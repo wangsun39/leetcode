@@ -1,0 +1,91 @@
+# 对数组 nums 执行 按位与 相当于对数组 nums 中的所有整数执行 按位与 。
+#
+# 例如，对 nums = [1, 5, 3] 来说，按位与等于 1 & 5 & 3 = 1 。
+# 同样，对 nums = [7] 而言，按位与等于 7 。
+# 给你一个正整数数组 candidates 。计算 candidates 中的数字每种组合下 按位与 的结果。 candidates 中的每个数字在每种组合中只能使用 一次 。
+#
+# 返回按位与结果大于 0 的 最长 组合的长度。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：candidates = [16,17,71,62,12,24,14]
+# 输出：4
+# 解释：组合 [16,17,62,24] 的按位与结果是 16 & 17 & 62 & 24 = 16 > 0 。
+# 组合长度是 4 。
+# 可以证明不存在按位与结果大于 0 且长度大于 4 的组合。
+# 注意，符合长度最大的组合可能不止一种。
+# 例如，组合 [62,12,24,14] 的按位与结果是 62 & 12 & 24 & 14 = 8 > 0 。
+# 示例 2：
+#
+# 输入：candidates = [8,8]
+# 输出：2
+# 解释：最长组合是 [8,8] ，按位与结果 8 & 8 = 8 > 0 。
+# 组合长度是 2 ，所以返回 2 。
+#  
+#
+# 提示：
+#
+# 1 <= candidates.length <= 105
+# 1 <= candidates[i] <= 107
+
+
+# Map = [['U' for _ in range(n)] for _ in range(m)]
+
+from typing import List
+from collections import deque
+# Definition for a binary tree node.
+from collections import Counter
+from collections import defaultdict
+# d = Counter(list1)
+# d = defaultdict(int)
+
+
+import bisect
+# bisect_right：
+# 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
+# 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# pos = bisect.bisect_right(left, tail)
+# bisect_left：
+# 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
+# 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
+
+from functools import lru_cache
+from typing import List
+# @lru_cache(None)
+
+class Solution:
+    def largestCombination(self, candidates: List[int]) -> int:
+        def getBits(nums):
+            res = [0 for i in range(24)]
+            i = 0
+            while nums > 0:
+                if nums & 1 == 1:
+                    res[i] = 1
+                i += 1
+                nums >>= 1
+            return res
+        # print(getBits(int(1e7)))
+        new = []
+        for c in candidates:
+            new.append(getBits(c))
+        print(new)
+        ans = 0
+        for i in range(24):
+            num = 0
+            for j in range(len(candidates)):
+                if new[j][i] != 0:
+                    num += 1
+            ans = max(ans, num)
+        return ans
+
+
+
+so = Solution()
+print(so.largestCombination([16,17,71,62,12,24,14]))
+print(so.largestCombination([8,8]))
+
+
+
+
