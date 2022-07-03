@@ -6,7 +6,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-#import random
+import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
 # randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
@@ -36,17 +36,7 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int:
-        n = len(nums)
-        d = defaultdict(set)
-        for e in edges:
-            d[e[0]].add(e[1])
-            d[e[1]].add(e[0])
-        val = [i for i in range(n)]
-        total = nums[0]
-        for i in range(1, n):
-            total ^= nums[i]
-
+    def removeDigit(self, number: str, digit: str) -> str:
 
 
 so = Solution()

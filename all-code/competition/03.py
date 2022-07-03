@@ -6,7 +6,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-#import random
+import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
 # randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
@@ -36,27 +36,32 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def maximumsSplicedArray(self, nums1: List[int], nums2: List[int]) -> int:
-        n = len(nums1)
-        sub1 = [nums1[i] - nums2[i] for i in range(n)]
-        sub2 = [nums2[i] - nums1[i] for i in range(n)]
-        def maxArray(arr):
-            dp = [0] * n
-            dp[0] = arr[0]
-            ans = dp[0]
-            for i in range(1, n):
-                dp[i] = max(arr[i], dp[i - 1] + arr[i])
-                ans = max(ans, dp[i])
-            return ans
-        r1, r2 = maxArray(sub1), maxArray(sub2)
-        # print(r1,r2)
-        return max(sum(nums1) + r2, sum(nums2) + r1)
+    def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
+        N = int(1e9 + 7)
+        f = [0] * n
+        g = [0] * n
+        for i in range(delay):
+            f[i] = 1
+        g[0] = 1
+        for i in range(delay, forget):
+            g[i] = sum(g[:i - delay + 1]) % N
+            f[i] = (g[i] + f[i - 1]) % N
+        for i in range(forget, n):
+            s = 0
+            for j in range(i - forget + 1, i - delay + 1):
+                s += g[j]
+                s %= N
+            g[i] = s
+            f[i] = (g[i] - g[i - forget] + f[i - 1]) % N
+        print(g)
+        print(f)
+        return f[-1]
+
 
 so = Solution()
-print(so.maximumsSplicedArray(nums1 = [60,160,60], nums2 = [10,90,10]))
-print(so.maximumsSplicedArray(nums1 = [60,60,60], nums2 = [10,90,10]))
-print(so.maximumsSplicedArray([20,40,20,70,30], nums2 = [50,20,50,40,20]))
-print(so.maximumsSplicedArray(nums1 = [7,11,13], nums2 = [1,1,1]))
+print(so.peopleAwareOfSecret(n = 7, delay = 3, forget = 5))
+print(so.peopleAwareOfSecret(n = 6, delay = 2, forget = 4))
+print(so.peopleAwareOfSecret(n = 4, delay = 1, forget = 3))
 
 
 

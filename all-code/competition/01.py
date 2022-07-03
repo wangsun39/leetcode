@@ -6,7 +6,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-#import random
+import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
 # randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
@@ -36,22 +36,26 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def checkXMatrix(self, grid: List[List[int]]) -> bool:
-        n = len(grid)
-        for i in range(n):
-            for j in range(n):
-                if i == j or i + j == n - 1:
-                    if grid[i][j] == 0:
-                        return False
-                else:
-                    if grid[i][j] != 0:
-                        return False
-        return True
+    def decodeMessage(self, key: str, message: str) -> str:
+        key = key.replace(' ', '')
+        # print(key)
+        d = {' ': ' '}
+        i = 0
+        for e in key:
+            if e not in d:
+                d[e] = chr(ord('a') + i)
+                i += 1
+        # print(d)
+        ans = ''
+        for s in message:
+            ans += d[s]
+        return ans
+
 
 
 so = Solution()
-print(so.checkXMatrix( [[2,0,0,1],[0,3,1,0],[0,5,2,0],[4,0,0,2]]))
-print(so.checkXMatrix( [[5,7,0],[0,3,1],[0,5,0]]))
+print(so.decodeMessage(key = "the quick brown fox jumps over the lazy dog", message = "vkbs bs t suepuv"))
+print(so.decodeMessage(key = "eljuxhpwnyrdgtqkviszcfmabo", message = "zwx hnfx lqantp mnoeius ycgk vcnjrdb"))
 
 
 

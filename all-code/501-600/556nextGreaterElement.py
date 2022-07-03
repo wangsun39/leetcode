@@ -21,10 +21,10 @@
 
 from typing import List
 from collections import defaultdict
-
+import bisect
 
 class Solution:
-    def nextGreaterElement(self, n: int) -> int:
+    def nextGreaterElement1(self, n: int) -> int:
         digits = []
         cur = n
         while cur > 0:
@@ -51,6 +51,22 @@ class Solution:
             res *= 10
             res += e
         return res if res <= 2147483647 else -1
+
+    def nextGreaterElement(self, n: int) -> int:  # 20220703
+        stack = []
+        s = str(n)
+        m = len(s)
+        for i in range(m - 1, -1, -1):
+            if len(stack) == 0 or s[i] >= stack[-1]:
+                stack.append(s[i])
+            else:
+                head = s[:i]
+                j = bisect.bisect_right(stack, s[i])
+                mid = stack[j]
+                stack[j] = s[i]
+                ans = int(head + mid + ''.join(stack))
+                return -1 if ans > int(2 ** 31 - 1) else ans
+        return -1
 
 
 so = Solution()
