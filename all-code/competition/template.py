@@ -1,5 +1,6 @@
 
 from typing import List
+from typing import Optional
 from collections import deque
 # Definition for a binary tree node.
 from collections import Counter
