@@ -47,109 +47,7 @@ class Node:
         self.left = None
         self.right = None
 
-class RangeModule:
-
-
-
-    # def __init__(self):
-    #     self.nodes = defaultdict(int)
-    #     self.lazy = defaultdict(int)
-    #
-    # def pushDown(self, idx, left_num, right_num):
-    #     if self.lazy[idx] == 0:
-    #         return
-    #     self.nodes[idx << 1] += left_num
-    #     self.nodes[idx << 1 + 1] += right_num
-    #     self.lazy[idx << 1] += left_num
-    #     self.lazy[idx << 1 + 1] += right_num
-    #     self.nodes[idx] = 0
-    #
-    # def pushUp(self, idx):
-    #     self.nodes[idx] = self.nodes[idx << 1] + self.nodes[idx << 1 + 1]
-    #
-    # def update(self, idx, start, end, l, r, val):
-    #     # print(start, end, l, r)
-    #     # 对[l, r)区间上的点都 + val， 现在处理的是[start, end]这段,
-    #     # 我们需要更新的每个区间节点（不一定都是叶子节点，充分利用好懒惰标记），合并起来正好是[l, r]
-    #     # idx 节点，对应的区间就是[start, end]
-    #     if l <= start and r >= end:
-    #         # 如果当前处理的这段区间都是在需要更新的范围内，那全部都 + 1
-    #         self.nodes[idx] = val * (end - start + 1)
-    #         self.lazy[idx] = val
-    #         return
-    #
-    #     mid = (start + end) >> 1
-    #     self.pushDown(idx, mid - start + 1, end - mid)
-    #     if l <= mid:
-    #         self.update(idx << 1, start, mid, l, r, val)
-    #     if r > mid:
-    #         self.update(idx << 1 + 1, mid + 1, end, l, r, val)
-    #     self.pushUp(idx)
-    #
-    # def query(self, idx, start, end, l, r):
-    #     if l <= start and r >= end:
-    #         return self.nodes[idx]
-    #     ans = 0
-    #     mid = (start + end) >> 1
-    #     self.pushDown(idx, mid - start + 1, end - mid)
-    #     if l <= mid:
-    #         ans += self.query(idx << 1, start, mid, l, r)
-    #     if r > mid:
-    #         ans += self.query(idx << 1 + 1, mid + 1, end, l, r)
-    #     # self.pushUp(idx)
-    #     return ans
-    #
-    # def addRange(self, left: int, right: int) -> None:
-    #     self.update(1, 1, 10 ** 9, left, right, 1)
-    #     # print(self.nodes[1])
-    #
-    # def queryRange(self, left: int, right: int) -> bool:
-    #     res = self.query(1, 1, 10 ** 9, left, right)
-    #     print(res)
-    #     return res == right - left
-    #
-    # def removeRange(self, left: int, right: int) -> None:
-    #     self.update(1, 1, 10 ** 9, left, right, -1)
-
-    # def __init__(self):
-    #     self.tree = defaultdict(int)
-    #
-    # def pushdown(self, idx: int):
-    #     if self.tree[idx]:
-    #         self.tree[idx << 1] = self.tree[idx]
-    #         self.tree[idx << 1 | 1] = self.tree[idx]
-    #
-    # def update(self, vl: int, start: int, end: int, l: int, r: int, idx: int):
-    #     if r < start or end < l:
-    #         return
-    #     if start <= l and r <= end:
-    #         self.tree[idx] = vl
-    #     else:
-    #         mid = (l + r) >> 1
-    #         self.pushdown(idx)
-    #         self.update(vl, start, end, l, mid, idx << 1)
-    #         self.update(vl, start, end, mid + 1, r, idx << 1 | 1)
-    #         self.tree[idx] = self.tree[idx << 1] & self.tree[idx << 1 | 1]
-    #
-    # def query(self, start: int, end: int, l: int, r: int, idx: int):
-    #     if r < start or end < l:
-    #         return True
-    #     if start <= l and r <= end:
-    #         return self.tree[idx] == 1
-    #     else:
-    #         mid = (l + r) >> 1
-    #         self.pushdown(idx)
-    #         return self.query(start, end, l, mid, idx << 1) and self.query(start, end, mid + 1, r, idx << 1 | 1)
-    #
-    # def addRange(self, left: int, right: int) -> None:
-    #     self.update(1, left, right - 1, 1, 10 ** 9, 1)
-    #
-    # def queryRange(self, left: int, right: int) -> bool:
-    #     return self.query(left, right - 1, 1, 10 ** 9, 1)
-    #
-    # def removeRange(self, left: int, right: int) -> None:
-    #     self.update(2, left, right - 1, 1, 10 ** 9, 1)
-
+class RangeModule1:
     def __init__(self):
         # self.tree = defaultdict(int)
         self.root = Node()
@@ -205,6 +103,61 @@ class RangeModule:
     def removeRange(self, left: int, right: int) -> None:
         self.update(self.root, 1, 10 ** 9, left, right - 1, -1)
 
+
+class RangeModule:
+    def __init__(self):
+        self.tree = defaultdict(int)
+
+    def pushup(self, id: int):
+        self.tree[id] = self.tree[id << 1] and self.tree[(id << 1) | 1]
+
+    def pushdown(self, id: int):
+        if self.tree[id]:
+            left, right = id << 1, (id << 1) | 1
+            self.tree[left] = self.tree[id]
+            self.tree[right] = self.tree[id]
+
+    def update(self, id: int, start: int, end: int, l: int, r: int, val: int):
+        if start > r or end < l:
+            return
+        if start >= l and end <= r:
+            self.tree[id] = val
+            return
+        mid = (start + end) >> 1
+        self.pushdown(id)
+        self.update(id << 1, start, mid, l, r, val)
+        self.update((id << 1) | 1, mid + 1, end, l, r, val)
+        self.pushup(id)
+
+    def query(self, id: int, start: int, end: int, l: int, r: int):
+        if start > r or end < l:
+            return True
+        if start >= l and end <= r:
+            return self.tree[id] == 1
+        mid = (start + end) >> 1
+        self.pushdown(id)
+        left = self.query(id << 1, start, mid, l, r)
+        if not left:
+            return False
+        return self.query((id << 1) | 1, mid + 1, end, l, r)
+
+
+    # def addRange(self, left: int, right: int) -> None:
+    #     self.update(1, 1, 10 ** 9, left, right - 1, 1)
+    #
+    # def queryRange(self, left: int, right: int) -> bool:
+    #     return self.query(1, 1, 10 ** 9, left, right - 1)
+    #
+    # def removeRange(self, left: int, right: int) -> None:
+    #     self.update(1, 1, 10 ** 9, left, right - 1, 2)
+    def addRange(self, left: int, right: int) -> None:
+        self.update(1, 1, 31, left, right - 1, 1)
+
+    def queryRange(self, left: int, right: int) -> bool:
+        return self.query(1, 1, 31, left, right - 1)
+
+    def removeRange(self, left: int, right: int) -> None:
+        self.update(1, 1, 31, left, right - 1, 2)
 
 so = RangeModule()
 print(so.addRange(10, 20))
