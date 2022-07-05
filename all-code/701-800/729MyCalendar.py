@@ -64,11 +64,14 @@ class MyCalendar:
             return
         if start >= l and end <= r:
             self.lazy[id] = 1
+            self.tree[id] = 1 # 这句可以没有
             return
         self.tree[id] = 1
         mid = (start + end) >> 1
         self.update(id << 1, start, mid, l, r)
         self.update((id << 1) | 1, mid + 1, end, l, r)
+        if 1 == self.lazy[id << 1] and 1 == self.lazy[(id << 1) | 1]: # 这段可以没有
+            self.lazy[id] = 1
 
     def query(self, id: int, start: int, end: int, l: int, r: int):
         if start > r or end < l:
@@ -76,19 +79,14 @@ class MyCalendar:
         if self.lazy[id] == 1:
             return False
         if start >= l and end <= r:
-            if self.tree[id] == 1 or self.lazy[id] == 1:
-                return False
-            return True
+            return self.tree[id] == 0
         mid = (start + end) >> 1
-        left = self.query(id << 1, start, mid, l, r)
-        if not left:
-            return False
-        return self.query((id << 1) | 1, mid + 1, end, l, r)
+        return self.query(id << 1, start, mid, l, r) and self.query((id << 1) | 1, mid + 1, end, l, r)
 
 
     def book(self, left: int, right: int) -> bool:
-        if self.query(1, 1, 10 ** 9, left, right - 1):
-            self.update(1, 1, 10 ** 9, left, right - 1)
+        if self.query(1, 0, 10 ** 9, left, right - 1):
+            self.update(1, 0, 10 ** 9, left, right - 1)
             return True
         return False
     # def book(self, left: int, right: int) -> bool:
