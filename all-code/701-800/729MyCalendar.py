@@ -33,7 +33,7 @@
 
 from typing import List
 import bisect
-class MyCalendar:
+class MyCalendar1:
 
     def __init__(self):
         self.starts = []
@@ -52,7 +52,60 @@ class MyCalendar:
             return True
         return False
 
+from collections import defaultdict
 
+class MyCalendar:
+    def __init__(self):
+        self.tree = defaultdict(int)  # 此区间是否有点被预定
+        self.lazy = defaultdict(int)  # 此区间是否所有点都被预定了
+
+    def update(self, id: int, start: int, end: int, l: int, r: int):
+        if start > r or end < l:
+            return
+        if start >= l and end <= r:
+            self.lazy[id] = 1
+            return
+        self.tree[id] = 1
+        mid = (start + end) >> 1
+        self.update(id << 1, start, mid, l, r)
+        self.update((id << 1) | 1, mid + 1, end, l, r)
+
+    def query(self, id: int, start: int, end: int, l: int, r: int):
+        if start > r or end < l:
+            return True
+        if self.lazy[id] == 1:
+            return False
+        if start >= l and end <= r:
+            if self.tree[id] == 1 or self.lazy[id] == 1:
+                return False
+            return True
+        mid = (start + end) >> 1
+        left = self.query(id << 1, start, mid, l, r)
+        if not left:
+            return False
+        return self.query((id << 1) | 1, mid + 1, end, l, r)
+
+
+    def book(self, left: int, right: int) -> bool:
+        if self.query(1, 1, 10 ** 9, left, right - 1):
+            self.update(1, 1, 10 ** 9, left, right - 1)
+            return True
+        return False
+    # def book(self, left: int, right: int) -> bool:
+    #     if self.query(1, 1, 100000, left, right - 1):
+    #         self.update(1, 1, 100000, left, right - 1)
+    #         return True
+    #     return False
+
+
+so = MyCalendar()
+print(so.book(20, 29))
+print(so.book(13, 22))
+
+so = MyCalendar()
+print(so.book(47, 50))
+print(so.book(33, 41))
+print(so.book(39, 45))
 
 so = MyCalendar()
 print(so.book(10, 20))

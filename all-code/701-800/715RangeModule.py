@@ -109,7 +109,10 @@ class RangeModule:
         self.tree = defaultdict(int)
 
     def pushup(self, id: int):
-        self.tree[id] = (1 == self.tree[id << 1]) and (1 == self.tree[(id << 1) | 1])
+        if (1 == self.tree[id << 1]) and (1 == self.tree[(id << 1) | 1]):
+            self.tree[id] = 1
+        else:
+            self.tree[id] = 0
 
     def pushdown(self, id: int):
         if self.tree[id]:
@@ -150,14 +153,7 @@ class RangeModule:
 
     def removeRange(self, left: int, right: int) -> None:
         self.update(1, 1, 10 ** 9, left, right - 1, 2)
-    # def addRange(self, left: int, right: int) -> None:
-    #     self.update(1, 1, 31, left, right - 1, 1)
-    #
-    # def queryRange(self, left: int, right: int) -> bool:
-    #     return self.query(1, 1, 31, left, right - 1)
-    #
-    # def removeRange(self, left: int, right: int) -> None:
-    #     self.update(1, 1, 31, left, right - 1, 2)
+
 
 so = RangeModule()
 print(so.addRange(10, 20))
