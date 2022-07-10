@@ -35,61 +35,27 @@ from typing import List
 # bit位 函数：
 # n.bit_length()
 # value = int(s, 2)
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-class Solution:
-    def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
-        ans = [[-1 for _ in range(n)] for _ in range(m)]
-        cur = head
-        i, j = 0, 0
-        startx, endx, dx = 0, n - 1, 1
-        starty, endy, dy = 1, m - 1, 1
-        dir = 1
-        while cur is not None:
-            if dir == 1:
-                for j in range(startx, endx + dx, dx):
-                    ans[i][j] = cur.val
-                    cur = cur.next
-                    if cur is None:
-                        break
-                startx, endx, dx = endx - dx, startx, -dx
-                dir = 2
-            elif dir == 2:
-                for i in range(starty, endy + dy, dy):
-                    ans[i][j] = cur.val
-                    cur = cur.next
-                    if cur is None:
-                        break
-                starty, endy, dy = endy - dy, starty, -dy
-                dir = 1
-            if cur is None:
-                break
-            # cur = cur.next
-        return ans
+
+class SmallestInfiniteSet:
+
+    def __init__(self):
+        self.s = set([i for i in range(1, 1200)])
 
 
-root = ListNode(3)
-root.next = ListNode(0)
-root.next.next = ListNode(2)
-root.next.next.next = ListNode(6)
-root.next.next.next.next = ListNode(8)
-root.next.next.next.next.next = ListNode(1)
-root.next.next.next.next.next.next = ListNode(7)
-root.next.next.next.next.next.next.next = ListNode(9)
-root.next.next.next.next.next.next.next.next = ListNode(4)
-root.next.next.next.next.next.next.next.next.next = ListNode(2)
-root.next.next.next.next.next.next.next.next.next.next = ListNode(5)
-root.next.next.next.next.next.next.next.next.next.next.next = ListNode(5)
-root.next.next.next.next.next.next.next.next.next.next.next.next = ListNode(0)
+    def popSmallest(self) -> int:
+        m = min(self.s)
+        self.s.remove(m)
+        return m
+
+
+
+    def addBack(self, num: int) -> None:
+        self.s.add(num)
+
+
 
 so = Solution()
-print(so.spiralMatrix(m = 3, n = 5, head = root))
-root = ListNode(0)
-root.next = ListNode(1)
-root.next.next = ListNode(2)
-print(so.spiralMatrix(m = 1, n = 4, head = root))
+print(so.removeDigit(123456))
 
 
 

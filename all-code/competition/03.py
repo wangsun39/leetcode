@@ -1,5 +1,6 @@
 
 from typing import List
+from typing import Optional
 from collections import deque
 # Definition for a binary tree node.
 from collections import Counter
@@ -36,32 +37,41 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
-        N = int(1e9 + 7)
-        f = [0] * n
-        g = [0] * n
-        for i in range(delay):
-            f[i] = 1
-        g[0] = 1
-        for i in range(delay, forget):
-            g[i] = sum(g[:i - delay + 1]) % N
-            f[i] = (g[i] + f[i - 1]) % N
-        for i in range(forget, n):
-            s = 0
-            for j in range(i - forget + 1, i - delay + 1):
-                s += g[j]
-                s %= N
-            g[i] = s
-            f[i] = (g[i] - g[i - forget] + f[i - 1]) % N
-        print(g)
-        print(f)
-        return f[-1]
+    def canChange(self, start: str, target: str) -> bool:
+        n = len(start)
+        s1, s2 = '', ''
+        for e in start:
+            if e in 'LR':
+                s1 += e
+        for e in target:
+            if e in 'LR':
+                s2 += e
+        if s1 != s2:
+            return False
+        lFlag = 0
+        rFlag = 0
+        for i in range(n):
+            if target[i] == 'L':
+                lFlag += 1
+            if start[i] == 'L':
+                lFlag -= 1
+            if lFlag < 0:
+                return False
+            if target[i] == 'R':
+                rFlag += 1
+            if start[i] == 'R':
+                rFlag -= 1
+            if rFlag > 0:
+                return False
+        return True
+
+
 
 
 so = Solution()
-print(so.peopleAwareOfSecret(n = 7, delay = 3, forget = 5))
-print(so.peopleAwareOfSecret(n = 6, delay = 2, forget = 4))
-print(so.peopleAwareOfSecret(n = 4, delay = 1, forget = 3))
+print(so.canChange(start = "_L__R__R_", target = "L______RR"))
+print(so.canChange(start = "R_L_", target = "__LR"))
+print(so.canChange(start = "_R", target = "R_"))
 
 
 

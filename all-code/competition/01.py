@@ -1,5 +1,6 @@
 
 from typing import List
+from typing import Optional
 from collections import deque
 # Definition for a binary tree node.
 from collections import Counter
@@ -36,26 +37,40 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def decodeMessage(self, key: str, message: str) -> str:
-        key = key.replace(' ', '')
-        # print(key)
-        d = {' ': ' '}
-        i = 0
-        for e in key:
-            if e not in d:
-                d[e] = chr(ord('a') + i)
-                i += 1
-        # print(d)
-        ans = ''
-        for s in message:
-            ans += d[s]
-        return ans
+    def fillCups(self, amount: List[int]) -> int:
+        # amount.sort(reverse=True)
+        # if amount[0] >= amount[1] + amount[2]:
+        #     return amount[0]
+        # s2 = amount[2] - amount[0] // 2
+        # s1 = amount[1] - (amount[0] - amount[0] // 2)
+        # if s2 < 0:
+        #     return amount[0] + s1 + s2
+        # return amount[0] + max(s1, s2)
+
+        # amount.sort()
+        # if amount[2] >= amount[1] + amount[0]:
+        #     return amount[2]
+        # x = amount[0] // 2
+        # y = amount[0] - x
+        # s2, s3 = amount[1] - x, amount[2] - y
+        # return amount[0] + max(s2, s3)
+
+        s = sum(amount)
+        m = max(amount)
+        return max((s + 1) // 2, m)
+
+
 
 
 
 so = Solution()
-print(so.decodeMessage(key = "the quick brown fox jumps over the lazy dog", message = "vkbs bs t suepuv"))
-print(so.decodeMessage(key = "eljuxhpwnyrdgtqkviszcfmabo", message = "zwx hnfx lqantp mnoeius ycgk vcnjrdb"))
+print(so.fillCups([7,4,9]))  # 10
+print(so.fillCups([2,4,2]))  # 4
+print(so.fillCups([2,4,4]))  # 5
+print(so.fillCups([5,4,4]))  # 7
+print(so.fillCups([4,1,4]))  # 5
+print(so.fillCups([1,4,2]))  # 4
+print(so.fillCups([5,0,0]))  # 5
 
 
 
