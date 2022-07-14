@@ -39,6 +39,7 @@
 # 1 <= maxValue <= 104
 
 from collections import defaultdict
+# from
 
 class Solution:
     def idealArrays(self, n: int, maxValue: int) -> int:
@@ -58,10 +59,22 @@ class Solution:
                         d[n].append(cnt)
                     i += 1
                 if nn > 1: d[n].append(1)
-
             return d
         d = factor()
         print(d)
+
+        ans = 0
+        for m in range(1, maxValue + 1):
+            l = d[m]
+            num = 1
+            for k in l:
+                num = num * (comb(n + k - 1, k) % MOD) % MOD
+            ans += num
+            ans %= MOD
+        return ans
+
+
+
 
 
 so = Solution()
