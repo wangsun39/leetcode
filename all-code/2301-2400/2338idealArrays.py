@@ -39,7 +39,7 @@
 # 1 <= maxValue <= 104
 
 from collections import defaultdict
-# from
+from scipy.special import comb
 
 class Solution:
     def idealArrays(self, n: int, maxValue: int) -> int:
@@ -68,13 +68,10 @@ class Solution:
             l = d[m]
             num = 1
             for k in l:
-                num = num * (comb(n + k - 1, k) % MOD) % MOD
+                num = num * (int(comb(n + k - 1, k)) % MOD) % MOD
             ans += num
             ans %= MOD
         return ans
-
-
-
 
 
 so = Solution()
