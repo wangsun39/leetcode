@@ -30,6 +30,7 @@ import bisect
 
 from functools import lru_cache
 from typing import List
+import math
 # @lru_cache(None)
 
 # bit位 函数：
@@ -37,12 +38,22 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def idealArrays(self, n: int, maxValue: int) -> int:
+    def minOperations(self, nums: List[int], numsDivide: List[int]) -> int:
+        gys = numsDivide[0]
+        for e in numsDivide[1:]:
+            gys = math.gcd(gys, e)
+        nums.sort()
+        for i, e in enumerate(nums):
+            if gys % e == 0:
+                return i
+        return -1
+
 
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.minOperations(nums = [2,3,2,4,3], numsDivide = [9,6,9,3,15]))
+print(so.minOperations(nums = [4,3,6], numsDivide = [8,2,6,10]))
 
 
 

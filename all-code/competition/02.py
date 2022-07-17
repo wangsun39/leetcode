@@ -36,26 +36,45 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-class SmallestInfiniteSet:
-
-    def __init__(self):
-        self.s = set([i for i in range(1, 1200)])
-
-
-    def popSmallest(self) -> int:
-        m = min(self.s)
-        self.s.remove(m)
-        return m
-
-
-
-    def addBack(self, num: int) -> None:
-        self.s.add(num)
+class Solution:
+    def maximumSum(self, nums: List[int]) -> int:
+        sums = []
+        for num in nums:
+            st = list(str(num))
+            digits = sum([int(e) for e in st])
+            sums.append(digits)
+        # print(sums)
+        d = {}
+        for idx, s in enumerate(sums):
+            if s not in d:
+                d[s] = [nums[idx]]
+                continue
+            if len(d[s]) == 1:
+                if d[s][0] < nums[idx]:
+                    d[s].append(nums[idx])
+                else:
+                    d[s].insert(0, nums[idx])
+                continue
+            if d[s][0] >= nums[idx]:
+                continue
+            if d[s][1] >= nums[idx]:
+                d[s][0] = nums[idx]
+                continue
+            d[s].pop(0)
+            d[s].append(nums[idx])
+        # print(d)
+        ans = -1
+        for key in d:
+            if len(d[key]) >= 2:
+                ans = max(ans, d[key][0] + d[key][1])
+        return ans
 
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.maximumSum([229,398,269,317,420,464,491,218,439,153,482,169,411,93,147,50,347,210,251,366,401]))
+print(so.maximumSum([10,12,19,14]))
+print(so.maximumSum([18,43,36,13,7]))
 
 
 

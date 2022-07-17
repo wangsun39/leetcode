@@ -37,41 +37,39 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def canChange(self, start: str, target: str) -> bool:
-        n = len(start)
-        s1, s2 = '', ''
-        for e in start:
-            if e in 'LR':
-                s1 += e
-        for e in target:
-            if e in 'LR':
-                s2 += e
-        if s1 != s2:
-            return False
-        lFlag = 0
-        rFlag = 0
-        for i in range(n):
-            if target[i] == 'L':
-                lFlag += 1
-            if start[i] == 'L':
-                lFlag -= 1
-            if lFlag < 0:
-                return False
-            if target[i] == 'R':
-                rFlag += 1
-            if start[i] == 'R':
-                rFlag -= 1
-            if rFlag > 0:
-                return False
-        return True
+    def smallestTrimmedNumbers(self, nums: List[str], queries: List[List[int]]) -> List[int]:
+        def query(k, trim):
+            res = []
+            for num in nums:
+                res.append(num[-trim:])
+            # print(res)
+            newArray = [[i, e] for i, e in enumerate(res)]
+            n = len(res)
+            for i in range(n):
+                for j in range(i, n):
+                    if newArray[i][1] > newArray[j][1]:
+                        newArray[i], newArray[j] = newArray[j], newArray[i]
+                    elif newArray[i][1] == newArray[j][1] and newArray[i][0] > newArray[j][0]:
+                        newArray[i], newArray[j] = newArray[j], newArray[i]
+
+
+            # print(newArray, k)
+            # print(newArray[k - 1], res.index(newArray[k - 1]))
+            return newArray[k - 1][0]
+        ans = []
+        for qry in queries:
+            idx = query(qry[0], qry[1])
+            ans.append(idx)
+        return ans
 
 
 
 
 so = Solution()
-print(so.canChange(start = "_L__R__R_", target = "L______RR"))
-print(so.canChange(start = "R_L_", target = "__LR"))
-print(so.canChange(start = "_R", target = "R_"))
+# [1, 2, 11, 10, 7, 0, 0, 1, 13, 13, 2, 12]
+print(so.smallestTrimmedNumbers(["64333639502","65953866768","17845691654","87148775908","58954177897","70439926174","48059986638","47548857440","18418180516","06364956881","01866627626","36824890579","14672385151","71207752868"], [[9,4],[6,1],[3,8],[12,9],[11,4],[4,9],[2,7],[10,3],[13,1],[13,1],[6,1],[5,10]]))
+print(so.smallestTrimmedNumbers(nums = ["24","37","96","04"], queries = [[2,1],[2,2]]))
+print(so.smallestTrimmedNumbers(nums = ["102","473","251","814"], queries = [[1,1],[2,3],[4,2],[1,2]]))
 
 
 
