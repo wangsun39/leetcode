@@ -89,12 +89,13 @@ class Solution:
         while True:
             for point in cur:
                 dfs(point[0], point[1])
-            print(finish)
-            print(next)
+            # print(finish)
+            # print(next)
             if (row - 1, col - 1) in finish:
                 return ans
             for p in next:
                 grid[p[0]][p[1]] = 0
+            print(grid)
             ans += 1
             cur = next
             next = set()
