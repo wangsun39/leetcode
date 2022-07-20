@@ -40,8 +40,8 @@ from collections import defaultdict
 class MyCalendarTwo:
 
     def __init__(self):
-        self.tree = defaultdict(int)
-        self.lazy = defaultdict(int)
+        self.tree = defaultdict(int)  # 区间上最大的重复预定次数
+        self.lazy = defaultdict(int)  # 区间上需要向下传递但没有传递的全区间预定次数
 
     def pushup(self, id: int):
         self.tree[id] = max(self.tree[id << 1], self.tree[(id << 1) | 1])
