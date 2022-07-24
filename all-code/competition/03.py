@@ -27,7 +27,7 @@ import bisect
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
-
+import heapq
 from functools import lru_cache
 from typing import List
 # @lru_cache(None)
@@ -36,40 +36,56 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-class Solution:
-    def smallestTrimmedNumbers(self, nums: List[str], queries: List[List[int]]) -> List[int]:
-        def query(k, trim):
-            res = []
-            for num in nums:
-                res.append(num[-trim:])
-            # print(res)
-            newArray = [[i, e] for i, e in enumerate(res)]
-            n = len(res)
-            for i in range(n):
-                for j in range(i, n):
-                    if newArray[i][1] > newArray[j][1]:
-                        newArray[i], newArray[j] = newArray[j], newArray[i]
-                    elif newArray[i][1] == newArray[j][1] and newArray[i][0] > newArray[j][0]:
-                        newArray[i], newArray[j] = newArray[j], newArray[i]
+class FoodRatings:
+
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        n = len(foods)
+        self.methods = {}
+        self.rate = {}
+        self.cuisines = {}
+        for i in range(n):
+            self.rate[foods[i]] = ratings[i]
+            self.cuisines[foods[i]] = cuisines[i]
+            if cuisines[i] not in self.methods:
+                self.methods[cuisines[i]] = [(-ratings[i], foods[i])]
+                continue
+            bisect.insort_left(self.methods[cuisines[i]], (-ratings[i], foods[i]))
 
 
-            # print(newArray, k)
-            # print(newArray[k - 1], res.index(newArray[k - 1]))
-            return newArray[k - 1][0]
-        ans = []
-        for qry in queries:
-            idx = query(qry[0], qry[1])
-            ans.append(idx)
-        return ans
+    def changeRating(self, food: str, newRating: int) -> None:
+        rating = self.rate[food]
+        cuisine = self.cuisines[food]
+        pos = bisect.bisect_left(self.methods[cuisine], (-rating, food))
+        del self.methods[cuisine][pos]
+        bisect.insort_left(self.methods[cuisine], (-newRating, food))
+        self.rate[food] = newRating
+
+
+    def highestRated(self, cuisine: str) -> str:
+        return self.methods[cuisine][0][1]
+
+# ["FoodRatings","changeRating","highestRated","changeRating","changeRating","changeRating","highestRated","highestRated"]
+# [,["qnvseohnoe",11],["fajbervsj"],["emgqdbo",3],["jmvfxjohq",9],["emgqdbo",14],["fajbervsj"],["snaxol"]]
+so = FoodRatings(["emgqdbo","jmvfxjohq","qnvseohnoe","yhptazyko","ocqmvmwjq"],["snaxol","snaxol","snaxol","fajbervsj","fajbervsj"],[2,6,18,6,5])
+
+print(so.changeRating("qnvseohnoe", 11))
+print(so.highestRated("fajbervsj"))
+print(so.changeRating("emgqdbo", 3))
+print(so.changeRating("jmvfxjohq", 9))
+print(so.changeRating("emgqdbo", 14))
+print(so.highestRated("fajbervsj"))
+print(so.highestRated("snaxol"))
 
 
 
-
-so = Solution()
-# [1, 2, 11, 10, 7, 0, 0, 1, 13, 13, 2, 12]
-print(so.smallestTrimmedNumbers(["64333639502","65953866768","17845691654","87148775908","58954177897","70439926174","48059986638","47548857440","18418180516","06364956881","01866627626","36824890579","14672385151","71207752868"], [[9,4],[6,1],[3,8],[12,9],[11,4],[4,9],[2,7],[10,3],[13,1],[13,1],[6,1],[5,10]]))
-print(so.smallestTrimmedNumbers(nums = ["24","37","96","04"], queries = [[2,1],[2,2]]))
-print(so.smallestTrimmedNumbers(nums = ["102","473","251","814"], queries = [[1,1],[2,3],[4,2],[1,2]]))
+# ["korean"], ["japanese"], ["sushi", 16], ["japanese"], ["ramen", 16], ["japanese"]]
+so = FoodRatings(["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"], ["korean", "japanese", "japanese", "greek", "japanese", "korean"], [9, 12, 8, 15, 14, 7])
+print(so.highestRated("korean"))
+print(so.highestRated("japanese"))
+print(so.changeRating("sushi", 16))
+print(so.highestRated("japanese"))
+print(so.changeRating("ramen", 16))
+print(so.highestRated("japanese"))
 
 
 

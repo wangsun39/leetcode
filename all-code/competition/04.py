@@ -30,7 +30,6 @@ import bisect
 
 from functools import lru_cache
 from typing import List
-import math
 # @lru_cache(None)
 
 # bit位 函数：
@@ -38,22 +37,29 @@ import math
 # value = int(s, 2)
 
 class Solution:
-    def minOperations(self, nums: List[int], numsDivide: List[int]) -> int:
-        gys = numsDivide[0]
-        for e in numsDivide[1:]:
-            gys = math.gcd(gys, e)
-        nums.sort()
-        for i, e in enumerate(nums):
-            if gys % e == 0:
-                return i
-        return -1
+    def countExcellentPairs(self, nums: List[int], k: int) -> int:
+        def count(num):
+            cnt = 0
+            while num:
+                num = num & (num - 1)
+                cnt += 1
+            return cnt
+        ans = 0
+        nums = set(nums)
+        bits = [count(e) for e in nums]
+        counter = Counter(bits)
+        for k1 in counter:
+            for k2 in counter:
+                if k1 + k2 < k:
+                    continue
+                ans += (counter[k1] * counter[k2])
 
-
-
+        return ans
 
 so = Solution()
-print(so.minOperations(nums = [2,3,2,4,3], numsDivide = [9,6,9,3,15]))
-print(so.minOperations(nums = [4,3,6], numsDivide = [8,2,6,10]))
+print(so.countExcellentPairs([1,2,4,8,16,32,64,128,256], 2))
+print(so.countExcellentPairs(nums = [1,2,3,1], k = 3))
+print(so.countExcellentPairs(nums = [5,1,1], k = 10))
 
 
 

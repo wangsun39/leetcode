@@ -37,44 +37,26 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def maximumSum(self, nums: List[int]) -> int:
-        sums = []
-        for num in nums:
-            st = list(str(num))
-            digits = sum([int(e) for e in st])
-            sums.append(digits)
-        # print(sums)
-        d = {}
-        for idx, s in enumerate(sums):
-            if s not in d:
-                d[s] = [nums[idx]]
-                continue
-            if len(d[s]) == 1:
-                if d[s][0] < nums[idx]:
-                    d[s].append(nums[idx])
-                else:
-                    d[s].insert(0, nums[idx])
-                continue
-            if d[s][0] >= nums[idx]:
-                continue
-            if d[s][1] >= nums[idx]:
-                d[s][0] = nums[idx]
-                continue
-            d[s].pop(0)
-            d[s].append(nums[idx])
-        # print(d)
-        ans = -1
-        for key in d:
-            if len(d[key]) >= 2:
-                ans = max(ans, d[key][0] + d[key][1])
+    def equalPairs(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        def equal(r, c):
+            for i in range(n):
+                if grid[r][i] != grid[i][c]:
+                    return False
+            return True
+        ans = 0
+        for i in range(n):
+            for j in range(n):
+                if equal(i, j):
+                    print(i, j)
+                    ans += 1
+
         return ans
 
 
-
 so = Solution()
-print(so.maximumSum([229,398,269,317,420,464,491,218,439,153,482,169,411,93,147,50,347,210,251,366,401]))
-print(so.maximumSum([10,12,19,14]))
-print(so.maximumSum([18,43,36,13,7]))
+print(so.equalPairs([[3,1,2,2],[1,4,4,5],[2,4,2,2],[2,4,2,2]]))
+print(so.equalPairs([[3,2,1],[1,7,6],[2,7,7]]))
 
 
 

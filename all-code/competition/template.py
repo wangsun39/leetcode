@@ -38,6 +38,7 @@ from typing import List
 
 class Solution:
     def removeDigit(self, number: str, digit: str) -> str:
+        pass
 
 
 so = Solution()

@@ -37,20 +37,17 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def numberOfPairs(self, nums: List[int]) -> List[int]:
-        counter = Counter(nums)
-        ans = [0, 0]
-        for k in counter:
-            ans[0] += (counter[k] // 2)
-            if counter[k] % 2 == 1:
-                ans[1] += 1
-        return ans
+    def repeatedCharacter(self, s: str) -> str:
+        d = set()
+        for ss in s:
+            if ss not in d:
+                d.add(ss)
+            else:
+                return ss
 
 
 so = Solution()
-print(so.numberOfPairs(nums = [1,3,2,1,3,2,2]))
-print(so.numberOfPairs(nums = [1,1]))
-print(so.numberOfPairs(nums = [0]))
+print(so.repeatedCharacter("abccbaacz"))
 
 
 
