@@ -31,12 +31,60 @@ from functools import lru_cache
 from typing import List
 # @lru_cache(None)
 
-class Solution:
-    def removeDigit(self, number: str, digit: str) -> str:
+class RangeModule:
 
 
-so = Solution()
-print(so.removeDigit())
+    def __init__(self):
+        self.tree = defaultdict(int)
+
+    def pushup(self, id: int):
+        if (1 == self.tree[id << 1]) and (1 == self.tree[(id << 1) | 1]):
+            self.tree[id] = 1
+        else:
+            self.tree[id] = 0
+
+    def pushdown(self, id: int):
+        if self.tree[id]:
+            left, right = id << 1, (id << 1) | 1
+            self.tree[left] = self.tree[id]
+            self.tree[right] = self.tree[id]
+
+    def update(self, id: int, start: int, end: int, l: int, r: int, val: int):
+        if start > r or end < l:
+            return
+        if start >= l and end <= r:
+            self.tree[id] = val
+            return
+        mid = (start + end) >> 1
+        self.pushdown(id)
+        self.update(id << 1, start, mid, l, r, val)
+        self.update((id << 1) | 1, mid + 1, end, l, r, val)
+        self.pushup(id)
+
+    def query(self, id: int, start: int, end: int, l: int, r: int):
+        if start > r or end < l:
+            return True
+        if start >= l and end <= r:
+            return self.tree[id] == 1
+        mid = (start + end) >> 1
+        self.pushdown(id)
+        left = self.query(id << 1, start, mid, l, r)
+        if not left:
+            return False
+        return self.query((id << 1) | 1, mid + 1, end, l, r)
+
+
+    def addRange(self, left: int, right: int) -> None:
+        self.update(1, 1, 10 ** 9, left, right - 1, 1)
+
+    def queryRange(self, left: int, right: int) -> bool:
+        return self.query(1, 1, 10 ** 9, left, right - 1)
+
+    def removeRange(self, left: int, right: int) -> None:
+        self.update(1, 1, 10 ** 9, left, right - 1, 2)
+
+
+
 
 
 
