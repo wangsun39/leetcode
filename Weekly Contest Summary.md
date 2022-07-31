@@ -1,6 +1,8 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2022-7-17| 第302场周赛  | T4  | [优质数对的数目](https://leetcode.cn/problems/minimum-deletions-to-make-array-divisible/) |  2075     | 一道涉及位运算的题，要用到公式： (A & B).bit_counter() + (A \| B).bit_counter() == A.bit_count() + B.bit_count() 有一定的技巧 |
+|2022-7-31| 第304场周赛  | T2  | [分组的最大数量](https://leetcode.cn/problems/maximum-number-of-groups-entering-a-competition/) |       | 小技巧，其实和数组元素无关 |
+|2022-7-31| 第304场周赛  | T4  | [图中的最长环](https://leetcode.cn/problems/longest-cycle-in-a-graph/) |       | 本周AK |
+|2022-7-24| 第303场周赛  | T4  | [优质数对的数目](https://leetcode.cn/problems/minimum-deletions-to-make-array-divisible/) |  2075     | 一道涉及位运算的题，要用到公式： (A & B).bit_counter() + (A \| B).bit_counter() == A.bit_count() + B.bit_count() 有一定的技巧 |
 |2022-7-17| 第302场周赛  | T4  | [使数组可以被整除的最少删除次数](https://leetcode.cn/problems/number-of-excellent-pairs/submissions/) |  1651     | GCD  |
 |2022-7-10| 第301场周赛  | T1  | [装满杯子需要的最短总时长](https://leetcode.cn/problems/minimum-amount-of-time-to-fill-cups/) |  1360     | 需要有点数学技巧：<br>假设amount中三个数从小到大依次为n1 <= n2 <= n3，<br>1) 如果n3 >= n1 + n2,那么结果就是n3.<br>2) 否则，可以证明，答案能达到下界sum(amount)/2上取整  |
 |2022-7-10| 第301场周赛  | T4  | [统计理想数组的数目](https://leetcode.cn/problems/count-the-number-of-ideal-arrays/) |  2615     | 难度很大，用到了排列组合的数学知识，再加上一些编程技巧  |
