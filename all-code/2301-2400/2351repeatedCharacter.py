@@ -1,3 +1,34 @@
+给你一个由小写英文字母组成的字符串 s ，请你找出并返回第一个出现 两次 的字母。
+
+注意：
+
+如果 a 的 第二次 出现比 b 的 第二次 出现在字符串中的位置更靠前，则认为字母 a 在字母 b 之前出现两次。
+s 包含至少一个出现两次的字母。
+ 
+
+示例 1：
+
+输入：s = "abccbaacz"
+输出："c"
+解释：
+字母 'a' 在下标 0 、5 和 6 处出现。
+字母 'b' 在下标 1 和 4 处出现。
+字母 'c' 在下标 2 、3 和 7 处出现。
+字母 'z' 在下标 8 处出现。
+字母 'c' 是第一个出现两次的字母，因为在所有字母中，'c' 第二次出现的下标是最小的。
+示例 2：
+
+输入：s = "abcdd"
+输出："d"
+解释：
+只有字母 'd' 出现两次，所以返回 'd' 。
+ 
+
+提示：
+
+2 <= s.length <= 100
+s 由小写英文字母组成
+s 包含至少一个重复字母
 
 from typing import List
 from typing import Optional
@@ -25,11 +56,6 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
-# heap.heapify(nums)
-# heapq.heappop() 函数弹出堆中最小值
-# heapq.heappush(nums, 1)
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
@@ -42,36 +68,17 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def longestCycle(self, edges: List[int]) -> int:
-        # @lru_cache(None)
-        n = len(edges)
-        flag = [0] * n
-        ans = -1
-        def dfs(node):
-            nonlocal ans
-            if flag[node]:
-                return
-            d = {}
-            dis = 0
-            while 0 == flag[node] and -1 != edges[node]:
-                d[node] = dis
-                dis += 1
-                flag[node] = 1
-                node = edges[node]
-            if -1 == edges[node]:
-                return
-            if node in d:
-                ans = max(ans, dis - d[node])
-        for i in range(n):
-            dfs(i)
-        return ans
-
-
+    def repeatedCharacter(self, s: str) -> str:
+        d = set()
+        for ss in s:
+            if ss not in d:
+                d.add(ss)
+            else:
+                return ss
 
 
 so = Solution()
-print(so.longestCycle([3,3,4,2,3]))
-print(so.longestCycle([2,-1,3,1]))
+print(so.repeatedCharacter("abccbaacz"))
 
 
 

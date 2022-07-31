@@ -25,9 +25,14 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
+import heapq
+# heap.heapify(nums)
+# heapq.heappop() 函数弹出堆中最小值
+# heapq.heappush(nums, 1)
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
-import heapq
+
 from functools import lru_cache
 from typing import List
 # @lru_cache(None)
@@ -36,56 +41,39 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-class FoodRatings:
-
-    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
-        n = len(foods)
-        self.methods = {}
-        self.rate = {}
-        self.cuisines = {}
-        for i in range(n):
-            self.rate[foods[i]] = ratings[i]
-            self.cuisines[foods[i]] = cuisines[i]
-            if cuisines[i] not in self.methods:
-                self.methods[cuisines[i]] = [(-ratings[i], foods[i])]
-                continue
-            bisect.insort_left(self.methods[cuisines[i]], (-ratings[i], foods[i]))
-
-
-    def changeRating(self, food: str, newRating: int) -> None:
-        rating = self.rate[food]
-        cuisine = self.cuisines[food]
-        pos = bisect.bisect_left(self.methods[cuisine], (-rating, food))
-        del self.methods[cuisine][pos]
-        bisect.insort_left(self.methods[cuisine], (-newRating, food))
-        self.rate[food] = newRating
-
-
-    def highestRated(self, cuisine: str) -> str:
-        return self.methods[cuisine][0][1]
-
-# ["FoodRatings","changeRating","highestRated","changeRating","changeRating","changeRating","highestRated","highestRated"]
-# [,["qnvseohnoe",11],["fajbervsj"],["emgqdbo",3],["jmvfxjohq",9],["emgqdbo",14],["fajbervsj"],["snaxol"]]
-so = FoodRatings(["emgqdbo","jmvfxjohq","qnvseohnoe","yhptazyko","ocqmvmwjq"],["snaxol","snaxol","snaxol","fajbervsj","fajbervsj"],[2,6,18,6,5])
-
-print(so.changeRating("qnvseohnoe", 11))
-print(so.highestRated("fajbervsj"))
-print(so.changeRating("emgqdbo", 3))
-print(so.changeRating("jmvfxjohq", 9))
-print(so.changeRating("emgqdbo", 14))
-print(so.highestRated("fajbervsj"))
-print(so.highestRated("snaxol"))
+class Solution:
+    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+        # if node1 == node2:
+        #     return node1
+        def find(node):
+            d = {}
+            distance = 0
+            while node not in d and node != -1:
+                d[node] = distance
+                node = edges[node]
+                distance += 1
+            return d
+        n = len(edges)
+        d1, d2 = find(node1), find(node2)
+        inter = set(d1.keys()) & set(d2.keys())
+        if len(inter) == 0:
+            return -1
+        ans = [n, n]
+        for node in inter:
+            dis = max(d1[node], d2[node])
+            if dis < ans[0]:
+                ans = [dis, node]
+            elif dis == ans[0]:
+                ans[1] = min(ans[1], node)
+        return ans[1]
 
 
 
-# ["korean"], ["japanese"], ["sushi", 16], ["japanese"], ["ramen", 16], ["japanese"]]
-so = FoodRatings(["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"], ["korean", "japanese", "japanese", "greek", "japanese", "korean"], [9, 12, 8, 15, 14, 7])
-print(so.highestRated("korean"))
-print(so.highestRated("japanese"))
-print(so.changeRating("sushi", 16))
-print(so.highestRated("japanese"))
-print(so.changeRating("ramen", 16))
-print(so.highestRated("japanese"))
+
+so = Solution()
+print(so.closestMeetingNode(edges = [1,2,-1], node1 = 0, node2 = 0))
+print(so.closestMeetingNode(edges = [1,2,-1], node1 = 0, node2 = 2))
+print(so.closestMeetingNode(edges = [2,2,3,-1], node1 = 0, node2 = 1))
 
 
 

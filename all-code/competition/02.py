@@ -25,38 +25,33 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
+import heapq
+# heap.heapify(nums)
+# heapq.heappop() 函数弹出堆中最小值
+# heapq.heappush(nums, 1)
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
 from functools import lru_cache
 from typing import List
 # @lru_cache(None)
+import math
 
 # bit位 函数：
 # n.bit_length()
 # value = int(s, 2)
 
 class Solution:
-    def equalPairs(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        def equal(r, c):
-            for i in range(n):
-                if grid[r][i] != grid[i][c]:
-                    return False
-            return True
-        ans = 0
-        for i in range(n):
-            for j in range(n):
-                if equal(i, j):
-                    print(i, j)
-                    ans += 1
-
+    def maximumGroups(self, grades: List[int]) -> int:
+        n = len(grades)
+        ans = int((math.sqrt(8 * n + 1) - 1)) // 2
         return ans
 
 
 so = Solution()
-print(so.equalPairs([[3,1,2,2],[1,4,4,5],[2,4,2,2],[2,4,2,2]]))
-print(so.equalPairs([[3,2,1],[1,7,6],[2,7,7]]))
+print(so.maximumGroups([10,6,12,7,3,5]))
+print(so.maximumGroups([8, 8]))
 
 
 

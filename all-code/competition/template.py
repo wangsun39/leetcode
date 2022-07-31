@@ -25,6 +25,11 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
+import heapq
+# heap.heapify(nums)
+# heapq.heappop() 函数弹出堆中最小值
+# heapq.heappush(nums, 1)
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
@@ -37,7 +42,7 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def removeDigit(self, number: str, digit: str) -> str:
+    def removeDigit(self, number) -> str:
         pass
 
 
