@@ -1,3 +1,37 @@
+# 给你一个 n 个节点的 有向图 ，节点编号为 0 到 n - 1 ，其中每个节点 至多 有一条出边。
+#
+# 图用一个大小为 n 下标从 0 开始的数组 edges 表示，节点 i 到节点 edges[i] 之间有一条有向边。如果节点 i 没有出边，那么 edges[i] == -1 。
+#
+# 请你返回图中的 最长 环，如果没有任何环，请返回 -1 。
+#
+# 一个环指的是起点和终点是 同一个 节点的路径。
+#
+#  
+#
+# 示例 1：
+#
+#
+#
+# 输入：edges = [3,3,4,2,3]
+# 输出去：3
+# 解释：图中的最长环是：2 -> 4 -> 3 -> 2 。
+# 这个环的长度为 3 ，所以返回 3 。
+# 示例 2：
+#
+#
+#
+# 输入：edges = [2,-1,3,1]
+# 输出：-1
+# 解释：图中没有任何环。
+#  
+#
+# 提示：
+#
+# n == edges.length
+# 2 <= n <= 105
+# -1 <= edges[i] < n
+# edges[i] != i
+
 
 from typing import List
 from typing import Optional
@@ -7,7 +41,6 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -43,18 +76,36 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
-        s = set(nums)
-        ans = 0
-        for i, e in enumerate(nums):
-            if e + diff in s and e + diff * 2 in s:
-                ans += 1
+    def longestCycle(self, edges: List[int]) -> int:
+        # @lru_cache(None)
+        n = len(edges)
+        flag = [0] * n
+        ans = -1
+        def dfs(node):
+            nonlocal ans
+            if flag[node]:
+                return
+            d = {}
+            dis = 0
+            while 0 == flag[node] and -1 != edges[node]:
+                d[node] = dis
+                dis += 1
+                flag[node] = 1
+                node = edges[node]
+            if -1 == edges[node]:
+                return
+            if node in d:
+                ans = max(ans, dis - d[node])
+        for i in range(n):
+            dfs(i)
         return ans
 
 
+
+
 so = Solution()
-print(so.arithmeticTriplets(nums = [0,1,4,6,7,10], diff = 3))
-print(so.arithmeticTriplets(nums = [4,5,6,7,8,9], diff = 2))
+print(so.longestCycle([3,3,4,2,3]))
+print(so.longestCycle([2,-1,3,1]))
 
 
 

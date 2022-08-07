@@ -7,6 +7,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -42,36 +43,22 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def longestCycle(self, edges: List[int]) -> int:
-        # @lru_cache(None)
-        n = len(edges)
-        flag = [0] * n
-        ans = -1
-        def dfs(node):
-            nonlocal ans
-            if flag[node]:
-                return
-            d = {}
-            dis = 0
-            while 0 == flag[node] and -1 != edges[node]:
-                d[node] = dis
-                dis += 1
-                flag[node] = 1
-                node = edges[node]
-            if -1 == edges[node]:
-                return
-            if node in d:
-                ans = max(ans, dis - d[node])
+    def longestIdealString(self, s: str, k: int) -> int:
+        n = len(s)
+        dp = [0] * 26
         for i in range(n):
-            dfs(i)
-        return ans
-
+            begin, end = max(0, ord(s[i]) - ord('a') - k), min(26, ord(s[i]) - ord('a') + k + 1)
+            dp[ord(s[i]) - ord('a')] = max(dp[begin: end]) + 1
+        return max(dp)
 
 
 
 so = Solution()
-print(so.longestCycle([3,3,4,2,3]))
-print(so.longestCycle([2,-1,3,1]))
+print(so.longestIdealString("pvjcci", 4)) # 2
+print(so.longestIdealString(s = "abcd", k = 0))
+print(so.longestIdealString(s = "xyz", k = 2))
+print(so.longestIdealString(s = "acfgbd", k = 2))
+print(so.longestIdealString(s = "abcd", k = 3))
 
 
 

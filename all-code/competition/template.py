@@ -7,6 +7,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：

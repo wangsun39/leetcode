@@ -1,3 +1,31 @@
+# 给你一个非负整数数组 nums 。在一步操作中，你必须：
+#
+# 选出一个正整数 x ，x 需要小于或等于 nums 中 最小 的 非零 元素。
+# nums 中的每个正整数都减去 x。
+# 返回使 nums 中所有元素都等于 0 需要的 最少 操作数。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：nums = [1,5,0,3,5]
+# 输出：3
+# 解释：
+# 第一步操作：选出 x = 1 ，之后 nums = [0,4,0,2,4] 。
+# 第二步操作：选出 x = 2 ，之后 nums = [0,2,0,0,2] 。
+# 第三步操作：选出 x = 2 ，之后 nums = [0,0,0,0,0] 。
+# 示例 2：
+#
+# 输入：nums = [0]
+# 输出：0
+# 解释：nums 中的每个元素都已经是 0 ，所以不需要执行任何操作。
+#  
+#
+# 提示：
+#
+# 1 <= nums.length <= 100
+# 0 <= nums[i] <= 100
+
 
 from typing import List
 from typing import Optional
@@ -7,7 +35,6 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -43,18 +70,16 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
-        s = set(nums)
-        ans = 0
-        for i, e in enumerate(nums):
-            if e + diff in s and e + diff * 2 in s:
-                ans += 1
-        return ans
+    def minimumOperations(self, nums: List[int]) -> int:
+        counter = Counter(nums)
+        if counter[0] > 0:
+            return len(counter.keys()) - 1
+        return len(counter.keys())
 
 
 so = Solution()
-print(so.arithmeticTriplets(nums = [0,1,4,6,7,10], diff = 3))
-print(so.arithmeticTriplets(nums = [4,5,6,7,8,9], diff = 2))
+print(so.minimumOperations([1,5,0,3,5]))
+print(so.minimumOperations([0]))
 
 
 

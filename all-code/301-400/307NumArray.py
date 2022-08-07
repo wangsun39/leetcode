@@ -36,9 +36,10 @@
 
 from typing import List
 from collections import defaultdict
+import math
 
 
-class NumArray:
+class NumArray1:
 
     def __init__(self, nums: List[int]):
         self.nums = nums
@@ -60,8 +61,65 @@ class NumArray:
         self.minus[index] += (val - old)
 
     def sumRange(self, left: int, right: int) -> int:
+        pass
+
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.tree = defaultdict(int)
+        n = len(nums)
+        self.n = n
+        for i in range(n):
+            # self.tree[n + i] = nums[i]
+            self.update(i, nums[i])
+        print(self.tree)
 
 
+    def update(self, index: int, val: int) -> None:
+        # self.update1(1, 0, 3 * (10 ** 4), index, index, val)
+        self.update1(1, 0, self.n, index, index, val)
+
+
+    def sumRange(self, left: int, right: int) -> int:
+        # return self.query(1, 0, 3 * (10 ** 4), left, right)
+        return self.query(1, 0, self.n, left, right)
+
+    def pushup(self, id: int):
+        # if (1 == self.tree[id << 1]) and (1 == self.tree[(id << 1) | 1]):
+        #     self.tree[id] = 1
+        # else:
+        #     self.tree[id] = 0
+        self.tree[id] = self.tree[id << 1] + self.tree[(id << 1) | 1]
+
+    def pushdown(self, id: int):
+        if self.tree[id]:
+            left, right = id << 1, (id << 1) | 1
+            self.tree[left] = self.tree[id]
+            self.tree[right] = self.tree[id]
+
+    def update1(self, id: int, start: int, end: int, l: int, r: int, val: int):
+        if start > r or end < l:
+            return
+        if start >= l and end <= r:
+            self.tree[id] = val
+            return
+        mid = (start + end) >> 1
+        # self.pushdown(id)
+        self.update1(id << 1, start, mid, l, r, val)
+        self.update1((id << 1) | 1, mid + 1, end, l, r, val)
+        self.pushup(id)
+
+    def query(self, id: int, start: int, end: int, l: int, r: int):
+        print(start, r)
+        if start > r or end < l:
+            return 0
+        if start >= l and end <= r:
+            return self.tree[id]
+        mid = (start + end) >> 1
+        # self.pushdown(id)
+        left = self.query(id << 1, start, mid, l, r)
+        right = self.query((id << 1) | 1, mid + 1, end, l, r)
+        return left + right
 
 # Your NumArray object will be instantiated and called as such:
 # obj = NumArray(nums)
@@ -69,7 +127,9 @@ class NumArray:
 # param_2 = obj.sumRange(left,right)
 
 
-so = NumArray()
-print(so.maxProfit([1,2,3,0,2]))
-print(so.maxProfit([5,7,11,13,17,19,29,43,47,53]))
+so = NumArray([1, 3, 5])
+print(so.tree)
+print(so.sumRange(0, 2))
+print(so.update(1, 2))
+print(so.sumRange(0, 2))
 

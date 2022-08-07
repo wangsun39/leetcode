@@ -7,6 +7,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -36,22 +37,34 @@ import heapq
 from functools import lru_cache
 from typing import List
 # @lru_cache(None)
-import math
 
 # bit位 函数：
 # n.bit_length()
 # value = int(s, 2)
 
 class Solution:
-    def maximumGroups(self, grades: List[int]) -> int:
-        n = len(grades)
-        ans = int((math.sqrt(8 * n + 1) - 1)) // 2
-        return ans
+    def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
+        d = defaultdict(set)
+        restricted = set(restricted)
+        for e in edges:
+            d[e[0]].add(e[1])
+            d[e[1]].add(e[0])
+        ans = set()
+        queue = [0]
+        while len(queue) > 0:
+            node = queue.pop(0)
+            if node not in ans and node not in restricted:
+                for n in d[node]:
+                    if n not in ans and node not in restricted:
+                        queue.append(n)
+                ans.add(node)
+        return len(ans)
+
 
 
 so = Solution()
-print(so.maximumGroups([10,6,12,7,3,5]))
-print(so.maximumGroups([8, 8]))
+print(so.reachableNodes(n = 7, edges = [[0,1],[1,2],[3,1],[4,0],[0,5],[5,6]], restricted = [4,5]))
+print(so.reachableNodes(n = 7, edges = [[0,1],[0,2],[0,5],[0,4],[3,2],[6,5]], restricted = [4,2,1]))
 
 
 

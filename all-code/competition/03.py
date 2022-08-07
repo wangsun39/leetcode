@@ -7,6 +7,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -42,38 +43,32 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
-        # if node1 == node2:
-        #     return node1
-        def find(node):
-            d = {}
-            distance = 0
-            while node not in d and node != -1:
-                d[node] = distance
-                node = edges[node]
-                distance += 1
-            return d
-        n = len(edges)
-        d1, d2 = find(node1), find(node2)
-        inter = set(d1.keys()) & set(d2.keys())
-        if len(inter) == 0:
-            return -1
-        ans = [n, n]
-        for node in inter:
-            dis = max(d1[node], d2[node])
-            if dis < ans[0]:
-                ans = [dis, node]
-            elif dis == ans[0]:
-                ans[1] = min(ans[1], node)
-        return ans[1]
-
+    def validPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        @lru_cache(None)
+        def helper(idx):
+            if idx == n:
+                return True
+            if idx == n - 1:
+                return False
+            if idx == n - 2:
+                return nums[idx] == nums[idx + 1]
+            if idx == n - 3:
+                return (nums[idx] == nums[idx + 1] == nums[idx + 2]) or (nums[idx + 2] - nums[idx + 1] == nums[idx + 1] - nums[idx] == 1)
+            if nums[idx] == nums[idx + 1] and helper(idx + 2):
+                return True
+            if nums[idx] == nums[idx + 1] == nums[idx + 2] and helper(idx + 3):
+                return True
+            if nums[idx + 2] - nums[idx + 1] == nums[idx + 1] - nums[idx] == 1 and helper(idx + 3):
+                return True
+            return False
+        return helper(0)
 
 
 
 so = Solution()
-print(so.closestMeetingNode(edges = [1,2,-1], node1 = 0, node2 = 0))
-print(so.closestMeetingNode(edges = [1,2,-1], node1 = 0, node2 = 2))
-print(so.closestMeetingNode(edges = [2,2,3,-1], node1 = 0, node2 = 1))
+print(so.validPartition([4,4,4,5,6]))
+print(so.validPartition([1,1,1,2]))
 
 
 
