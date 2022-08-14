@@ -1,3 +1,34 @@
+# 给你一个下标从 0 开始、严格递增 的整数数组 nums 和一个正整数 diff 。如果满足下述全部条件，则三元组 (i, j, k) 就是一个 算术三元组 ：
+#
+# i < j < k ，
+# nums[j] - nums[i] == diff 且
+# nums[k] - nums[j] == diff
+# 返回不同 算术三元组 的数目。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：nums = [0,1,4,6,7,10], diff = 3
+# 输出：2
+# 解释：
+# (1, 2, 4) 是算术三元组：7 - 4 == 3 且 4 - 1 == 3 。
+# (2, 4, 5) 是算术三元组：10 - 7 == 3 且 7 - 4 == 3 。
+# 示例 2：
+#
+# 输入：nums = [4,5,6,7,8,9], diff = 2
+# 输出：2
+# 解释：
+# (0, 2, 4) 是算术三元组：8 - 6 == 2 且 6 - 4 == 2 。
+# (1, 3, 5) 是算术三元组：9 - 7 == 2 且 7 - 5 == 2 。
+#  
+#
+# 提示：
+#
+# 3 <= nums.length <= 200
+# 0 <= nums[i] <= 200
+# 1 <= diff <= 50
+# nums 严格 递增
 
 from typing import List
 from typing import Optional
@@ -42,37 +73,19 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-
-# 将 nn 转换成字符串 ss，定义 f(i,\textit{mask}, \textit{isLimit},\textit{isNum})f(i,mask,isLimit,isNum) 表示从构造 nn 从高到低第 ii 位及其之后位的方案数，其余参数的含义为：
-#
-# 要选的数字不能在 \textit{mask}mask 集合中。
-# \textit{isLimit}isLimit 表示当前是否受到了 nn 的约束。若为真，则第 ii 位填入的数字至多为 s[i]s[i]，否则可以是 99。
-# \textit{isNum}isNum 表示 ii 前面的位数是否填了数字。若为假，则当前位可以跳过（不填数字），或者要填入的数字至少为 11；若为真，则要填入的数字可以从 00 开始。
-
-
 class Solution:
-    def countSpecialNumbers(self, n: int) -> int:
-        s = str(n)
-        @lru_cache(None)
-        def helper(i: int, mask: int, is_limit: bool, is_num: bool) -> int:
-            if i == len(s):
-                return 1 if is_num else 0
-            ans = 0
-            if not is_num:
-                ans = helper(i + 1, mask, False, False)
-            upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
-            lower = 0 if is_num else 1
-            for j in range(lower, upper + 1):
-                if (1 << j) & mask == 0:
-                    ans += helper(i + 1, mask | (1 << j), is_limit and j == upper, True)
-            return ans
-        return helper(0, 0, True, False)
+    def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
+        s = set(nums)
+        ans = 0
+        for i, e in enumerate(nums):
+            if e + diff in s and e + diff * 2 in s:
+                ans += 1
+        return ans
 
 
 so = Solution()
-print(so.countSpecialNumbers(5))
-print(so.countSpecialNumbers(20))
-print(so.countSpecialNumbers(135))
+print(so.arithmeticTriplets(nums = [0,1,4,6,7,10], diff = 3))
+print(so.arithmeticTriplets(nums = [4,5,6,7,8,9], diff = 2))
 
 
 

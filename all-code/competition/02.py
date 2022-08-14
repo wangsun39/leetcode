@@ -43,28 +43,23 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
-        d = defaultdict(set)
-        restricted = set(restricted)
-        for e in edges:
-            d[e[0]].add(e[1])
-            d[e[1]].add(e[0])
-        ans = set()
-        queue = [0]
-        while len(queue) > 0:
-            node = queue.pop(0)
-            if node not in ans and node not in restricted:
-                for n in d[node]:
-                    if n not in ans and node not in restricted:
-                        queue.append(n)
-                ans.add(node)
-        return len(ans)
+    def edgeScore(self, edges: List[int]) -> int:
+        n = len(edges)
+        integral = [0] * n
+        for idx, val in enumerate(edges):
+            integral[val] += idx
+        id, mx = 0, 0
+        for idx, val in enumerate(integral):
+            if val > mx:
+                id = idx
+                mx = val
+        return id
 
 
 
 so = Solution()
-print(so.reachableNodes(n = 7, edges = [[0,1],[1,2],[3,1],[4,0],[0,5],[5,6]], restricted = [4,5]))
-print(so.reachableNodes(n = 7, edges = [[0,1],[0,2],[0,5],[0,4],[3,2],[6,5]], restricted = [4,2,1]))
+print(so.edgeScore([1,0,0,0,0,7,7,5]))
+print(so.edgeScore([2,0,0,2]))
 
 
 

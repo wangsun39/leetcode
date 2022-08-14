@@ -43,32 +43,37 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def validPartition(self, nums: List[int]) -> bool:
-        n = len(nums)
-        @lru_cache(None)
-        def helper(idx):
-            if idx == n:
-                return True
-            if idx == n - 1:
-                return False
-            if idx == n - 2:
-                return nums[idx] == nums[idx + 1]
-            if idx == n - 3:
-                return (nums[idx] == nums[idx + 1] == nums[idx + 2]) or (nums[idx + 2] - nums[idx + 1] == nums[idx + 1] - nums[idx] == 1)
-            if nums[idx] == nums[idx + 1] and helper(idx + 2):
-                return True
-            if nums[idx] == nums[idx + 1] == nums[idx + 2] and helper(idx + 3):
-                return True
-            if nums[idx + 2] - nums[idx + 1] == nums[idx + 1] - nums[idx] == 1 and helper(idx + 3):
-                return True
-            return False
-        return helper(0)
+    def smallestNumber(self, pattern: str) -> str:
+        def helper(pattern):
+            if pattern == 'I':
+                return '12'
+            if pattern == 'D':
+                return '21'
+            n = len(pattern)
+            pos = pattern.rfind('I')
+            ans = ''
+            if pos == -1:
+                for i in range(n + 1, 0, -1):
+                    ans += str(i)
+                return ans
+            sub2 = ''
+            i = n + 1
+            count = 0
+            # for i in range(n + 1, n - pos + 1, -1):
+            while count < n - pos:
+                sub2 += str(i)
+                count += 1
+                i -= 1
+            sub1 = helper(pattern[:pos])
+            return sub1 + sub2
+        return helper(pattern)
 
 
 
 so = Solution()
-print(so.validPartition([4,4,4,5,6]))
-print(so.validPartition([1,1,1,2]))
+print(so.smallestNumber("IIIDDD"))
+print(so.smallestNumber("IIIDIDDD"))
+print(so.smallestNumber("DDD"))
 
 
 

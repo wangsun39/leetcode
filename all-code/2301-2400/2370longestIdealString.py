@@ -1,3 +1,34 @@
+# 给你一个由小写字母组成的字符串 s ，和一个整数 k 。如果满足下述条件，则可以将字符串 t 视作是 理想字符串 ：
+#
+# t 是字符串 s 的一个子序列。
+# t 中每两个 相邻 字母在字母表中位次的绝对差值小于或等于 k 。
+# 返回 最长 理想字符串的长度。
+#
+# 字符串的子序列同样是一个字符串，并且子序列还满足：可以经由其他字符串删除某些字符（也可以不删除）但不改变剩余字符的顺序得到。
+#
+# 注意：字母表顺序不会循环。例如，'a' 和 'z' 在字母表中位次的绝对差值是 25 ，而不是 1 。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：s = "acfgbd", k = 2
+# 输出：4
+# 解释：最长理想字符串是 "acbd" 。该字符串长度为 4 ，所以返回 4 。
+# 注意 "acfgbd" 不是理想字符串，因为 'c' 和 'f' 的字母表位次差值为 3 。
+# 示例 2：
+#
+# 输入：s = "abcd", k = 3
+# 输出：4
+# 解释：最长理想字符串是 "abcd" ，该字符串长度为 4 ，所以返回 4 。
+#  
+#
+# 提示：
+#
+# 1 <= s.length <= 105
+# 0 <= k <= 25
+# s 由小写英文字母组成
+
 
 from typing import List
 from typing import Optional
@@ -42,37 +73,23 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-
-# 将 nn 转换成字符串 ss，定义 f(i,\textit{mask}, \textit{isLimit},\textit{isNum})f(i,mask,isLimit,isNum) 表示从构造 nn 从高到低第 ii 位及其之后位的方案数，其余参数的含义为：
-#
-# 要选的数字不能在 \textit{mask}mask 集合中。
-# \textit{isLimit}isLimit 表示当前是否受到了 nn 的约束。若为真，则第 ii 位填入的数字至多为 s[i]s[i]，否则可以是 99。
-# \textit{isNum}isNum 表示 ii 前面的位数是否填了数字。若为假，则当前位可以跳过（不填数字），或者要填入的数字至少为 11；若为真，则要填入的数字可以从 00 开始。
-
-
 class Solution:
-    def countSpecialNumbers(self, n: int) -> int:
-        s = str(n)
-        @lru_cache(None)
-        def helper(i: int, mask: int, is_limit: bool, is_num: bool) -> int:
-            if i == len(s):
-                return 1 if is_num else 0
-            ans = 0
-            if not is_num:
-                ans = helper(i + 1, mask, False, False)
-            upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
-            lower = 0 if is_num else 1
-            for j in range(lower, upper + 1):
-                if (1 << j) & mask == 0:
-                    ans += helper(i + 1, mask | (1 << j), is_limit and j == upper, True)
-            return ans
-        return helper(0, 0, True, False)
+    def longestIdealString(self, s: str, k: int) -> int:
+        n = len(s)
+        dp = [0] * 26
+        for i in range(n):
+            begin, end = max(0, ord(s[i]) - ord('a') - k), min(26, ord(s[i]) - ord('a') + k + 1)
+            dp[ord(s[i]) - ord('a')] = max(dp[begin: end]) + 1
+        return max(dp)
+
 
 
 so = Solution()
-print(so.countSpecialNumbers(5))
-print(so.countSpecialNumbers(20))
-print(so.countSpecialNumbers(135))
+print(so.longestIdealString("pvjcci", 4)) # 2
+print(so.longestIdealString(s = "abcd", k = 0))
+print(so.longestIdealString(s = "xyz", k = 2))
+print(so.longestIdealString(s = "acfgbd", k = 2))
+print(so.longestIdealString(s = "abcd", k = 3))
 
 
 
