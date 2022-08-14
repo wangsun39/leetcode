@@ -1,7 +1,9 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2022-8-14| 第304场周赛  | T4  | [统计特殊整数](https://leetcode.cn/problems/count-special-integers/) |       | 数位DP，没做出来，灵神总结了一个模块，已经记录下来<br>此题之前leetcode有个及其相似的题(1012)，比赛的时候已经看到有人提到了，也看到了答案，但还是忍住了没有抄答案。<br>虽然leetcode不应该这么出题，估计不少人都是抄了答案提交的，但还是技不如人，继续加油吧，&#x1F337; |
+|2022-8-7| 第305场周赛  | T4  | [最长理想子序列](https://leetcode.cn/problems/longest-ideal-subsequence/) |   1834    | 26个字母的DP， 每周AK(796) |
 |2022-7-31| 第304场周赛  | T2  | [分组的最大数量](https://leetcode.cn/problems/maximum-number-of-groups-entering-a-competition/) |   1502    | 小技巧，其实和数组元素无关 |
-|2022-7-31| 第304场周赛  | T4  | [图中的最长环](https://leetcode.cn/problems/longest-cycle-in-a-graph/) |    1897   | 本周AK |
+|2022-7-31| 第304场周赛  | T4  | [图中的最长环](https://leetcode.cn/problems/longest-cycle-in-a-graph/) |    1897   | 本周AK(430) |
 |2022-7-24| 第303场周赛  | T4  | [优质数对的数目](https://leetcode.cn/problems/minimum-deletions-to-make-array-divisible/) |  2075     | 一道涉及位运算的题，要用到公式： (A & B).bit_counter() + (A \| B).bit_counter() == A.bit_count() + B.bit_count() 有一定的技巧 |
 |2022-7-17| 第302场周赛  | T4  | [使数组可以被整除的最少删除次数](https://leetcode.cn/problems/number-of-excellent-pairs/submissions/) |  1651     | GCD  |
 |2022-7-10| 第301场周赛  | T1  | [装满杯子需要的最短总时长](https://leetcode.cn/problems/minimum-amount-of-time-to-fill-cups/) |  1360     | 需要有点数学技巧：<br>假设amount中三个数从小到大依次为n1 <= n2 <= n3，<br>1) 如果n3 >= n1 + n2,那么结果就是n3.<br>2) 否则，可以证明，答案能达到下界sum(amount)/2上取整  |
