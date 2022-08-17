@@ -15,7 +15,7 @@
 # 提示：
 #
 # 0 <= n <= 109
-
+from functools import lru_cache
 
 class Solution:
     def countDigitOne(self, n: int) -> int:
@@ -39,14 +39,39 @@ class Solution:
             # print(res)
         return int(res)
 
+    def countDigitOne1(self, n: int) -> int:  # 用数位模板的解法
+        s = str(n)
+        @lru_cache(None)
+        def helper(i: int, is_limit: bool, is_num: bool) -> int:
+            if i == len(s):
+                # return 1 if is_num else 0
+                return 0
+            ans = 0
+            if not is_num:
+                ans = helper(i + 1, False, False)
+            upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
+            lower = 0 if is_num else 1
+            for j in range(lower, upper + 1):
+                ans += helper(i + 1, is_limit and j == upper, True)
+                if j == 1:
+                    if i == len(s) - 1:
+                        ans += 1
+                    elif j != upper:
+                        ans += (10 ** (len(s) - i - 1))
+                    else:
+                        ans += (int(s[i + 1:]) + 1)
+
+            return ans
+        return helper(0, True, False)
+
 
 
 
 so = Solution()
-print(so.countDigitOne(10))
-print(so.countDigitOne(0))
-print(so.countDigitOne(11))
-print(so.countDigitOne(13))
+print(so.countDigitOne1(11))   # 4
+print(so.countDigitOne1(13))  # 6
+print(so.countDigitOne1(10))  # 2
+print(so.countDigitOne1(0))   # 0
 
 
 
