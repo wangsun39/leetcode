@@ -43,19 +43,27 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def largestLocal(self, grid: List[List[int]]) -> List[List[int]]:
-        n = len(grid)
-        ans = [[0 for _ in range(n - 2)] for _ in range(n - 2)]
-        for i in range(1, n - 1):
-            for j in range(1, n - 1):
-                ans[i - 1][j - 1] = max(grid[i - 1][j - 1], grid[i - 1][j], grid[i - 1][j + 1], grid[i][j - 1], grid[i][j], grid[i][j + 1], grid[i + 1][j - 1], grid[i + 1][j], grid[i + 1][j + 1])
-        return ans
+    def minNumberOfHours(self, initialEnergy: int, initialExperience: int, energy: List[int], experience: List[int]) -> int:
+        n = len(energy)
+
+        sum1 = sum(energy)
+        if initialEnergy <= sum1:
+            e1 = sum1 - initialEnergy + 1
+        else:
+            e1 = 0
+        e2 = 0
+        for i in range(n):
+            if initialExperience <= experience[i]:
+                e2 = max(e2, experience[i] - initialExperience + 1)
+            initialExperience += experience[i]
+        return e1 + e2
 
 
 
 so = Solution()
-print(so.largestLocal([[9,9,8,1],[5,6,2,6],[8,2,6,4],[6,2,2,2]]))
-print(so.largestLocal([[1,1,1,1,1],[1,1,1,1,1],[1,1,2,1,1],[1,1,1,1,1],[1,1,1,1,1]]))
+print(so.minNumberOfHours(1,1,[1,1,1,1],[1,1,1,50]))
+print(so.minNumberOfHours(initialEnergy = 5, initialExperience = 3, energy = [1,4,3,2], experience = [2,6,3,1]))
+print(so.minNumberOfHours(initialEnergy = 2, initialExperience = 4, energy = [1], experience = [3]))
 
 
 
