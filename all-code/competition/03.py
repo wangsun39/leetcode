@@ -42,54 +42,16 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
+import string
+# string.digits  表示 0123456789
 
 class Solution:
-    def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
-        tree = defaultdict(set)
-        def construct(node: TreeNode):
-            array = [node]
-            while len(array) > 0:
-                cur = array.pop(0)
-                if cur.left is not None:
-                    tree[cur.val].add(cur.left.val)
-                    tree[cur.left.val].add(cur.val)
-                    array.append(cur.left)
-                if cur.right is not None:
-                    tree[cur.val].add(cur.right.val)
-                    tree[cur.right.val].add(cur.val)
-                    array.append(cur.right)
-
-        def bfs(val):
-            ans = 0
-            infect = set()
-            array = [val, '#']
-            while len(array) > 1:
-                cur = array.pop(0)
-                if cur == '#':
-                    ans += 1
-                    array.append('#')
-                    continue
-                infect.add(cur)
-                for e in tree[cur]:
-                    if e not in infect:
-                        array.append(e)
-            return ans
-
-        construct(root)
-        return bfs(start)
-
-root = TreeNode(1)
-root.left = TreeNode(5)
-root.right = TreeNode(3)
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.amountOfTime(root, 3))
+print(so.removeDigit(123456))
 
 
 

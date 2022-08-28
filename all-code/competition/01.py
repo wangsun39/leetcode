@@ -42,28 +42,16 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
+import string
+# string.digits  表示 0123456789
+
 class Solution:
-    def minNumberOfHours(self, initialEnergy: int, initialExperience: int, energy: List[int], experience: List[int]) -> int:
-        n = len(energy)
-
-        sum1 = sum(energy)
-        if initialEnergy <= sum1:
-            e1 = sum1 - initialEnergy + 1
-        else:
-            e1 = 0
-        e2 = 0
-        for i in range(n):
-            if initialExperience <= experience[i]:
-                e2 = max(e2, experience[i] - initialExperience + 1)
-            initialExperience += experience[i]
-        return e1 + e2
-
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.minNumberOfHours(1,1,[1,1,1,1],[1,1,1,50]))
-print(so.minNumberOfHours(initialEnergy = 5, initialExperience = 3, energy = [1,4,3,2], experience = [2,6,3,1]))
-print(so.minNumberOfHours(initialEnergy = 2, initialExperience = 4, energy = [1], experience = [3]))
+print(so.removeDigit(123456))
 
 
 

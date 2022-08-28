@@ -42,44 +42,16 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
+import string
+# string.digits  表示 0123456789
+
 class Solution:
-    def largestPalindromic(self, num: str) -> str:
-        counter = Counter(num)
-        s = []
-        single = -1
-        for x in counter:
-            if counter[x] % 2 == 0:
-                s.append([x, counter[x]])
-            else:
-                if counter[x] > 1:
-                    s.append([x, counter[x] - 1])
-                if int(x) > single:
-                    single = int(x)
-        s.sort(reverse=True)
-        if len(s) and s[0][0] == '0':
-            if single != -1:
-                return str(single)
-            else:
-                return '0'
-        ans = ''
-        for e in s:
-            ans += (e[0] * (e[1] // 2))
-        ans1 = ans[::-1]
-        if single != -1:
-            ans += str(single)
-        return ans + ans1
-
-
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.largestPalindromic("0"))
-print(so.largestPalindromic("00"))
-print(so.largestPalindromic("000"))
-print(so.largestPalindromic("9"))
-print(so.largestPalindromic("09"))
-print(so.largestPalindromic("00009"))
-print(so.largestPalindromic("444947137"))
+print(so.removeDigit(123456))
 
 
 

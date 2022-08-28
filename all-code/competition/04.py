@@ -42,6 +42,9 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
+import string
+# string.digits  表示 0123456789
+
 class Solution:
     def removeDigit(self, number) -> str:
         pass
