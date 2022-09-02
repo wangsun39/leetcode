@@ -27,7 +27,7 @@
 #
 # 2
 # 注意: 给定的二叉树不超过10000个结点。 树的高度不超过1000。
-
+from typing import Optional
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -37,7 +37,7 @@ class TreeNode:
 
 
 class Solution:
-    def longestUnivaluePath(self, root: TreeNode) -> int:
+    def longestUnivaluePath1(self, root: TreeNode) -> int:
         longest = 0
         def helper(node): # 返回值，一个是从node开始的最长路径，不包含经过node的路径
             nonlocal longest
@@ -55,10 +55,40 @@ class Solution:
         if root is not None:
             helper(root)
         return longest
+    def longestUnivaluePath(self, root: Optional[TreeNode]) -> int:
+        def helper(node):
+            a1, a2 = 1, 1
+            if node.left:
+                l1, l2 = helper(node.left)
+                if node.val == node.left.val:
+                    a1 += l1
+                a2 = max(a2, l2, a1)
+            if node.right:
+                r1, r2 = helper(node.right)
+                if node.val == node.right.val:
+                    a1 = max(a1, 1 + r1)
+                a2 = max(a2, r2, a1)
+            # a2 = max(l2, r2, a1)
+            if node.left and node.right and node.val == node.left.val == node.right.val:
+                a2 = max(a2, l1 + r1 + 1)
+            return a1, a2  # a1 为以node为起点的最长路径上的点数，a2就是答案期望的路径上的点数
+        if root is None:
+            return 0
+        x, y = helper(root)
+        return y - 1
 
 
 
 so = Solution()
+root = TreeNode(5)
+root.left = TreeNode(4)
+root.left.left = TreeNode(1)
+root.left.right = TreeNode(1)
+root.right = TreeNode(5)
+# root.right.right = TreeNode(5)
+#print(so.repeatedStringMatch("abcd", "cdabcdab"))
+print(so.longestUnivaluePath(root))
+
 root = TreeNode(5)
 root.left = TreeNode(4)
 root.left.left = TreeNode(4)
