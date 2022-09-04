@@ -46,12 +46,24 @@ import string
 # string.digits  表示 0123456789
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def checkDistances(self, s: str, distance: List[int]) -> bool:
+        dist = [-1] * 26
+        i, n = 0, len(s)
+        while i < n:
+            if dist[ord(s[i]) - ord('a')] != -1:
+                i += 1
+                continue
+            pos = s.find(s[i], i + 1)
+            dist[ord(s[i]) - ord('a')] = pos - i - 1
+            if dist[ord(s[i]) - ord('a')] != distance[ord(s[i]) - ord('a')]:
+                return False
+        # print(dist)
+        return True
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.checkDistances(s = "abaccb", distance = [1,3,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
+print(so.checkDistances(s = "aa", distance = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
 
 
 

@@ -46,12 +46,25 @@ import string
 # string.digits  表示 0123456789
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def numberOfWays(self, startPos: int, endPos: int, k: int) -> int:
+        MOD = int(1e9 + 7)
+        # dp = defaultdict(set)
+        # dp[(endPos, 0)] = 1
+
+        @lru_cache(None)
+        def helper(pos, step):
+            if step == 0:
+                return 1 if pos == endPos else 0
+            ans = helper(pos - 1, step - 1) + helper(pos + 1, step - 1)
+            ans %= MOD
+            return ans
+        return helper(startPos, k)
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.numberOfWays(startPos = 1, endPos = 2, k = 3))
+print(so.numberOfWays(startPos = 2, endPos = 5, k = 10))
 
 
 

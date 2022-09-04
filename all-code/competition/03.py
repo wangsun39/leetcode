@@ -46,12 +46,25 @@ import string
 # string.digits  表示 0123456789
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def longestNiceSubarray(self, nums: List[int]) -> int:
+        n = len(nums)
+        i, j = 0, 1
+        cur = nums[i]
+        ans = 1
+        while j < n:
+            if cur & nums[j] == 0:
+                cur |= nums[j]
+                ans = max(ans, j - i + 1)
+                j += 1
+            else:
+                cur &= ~nums[i]
+                i += 1
+        return ans
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.longestNiceSubarray([1,3,8,48,10]))
+print(so.longestNiceSubarray([3,1,5,11,13]))
 
 
 

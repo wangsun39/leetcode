@@ -46,12 +46,38 @@ import string
 # string.digits  表示 0123456789
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def mostBooked(self, n: int, meetings: List[List[int]]) -> int:
+        meetings.sort()
+        count = [0] * n
+        # x = [[int(i - 1e6), i] for i in range(n)]
+        x = [[0, i] for i in range(n)]
+        # h = heapq.heapify(x)
+        h = x
+        for mt in meetings:
+            end, idx = heapq.heappop(h)
+            while end < mt[0]:
+                heapq.heappush(h, [mt[0], idx])
+                end, idx = heapq.heappop(h)
+            if end < 0 or end <= mt[0]:
+                heapq.heappush(h, [mt[1], idx])
+            else:
+                heapq.heappush(h, [end + mt[1] - mt[0], idx])
+            count[idx] += 1
+        ans, mx = 0, 0
+        print(count)
+        for i, e in enumerate(count):
+            if e > mx:
+                ans = i
+                mx = e
+        return ans
+
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.mostBooked(n = 4, meetings = [[18,19],[3,12],[17,19],[2,13],[7,10]]))
+print(so.mostBooked(n = 3, meetings = [[1,20],[2,10],[3,5],[4,9],[6,8]]))
+print(so.mostBooked(n = 2, meetings = [[0,10],[1,5],[2,7],[3,4]]))
 
 
 
