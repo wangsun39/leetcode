@@ -1,3 +1,4 @@
+from functools import lru_cache
 class Solution:
     def __init__(self):
         self.getAllStates(6)
@@ -33,7 +34,7 @@ class Solution:
         self.allStates.append(self.funcB(self.funcD([1] * n)))
         self.allStates.append(self.funcC(self.funcD([1] * n)))
         print(self.allStates)
-    def flipLights(self, n: int, m: int):
+    def flipLights1(self, n: int, m: int):
         if 0 == n:
             return 0
         if 0 == m:
@@ -52,9 +53,36 @@ class Solution:
         else:
             return 8
 
+    def flipLights(self, n: int, presses: int):
+        @lru_cache(None)
+        def next(L, time):
+            # if L in ans:
+            #     return
+            if time == 0:
+                ans.add(L)
+                return
+            n = len(L)
+            L1, L2, L3, L4 = [], [], [], []
+            for i in range(n):
+                L1.append(-L[i])
+                L2.append(L[i] if i % 2 == 0 else -L[i])
+                L3.append(L[i] if i % 2 == 1 else -L[i])
+                L4.append(-L[i] if i % 3 == 0 else L[i])
+
+            next(tuple(L1), time - 1)
+            next(tuple(L2), time - 1)
+            next(tuple(L3), time - 1)
+            next(tuple(L4), time - 1)
+
+        # if presses == 0: return 1
+        ans = set()
+        L = tuple([1] * min(n, 6))
+        next(L, presses)
+        print(ans)
+        return len(ans)
 
 
 
 
 obj = Solution()
-obj.flipLights(6, 1)
+obj.flipLights(3, 2)
