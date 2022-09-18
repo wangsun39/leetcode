@@ -27,7 +27,7 @@ import bisect
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 import heapq
-# heap.heapify(nums)
+# heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
@@ -44,25 +44,51 @@ from typing import List
 
 import string
 # string.digits  表示 0123456789
+# string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
+# string.lowercase：包含所有小写字母的字符串
+# string.printable：包含所有可打印字符的字符串
+# string.punctuation：包含所有标点的字符串
+# string.uppercase：包含所有大写字母的字符串
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 class Solution:
-    def minGroups(self, intervals: List[List[int]]) -> int:
-        intervals.sort()
-        group = []
-        for iv in intervals:
-            pos = bisect.bisect_right(group, iv[0] - 1)
-            if pos > 0 and len(group) > 0 and group[pos - 1] < iv[0]:
-                del(group[pos - 1])
-                bisect.insort_right(group, iv[1])
-            elif pos >= len(group):
-                group.append(iv[1])
-            else:
-                bisect.insort_right(group, iv[1])
-        return len(group)
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        lev = 0
+        # cur = root
+        queue = [root]
+        def proc(q):
+            n = len(q)
+            for i in range(n // 2):
+                q[i].val, q[n - i - 1].val = q[n - i - 1].val, q[i].val
+            return
+            # return q
 
+        while True:
+            if lev % 2 == 0:
+                pass
+            else:
+                # queue = proc(queue)
+                proc(queue)
+            if queue[0].left is None:
+                break
+            que = []
+            for node in queue:
+                que.append(node.left)
+                que.append(node.right)
+            lev += 1
+            queue = que
+
+        return root
+
+root = TreeNode(2)
+root.left = TreeNode(3)
+root.right = TreeNode(4)
 so = Solution()
-print(so.minGroups([[1,3],[5,6],[8,10],[11,13]]))
-print(so.minGroups([[5,10],[6,8],[1,5],[2,3],[1,10]]))
+print(so.reverseOddLevels(root))
 
 
 

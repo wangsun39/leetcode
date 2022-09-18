@@ -1,3 +1,33 @@
+# 给你一个整数数组 nums ，返回出现最频繁的偶数元素。
+#
+# 如果存在多个满足条件的元素，只需要返回 最小 的一个。如果不存在这样的元素，返回 -1 。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：nums = [0,1,2,2,4,4,1]
+# 输出：2
+# 解释：
+# 数组中的偶数元素为 0、2 和 4 ，在这些元素中，2 和 4 出现次数最多。
+# 返回最小的那个，即返回 2 。
+# 示例 2：
+#
+# 输入：nums = [4,4,4,9,2,4]
+# 输出：4
+# 解释：4 是出现最频繁的偶数元素。
+# 示例 3：
+#
+# 输入：nums = [29,47,21,41,13,37,25,7]
+# 输出：-1
+# 解释：不存在偶数元素。
+#  
+#
+# 提示：
+#
+# 1 <= nums.length <= 2000
+# 0 <= nums[i] <= 105
+
 
 from typing import List
 from typing import Optional
@@ -27,7 +57,7 @@ import bisect
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 import heapq
-# heap.heapify(nums) # 小顶堆
+# heap.heapify(nums)
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
@@ -44,29 +74,28 @@ from typing import List
 
 import string
 # string.digits  表示 0123456789
-# string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.lowercase：包含所有小写字母的字符串
-# string.printable：包含所有可打印字符的字符串
-# string.punctuation：包含所有标点的字符串
-# string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def longestContinuousSubstring(self, s: str) -> int:
-        n = len(s)
-        ans = 1
-        cur = 1
-        for i in range(1, n):
-            if ord(s[i]) - ord(s[i - 1]) == 1:
-                cur += 1
-                ans = max(ans, cur)
-            else:
-                cur = 1
-        return ans
+    def mostFrequentEven(self, nums: List[int]) -> int:
+        counter = Counter(nums)
+        me = 0
+        ans = 1e6
+        for k in counter:
+            if k % 2 == 0:
+                if counter[k] > me:
+                    ans = k
+                    me = counter[k]
+                elif counter[k] == me:
+                    ans = min(k, ans)
+        return -1 if ans > 1e5 else ans
+
+
 
 
 so = Solution()
-print(so.longestContinuousSubstring("abacaba"))
-print(so.longestContinuousSubstring("abcde"))
+print(so.mostFrequentEven([0,1,2,2,4,4,1]))
+print(so.mostFrequentEven([4,4,4,9,2,4]))
+print(so.mostFrequentEven([29,47,21,41,13,37,25,7]))
 
 
 

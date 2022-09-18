@@ -1,3 +1,35 @@
+# 给你一个二维整数数组 intervals ，其中 intervals[i] = [lefti, righti] 表示 闭 区间 [lefti, righti] 。
+#
+# 你需要将 intervals 划分为一个或者多个区间 组 ，每个区间 只 属于一个组，且同一个组中任意两个区间 不相交 。
+#
+# 请你返回 最少 需要划分成多少个组。
+#
+# 如果两个区间覆盖的范围有重叠（即至少有一个公共数字），那么我们称这两个区间是 相交 的。比方说区间 [1, 5] 和 [5, 8] 相交。
+#
+#  
+#
+# 示例 1：
+#
+# 输入：intervals = [[5,10],[6,8],[1,5],[2,3],[1,10]]
+# 输出：3
+# 解释：我们可以将区间划分为如下的区间组：
+# - 第 1 组：[1, 5] ，[6, 8] 。
+# - 第 2 组：[2, 3] ，[5, 10] 。
+# - 第 3 组：[1, 10] 。
+# 可以证明无法将区间划分为少于 3 个组。
+# 示例 2：
+#
+# 输入：intervals = [[1,3],[5,6],[8,10],[11,13]]
+# 输出：1
+# 解释：所有区间互不相交，所以我们可以把它们全部放在一个组内。
+#  
+#
+# 提示：
+#
+# 1 <= intervals.length <= 105
+# intervals[i].length == 2
+# 1 <= lefti <= righti <= 106
+
 
 from typing import List
 from typing import Optional
@@ -27,7 +59,7 @@ import bisect
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 import heapq
-# heap.heapify(nums) # 小顶堆
+# heap.heapify(nums)
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
@@ -51,22 +83,20 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def longestContinuousSubstring(self, s: str) -> int:
-        n = len(s)
-        ans = 1
-        cur = 1
-        for i in range(1, n):
-            if ord(s[i]) - ord(s[i - 1]) == 1:
-                cur += 1
-                ans = max(ans, cur)
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+        group = [intervals[0][1]]
+        for iv in intervals[1:]:
+            if len(group) > 0 and group[0] < iv[0]:
+                del(group[0])
+                bisect.insort_right(group, iv[1])
             else:
-                cur = 1
-        return ans
-
+                bisect.insort_right(group, iv[1])
+        return len(group)
 
 so = Solution()
-print(so.longestContinuousSubstring("abacaba"))
-print(so.longestContinuousSubstring("abcde"))
+print(so.minGroups([[1,3],[5,6],[8,10],[11,13]]))
+print(so.minGroups([[5,10],[6,8],[1,5],[2,3],[1,10]]))
 
 
 

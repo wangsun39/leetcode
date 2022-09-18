@@ -27,7 +27,7 @@ import bisect
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 import heapq
-# heap.heapify(nums)
+# heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
@@ -44,51 +44,34 @@ from typing import List
 
 import string
 # string.digits  表示 0123456789
-
-class STree:
-
-    def __init__(self):
-        self.tree = defaultdict(int)
-
-    def pushup(self, id: int):
-        self.tree[id] = max(self.tree[id << 1], self.tree[(id << 1) | 1])
-
-    def update(self, id: int, start: int, end: int, l: int, r: int, val: int):
-        if start > r or end < l:
-            return
-        if start >= l and end <= r:
-            self.tree[id] = val
-            return
-        mid = (start + end) >> 1
-        self.update(id << 1, start, mid, l, r, val)
-        self.update((id << 1) | 1, mid + 1, end, l, r, val)
-        self.pushup(id)
-
-    def query(self, id: int, start: int, end: int, l: int, r: int):
-        if start > r or end < l:
-            return 0
-        if start >= l and end <= r:
-            return self.tree[id]
-        mid = (start + end) >> 1
-        return max(self.query(id << 1, start, mid, l, r), self.query((id << 1) | 1, mid + 1, end, l, r))
+# string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
+# string.lowercase：包含所有小写字母的字符串
+# string.printable：包含所有可打印字符的字符串
+# string.punctuation：包含所有标点的字符串
+# string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-
-
-    def lengthOfLIS(self, nums: List[int], k: int) -> int:
-        ans = 0
-        st = STree()
-        for num in nums:
-            val = st.query(1, 1, int(1e5), max(1, num - k), num - 1) + 1
-            st.update(1, 1, int(1e5), num, num, val)
-            ans = max(ans, val)
+    def sumPrefixScores(self, words: List[str]) -> List[int]:
+        d = defaultdict(int)
+        for word in words:
+            n = len(word)
+            for i in range(n):
+                d[word[:i + 1]] += 1
+        ans = []
+        for word in words:
+            n = len(word)
+            score = 0
+            for i in range(n):
+                score += d[word[:i + 1]]
+            ans.append(score)
         return ans
 
 
+
 so = Solution()
-print(so.lengthOfLIS(nums = [4,2,1,4,3,4,5,8,15], k = 3))
-print(so.lengthOfLIS(nums = [7,4,5,1,8,12,4,7], k = 5))
-print(so.lengthOfLIS(nums = [1,5], k = 1))
+print(so.sumPrefixScores(words = ["abc","ab","bc","b"]))
+# print(so.sumPrefixScores(words = ["abc","ab","bc","b"]))
+print(so.sumPrefixScores(words = ["abcd"]))
 
 
 

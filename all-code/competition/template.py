@@ -27,9 +27,10 @@ import bisect
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
 import heapq
-# heap.heapify(nums)
+# heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
+# heapq.heapreplace(heap, item)  删除最小值并添加新值
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
@@ -44,6 +45,11 @@ from typing import List
 
 import string
 # string.digits  表示 0123456789
+# string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
+# string.lowercase：包含所有小写字母的字符串
+# string.printable：包含所有可打印字符的字符串
+# string.punctuation：包含所有标点的字符串
+# string.uppercase：包含所有大写字母的字符串
 
 class Solution:
     def removeDigit(self, number) -> str:
