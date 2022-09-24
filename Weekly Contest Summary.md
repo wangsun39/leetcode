@@ -1,6 +1,6 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2022-9-18| 第311场周赛  | T4  | [字符串的前缀分数和](https://leetcode.cn/problems/sum-of-prefix-scores-of-strings/) |       | 本周AK，排名不高。<br> 这次就靠暴力哈希过的。另外Trie树的方法，值得保存一个模板 |
+|2022-9-18| 第311场周赛  | T4  | [字符串的前缀分数和](https://leetcode.cn/problems/sum-of-prefix-scores-of-strings/) |  1725     | 本周AK，排名不高。<br> 这次就靠暴力哈希过的。另外Trie树的方法，值得保存一个模板 |
 |2022-9-11| 第310场周赛  | T4  | [最长递增子序列 II](https://leetcode.cn/problems/longest-increasing-subsequence-ii/) |   2280    | 没做出来，本以为最长递增子序是按DP来计算的，没想到需要用线段树<br> 在求解「上升子序列」问题时，期望O(NlogN)的复杂度，一般有两种优化方法：单调栈 + 二分优化；线段树、平衡树等数据结构优化。 |
 |2022-9-4| 第309场周赛  | T4  | [会议室 III](https://leetcode.cn/problems/meeting-rooms-iii/) |   2092    | 排序 + 优先队列，比赛结束后5分钟做完了，有点可惜，但也是参考了会议室 II的思路 |
 |2022-8-28| 第308场周赛  | T4  | [给定条件下构造矩阵](https://leetcode.cn/problems/build-a-matrix-with-conditions/) |   1960    | 没能做出来，感觉就差一点了，拓扑排序之前没有关注过，需要多练习此方法<br>本周前三题做的比较顺，18分钟，可惜最后一题了 |
