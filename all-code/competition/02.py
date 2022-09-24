@@ -30,6 +30,7 @@ import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
+# heapq.heapreplace(heap, item)  删除最小值并添加新值
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
@@ -51,22 +52,22 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def longestContinuousSubstring(self, s: str) -> int:
-        n = len(s)
-        ans = 1
-        cur = 1
-        for i in range(1, n):
-            if ord(s[i]) - ord(s[i - 1]) == 1:
-                cur += 1
-                ans = max(ans, cur)
-            else:
-                cur = 1
-        return ans
+    def transportationHub(self, path: List[List[int]]) -> int:
+        inner, outer = defaultdict(int), defaultdict(int)
+        for x, y in path:
+            inner[y] += 1
+            outer[x] += 1
+        n = len(set(inner.keys()) | set(outer.keys()))
+        for k in inner:
+            if outer[k] == 0 and inner[k] == n - 1:
+                return k
+        return -1
+
 
 
 so = Solution()
-print(so.longestContinuousSubstring("abacaba"))
-print(so.longestContinuousSubstring("abcde"))
+print(so.transportationHub([[0,1],[0,3],[1,3],[2,0],[2,3]]))
+print(so.transportationHub([[0,3],[1,0],[1,3],[2,0],[3,0],[3,2]]))
 
 
 

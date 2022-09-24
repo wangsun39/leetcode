@@ -30,6 +30,7 @@ import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
+# heapq.heapreplace(heap, item)  删除最小值并添加新值
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
@@ -50,28 +51,21 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
-class Solution:
-    def sumPrefixScores(self, words: List[str]) -> List[int]:
-        d = defaultdict(int)
-        for word in words:
-            n = len(word)
-            for i in range(n):
-                d[word[:i + 1]] += 1
-        ans = []
-        for word in words:
-            n = len(word)
-            score = 0
-            for i in range(n):
-                score += d[word[:i + 1]]
-            ans.append(score)
-        return ans
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
 
+class Solution:
+    def closeLampInTree(self, root: TreeNode) -> int:
+        def dfs(node: TreeNode):
+            if node.left is None and node.right is None:
+                return 0 if node.val == 0 else 1
 
 
 so = Solution()
-print(so.sumPrefixScores(words = ["abc","ab","bc","b"]))
-# print(so.sumPrefixScores(words = ["abc","ab","bc","b"]))
-print(so.sumPrefixScores(words = ["abcd"]))
+print(so.removeDigit(123456))
 
 
 

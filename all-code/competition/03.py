@@ -30,6 +30,7 @@ import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
+# heapq.heapreplace(heap, item)  删除最小值并添加新值
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
@@ -50,45 +51,70 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 class Solution:
-    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        lev = 0
-        # cur = root
-        queue = [root]
-        def proc(q):
-            n = len(q)
-            for i in range(n // 2):
-                q[i].val, q[n - i - 1].val = q[n - i - 1].val, q[i].val
-            return
-            # return q
+    def ballGame(self, num: int, plate: List[str]) -> List[List[int]]:
+        row, col = len(plate), len(plate[0])
+        target = set()
+        for i in range(row):
+            for j in range(col):
+                if plate[i][j] == 'O':
+                    target.add((i, j))
+        def change(pre, cur):
+            if cur == '.' or cur == 'O':
+                return pre
+            if pre == 'U':
+                return 'R' if cur == 'E' else 'L'
+            if pre == 'L':
+                return 'U' if cur == 'E' else 'D'
+            if pre == 'D':
+                return 'L' if cur == 'E' else 'R'
+            if pre == 'R':
+                return 'D' if cur == 'E' else 'U'
+        ans = []
+        ok, nak = {}, {}
+        @lru_cache(None)
+        def dfs(x, y, dir, step):
+            # if x == t1 and y == t2:
+            if (x, y) in target and step != num:
+                return True
+            if step == 0:
+                return False
+            if (x, y, dir) in ok and step >= ok[(x, y, dir)]:
+                return True
+            if (x, y, dir) in nak and step <= nak[(x, y, dir)]:
+                return False
+            next = change(dir, plate[x][y]) if step != num else dir
+            xx, yy = x + dirs[next][0], y + dirs[next][1]
+            if 0 <= xx < row and 0 <= yy < col:
+                res = dfs(xx, yy, next, step - 1)
+                if res:
+                    ok[(x, y, dir)] = min(ok[(x, y, dir)], step) if (x, y, dir) in ok else step
+                    return True
+                else:
+                    nak[(x, y, dir)] = max(nak[(x, y, dir)], step) if (x, y, dir) in ok else step
+                    return False
+            return False
 
-        while True:
-            if lev % 2 == 0:
-                pass
-            else:
-                # queue = proc(queue)
-                proc(queue)
-            if queue[0].left is None:
-                break
-            que = []
-            for node in queue:
-                que.append(node.left)
-                que.append(node.right)
-            lev += 1
-            queue = que
+        dirs = {'U': [-1, 0], 'L': [0, -1], 'R': [0, 1], 'D': [1, 0]}
+        for i in range(1, col - 1):
+            if plate[0][i] == '.' and dfs(0, i, 'D', num):
+                ans.append([0, i])
+            if plate[row - 1][i] == '.' and row > 1 and dfs(row - 1, i, 'U', num):
+                ans.append([row - 1, i])
+        for i in range(1, row - 1):
+            if plate[i][0] == '.' and dfs(i, 0, 'R', num):
+                ans.append([i, 0])
+            if plate[i][col - 1] == '.' and col > 1 and dfs(i, col - 1, 'L', num):
+                ans.append([i, col - 1])
+        return list(ans)
 
-        return root
 
-root = TreeNode(2)
-root.left = TreeNode(3)
-root.right = TreeNode(4)
+
 so = Solution()
-print(so.reverseOddLevels(root))
+print(so.ballGame(41, ["E...W..WW",".E...O...","...WO...W","..OWW.O..",".W.WO.W.E","O..O.W...",".OO...W..","..EW.WEE."]))
+print(so.ballGame(3, [".....","....O","....O","....."]))
+print(so.ballGame(5, [".....","..E..",".WO..","....."]))
+print(so.ballGame(4, ["..E.",".EOW","..W."]))
 
 
 
