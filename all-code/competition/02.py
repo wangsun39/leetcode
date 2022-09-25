@@ -52,22 +52,34 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def transportationHub(self, path: List[List[int]]) -> int:
-        inner, outer = defaultdict(int), defaultdict(int)
-        for x, y in path:
-            inner[y] += 1
-            outer[x] += 1
-        n = len(set(inner.keys()) | set(outer.keys()))
-        for k in inner:
-            if outer[k] == 0 and inner[k] == n - 1:
-                return k
-        return -1
+    def longestSubarray(self, nums: List[int]) -> int:
+        n = len(nums)
+        m = max(nums)
+        ans = 1
+        cur = 0
+        for i in range(n):
+            if nums[i] == m:
+                cur += 1
+                ans = max(ans, cur)
+            else:
+                cur = 0
+        return ans
+        # i, j = 0, 1
+        # cur = 1
+        # maxx = cur
+        # val = nums[0]
+        # while j < n:
+        #     if (val & nums[j]) >= val:
+        #         cur += 1
+        #         j += 1
+        #         continue
+        #     cur = val ^ nums[i]
 
 
 
 so = Solution()
-print(so.transportationHub([[0,1],[0,3],[1,3],[2,0],[2,3]]))
-print(so.transportationHub([[0,3],[1,0],[1,3],[2,0],[3,0],[3,2]]))
+print(so.longestSubarray([1,2,3,3,2,2]))
+print(so.longestSubarray([1,2,3,4]))
 
 
 

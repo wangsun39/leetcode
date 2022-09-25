@@ -51,17 +51,9 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
 class Solution:
-    def closeLampInTree(self, root: TreeNode) -> int:
-        def dfs(node: TreeNode):
-            if node.left is None and node.right is None:
-                return 0 if node.val == 0 else 1
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()

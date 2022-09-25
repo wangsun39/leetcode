@@ -52,29 +52,21 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def temperatureTrend(self, temperatureA: List[int], temperatureB: List[int]) -> int:
-        n = len(temperatureA)
-        ans = 0
-        cur = 0
-        for i in range(n - 1):
-            if (temperatureA[i + 1] - temperatureA[i] > 0 and temperatureB[i + 1] - temperatureB[i] > 0) \
-                    or (temperatureA[i + 1] - temperatureA[i] == 0 and temperatureB[i + 1] - temperatureB[
-                i] == 0) \
-                    or (temperatureA[i + 1] - temperatureA[i] < 0 and temperatureB[i + 1] - temperatureB[
-                i] < 0):
-                cur += 1
-            else:
-                cur = 0
-                continue
-            ans = max(ans, cur)
+    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
+        # arr = zip(names, heights)
+        arr = []
+        n = len(names)
+        for i in range(n):
+            arr.append([heights[i], names[i]])
+        # print(arr)
+        arr.sort(reverse= True)
+        ans = [x[1] for x in arr]
         return ans
 
 
-
-
 so = Solution()
-print(so.temperatureTrend([5,10,16,-6,15,11,3], [16,22,23,23,25,3,-16]))
-print(so.temperatureTrend([21,18,18,18,31], [34,32,16,16,17]))
+print(so.sortPeople(names = ["Mary","John","Emma"], heights = [180,165,170]))
+print(so.sortPeople(names = ["Alice","Bob","Bob"], heights = [155,185,150]))
 
 
 

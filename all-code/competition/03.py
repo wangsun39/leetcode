@@ -52,69 +52,42 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def ballGame(self, num: int, plate: List[str]) -> List[List[int]]:
-        row, col = len(plate), len(plate[0])
-        target = set()
-        for i in range(row):
-            for j in range(col):
-                if plate[i][j] == 'O':
-                    target.add((i, j))
-        def change(pre, cur):
-            if cur == '.' or cur == 'O':
-                return pre
-            if pre == 'U':
-                return 'R' if cur == 'E' else 'L'
-            if pre == 'L':
-                return 'U' if cur == 'E' else 'D'
-            if pre == 'D':
-                return 'L' if cur == 'E' else 'R'
-            if pre == 'R':
-                return 'D' if cur == 'E' else 'U'
+    def goodIndices(self, nums: List[int], k: int) -> List[int]:
+        nums1 = []
+        n = len(nums)
+        for i in range(1, n):
+            if nums[i] - nums[i - 1] == 0:
+                nums1.append(0)
+            elif nums[i] - nums[i - 1] > 0:
+                nums1.append(1)
+            elif nums[i] - nums[i - 1] < 0:
+                nums1.append(-1)
+        print(nums1)
+        stack1 = [-1]
+        cur = -1
+        for i in range(n - 1):
+            stack1.append(cur)
+            if nums1[i] == 1:
+                cur = i + 1
+        print(stack1)
+        stack2 = [10000000]
+        cur = 10000000
+        for i in range(n - 2, -1, -1):
+            stack2.insert(0, cur)
+            if nums1[i] == -1:
+                cur = i
+        print(stack2)
         ans = []
-        ok, nak = {}, {}
-        @lru_cache(None)
-        def dfs(x, y, dir, step):
-            # if x == t1 and y == t2:
-            if (x, y) in target and step != num:
-                return True
-            if step == 0:
-                return False
-            if (x, y, dir) in ok and step >= ok[(x, y, dir)]:
-                return True
-            if (x, y, dir) in nak and step <= nak[(x, y, dir)]:
-                return False
-            next = change(dir, plate[x][y]) if step != num else dir
-            xx, yy = x + dirs[next][0], y + dirs[next][1]
-            if 0 <= xx < row and 0 <= yy < col:
-                res = dfs(xx, yy, next, step - 1)
-                if res:
-                    ok[(x, y, dir)] = min(ok[(x, y, dir)], step) if (x, y, dir) in ok else step
-                    return True
-                else:
-                    nak[(x, y, dir)] = max(nak[(x, y, dir)], step) if (x, y, dir) in ok else step
-                    return False
-            return False
-
-        dirs = {'U': [-1, 0], 'L': [0, -1], 'R': [0, 1], 'D': [1, 0]}
-        for i in range(1, col - 1):
-            if plate[0][i] == '.' and dfs(0, i, 'D', num):
-                ans.append([0, i])
-            if plate[row - 1][i] == '.' and row > 1 and dfs(row - 1, i, 'U', num):
-                ans.append([row - 1, i])
-        for i in range(1, row - 1):
-            if plate[i][0] == '.' and dfs(i, 0, 'R', num):
-                ans.append([i, 0])
-            if plate[i][col - 1] == '.' and col > 1 and dfs(i, col - 1, 'L', num):
-                ans.append([i, col - 1])
-        return list(ans)
-
+        for i in range(k, n - k):
+            if i - stack1[i] >= k and stack2[i] - i >= k:
+                ans.append(i)
+        return ans
 
 
 so = Solution()
-print(so.ballGame(41, ["E...W..WW",".E...O...","...WO...W","..OWW.O..",".W.WO.W.E","O..O.W...",".OO...W..","..EW.WEE."]))
-print(so.ballGame(3, [".....","....O","....O","....."]))
-print(so.ballGame(5, [".....","..E..",".WO..","....."]))
-print(so.ballGame(4, ["..E.",".EOW","..W."]))
+print(so.goodIndices(nums = [877464,394689,51354,348332,285490,570624], k = 2))
+print(so.goodIndices(nums = [2,1,1,1,3,4,1], k = 2))
+print(so.goodIndices(nums = [2,1,1,2], k = 2))
 
 
 
