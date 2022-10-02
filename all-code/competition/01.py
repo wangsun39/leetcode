@@ -52,21 +52,20 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
-        # arr = zip(names, heights)
-        arr = []
-        n = len(names)
-        for i in range(n):
-            arr.append([heights[i], names[i]])
-        # print(arr)
-        arr.sort(reverse= True)
-        ans = [x[1] for x in arr]
+    def commonFactors(self, a: int, b: int) -> int:
+        m = min(a, b)
+        ans = 0
+        for i in range(1, m + 1):
+            if a % i == 0 and b % i == 0:
+                ans += 1
+        # if a % b == 0 or b % b == 0:
+        #     ans += 1
         return ans
 
 
 so = Solution()
-print(so.sortPeople(names = ["Mary","John","Emma"], heights = [180,165,170]))
-print(so.sortPeople(names = ["Alice","Bob","Bob"], heights = [155,185,150]))
+print(so.commonFactors(a = 12, b = 6))
+print(so.commonFactors(a = 25, b = 30))
 
 
 

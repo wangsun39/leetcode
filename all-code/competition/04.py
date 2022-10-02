@@ -52,12 +52,37 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def deleteString(self, s: str) -> int:
+        n = len(s)
+        d = set()
+        for l in range(1, n // 2 + 1):
+            i = 0
+            while i + l * 2 <= n:
+                if s[i: i + l] == s[i + l: i + l * 2]:
+                    d.add((i, l))
+                i += 1
+        @lru_cache(None)
+        def dfs(s, offset):
+            n = len(s)
+            if n == 0:
+                return 0
+            if n == 1:
+                return 1
+            res = 1
+            for i in range(1, n // 2 + 1):
+                # if s[:i + 1] == s[i + 1: i * 2 + 2]:
+                if (offset, i) in d:
+                    val = dfs(s[i:], offset + i)
+                    res = max(res, val + 1)
+                    # break
+            return res
+        return dfs(s, 0)
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.deleteString("aaabaab"))
+print(so.deleteString("abcabcdabc"))
+print(so.deleteString("aaaaa"))
 
 
 

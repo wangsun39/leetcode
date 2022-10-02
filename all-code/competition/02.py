@@ -52,34 +52,18 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def longestSubarray(self, nums: List[int]) -> int:
-        n = len(nums)
-        m = max(nums)
-        ans = 1
-        cur = 0
-        for i in range(n):
-            if nums[i] == m:
-                cur += 1
-                ans = max(ans, cur)
-            else:
-                cur = 0
+    def maxSum(self, grid: List[List[int]]) -> int:
+        row, col = len(grid), len(grid[0])
+        ans = 0
+        for i in range(row - 2):
+            for j in range(col - 2):
+                ans = max(ans, grid[i][j] + grid[i][j + 1] + grid[i][j + 2] + grid[i + 1][j + 1] + grid[i + 2][j] + grid[i + 2][j + 1] + grid[i + 2][j + 2])
         return ans
-        # i, j = 0, 1
-        # cur = 1
-        # maxx = cur
-        # val = nums[0]
-        # while j < n:
-        #     if (val & nums[j]) >= val:
-        #         cur += 1
-        #         j += 1
-        #         continue
-        #     cur = val ^ nums[i]
-
 
 
 so = Solution()
-print(so.longestSubarray([1,2,3,3,2,2]))
-print(so.longestSubarray([1,2,3,4]))
+print(so.maxSum([[6,2,1,3],[4,2,1,5],[9,2,8,7],[4,1,2,9]]))
+print(so.maxSum([[1,2,3],[4,5,6],[7,8,9]]))
 
 
 

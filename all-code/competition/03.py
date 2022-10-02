@@ -52,42 +52,60 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def goodIndices(self, nums: List[int], k: int) -> List[int]:
-        nums1 = []
-        n = len(nums)
-        for i in range(1, n):
-            if nums[i] - nums[i - 1] == 0:
-                nums1.append(0)
-            elif nums[i] - nums[i - 1] > 0:
-                nums1.append(1)
-            elif nums[i] - nums[i - 1] < 0:
-                nums1.append(-1)
-        print(nums1)
-        stack1 = [-1]
-        cur = -1
-        for i in range(n - 1):
-            stack1.append(cur)
-            if nums1[i] == 1:
-                cur = i + 1
-        print(stack1)
-        stack2 = [10000000]
-        cur = 10000000
-        for i in range(n - 2, -1, -1):
-            stack2.insert(0, cur)
-            if nums1[i] == -1:
-                cur = i
-        print(stack2)
-        ans = []
-        for i in range(k, n - k):
-            if i - stack1[i] >= k and stack2[i] - i >= k:
-                ans.append(i)
-        return ans
+    def minimizeXor(self, num1: int, num2: int) -> int:
+        def count(x):
+            res = 0
+            while x:
+                x &= (x - 1)
+                res += 1
+            return res
+        count1, count2 = count(num1), count(num2)
+        # l1, l2 = num1.bit_count(), num2.bit_count()
+        s1 = bin(num1)[2:]
+        s2 = ''
+        if count1 >= count2:
+            cnt = 0
+            for s in s1:
+                if cnt >= count2:
+                    s2 += ('0' * (len(s1) - len(s2)))
+                    break
+                if s == '1':
+                    s2 += '1'
+                    cnt += 1
+                else:
+                    s2 += '0'
+        elif count2 >= len(s1):
+            return int('1' * count2, 2)
+        else:
+            cnt = 0
+            for s in s1:
+                if cnt >= count1:
+                    delta = min(count2 - count1, len(s1) - len(s2))
+                    s2 = s2 + ('0' * (len(s1) - len(s2) - delta)) + ('1' * delta)
+                    break
+                if s == '1':
+                    s2 += '1'
+                    cnt += 1
+                else:
+                    s2 += '0'
+            if s2.count('1') < count2:
+                delta = count2 - s2.count('1')
+                while delta > 0:
+                    pos = s2.rfind('0')
+                    s2 = s2[:pos] + '1' + s2[pos + 1:]
+                    delta -= 1
+        print(s2)
+
+        return int(s2, 2)
+
 
 
 so = Solution()
-print(so.goodIndices(nums = [877464,394689,51354,348332,285490,570624], k = 2))
-print(so.goodIndices(nums = [2,1,1,1,3,4,1], k = 2))
-print(so.goodIndices(nums = [2,1,1,2], k = 2))
+print(so.minimizeXor(num1 = 3756, num2 = 7038))
+print(so.minimizeXor(num1 = 65, num2 = 84))
+print(so.minimizeXor(num1 = 1, num2 = 12))
+print(so.minimizeXor(num1 = 3, num2 = 5))
+print(so.minimizeXor(num1 = 8, num2 = 3))
 
 
 
