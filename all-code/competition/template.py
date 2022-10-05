@@ -51,6 +51,10 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+
 class Solution:
     def removeDigit(self, number) -> str:
         pass
