@@ -35,7 +35,7 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
 # @lru_cache(None)
 
@@ -51,38 +51,56 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+from itertools import combinations
 class Solution:
-    def deleteString(self, s: str) -> int:
-        n = len(s)
-        d = set()
-        for l in range(1, n // 2 + 1):
-            i = 0
-            while i + l * 2 <= n:
-                if s[i: i + l] == s[i + l: i + l * 2]:
-                    d.add((i, l))
-                i += 1
-        @lru_cache(None)
-        def dfs(s, offset):
-            n = len(s)
-            if n == 0:
-                return 0
-            if n == 1:
-                return 1
-            res = 1
-            for i in range(1, n // 2 + 1):
-                # if s[:i + 1] == s[i + 1: i * 2 + 2]:
-                if (offset, i) in d:
-                    val = dfs(s[i:], offset + i)
-                    res = max(res, val + 1)
-                    # break
-            return res
-        return dfs(s, 0)
+    def Leetcode(self, words: List[str]) -> int:
+        counters = [Counter(e) for e in words]
+        n = len(words)
 
+        n_e = [0] * n
+
+        def get(letter, time, start):
+            if time == 0:
+                return [0] * (n - start)
+            for i in range(time + 1):
+                res = get(letter, time - i, start + 1)
+                res = [[i] + e for e in res]
+            return res
+
+        def get():
+            res = []
+            count = Counter()
+
+            for i in range(n):
+                c = counters[i]
+                c_e, c_l, c_o, c_h, c_c, c_t, c_d = c['e'], c['l'], c['o'], c['h'], c['c'], c['t'], c['d']
+                for i1 in range(min(c_e, 5)):
+                    if count['e'] + i1 > 4:
+                        break
+                    count['e'] += i1
+
+                for i2 in range(min(c_l, 4)):
+                    if count['l'] + i2 > 3:
+                        break
+                    count['l'] += i2
+
+
+                    for i3 in range(min(c_o, 3)):
+                        for i4 in range(min(c_h, 2)):
+                            for i5 in range(min(c_c, 2)):
+                                for i6 in range(min(c_t, 2)):
+                                    for i7 in range(min(c_d, 2)):
+                                        time = [i1, i2, i3, i4, i5, i6, i7]
+
+
+        print(counters)
 
 so = Solution()
-print(so.deleteString("aaabaab"))
-print(so.deleteString("abcabcdabc"))
-print(so.deleteString("aaaaa"))
+print(so.Leetcode(words = ["hold","engineer","cost","level"]))
+print(so.Leetcode(words = ["hello","leetcode"]))
 
 
 

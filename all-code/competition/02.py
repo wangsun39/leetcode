@@ -35,7 +35,7 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
 # @lru_cache(None)
 
@@ -51,19 +51,32 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 class Solution:
-    def maxSum(self, grid: List[List[int]]) -> int:
-        row, col = len(grid), len(grid[0])
-        ans = 0
-        for i in range(row - 2):
-            for j in range(col - 2):
-                ans = max(ans, grid[i][j] + grid[i][j + 1] + grid[i][j + 2] + grid[i + 1][j + 1] + grid[i + 2][j] + grid[i + 2][j + 1] + grid[i + 2][j + 2])
-        return ans
+    def expandBinaryTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def dfs(node):
+            if node.left:
+                ln = TreeNode(-1, left=node.left)
+                node.left = ln
+                dfs(ln.left)
+            if node.right:
+                rn = TreeNode(val=-1, right=node.right)
+                node.right = rn
+                dfs(rn.right)
+        dfs(root)
+        return root
 
 
 so = Solution()
-print(so.maxSum([[6,2,1,3],[4,2,1,5],[9,2,8,7],[4,1,2,9]]))
-print(so.maxSum([[1,2,3],[4,5,6],[7,8,9]]))
+print(so.expandBinaryTree(123456))
 
 
 

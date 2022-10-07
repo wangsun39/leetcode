@@ -35,7 +35,7 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
 # @lru_cache(None)
 
@@ -51,61 +51,37 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+
 class Solution:
-    def minimizeXor(self, num1: int, num2: int) -> int:
-        def count(x):
-            res = 0
-            while x:
-                x &= (x - 1)
-                res += 1
-            return res
-        count1, count2 = count(num1), count(num2)
-        # l1, l2 = num1.bit_count(), num2.bit_count()
-        s1 = bin(num1)[2:]
-        s2 = ''
-        if count1 >= count2:
-            cnt = 0
-            for s in s1:
-                if cnt >= count2:
-                    s2 += ('0' * (len(s1) - len(s2)))
-                    break
-                if s == '1':
-                    s2 += '1'
-                    cnt += 1
+    def beautifulBouquet(self, flowers: List[int], cnt: int) -> int:
+        MOD = 1000000007
+        n = len(flowers)
+        start, end = 0, 0
+        counter = Counter()
+        ans = 0
+        while start < n:
+            if end < n:
+                if counter[flowers[end]] < cnt:
+                    ans += 1
+                    counter[flowers[end]] += 1
+                    end += 1
                 else:
-                    s2 += '0'
-        elif count2 >= len(s1):
-            return int('1' * count2, 2)
-        else:
-            cnt = 0
-            for s in s1:
-                if cnt >= count1:
-                    delta = min(count2 - count1, len(s1) - len(s2))
-                    s2 = s2 + ('0' * (len(s1) - len(s2) - delta)) + ('1' * delta)
-                    break
-                if s == '1':
-                    s2 += '1'
-                    cnt += 1
-                else:
-                    s2 += '0'
-            if s2.count('1') < count2:
-                delta = count2 - s2.count('1')
-                while delta > 0:
-                    pos = s2.rfind('0')
-                    s2 = s2[:pos] + '1' + s2[pos + 1:]
-                    delta -= 1
-        print(s2)
-
-        return int(s2, 2)
-
-
+                    counter[flowers[start]] -= 1
+                    start += 1
+                    ans += (end - start)
+            else:
+                counter[flowers[start]] -= 1
+                start += 1
+                ans += (end - start)
+            ans %= MOD
+        return ans
 
 so = Solution()
-print(so.minimizeXor(num1 = 3756, num2 = 7038))
-print(so.minimizeXor(num1 = 65, num2 = 84))
-print(so.minimizeXor(num1 = 1, num2 = 12))
-print(so.minimizeXor(num1 = 3, num2 = 5))
-print(so.minimizeXor(num1 = 8, num2 = 3))
+print(so.beautifulBouquet(flowers = [1,2,3,2], cnt = 1))
+print(so.beautifulBouquet(flowers = [5,3,3,3], cnt = 2))
 
 
 

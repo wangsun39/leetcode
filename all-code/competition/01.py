@@ -35,7 +35,7 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
 # @lru_cache(None)
 
@@ -51,21 +51,23 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+
 class Solution:
-    def commonFactors(self, a: int, b: int) -> int:
-        m = min(a, b)
-        ans = 0
-        for i in range(1, m + 1):
-            if a % i == 0 and b % i == 0:
-                ans += 1
-        # if a % b == 0 or b % b == 0:
-        #     ans += 1
-        return ans
+    def minNumBooths(self, demand: List[str]) -> int:
+        counter = Counter()
+        for de in demand:
+            ct = Counter(de)
+            for x, y in ct.items():
+                counter[x] = max(counter[x], y)
+        return sum(counter.values())
 
 
 so = Solution()
-print(so.commonFactors(a = 12, b = 6))
-print(so.commonFactors(a = 25, b = 30))
+print(so.minNumBooths(["acd","bed","accd"]))
+print(so.minNumBooths(["abc","ab","ac","b"]))
 
 
 
