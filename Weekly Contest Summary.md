@@ -1,5 +1,9 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2022-10-2| 第313场周赛  | T3  | [最小 XOR](https://leetcode.cn/problems/minimize-xor/) |       | 本周又是2000多名，哎。。。<br> 此题虽然做出来了，不过耽误了不少时间，方法有些复杂，可以参考excel中灵神的解法思路 |
+|2022-10-2| 第313场周赛  | T4  | [对字母串可执行的最大删除数](https://leetcode.cn/problems/maximum-deletions-on-a-string/) |       | 这题用了DFS+记忆化搜索，但TLE了 |
+|2022-9-25| 第312场周赛  | T3  | [找到所有好下标](https://leetcode.cn/problems/find-all-good-indices/) |   1695    | 本周2400多名，创近两个月的最低记录<br> 这题考虑用单调栈，虽然也可以做出来，但写法复杂，比赛中没有写完。<br> 实际左右两次遍历就可以了 |
+|2022-9-25| 第312场周赛  | T4  | [好路径的数目](https://leetcode.cn/problems/number-of-good-paths/) |   2444    | 这题难度较大，需要用到并查集，关键也不容易想到用并查集，并查集的模板需要继续练习 |
 |2022-9-18| 第311场周赛  | T4  | [字符串的前缀分数和](https://leetcode.cn/problems/sum-of-prefix-scores-of-strings/) |  1725     | 本周AK，排名不高。<br> 这次就靠暴力哈希过的。另外Trie树的方法，值得保存一个模板 |
 |2022-9-11| 第310场周赛  | T4  | [最长递增子序列 II](https://leetcode.cn/problems/longest-increasing-subsequence-ii/) |   2280    | 没做出来，本以为最长递增子序是按DP来计算的，没想到需要用线段树<br> 在求解「上升子序列」问题时，期望O(NlogN)的复杂度，一般有两种优化方法：单调栈 + 二分优化；线段树、平衡树等数据结构优化。 |
 |2022-9-4| 第309场周赛  | T4  | [会议室 III](https://leetcode.cn/problems/meeting-rooms-iii/) |   2092    | 排序 + 优先队列，比赛结束后5分钟做完了，有点可惜，但也是参考了会议室 II的思路 |
