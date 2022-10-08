@@ -34,11 +34,12 @@ class Solution:
         ans = [0] * n
         i, k = 0, n - 1
         for j in range(n):
-            if n2[j][0] < nums1[i]:
-                ans[n2[j][1]] = nums1[i]
+            e, idx = n2[j]
+            if e < nums1[i]:
+                ans[idx] = nums1[i]
                 i += 1
             else:
-                ans[n2[j][1]] = nums1[k]
+                ans[idx] = nums1[k]
                 k -= 1
         return ans
 
