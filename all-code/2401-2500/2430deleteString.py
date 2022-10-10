@@ -104,6 +104,7 @@ class Solution:
                     d[i].append(l)
                 l += 1
             d[i].append(n - i)
+        print('ok')
         @lru_cache(None)
         def dfs(s, offset):
             n = len(s)
