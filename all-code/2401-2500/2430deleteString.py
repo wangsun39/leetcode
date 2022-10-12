@@ -77,7 +77,7 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
 # @lru_cache(None)
 
@@ -118,7 +118,7 @@ class Solution:
                 res = max(res, val + 1)
             return res
         return dfs(0)
-    def deleteString(self, s: str) -> int:
+    def deleteString3(self, s: str) -> int:
         n = len(s)
         d = defaultdict(list)
         for i in range(n):
@@ -135,7 +135,7 @@ class Solution:
             dp[i] = x + 1
         print(dp)
         return dp[0]
-    def deleteString2(self, s: str) -> int:
+    def deleteString(self, s: str) -> int:
         if len(set(s)) == 1:
             return len(s)
         @lru_cache(None)
@@ -147,6 +147,20 @@ class Solution:
                 return 1 + max([dfs(ss[i:]) for i in range(1, len(ss)//2+1) if ss[:i] == ss[i:2*i]], default=0)
 
         return dfs(s)
+    def deleteString2(self, s: str) -> int:
+        @cache
+        def dfs(i):
+            if i >= l:
+                return 0
+            ans = 1
+            for j in range(i + 1, i + (l - i) // 2 + 1):
+                if s[i:j] == s[j:j + j - i]:
+                    ans = max(ans, 1 + dfs(j))
+            return ans
+
+        l = len(s)
+        ans = dfs(0)
+        return ans
 
 
 
