@@ -1,3 +1,6 @@
+import bisect
+
+
 class TreeNode:
     def __init__(self, x):
         self.val = x
@@ -47,10 +50,35 @@ class Solution1:
         print(M)
         return M[-1][-1]
 
-so = Solution()
+from collections import defaultdict
+class Solution3:
+    def numDistinct(self, s: str, t: str) -> int:
+        ls, lt = len(s), len(t)
+        dp = [[0] * lt for _ in range(ls)]
+        c = 0
+        for i in range(ls):
+            if s[i] == t[0]:
+                c += 1
+            dp[i][0] = c
+        print(dp)
+        for i in range(1, ls):
+            for j in range(1, lt):
+                if s[i] == t[j]:
+                    dp[i][j] = dp[i - 1][j - 1]
+                dp[i][j] += dp[i - 1][j]
+        print(dp)
+        return dp[-1][-1]
+
+
+so = Solution3()
+print(so.numDistinct("aabb", "ab"))
 print(so.numDistinct("rabbbit", "rabbit"))
 print(so.numDistinct("babgbag", "bag"))
 
 so = Solution1()
+print(so.numDistinct("rabbbit", "rabbit"))
+print(so.numDistinct("babgbag", "bag"))
+
+so = Solution()
 print(so.numDistinct("rabbbit", "rabbit"))
 print(so.numDistinct("babgbag", "bag"))
