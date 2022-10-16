@@ -55,28 +55,17 @@ import string
 # name = 'sun'
 # f"Hello, my name is {name}"
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 class Solution:
-    def expandBinaryTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        def dfs(node):
-            if node.left:
-                ln = TreeNode(-1, left=node.left)
-                node.left = ln
-                dfs(ln.left)
-            if node.right:
-                rn = TreeNode(val=-1, right=node.right)
-                node.right = rn
-                dfs(rn.right)
-        dfs(root)
-        return root
+    def countDistinctIntegers(self, nums: List[int]) -> int:
+        s2 = set()
+        for x in nums:
+            s2.add(int(str(x)[::-1]))
+        return len(set(nums) | s2)
 
 
 so = Solution()
-print(so.expandBinaryTree(123456))
+print(so.countDistinctIntegers([1,13,10,12,31]))
+print(so.countDistinctIntegers([2,2,2]))
 
 
 

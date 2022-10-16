@@ -56,32 +56,19 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def beautifulBouquet(self, flowers: List[int], cnt: int) -> int:
-        MOD = 1000000007
-        n = len(flowers)
-        start, end = 0, 0
-        counter = Counter()
-        ans = 0
-        while start < n:
-            if end < n:
-                if counter[flowers[end]] < cnt:
-                    ans += 1
-                    counter[flowers[end]] += 1
-                    end += 1
-                else:
-                    counter[flowers[start]] -= 1
-                    start += 1
-                    ans += (end - start)
-            else:
-                counter[flowers[start]] -= 1
-                start += 1
-                ans += (end - start)
-            ans %= MOD
-        return ans
+    def sumOfNumberAndReverse(self, num: int) -> bool:
+        for i in range(num + 1):
+            if i + int(str(i)[::-1]) == num:
+                print(i)
+                return True
+        return False
+
 
 so = Solution()
-print(so.beautifulBouquet(flowers = [1,2,3,2], cnt = 1))
-print(so.beautifulBouquet(flowers = [5,3,3,3], cnt = 2))
+print(so.sumOfNumberAndReverse(0))
+print(so.sumOfNumberAndReverse(443))
+print(so.sumOfNumberAndReverse(63))
+print(so.sumOfNumberAndReverse(181))
 
 
 

@@ -56,18 +56,20 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def minNumBooths(self, demand: List[str]) -> int:
-        counter = Counter()
-        for de in demand:
-            ct = Counter(de)
-            for x, y in ct.items():
-                counter[x] = max(counter[x], y)
-        return sum(counter.values())
+    def findMaxK(self, nums: List[int]) -> int:
+        s = set()
+        ans = -1
+        for x in nums:
+            if -x in s:
+                ans = max(abs(x), ans)
+            s.add(x)
+        return ans
 
 
 so = Solution()
-print(so.minNumBooths(["acd","bed","accd"]))
-print(so.minNumBooths(["abc","ab","ac","b"]))
+print(so.findMaxK([-1,2,-3,3]))
+print(so.findMaxK([-1,10,6,7,-7,1]))
+print(so.findMaxK([-10,8,6,7,-2,-3]))
 
 
 

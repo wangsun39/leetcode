@@ -54,53 +54,33 @@ import string
 # f-string用法
 # name = 'sun'
 # f"Hello, my name is {name}"
-from itertools import combinations
+
 class Solution:
-    def Leetcode(self, words: List[str]) -> int:
-        counters = [Counter(e) for e in words]
-        n = len(words)
-
-        n_e = [0] * n
-
-        def get(letter, time, start):
-            if time == 0:
-                return [0] * (n - start)
-            for i in range(time + 1):
-                res = get(letter, time - i, start + 1)
-                res = [[i] + e for e in res]
-            return res
-
-        def get():
-            res = []
-            count = Counter()
-
-            for i in range(n):
-                c = counters[i]
-                c_e, c_l, c_o, c_h, c_c, c_t, c_d = c['e'], c['l'], c['o'], c['h'], c['c'], c['t'], c['d']
-                for i1 in range(min(c_e, 5)):
-                    if count['e'] + i1 > 4:
-                        break
-                    count['e'] += i1
-
-                for i2 in range(min(c_l, 4)):
-                    if count['l'] + i2 > 3:
-                        break
-                    count['l'] += i2
-
-
-                    for i3 in range(min(c_o, 3)):
-                        for i4 in range(min(c_h, 2)):
-                            for i5 in range(min(c_c, 2)):
-                                for i6 in range(min(c_t, 2)):
-                                    for i7 in range(min(c_d, 2)):
-                                        time = [i1, i2, i3, i4, i5, i6, i7]
-
-
-        print(counters)
+    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+        n = len(nums)
+        pmin, pmax = -1, -1
+        ans = 0
+        start = 0
+        for i in range(n):
+            if nums[i] < minK or nums[i] > maxK:
+                pmin, pmax = -1, -1
+                start = i + 1
+                continue
+            if nums[i] == minK:
+                pmin = i
+            if nums[i] == maxK:
+                pmax = i
+            if pmin != -1 and pmax != -1:
+                ans += (min(pmin, pmax) - start + 1)
+        return ans
 
 so = Solution()
-print(so.Leetcode(words = ["hold","engineer","cost","level"]))
-print(so.Leetcode(words = ["hello","leetcode"]))
+print(so.countSubarrays([928799,888361,928799,928799,928799,928799,124173,93094,399240,946505,93094,93094,585816], 93094, 928799))
+print(so.countSubarrays([689862,297861,946099,25145,946099,647669,863241,886257,946099,25145,567132,484586,478308,427044,545054,25145,25145,25145,25145,25145],
+25145,
+946099))
+print(so.countSubarrays(nums = [1,3,5,2,7,5], minK = 1, maxK = 5))
+print(so.countSubarrays(nums = [1,1,1,1], minK = 1, maxK = 1))
 
 
 
