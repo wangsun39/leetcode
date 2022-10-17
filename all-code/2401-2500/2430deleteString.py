@@ -95,6 +95,8 @@ import string
 
 class Solution:
     def deleteString1(self, s: str) -> int:  # 超过最大递归次数
+        # if len(set(s)) == 1:   实际放开这个特殊处理，这个方法是可以通过的
+        #     return len(s)
         n = len(s)
         d = defaultdict(list)
         for i in range(n):
@@ -118,7 +120,7 @@ class Solution:
                 res = max(res, val + 1)
             return res
         return dfs(0)
-    def deleteString3(self, s: str) -> int:
+    def deleteString3(self, s: str) -> int:  # 先计算出所有相等的连续区间，再逆序DP
         n = len(s)
         d = defaultdict(list)
         for i in range(n):
@@ -127,7 +129,6 @@ class Solution:
                 if s[i: i + l] == s[i + l: i + l * 2]:
                     d[i].append(i + l)
                 l += 1
-            # d[i].append(n - i)
 
         dp = [1] * n
         for i in range(n - 2, -1, -1):
