@@ -1,25 +1,76 @@
+from itertools import *
 
-class Solution:
-    def getSeqMax(self, A):
-        # A是一个序列， 1<=A[i]<=10000
-        # 求构造一个B序列，满足1<=B[i]<=A[i],使得sigma|B[i]-B[i-1]|最大值
-        # 可以证明B[i]序列的取值为1或A[i]，如果在1和A[i]之间，都可以找到B[i]为1或A[i]时，不比中间值小
-        # z2[i]表示Bi=Ai时，前i个Bi构成的序列最大值
-        # z1[i]表示Bi=1时，前i个Bi构成的序列最大值
-        # 那么，z2[i+1]=max(z1[i]+(A[i+1]-1),z2[i]+|A[i+1]-A[i]|)
-        # z1[i+1]=max(z2[i]+(A[i]-1),z1[i])
-        pre_z1 = A[0] - 1
-        pre_z2 = A[1] - 1
-        for i in range(2, len(A)):
-            z1 = max(pre_z2 + A[i-1]-1, pre_z1)
-            z2 = max(pre_z1 + A[i]-1, pre_z2 + abs(A[i]-A[i-1]))
-            pre_z1, pre_z2 = z1, z2
-        return max(z1, z2)
+dic = {
+    0: "+",
+    1: "-",
+    2: "*",
+    3: "**",
+    4: "//",
+    5: "%",
+    6: "|",
+    7: "&",
+    8: "^",
+    9: "<<",
+    10: ">>"
+}
 
 
+def check(status):
+    for t in opts:
+        if t not in status:
+            return False
+    return True
 
-obj = Solution()
-print(obj.getSeqMax([10,1,10,1,10]))
-print(obj.getSeqMax([6,5,4,3,2,1]))
-#print(obj.baseNeg2(4))
+
+def bk(idx, res, status):
+    if idx == 4:
+        if res == 1024 and check(status):
+            plan_out = '(('
+            for i in range(4):
+                tmp = ') ' if i not in (0, 3) else ' '
+                plan_out += str(combin[i]) + tmp
+                if i != 3:
+                    plan_out += dic[status[i]] + ' '
+            print(plan_out)
+        return
+
+    val = combin[idx]
+
+    for i in range(11):
+        if i == 0:
+            bk(idx + 1, res + val, status + [0])
+        elif i == 1:
+            bk(idx + 1, res - val, status + [1])
+        elif i == 2:
+            bk(idx + 1, res * val, status + [2])
+        elif i == 3:
+            bk(idx + 1, res**val, status + [3])
+        elif i == 4 and val != 0:
+            bk(idx + 1, res // val, status + [4])
+        elif i == 5 and val != 0:
+            bk(idx + 1, res % val, status + [5])
+        elif i == 6:
+            bk(idx + 1, res | val, status + [6])
+        elif i == 7:
+            bk(idx + 1, res & val, status + [7])
+        elif i == 8:
+            bk(idx + 1, res ^ val, status + [8])
+        elif i == 9:
+            bk(idx + 1, res << val, status + [9])
+        elif i == 10:
+            bk(idx + 1, res >> val, status + [10])
+
+
+if __name__ == '__main__':
+    # 已经获得的 3 张数字牌
+    ori = [2, 2, 12, 14, 23, 32]
+    # 已经获得的运算符
+    opts = [1, 2, 10, 7, 8]
+
+    # for i in list(range(101)) + [955, 996, 1024, 1075, 1337]:
+    for i in list(range(101)):
+        nums = ori + [i]
+        print('使用 %i 的' % i)
+        for combin in permutations(nums):
+            bk(1, combin[0], [])
 
