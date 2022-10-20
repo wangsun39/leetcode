@@ -1,76 +1,54 @@
-from itertools import *
-
-dic = {
-    0: "+",
-    1: "-",
-    2: "*",
-    3: "**",
-    4: "//",
-    5: "%",
-    6: "|",
-    7: "&",
-    8: "^",
-    9: "<<",
-    10: ">>"
-}
+def calculate_res(nums, ops):
+    try:
+        r1 = my_op(nums[0], nums[1], ops[0])
+        r2 = my_op(r1, nums[2], ops[1])
+        r3 = my_op(r2, nums[3], ops[2])
+    except ZeroDivisionError:
+        return 0
+    return r3
 
 
-def check(status):
-    for t in opts:
-        if t not in status:
-            return False
-    return True
+def my_op(x, y, op):
+    if op == '+':
+        return x + y
+    elif op == '-':
+        return x - y
+    elif op == '*':
+        return x * y
+    elif op == '/':
+        try:
+            return x // y
+        except ZeroDivisionError:
+            raise ZeroDivisionError
+    elif op == '**':
+        try:
+            return int(x ** y)
+        except ZeroDivisionError:
+            raise ZeroDivisionError
+    elif op == '&':
+        return x & y
+    elif op == '|':
+        return x | y
+    elif op == '^':
+        return x ^ y
+    elif op == '>>':
+        return x >> y
+    elif op == '<<':
+        return x << y
 
-
-def bk(idx, res, status):
-    if idx == 4:
-        if res == 1024 and check(status):
-            plan_out = '(('
-            for i in range(4):
-                tmp = ') ' if i not in (0, 3) else ' '
-                plan_out += str(combin[i]) + tmp
-                if i != 3:
-                    plan_out += dic[status[i]] + ' '
-            print(plan_out)
-        return
-
-    val = combin[idx]
-
-    for i in range(11):
-        if i == 0:
-            bk(idx + 1, res + val, status + [0])
-        elif i == 1:
-            bk(idx + 1, res - val, status + [1])
-        elif i == 2:
-            bk(idx + 1, res * val, status + [2])
-        elif i == 3:
-            bk(idx + 1, res**val, status + [3])
-        elif i == 4 and val != 0:
-            bk(idx + 1, res // val, status + [4])
-        elif i == 5 and val != 0:
-            bk(idx + 1, res % val, status + [5])
-        elif i == 6:
-            bk(idx + 1, res | val, status + [6])
-        elif i == 7:
-            bk(idx + 1, res & val, status + [7])
-        elif i == 8:
-            bk(idx + 1, res ^ val, status + [8])
-        elif i == 9:
-            bk(idx + 1, res << val, status + [9])
-        elif i == 10:
-            bk(idx + 1, res >> val, status + [10])
-
-
+# (2, 14, 29, 1024) ('*', '>>', '^')
+# (1024, 32, 2, 1024) ('>>', '-', '&')
 if __name__ == '__main__':
-    # 已经获得的 3 张数字牌
-    ori = [2, 2, 12, 14, 23, 32]
-    # 已经获得的运算符
-    opts = [1, 2, 10, 7, 8]
+    nums = [1, 2,2,12,14,23,32,29,1024, 1024]  # 填拥有的数字卡
+    ops = ["|", "^", "*", ">>", "&", "-"]  # 拥有的符号卡
+    nums = [1,2,12,23,32,32,1024, 1024]  # 填拥有的数字卡
+    ops = ["|", "&", "-", ">>"]  # 拥有的符号卡
 
-    # for i in list(range(101)) + [955, 996, 1024, 1075, 1337]:
-    for i in list(range(101)):
-        nums = ori + [i]
-        print('使用 %i 的' % i)
-        for combin in permutations(nums):
-            bk(1, combin[0], [])
+    from itertools import permutations
+
+    for n_perm in permutations(nums, 4):
+        for o_perm in permutations(ops, 3):
+            res = calculate_res(n_perm, o_perm)
+            if res == 1024:
+                print(n_perm, o_perm)
 
