@@ -95,7 +95,7 @@ class Solution:
                 fa[x] = find(fa[x])
             return fa[x]
 
-        sumOf = [0] * n  # 存放每个点所属连通块内元素只和
+        sumOf = [0] * n  # 存放每个点所属连通块内元素之和
         ans = [0] * n
         for i in range(n - 1, 0, -1):
             x = removeQueries[i]
