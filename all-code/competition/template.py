@@ -2,6 +2,7 @@
 from typing import List
 from typing import Optional
 from collections import deque
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -40,13 +41,21 @@ from typing import List
 # @lru_cache(None)
 
 # bit位 函数：
-# n.bit_length()
+# n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
+# lowbit(i) 即i&-i	返回i的最后一位1
+# n>>k & 1	求n的第k位数字
+# x | (1 << k)	将x第k位 置为1
+# x ^ (1 << k)	将x第k位取反
+# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
+# x | (x + 1)	将x最右边的0置为1
+# x & 1	判断奇偶性 真为奇，假为偶
+
 
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.lowercase：包含所有小写字母的字符串
+# string.ascii_lowercase：包含所有小写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串

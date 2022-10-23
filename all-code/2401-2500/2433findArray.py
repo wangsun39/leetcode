@@ -1,3 +1,34 @@
+# 给你一个长度为 n 的 整数 数组 pref 。找出并返回满足下述条件且长度为 n 的数组 arr ：
+#
+# pref[i] = arr[0] ^ arr[1] ^ ... ^ arr[i].
+# 注意 ^ 表示 按位异或（bitwise-xor）运算。
+#
+# 可以证明答案是 唯一 的。
+#
+#
+#
+# 示例 1：
+#
+# 输入：pref = [5,2,0,3,1]
+# 输出：[5,7,2,3,2]
+# 解释：从数组 [5,7,2,3,2] 可以得到如下结果：
+# - pref[0] = 5
+# - pref[1] = 5 ^ 7 = 2
+# - pref[2] = 5 ^ 7 ^ 2 = 0
+# - pref[3] = 5 ^ 7 ^ 2 ^ 3 = 3
+# - pref[4] = 5 ^ 7 ^ 2 ^ 3 ^ 2 = 1
+# 示例 2：
+#
+# 输入：pref = [13]
+# 输出：[13]
+# 解释：pref[0] = arr[0] = 13
+#
+#
+# 提示：
+#
+# 1 <= pref.length <= 105
+# 0 <= pref[i] <= 106
+# https://leetcode.cn/problems/find-the-original-array-of-prefix-xor/
 
 from typing import List
 from typing import Optional
@@ -46,7 +77,7 @@ from typing import List
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串
+# string.lowercase：包含所有小写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -56,36 +87,18 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def subarrayGCD(self, nums: List[int], k: int) -> int:
-        nums1 = [e // k for e in nums]
-        nums2 = [e % k for e in nums]
-        n = len(nums1)
-        cur = 0
-        ans = 0
-        def GCD(start, end):
-            x = nums1[start]
-            for i in range(start, end + 1):
-                x = math.gcd(x, nums1[i])
-                if x == 1:
-                    return 1
-            return x
-        print(nums1)
-        print(nums2)
-        for i in range(n):
-            if nums2[i] != 0:
-                cur = i + 1
-                continue
-            for j in range(cur, i + 1):
-                if GCD(j, i) == 1:
-                    ans += 1
+    def findArray(self, pref: List[int]) -> List[int]:
+        # arr[i] = pref[i] ^ pref[i - 1]
+        ans = [pref[0]]
+        for i, e in enumerate(pref[1:], 1):
+            ans.append(e ^ pref[i - 1])
         return ans
 
 
 
 so = Solution()
-print(so.subarrayGCD([3,12,9,6], 3))
-print(so.subarrayGCD(nums = [9,3,1,2,6,3], k = 3))
-print(so.subarrayGCD(nums = [4], k = 7))
+print(so.findArray([5,2,0,3,1]))
+print(so.findArray([13]))
 
 
 

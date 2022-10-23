@@ -46,7 +46,7 @@ from typing import List
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.lowercase：包含所有小写字母的字符串
+# string.ascii_lowercase：包含所有小写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -56,31 +56,12 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
-        n = len(nums)
-        pmin, pmax = -1, -1
-        ans = 0
-        start = 0
-        for i in range(n):
-            if nums[i] < minK or nums[i] > maxK:
-                pmin, pmax = -1, -1
-                start = i + 1
-                continue
-            if nums[i] == minK:
-                pmin = i
-            if nums[i] == maxK:
-                pmax = i
-            if pmin != -1 and pmax != -1:
-                ans += (min(pmin, pmax) - start + 1)
-        return ans
+    def removeDigit(self, number) -> str:
+        pass
+
 
 so = Solution()
-print(so.countSubarrays([928799,888361,928799,928799,928799,928799,124173,93094,399240,946505,93094,93094,585816], 93094, 928799))
-print(so.countSubarrays([689862,297861,946099,25145,946099,647669,863241,886257,946099,25145,567132,484586,478308,427044,545054,25145,25145,25145,25145,25145],
-25145,
-946099))
-print(so.countSubarrays(nums = [1,3,5,2,7,5], minK = 1, maxK = 5))
-print(so.countSubarrays(nums = [1,1,1,1], minK = 1, maxK = 1))
+print(so.removeDigit(123456))
 
 
 

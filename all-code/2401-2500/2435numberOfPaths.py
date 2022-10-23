@@ -1,3 +1,41 @@
+# 给你一个下标从 0 开始的 m x n 整数矩阵 grid 和一个整数 k 。你从起点 (0, 0) 出发，每一步只能往 下 或者往 右 ，你想要到达终点 (m - 1, n - 1) 。
+#
+# 请你返回路径和能被 k 整除的路径数目，由于答案可能很大，返回答案对 109 + 7 取余 的结果。
+#
+#
+#
+# 示例 1：
+#
+#
+#
+# 输入：grid = [[5,2,4],[3,0,5],[0,7,2]], k = 3
+# 输出：2
+# 解释：有两条路径满足路径上元素的和能被 k 整除。
+# 第一条路径为上图中用红色标注的路径，和为 5 + 2 + 4 + 5 + 2 = 18 ，能被 3 整除。
+# 第二条路径为上图中用蓝色标注的路径，和为 5 + 3 + 0 + 5 + 2 = 15 ，能被 3 整除。
+# 示例 2：
+#
+#
+# 输入：grid = [[0,0]], k = 5
+# 输出：1
+# 解释：红色标注的路径和为 0 + 0 = 0 ，能被 5 整除。
+# 示例 3：
+#
+#
+# 输入：grid = [[7,3,4,9],[2,3,6,2],[2,3,7,0]], k = 1
+# 输出：10
+# 解释：每个数字都能被 1 整除，所以每一条路径的和都能被 k 整除。
+#
+#
+# 提示：
+#
+# m == grid.length
+# n == grid[i].length
+# 1 <= m, n <= 5 * 104
+# 1 <= m * n <= 5 * 104
+# 0 <= grid[i][j] <= 100
+# 1 <= k <= 50
+# https://leetcode.cn/problems/paths-in-matrix-whose-sum-is-divisible-by-k/
 
 from typing import List
 from typing import Optional
@@ -46,7 +84,7 @@ from typing import List
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串
+# string.lowercase：包含所有小写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -56,36 +94,29 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def subarrayGCD(self, nums: List[int], k: int) -> int:
-        nums1 = [e // k for e in nums]
-        nums2 = [e % k for e in nums]
-        n = len(nums1)
-        cur = 0
-        ans = 0
-        def GCD(start, end):
-            x = nums1[start]
-            for i in range(start, end + 1):
-                x = math.gcd(x, nums1[i])
-                if x == 1:
-                    return 1
-            return x
-        print(nums1)
-        print(nums2)
-        for i in range(n):
-            if nums2[i] != 0:
-                cur = i + 1
-                continue
-            for j in range(cur, i + 1):
-                if GCD(j, i) == 1:
-                    ans += 1
-        return ans
-
+    def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
+        MOD = int(1e9 + 7)
+        row, col = len(grid), len(grid[0])
+        dp = [[[0 for _ in range(k)] for _ in range(col)] for _ in range(row)]
+        print(dp)
+        dp[0][0][grid[0][0] % k] = 1
+        for i in range(row):
+            for j in range(col):
+                for l in range(k):
+                    idx = (l + grid[i][j]) % k
+                    if i > 0:
+                        dp[i][j][idx] += dp[i - 1][j][l]
+                        dp[i][j][idx] %= MOD
+                    if j > 0:
+                        dp[i][j][idx] += dp[i][j - 1][l]
+                        dp[i][j][idx] %= MOD
+        return dp[-1][-1][0]
 
 
 so = Solution()
-print(so.subarrayGCD([3,12,9,6], 3))
-print(so.subarrayGCD(nums = [9,3,1,2,6,3], k = 3))
-print(so.subarrayGCD(nums = [4], k = 7))
+print(so.numberOfPaths(grid = [[5,2,4],[3,0,5],[0,7,2]], k = 3))
+print(so.numberOfPaths(grid = [[0,0]], k = 5))
+print(so.numberOfPaths(grid = [[7,3,4,9],[2,3,6,2],[2,3,7,0]], k = 1))
 
 
 

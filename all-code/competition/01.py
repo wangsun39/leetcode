@@ -46,7 +46,7 @@ from typing import List
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.lowercase：包含所有小写字母的字符串
+# string.ascii_lowercase：包含所有小写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -56,20 +56,18 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def findMaxK(self, nums: List[int]) -> int:
-        s = set()
-        ans = -1
-        for x in nums:
-            if -x in s:
-                ans = max(abs(x), ans)
-            s.add(x)
-        return ans
+    def haveConflict(self, event1: List[str], event2: List[str]) -> bool:
+        if event1[0] > event2[0]:
+            event1, event2 = event2, event1
+        if event1[1] >= event2[0]:
+            return True
+        return False
 
 
 so = Solution()
-print(so.findMaxK([-1,2,-3,3]))
-print(so.findMaxK([-1,10,6,7,-7,1]))
-print(so.findMaxK([-10,8,6,7,-2,-3]))
+print(so.haveConflict(event1 = ["01:15","02:00"], event2 = ["02:00","03:00"]))
+print(so.haveConflict(event1 = ["01:00","02:00"], event2 = ["01:20","03:00"]))
+print(so.haveConflict(event1 = ["10:00","11:00"], event2 = ["14:00","15:00"]))
 
 
 
