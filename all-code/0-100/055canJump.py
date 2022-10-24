@@ -29,6 +29,7 @@ class Solution:
     def canJump(self, nums: List[int]) -> bool:
         n = len(nums)
         maxPos = 0
+        if n == 1: return True
         for i in range(n - 1):
             maxPos = max(i + nums[i], maxPos)
             if maxPos >= n - 1:
