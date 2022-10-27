@@ -1,6 +1,7 @@
 
 from typing import List
 from typing import Optional
+from cmath import inf
 from collections import deque
 from itertools import pairwise
 # Definition for a binary tree node.
@@ -63,6 +64,10 @@ import string
 # f-string用法
 # name = 'sun'
 # f"Hello, my name is {name}"
+
+from itertools import accumulate
+# s = list(accumulate(nums, initial=0))  # 计算前缀和
+
 
 class Solution:
     def removeDigit(self, number) -> str:

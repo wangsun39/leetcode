@@ -1,5 +1,10 @@
 import bisect
 import collections
+from typing import List
+
+from itertools import accumulate
+from cmath import inf
+from collections import deque
 class Solution:
     def shortestSubarray(self, A, K: int):
         s = 0
@@ -62,8 +67,26 @@ class Solution:
             mono_prefix_sum.append((i, item))
         return res
 
+    def shortestSubarray3(self, nums: List[int], k: int) -> int:  # 2022/10/26
+        s = list(accumulate(nums, initial=0))  # 前缀和
+        n = len(nums)
+        print(s)
+        queue = deque()
+        ans = inf
+        for i in range(n + 1):
+            while len(queue) and s[queue[-1]] >= s[i]:
+                queue.pop()
+            queue.append(i)
+            while len(queue) and s[i] - s[queue[0]] >= k:
+                ans = min(ans, i - queue[0])
+                queue.popleft()
+        return ans if ans < inf else -1
+
 
 so = Solution()
+print(so.shortestSubarray3([1, 2], 4))
+print(so.shortestSubarray3([1], 1))
+print(so.shortestSubarray3([84,-37,32,40,95], 167))
 print(so.shortestSubarray2([2,-1,2], 3))
 #print(so.shortestSubarray([84,-37,32,40,95], 167))
 #print(so.shortestSubarray2([10,10,-1,-1,10,10], 38))
