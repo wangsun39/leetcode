@@ -3,6 +3,11 @@ from typing import List
 from typing import Optional
 from cmath import inf
 from collections import deque
+# de = deque([1, 2, 3])
+# de.append(4)
+# de.appendleft(6)
+# de.pop()
+# de.popleft()
 from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
@@ -19,6 +24,11 @@ import random
 # 浮点数： price = "{:.02f}".format(price)
 # newword = float(word[1:]) * (100 - discount) / 100
 # newword = "%.2f" % newword
+# a.isalpha()  # 判断字符串中是否所有的字符都是字母
+# a.isdigit() # 判断字符串中是否所有的字符都是整数
+# a.isalnum()  # 判断字符串中是否所有的字符都是字母or数字
+# a.isspace()  # 判断字符串中是否所有的字符都是空白符
+# a.swapcase()  # 转换大小写
 
 import bisect
 # bisect_right：

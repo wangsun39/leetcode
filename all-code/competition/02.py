@@ -1,7 +1,47 @@
+# 给你两个字符串数组 creators 和 ids ，和一个整数数组 views ，所有数组的长度都是 n 。平台上第 i 个视频者是 creator[i] ，视频分配的 id 是 ids[i] ，且播放量为 views[i] 。
+#
+# 视频创作者的 流行度 是该创作者的 所有 视频的播放量的 总和 。请找出流行度 最高 创作者以及该创作者播放量 最大 的视频的 id 。
+#
+# 如果存在多个创作者流行度都最高，则需要找出所有符合条件的创作者。
+# 如果某个创作者存在多个播放量最高的视频，则只需要找出字典序最小的 id 。
+# 返回一个二维字符串数组 answer ，其中 answer[i] = [creatori, idi] 表示 creatori 的流行度 最高 且其最流行的视频 id 是 idi ，可以按任何顺序返回该结果。
+#
+#
+#
+# 示例 1：
+#
+# 输入：creators = ["alice","bob","alice","chris"], ids = ["one","two","three","four"], views = [5,10,5,4]
+# 输出：[["alice","one"],["bob","two"]]
+# 解释：
+# alice 的流行度是 5 + 5 = 10 。
+# bob 的流行度是 10 。
+# chris 的流行度是 4 。
+# alice 和 bob 是流行度最高的创作者。
+# bob 播放量最高的视频 id 为 "two" 。
+# alice 播放量最高的视频 id 是 "one" 和 "three" 。由于 "one" 的字典序比 "three" 更小，所以结果中返回的 id 是 "one" 。
+# 示例 2：
+#
+# 输入：creators = ["alice","alice","alice"], ids = ["a","b","c"], views = [1,2,2]
+# 输出：[["alice","b"]]
+# 解释：
+# id 为 "b" 和 "c" 的视频都满足播放量最高的条件。
+# 由于 "b" 的字典序比 "c" 更小，所以结果中返回的 id 是 "b" 。
+#
+#
+# 提示：
+#
+# n == creators.length == ids.length == views.length
+# 1 <= n <= 105
+# 1 <= creators[i].length, ids[i].length <= 5
+# creators[i] 和 ids[i] 仅由小写英文字母组成
+# 0 <= views[i] <= 105
+# https://leetcode.cn/problems/most-popular-video-creator/
 
 from typing import List
 from typing import Optional
+from cmath import inf
 from collections import deque
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -40,8 +80,16 @@ from typing import List
 # @lru_cache(None)
 
 # bit位 函数：
-# n.bit_length()
+# n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
+# lowbit(i) 即i&-i	返回i的最后一位1
+# n>>k & 1	求n的第k位数字
+# x | (1 << k)	将x第k位 置为1
+# x ^ (1 << k)	将x第k位取反
+# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
+# x | (x + 1)	将x最右边的0置为1
+# x & 1	判断奇偶性 真为奇，假为偶
+
 
 import string
 # string.digits  表示 0123456789
@@ -55,37 +103,44 @@ import string
 # name = 'sun'
 # f"Hello, my name is {name}"
 
+from itertools import accumulate
+# s = list(accumulate(nums, initial=0))  # 计算前缀和
+
+
 class Solution:
-    def subarrayGCD(self, nums: List[int], k: int) -> int:
-        nums1 = [e // k for e in nums]
-        nums2 = [e % k for e in nums]
-        n = len(nums1)
-        cur = 0
-        ans = 0
-        def GCD(start, end):
-            x = nums1[start]
-            for i in range(start, end + 1):
-                x = math.gcd(x, nums1[i])
-                if x == 1:
-                    return 1
-            return x
-        print(nums1)
-        print(nums2)
+    def mostPopularCreator(self, creators: List[str], ids: List[str], views: List[int]) -> List[List[str]]:
+        n = len(creators)
+        d = defaultdict(int)
+        d2 = {}
+        max_num = 0
+        max_set = set()
         for i in range(n):
-            if nums2[i] != 0:
-                cur = i + 1
-                continue
-            for j in range(cur, i + 1):
-                if GCD(j, i) == 1:
-                    ans += 1
+            d[creators[i]] += views[i]
+            if creators[i] not in d2:
+                d2[creators[i]] = i
+            else:
+                if views[i] > views[d2[creators[i]]]:
+                    d2[creators[i]] = i
+                elif views[i] == views[d2[creators[i]]]:
+                    if ids[i] < ids[d2[creators[i]]]:
+                        d2[creators[i]] = i
+            if d[creators[i]] > max_num:
+                max_num = d[creators[i]]
+                max_set = set()
+                max_set.add(creators[i])
+            elif d[creators[i]] == max_num:
+                max_set.add(creators[i])
+        ans = []
+        # print(max_set)
+        # print(d2)
+        for cr in max_set:
+            ans.append([cr, ids[d2[cr]]])
         return ans
 
 
-
 so = Solution()
-print(so.subarrayGCD([3,12,9,6], 3))
-print(so.subarrayGCD(nums = [9,3,1,2,6,3], k = 3))
-print(so.subarrayGCD(nums = [4], k = 7))
+print(so.mostPopularCreator(creators = ["alice","bob","alice","chris"], ids = ["one","two","three","four"], views = [5,10,5,4]))
+print(so.mostPopularCreator(creators = ["alice","alice","alice"], ids = ["a","b","c"], views = [1,2,2]))
 
 
 
