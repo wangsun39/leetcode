@@ -110,8 +110,8 @@ from itertools import accumulate
 class Solution:
     def mostPopularCreator(self, creators: List[str], ids: List[str], views: List[int]) -> List[List[str]]:
         n = len(creators)
-        d = defaultdict(int)
-        d2 = {}
+        d = defaultdict(int)  # 每个创作者的播放总量
+        d2 = {}  # 每个创作者的播放量最大的视频下标
         max_num = 0
         max_set = set()
         for i in range(n):
