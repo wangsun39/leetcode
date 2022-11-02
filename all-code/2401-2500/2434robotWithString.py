@@ -97,30 +97,9 @@ import string
 
 class Solution:
     def robotWithString(self, s: str) -> str:
-        s = s[::-1]
-        ans = ''
-        stack = []
-        for e in string.ascii_lowercase:
-            while len(stack) and ord(stack[0]) <= ord(e):
-                ans += stack.pop(0)
-            cur = ''
-            pos = s.find(e)
-            if pos == -1:
-                continue
-            tmstack = []
-            for ss in s[pos:]:
-                if ss == e:
-                    cur = cur + ss
-                else:
-                    tmstack.append(ss)
-            stack = tmstack + stack
-            ans += cur
-            s = s[:pos]
-            if len(s) == 0:
-                while len(stack):
-                    ans += stack.pop(0)
-                break
-        return ans
+        counter = Counter(s)
+
+
 
 
 so = Solution()
