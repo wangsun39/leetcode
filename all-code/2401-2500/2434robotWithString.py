@@ -97,8 +97,22 @@ import string
 
 class Solution:
     def robotWithString(self, s: str) -> str:
-        counter = Counter(s)
-
+        ans = []
+        c = [0] * 26
+        for e in s:
+            c[ord(e) - ord('a')] += 1
+        t = []
+        def no_less(i):
+            for j in range(i):
+                if c[j] > 0:
+                    return False
+            return True
+        for e in s:
+            c[ord(e) - ord('a')] -= 1
+            t.append(e)
+            while len(t) and no_less(ord(t[-1]) - ord('a')):
+                ans.append(t.pop())
+        return ''.join(ans)
 
 
 
