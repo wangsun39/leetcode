@@ -1,38 +1,14 @@
-# 给你两个正整数 n 和 target 。
-#
-# 如果某个整数每一位上的数字相加小于或等于 target ，则认为这个整数是一个 美丽整数 。
-#
-# 找出并返回满足 n + x 是 美丽整数 的最小非负整数 x 。生成的输入保证总可以使 n 变成一个美丽整数。
-#
-#
-#
-# 示例 1：
-#
-# 输入：n = 16, target = 6
-# 输出：4
-# 解释：最初，n 是 16 ，且其每一位数字的和是 1 + 6 = 7 。在加 4 之后，n 变为 20 且每一位数字的和变成 2 + 0 = 2 。可以证明无法加上一个小于 4 的非负整数使 n 变成一个美丽整数。
-# 示例 2：
-#
-# 输入：n = 467, target = 6
-# 输出：33
-# 解释：最初，n 是 467 ，且其每一位数字的和是 4 + 6 + 7 = 17 。在加 33 之后，n 变为 500 且每一位数字的和变成 5 + 0 + 0 = 5 。可以证明无法加上一个小于 33 的非负整数使 n 变成一个美丽整数。
-# 示例 3：
-#
-# 输入：n = 1, target = 1
-# 输出：0
-# 解释：最初，n 是 1 ，且其每一位数字的和是 1 ，已经小于等于 target 。
-#
-#
-# 提示：
-#
-# 1 <= n <= 1012
-# 1 <= target <= 150
-# 生成的输入保证总可以使 n 变成一个美丽整数。
-# https://leetcode.cn/problems/minimum-addition-to-make-integer-beautiful/
 
 from typing import List
 from typing import Optional
+from cmath import inf
 from collections import deque
+# de = deque([1, 2, 3])
+# de.append(4)
+# de.appendleft(6)
+# de.pop()
+# de.popleft()
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -48,6 +24,11 @@ import random
 # 浮点数： price = "{:.02f}".format(price)
 # newword = float(word[1:]) * (100 - discount) / 100
 # newword = "%.2f" % newword
+# a.isalpha()  # 判断字符串中是否所有的字符都是字母
+# a.isdigit() # 判断字符串中是否所有的字符都是整数
+# a.isalnum()  # 判断字符串中是否所有的字符都是字母or数字
+# a.isspace()  # 判断字符串中是否所有的字符都是空白符
+# a.swapcase()  # 转换大小写
 
 import bisect
 # bisect_right：
@@ -71,8 +52,16 @@ from typing import List
 # @lru_cache(None)
 
 # bit位 函数：
-# n.bit_length()
+# n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
+# lowbit(i) 即i&-i	返回i的最后一位1
+# n>>k & 1	求n的第k位数字
+# x | (1 << k)	将x第k位 置为1
+# x ^ (1 << k)	将x第k位取反
+# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
+# x | (x + 1)	将x最右边的0置为1
+# x & 1	判断奇偶性 真为奇，假为偶
+
 
 import string
 # string.digits  表示 0123456789
@@ -91,29 +80,32 @@ from itertools import accumulate
 
 
 class Solution:
-    def makeIntegerBeautiful(self, n: int, target: int) -> int:
-        def sumof(num):
-            s = str(num)
-            return sum(int(ss) for ss in s)
-        n1 = n
-        dec = 10
-        while sumof(n1) > target:
-            while n1 % dec == 0:
-                dec *= 10
-            tail = n1 % dec
-            add = dec - tail
-            n1 = n1 + add
-        return n1 - n
+    def destroyTargets(self, nums: List[int], space: int) -> int:
+        d = {}
+        ans = 1e10
+        maxA = 0
+        for num in nums:
+            remain = num % space
+            if remain in d:
+                d[remain][0] += 1
+                d[remain][1] = min(d[remain][1], num)
+            else:
+                d[remain] = [1, num]
+            if d[remain][0] > maxA:
+                ans = d[remain][1]
+                maxA = d[remain][0]
+            elif d[remain][0] == maxA:
+                ans = min(ans, d[remain][1])
+        return ans
+
 
 
 so = Solution()
-print(so.makeIntegerBeautiful(n = 467, target = 4))
-print(so.makeIntegerBeautiful(n = 467, target = 6))
-print(so.makeIntegerBeautiful(n = 16, target = 6))
-
-
-
-
+print(so.destroyTargets(nums = [3,7,8,1,1,5], space = 2))
+print(so.destroyTargets(nums = [1,5,3,2,2], space = 10000))
+print(so.destroyTargets(nums = [3,7,8,1,1,5], space = 2))
+print(so.destroyTargets(nums = [1,3,5,2,4,6], space = 2))
+print(so.destroyTargets(nums = [6,2,5], space = 100))
 
 
 

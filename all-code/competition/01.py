@@ -1,31 +1,13 @@
-# 给你一个由正整数组成的整数数组 nums ，返回其中可被 3 整除的所有偶数的平均值。
-#
-# 注意：n 个元素的平均值等于 n 个元素 求和 再除以 n ，结果 向下取整 到最接近的整数。
-#
-#
-#
-# 示例 1：
-#
-# 输入：nums = [1,3,6,10,12,15]
-# 输出：9
-# 解释：6 和 12 是可以被 3 整除的偶数。(6 + 12) / 2 = 9 。
-# 示例 2：
-#
-# 输入：nums = [1,2,4,7,10]
-# 输出：0
-# 解释：不存在满足题目要求的整数，所以返回 0 。
-#
-#
-# 提示：
-#
-# 1 <= nums.length <= 1000
-# 1 <= nums[i] <= 1000
-# https://leetcode.cn/problems/average-value-of-even-numbers-that-are-divisible-by-three/
 
 from typing import List
 from typing import Optional
 from cmath import inf
 from collections import deque
+# de = deque([1, 2, 3])
+# de.append(4)
+# de.appendleft(6)
+# de.pop()
+# de.popleft()
 from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
@@ -42,6 +24,11 @@ import random
 # 浮点数： price = "{:.02f}".format(price)
 # newword = float(word[1:]) * (100 - discount) / 100
 # newword = "%.2f" % newword
+# a.isalpha()  # 判断字符串中是否所有的字符都是字母
+# a.isdigit() # 判断字符串中是否所有的字符都是整数
+# a.isalnum()  # 判断字符串中是否所有的字符都是字母or数字
+# a.isspace()  # 判断字符串中是否所有的字符都是空白符
+# a.swapcase()  # 转换大小写
 
 import bisect
 # bisect_right：
@@ -93,20 +80,26 @@ from itertools import accumulate
 
 
 class Solution:
-    def averageValue(self, nums: List[int]) -> int:
-        n = len(nums)
-        cnt = 0
-        s = 0
-        for i in range(n):
-            if nums[i] % 3 == 0 and nums[i] & 1 == 0:
-                s += nums[i]
-                cnt += 1
-        return s // cnt if cnt > 0 else 0
+    def oddString(self, words: List[str]) -> str:
+        n = len(words[0])
+        def diff(word):
+            ans = []
+            for i in range(n - 1):
+                ans.append(ord(word[i + 1]) - ord(word[i]))
+            return ans
+        w2 = [diff(w) for w in words]
+        m = len(words)
+        if w2[0] == w2[1]:
+            for i in range(2, m):
+                if w2[0] != w2[i]:
+                    return words[i]
+        else:
+            return words[0] if w2[0] != w2[2] else words[1]
 
 
 so = Solution()
-print(so.averageValue([1,3,6,10,12,15]))
-print(so.averageValue([1,2,4,7,10]))
+print(so.oddString(["adc","wzy","abc"]))
+print(so.oddString( ["aaa","bob","ccc","ddd"]))
 
 
 
