@@ -1,4 +1,4 @@
-
+import copy
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -91,12 +91,24 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
+        def dfs(r, f):
+            if len(r) == 0: return 0
+            ans = 1e18
+            for idx, ff in enumerate(f):
+                cur = 0
+                if ff[1] > 0:
+                    cur += abs(r[0] - ff[0])
+                    newf = copy.deepcopy(f)
+                    newf[idx][1] -= 1
+                    cur += dfs(r[1:], newf)
+                    ans = min(ans, cur)
+            return ans
+        return dfs(robot, factory)
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.minimumTotalDistance(robot = [0,4,6], factory = [[2,2],[6,2]]))
 
 
 

@@ -91,12 +91,35 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
-
+    def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        d = {}
+        maxV, curV = 0, 0
+        for i in range(k):
+            if nums[i] not in d:
+                d[nums[i]] = 1
+            else:
+                d[nums[i]] += 1
+            curV += nums[i]
+        if len(d) == k:
+            maxV = curV
+        for i in range(k, n):
+            if nums[i] in d:
+                d[nums[i]] += 1
+            else:
+                d[nums[i]] = 1
+            curV += nums[i]
+            d[nums[i - k]] -= 1
+            curV -= nums[i - k]
+            if d[nums[i - k]] == 0:
+                del(d[nums[i - k]])
+            if len(d) == k:
+                maxV = max(curV, maxV)
+        return maxV
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.maximumSubarraySum(nums = [1,5,4,2,9,9,9], k = 3))
+print(so.maximumSubarraySum(nums = [4,4,4], k = 3))
 
 
 

@@ -91,12 +91,25 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def applyOperations(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        for i in range(n - 1):
+            if nums[i] == nums[i + 1]:
+                nums[i] *= 2
+                nums[i + 1] = 0
+        ans = []
+        t = []
+        for num in nums:
+            if num != 0:
+                ans.append(num)
+            else:
+                t.append(num)
+        return ans + t
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.applyOperations( [1,2,2,1,1,0]))
+print(so.applyOperations( [0,1]))
 
 
 
