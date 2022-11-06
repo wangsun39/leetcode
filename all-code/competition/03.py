@@ -78,34 +78,25 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
+from sortedcontainers import SortedList
+    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # SortedList.clear() 移除所有元素。时间复杂度O(n).
+    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # SortedList.bisect_left(value)
+    # SortedList.bisect_right(value)
+    # SortedList.count(value)
+    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def destroyTargets(self, nums: List[int], space: int) -> int:
-        d = {}
-        ans = 1e10
-        maxA = 0
-        for num in nums:
-            remain = num % space
-            if remain in d:
-                d[remain][0] += 1
-                d[remain][1] = min(d[remain][1], num)
-            else:
-                d[remain] = [1, num]
-            if d[remain][0] > maxA:
-                ans = d[remain][1]
-                maxA = d[remain][0]
-            elif d[remain][0] == maxA:
-                ans = min(ans, d[remain][1])
-        return ans
-
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.destroyTargets(nums = [3,7,8,1,1,5], space = 2))
-print(so.destroyTargets(nums = [1,5,3,2,2], space = 10000))
-print(so.destroyTargets(nums = [3,7,8,1,1,5], space = 2))
-print(so.destroyTargets(nums = [1,3,5,2,4,6], space = 2))
-print(so.destroyTargets(nums = [6,2,5], space = 100))
+print(so.removeDigit(123456))
 
 
 

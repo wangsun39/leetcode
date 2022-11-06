@@ -1,3 +1,37 @@
+# 给你一个字符串数组 words ，每一个字符串长度都相同，令所有字符串的长度都为 n 。
+#
+# 每个字符串 words[i] 可以被转化为一个长度为 n - 1 的 差值整数数组 difference[i] ，其中对于 0 <= j <= n - 2 有 difference[i][j] = words[i][j+1] - words[i][j] 。注意两个字母的差值定义为它们在字母表中 位置 之差，也就是说 'a' 的位置是 0 ，'b' 的位置是 1 ，'z' 的位置是 25 。
+#
+# 比方说，字符串 "acb" 的差值整数数组是 [2 - 0, 1 - 2] = [2, -1] 。
+# words 中所有字符串 除了一个字符串以外 ，其他字符串的差值整数数组都相同。你需要找到那个不同的字符串。
+#
+# 请你返回 words中 差值整数数组 不同的字符串。
+#
+#
+#
+# 示例 1：
+#
+# 输入：words = ["adc","wzy","abc"]
+# 输出："abc"
+# 解释：
+# - "adc" 的差值整数数组是 [3 - 0, 2 - 3] = [3, -1] 。
+# - "wzy" 的差值整数数组是 [25 - 22, 24 - 25]= [3, -1] 。
+# - "abc" 的差值整数数组是 [1 - 0, 2 - 1] = [1, 1] 。
+# 不同的数组是 [1, 1]，所以返回对应的字符串，"abc"。
+# 示例 2：
+#
+# 输入：words = ["aaa","bob","ccc","ddd"]
+# 输出："bob"
+# 解释：除了 "bob" 的差值整数数组是 [13, -13] 以外，其他字符串的差值整数数组都是 [0, 0] 。
+#
+#
+# 提示：
+#
+# 3 <= words.length <= 100
+# n == words[i].length
+# 2 <= n <= 20
+# words[i] 只含有小写英文字母。
+
 
 from typing import List
 from typing import Optional
@@ -78,25 +112,28 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def oddString(self, words: List[str]) -> str:
+        n = len(words[0])
+        def diff(word):
+            ans = []
+            for i in range(n - 1):
+                ans.append(ord(word[i + 1]) - ord(word[i]))
+            return ans
+        w2 = [diff(w) for w in words]
+        m = len(words)
+        if w2[0] == w2[1]:
+            for i in range(2, m):
+                if w2[0] != w2[i]:
+                    return words[i]
+        else:
+            return words[0] if w2[0] != w2[2] else words[1]
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.oddString(["adc","wzy","abc"]))
+print(so.oddString( ["aaa","bob","ccc","ddd"]))
 
 
 
