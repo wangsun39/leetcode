@@ -1,6 +1,6 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2022-11-6| 第318场周赛  | T4  | [最小移动总距离](https://leetcode.cn/problems/minimum-total-distance-traveled/) |   2298    | 本周前三题虽然做出来了，但花了很多时间1:12:36，最后一题本来就难，更是没时间做出来了<br>第二题开始想到双指针去了，耽误了不少时间，<br>第三题wa了3次 |
+|2022-11-6| 第318场周赛  | T4  | [最小移动总距离](https://leetcode.cn/problems/minimum-total-distance-traveled/) |   2453    | 本周前三题虽然做出来了，但花了很多时间1:12:36，最后一题本来就难，更是没时间做出来了<br>第二题开始想到双指针去了，耽误了不少时间，<br>第三题wa了3次 |
 |2022-10-30| 第317场周赛  | T4  | [移除子树后的二叉树高度](https://leetcode.cn/problems/height-of-binary-tree-after-subtree-removal-queries/) |   2298    | 本周AK &#x1F603;，这题wa了4次，总是TLE，最后发现是list开的太大了，还好提前几分钟过了 |
 |2022-10-30| 第316场周赛  | T3  | [使数组相等的最小开销](https://leetcode.cn/problems/minimum-cost-to-make-array-equal/description/) |   2005    | 这题又是属于比赛时已经有思路了，但是没能调试出来，导致本周只做了2题，还是不够熟练。<br> 当然方法也是可以优化一点，最优值一点在数组的某个值上取到 |
 |2022-10-23| 第316场周赛  | T4  | [使数组相似的最少操作次数](https://leetcode.cn/problems/minimum-number-of-operations-to-make-arrays-similar/) |    2076   | 因为第三题耗时太长，这题没有时间做，当然第三题没耽误，这题也不一定做出来。技巧：奇偶分类，可以把奇数取相反数，这样它们就分开了。<br>这题和第三题是有点像的。 |
