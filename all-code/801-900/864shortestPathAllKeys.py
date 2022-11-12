@@ -55,19 +55,46 @@ class Solution:
         row, col = len(grid), len(grid[0])
         d = {}  # (x, y, mask) => step 最小步数
         dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        def dfs(x, y, mask, step):
-            for dir in dirs:
-                xx, yy = x + dir[0], y + dir[1]
-                if 0 <= xx < row and 0 <= yy < col and grid[xx][yy] != '#':
+        def bfs(x0, y0, target):
+            q= [(x0, y0, 0)]
+            while len(q):
+                x, y, mask = q.pop(0)
+                for dir in dirs:
+                    xx, yy = x + dir[0], y + dir[1]
+                    if xx < 0 or xx >= row or yy < 0 or yy >= col or grid[xx][yy] == '#':
+                        continue
+                    mask1 = mask
+                    if grid[xx][yy].islower():
+                        mask1 |= (1 << (ord(grid[xx][yy]) - ord('a')))
+                        if mask1 == target:
+                            return d[(x, y, mask)] + 1
+                    elif grid[xx][yy].isupper():
+                        if mask & (1 << (ord(grid[xx][yy]) - ord('A'))) == 0:
+                            continue
+                    if (xx, yy, mask1) in d:
+                        continue
+                    d[(xx, yy, mask1)] = d[(x, y, mask)] + 1
+                    q.append((xx, yy, mask1))
+            return -1
 
-        for i in row:
-            for j in col:
+        letter = set()
+        for i in range(row):
+            for j in range(col):
                 if grid[i][j] == '@':
-                    d[(i, j, 0)] = 0
-                    dfs(i, j, 0, 0)
+                    x0, y0 = i, j
+                elif grid[i][j].islower():
+                    letter.add(grid[i][j])
+        target = 0
+        for l in letter:
+            target |= (1 << (ord(l) - ord('a')))
+        d[(x0, y0, 0)] = 0
+        return bfs(x0, y0, target)
 
 
 
 so = Solution()
-print(so.shortestSubarray3([1, 2], 4))
+print(so.shortestPathAllKeys(["@...a",".###A","b.BCc"]))   # 10
+print(so.shortestPathAllKeys(["@.a.#","###.#","b.A.B"]))   # 8
+print(so.shortestPathAllKeys(["@..aA","..B#.","....b"]))   # 6
+print(so.shortestPathAllKeys(["@Aa"]))   # -1
 
