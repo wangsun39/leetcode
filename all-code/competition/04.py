@@ -1,4 +1,4 @@
-import copy
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -91,24 +91,38 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
-        def dfs(r, f):
-            if len(r) == 0: return 0
-            ans = 1e18
-            for idx, ff in enumerate(f):
-                cur = 0
-                if ff[1] > 0:
-                    cur += abs(r[0] - ff[0])
-                    newf = copy.deepcopy(f)
-                    newf[idx][1] -= 1
-                    cur += dfs(r[1:], newf)
-                    ans = min(ans, cur)
-            return ans
-        return dfs(robot, factory)
+    def maxPalindromes(self, s: str, k: int) -> int:
+        n = len(s)
+        found = set()  # 记录所有回文区间
+        for i in range(n):
+            found.add((i, i))
+        dp = [0] * n  # dp[i] 表示子串s[:i + 1] 最多包含的回文段 dp[i][j] 表示区间子串s[i: j + 1] 最多包含的回文段
+        for i in range(n):
+            cur = 0 if i == 0 else dp[i - 1]
+            for j in range(i):
+                if s[j] == s[i] and (i - j < 2 or (j + 1, i - 1) in found):
+                    found.add((j, i))
+            for j in range(i + 1):  # [0, j - 1] [j, i]
+                if i - j + 1 < k:
+                    continue
+                if j == 0:
+                    if (j, i) in found:
+                        cur = max(cur, 1)
+                elif (j, i) in found:
+                    cur = max(cur, dp[j - 1] + 1)
+                else:
+                    cur = max(cur, dp[j - 1])
+            dp[i] = cur
+        print(found)
+        print(dp)
+        return dp[-1]
 
 
 so = Solution()
-print(so.minimumTotalDistance(robot = [0,4,6], factory = [[2,2],[6,2]]))
+print(so.maxPalindromes(s = "i", k = 1))  # 1
+print(so.maxPalindromes(s = "iqqibcecvrbxxj", k = 1))  # 14
+print(so.maxPalindromes(s = "adbcda", k = 2))  # 0
+print(so.maxPalindromes(s = "abaccdbbd", k = 3))  # 2
 
 
 

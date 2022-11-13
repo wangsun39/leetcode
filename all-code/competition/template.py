@@ -54,7 +54,7 @@ from typing import List
 # bit位 函数：
 # n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
-# lowbit(i) 即i&-i	返回i的最后一位1
+# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
 # n>>k & 1	求n的第k位数字
 # x | (1 << k)	将x第k位 置为1
 # x ^ (1 << k)	将x第k位取反
