@@ -93,22 +93,22 @@ from sortedcontainers import SortedList
 class Solution:
     def maxPalindromes(self, s: str, k: int) -> int:
         n = len(s)
-        found = set()  # 记录所有回文区间
+        found = [[False] * n for _ in range(n)]  # 如果found用set，不能通过，hash的性能不如数组
         for i in range(n):
-            found.add((i, i))
+            found[i][i] = True
         dp = [0] * n  # dp[i] 表示子串s[:i + 1] 最多包含的回文段 dp[i][j] 表示区间子串s[i: j + 1] 最多包含的回文段
         for i in range(n):
             cur = 0 if i == 0 else dp[i - 1]
             for j in range(i):
-                if s[j] == s[i] and (i - j < 2 or (j + 1, i - 1) in found):
-                    found.add((j, i))
+                if s[j] == s[i] and (i - j < 2 or found[j + 1][i - 1]):
+                    found[j][i] = True
             for j in range(i + 1):  # [0, j - 1] [j, i]
                 if i - j + 1 < k:
                     continue
                 if j == 0:
-                    if (j, i) in found:
+                    if found[j][i]:
                         cur = max(cur, 1)
-                elif (j, i) in found:
+                elif found[j][i]:
                     cur = max(cur, dp[j - 1] + 1)
                 else:
                     cur = max(cur, dp[j - 1])
