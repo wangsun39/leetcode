@@ -70,6 +70,8 @@ class Solution:
             else:
                 j += 1
         return False
+    def splitArraySameAverage2(self, A):
+
 
 so = Solution()
 print(so.splitArraySameAverage([5,3,11,19,2]))
