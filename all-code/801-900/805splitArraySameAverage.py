@@ -29,7 +29,7 @@ class Solution:
                     return True
         return False
 
-    def splitArraySameAverage(self, A):
+    def splitArraySameAverage2(self, A):
         sumA, N = sum(A), len(A)
         if N < 2:
             return False
@@ -70,13 +70,51 @@ class Solution:
             else:
                 j += 1
         return False
-    def splitArraySameAverage2(self, A):
+
+    def splitArraySameAverage(self, A):
+        n = len(A)
+        def get_all_sum(X):
+            nx = len(X)
+            ans = set()
+            for i in range(1, 2 ** nx):
+                cur = 0
+                for j in range(nx):
+                    if i & (1 << j):
+                        cur += X[j]
+                ans.add(cur)
+            return ans
+
+        s = sum(A)
+        A = [e * n - s for e in A]
+        # print(A)
+        n1 = n // 2
+        A1, A2 = A[:n1], A[n1:]
+        S1 = get_all_sum(A1)
+        # print(S1)
+        if 0 in S1:
+            return True
+        sum1 = sum(A1)
+        n2 = n - n1
+        for i in range(1, 2 ** n2 - 1):
+            cur = 0
+            for j in range(n2):
+                if i & (1 << j):
+                    cur += A2[j]
+            if -cur in S1:
+                return True
+        if sum(A2) in S1 and sum(A2) != -sum1:
+            return True
+        return False
+
 
 
 so = Solution()
-print(so.splitArraySameAverage([5,3,11,19,2]))
-print(so.splitArraySameAverage([6,8,18,3,1]))
-print(so.splitArraySameAverage([60,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30]))
-print(so.splitArraySameAverage([1,2,3,4,5,6,7,8]))
+print(so.splitArraySameAverage([1,3]))  # False
+print(so.splitArraySameAverage([3,1,2]))  # True
+print(so.splitArraySameAverage([18,0,16,2]))  # True
+print(so.splitArraySameAverage([1,2,3,4,5,6,7,8]))  # True
+print(so.splitArraySameAverage([5,3,11,19,2]))  # True
+print(so.splitArraySameAverage([6,8,18,3,1]))  # False
+print(so.splitArraySameAverage([60,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30]))  # False
 
 
