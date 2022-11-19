@@ -54,18 +54,27 @@ import bisect
 # Definition for a binary tree node.
 class Solution:
     def goodDaysToRobBank(self, security: List[int], time: int) -> List[int]:
-        N = len(security)
-        def findFrom(pos):
-            while pos + 1 < N:
-                if security[pos] >= security[pos + 1]:
-                    pos += 1
+        n = len(security)
+        left, right = [0] * n, [0] * n
+        for i in range(1, n):
+            left[i] = left[i - 1] + 1 if security[i - 1] >= security[i] else 0
+        for i in range(n - 2, -1, -1):
+            right[i] = right[i + 1] + 1 if security[i] <= security[i + 1] else 0
+        ans = []
+        # print(left)
+        for i in range(n):
+            if left[i] >= time and right[i] >= time:
+                ans.append(i)
+        return ans
+
+
 
 
 so = Solution()
+print(so.goodDaysToRobBank([1,2,5,4,1,0,2,4,5,3,1,2,4,3,2,4,8], 2))  # [5,10,14]
 print(so.goodDaysToRobBank([5,3,3,3,5,6,2], 2))  # [2,3]
 print(so.goodDaysToRobBank([3,0,0,0,1], 2))  # [2]
 print(so.goodDaysToRobBank([0,4,3,0,0], 1))  # [3]
-print(so.goodDaysToRobBank([1,2,5,4,1,0,2,4,5,3,1,2,4,3,2,4,8], 2))  # [5,10,14]
 print(so.goodDaysToRobBank([1,1,1,1,1], 0))  # [0, 1, 2, 3, 4]
 print(so.goodDaysToRobBank([1,2,3,4,5,6], 2))   # []
 
