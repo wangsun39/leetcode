@@ -54,7 +54,7 @@ from typing import List
 # bit位 函数：
 # n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
-# lowbit(i) 即i&-i	返回i的最后一位1
+# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
 # n>>k & 1	求n的第k位数字
 # x | (1 << k)	将x第k位 置为1
 # x ^ (1 << k)	将x第k位取反
@@ -90,67 +90,13 @@ from sortedcontainers import SortedList
     # SortedList.count(value)
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
 class Solution:
-    def minimumOperations(self, root: Optional[TreeNode]) -> int:
-        level = [root]
-        q = []
-        qq = []
-        ans = 0
-        def calc(lev):
-            nonlocal ans
-            n = len(lev)
-            d = {e: i for i, e in enumerate(lev)}
-            # ast = [[e, i] for i, e in enumerate(lev)]
-            ast = [e for e in lev]
-            ast.sort()
-            for i in range(n):
-                if ast[i] == lev[i]:
-                    continue
-                idx = d[ast[i]]
-                d[lev[i]], d[lev[idx]] = d[lev[idx]], d[lev[i]]
-                lev[i], lev[idx] = lev[idx], lev[i]
-                ans += 1
-            return
+    def removeDigit(self, number) -> str:
+        pass
 
-        while True:
-            while len(level):
-                node = level.pop(0)
-                if node.left:
-                    q.append(node.left)
-                    qq.append(node.left.val)
-                if node.right:
-                    q.append(node.right)
-                    qq.append(node.right.val)
-            if len(q) == 0:
-                break
-            calc(qq)
-            level, q, qq = q, [], []
-        return ans
-
-root = TreeNode(1)
-root.left = TreeNode(2)
-root.left.left = TreeNode(4)
-root.left.right = TreeNode(5)
-root.right = TreeNode(3)
-root.right.left = TreeNode(6)
-
-
-root = TreeNode(1)
-root.left = TreeNode(3)
-root.left.left = TreeNode(7)
-root.left.right = TreeNode(6)
-root.right = TreeNode(2)
-root.right.left = TreeNode(5)
-root.right.right = TreeNode(4)
 
 so = Solution()
-print(so.minimumOperations(root))
+print(so.removeDigit(123456))
 
 
 

@@ -54,7 +54,7 @@ from typing import List
 # bit位 函数：
 # n.bit_length()  数值的二进制的长度数
 # value = int(s, 2)
-# lowbit(i) 即i&-i	返回i的最后一位1
+# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
 # n>>k & 1	求n的第k位数字
 # x | (1 << k)	将x第k位 置为1
 # x ^ (1 << k)	将x第k位取反
@@ -91,38 +91,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maxPalindromes(self, s: str, k: int) -> int:
-        n = len(s)
-        found = [[False] * n for _ in range(n)]  # 如果found用set，不能通过，hash的性能不如数组
-        for i in range(n):
-            found[i][i] = True
-        dp = [0] * n  # dp[i] 表示子串s[:i + 1] 最多包含的回文段 dp[i][j] 表示区间子串s[i: j + 1] 最多包含的回文段
-        for i in range(n):
-            cur = 0 if i == 0 else dp[i - 1]
-            for j in range(i):
-                if s[j] == s[i] and (i - j < 2 or found[j + 1][i - 1]):
-                    found[j][i] = True
-            for j in range(i + 1):  # [0, j - 1] [j, i]
-                if i - j + 1 < k:
-                    continue
-                if j == 0:
-                    if found[j][i]:
-                        cur = max(cur, 1)
-                elif found[j][i]:
-                    cur = max(cur, dp[j - 1] + 1)
-                else:
-                    cur = max(cur, dp[j - 1])
-            dp[i] = cur
-        print(found)
-        print(dp)
-        return dp[-1]
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxPalindromes(s = "i", k = 1))  # 1
-print(so.maxPalindromes(s = "iqqibcecvrbxxj", k = 1))  # 14
-print(so.maxPalindromes(s = "adbcda", k = 2))  # 0
-print(so.maxPalindromes(s = "abaccdbbd", k = 3))  # 2
+print(so.removeDigit(123456))
 
 
 
