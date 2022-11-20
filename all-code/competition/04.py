@@ -91,12 +91,37 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:
+        MOD = int(1e9 + 7)
+        n = len(s)
+        A = [0]  # 所有可能的分界点
+        for i in range(n - 1):
+            if s[i] not in '2357' and s[i + 1] in '2357':
+                A.append(i)
+        A.append(n - 1)
+        m = len(A)
+        print(A)
+        dp = [[0] * m for _ in range(k)]  # dp[i][j] 表示 A[:j]中分i段的最大数量
+        for i in range(1, m):
+            if A[i] + 1 >= minLength:
+                dp[0][i] = 1
+        for i in range(1, k):
+            for j in range(1, m):
+                for t in range(j):
+                    if A[j] - A[t] >= minLength and dp[i - 1][t]:
+                        dp[i][j] += (dp[i - 1][t])
+                        dp[i][j] %= MOD
+        print(dp)
+        return dp[-1][-1]
+
+
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.beautifulPartitions(s = "3312958", k = 3, minLength = 1))
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 2))
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 3))
 
 
 

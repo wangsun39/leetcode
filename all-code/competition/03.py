@@ -91,12 +91,38 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def minimumFuelCost(self, roads: List[List[int]], seats: int) -> int:
+        map = defaultdict(list)
+        for x, y in roads:
+            map[x].append(y)
+            map[y].append(x)
+        map2 = defaultdict(list)
+        def dfs(v):
+            map2[v] = []
+            for x in map[v]:
+                if x not in map2:
+                    map2[v].append(x)
+            for s in map2[v]:
+                dfs(s)
+        dfs(0)
+        print(map2)
+        def calc(v):  # 人数，之前的油耗
+            nu, cu = 1, 0
+            for s in map2[v]:
+                x, y = calc(s)
+                cars = math.ceil(x / seats)
+                cu += (y + cars)
+                nu += x
+            return nu, cu
+        res = calc(0)
+        return res[1]
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.minimumFuelCost(roads = [], seats = 1))
+print(so.minimumFuelCost(roads = [[0,1],[0,2],[0,3]], seats = 5))
+print(so.minimumFuelCost(roads = [[3,1],[3,2],[1,0],[0,4],[0,5],[4,6]], seats = 2))
 
 
 

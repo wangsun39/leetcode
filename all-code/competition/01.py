@@ -91,12 +91,21 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def unequalTriplets(self, nums: List[int]) -> int:
+        n = len(nums)
+        ans = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                for k in range(j + 1, n):
+                    if nums[i] != nums[j] != nums[k] != nums[i]:
+                        ans += 1
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.unequalTriplets([4,4,2,4,3]))
+print(so.unequalTriplets([1,1,1,1,1]))
 
 
 
