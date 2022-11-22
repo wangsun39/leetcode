@@ -107,6 +107,8 @@ class Solution:
                 dp[0][i] = 1
         for i in range(1, k):
             for j in range(1, m):
+                # if A[j] < i * minLength - 1 or A[j] > n - (k - i) * minLength + 1:
+                #     continue
                 for t in range(j):
                     if A[j] - A[t] >= minLength and dp[i - 1][t]:
                         dp[i][j] += (dp[i - 1][t])
@@ -114,14 +116,10 @@ class Solution:
         print(dp)
         return dp[-1][-1]
 
-
-
-
-
 so = Solution()
-print(so.beautifulPartitions(s = "3312958", k = 3, minLength = 1))
-print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 2))
-print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 3))
+print(so.beautifulPartitions(s = "3312958", k = 3, minLength = 1))  # 1
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 2))  # 3
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 3))  # 1
 
 
 
