@@ -1,33 +1,59 @@
-# 给你一个下标从 0 开始的正整数数组 nums 。请你找出并统计满足下述条件的三元组 (i, j, k) 的数目：
+# 给你一棵 n 个节点的树（一个无向、连通、无环图），每个节点表示一个城市，编号从 0 到 n - 1 ，且恰好有 n - 1 条路。0 是首都。给你一个二维整数数组 roads ，其中 roads[i] = [ai, bi] ，表示城市 ai 和 bi 之间有一条 双向路 。
 #
-# 0 <= i < j < k < nums.length
-# nums[i]、nums[j] 和 nums[k] 两两不同 。
-# 换句话说：nums[i] != nums[j]、nums[i] != nums[k] 且 nums[j] != nums[k] 。
-# 返回满足上述条件三元组的数目。
+# 每个城市里有一个代表，他们都要去首都参加一个会议。
+#
+# 每座城市里有一辆车。给你一个整数 seats 表示每辆车里面座位的数目。
+#
+# 城市里的代表可以选择乘坐所在城市的车，或者乘坐其他城市的车。相邻城市之间一辆车的油耗是一升汽油。
+#
+# 请你返回到达首都最少需要多少升汽油。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums = [4,4,2,4,3]
+#
+#
+# 输入：roads = [[0,1],[0,2],[0,3]], seats = 5
 # 输出：3
-# 解释：下面列出的三元组均满足题目条件：
-# - (0, 2, 4) 因为 4 != 2 != 3
-# - (1, 2, 4) 因为 4 != 2 != 3
-# - (2, 3, 4) 因为 2 != 4 != 3
-# 共计 3 个三元组，返回 3 。
-# 注意 (2, 0, 4) 不是有效的三元组，因为 2 > 0 。
+# 解释：
+# - 代表 1 直接到达首都，消耗 1 升汽油。
+# - 代表 2 直接到达首都，消耗 1 升汽油。
+# - 代表 3 直接到达首都，消耗 1 升汽油。
+# 最少消耗 3 升汽油。
 # 示例 2：
 #
-# 输入：nums = [1,1,1,1,1]
+#
+#
+# 输入：roads = [[3,1],[3,2],[1,0],[0,4],[0,5],[4,6]], seats = 2
+# 输出：7
+# 解释：
+# - 代表 2 到达城市 3 ，消耗 1 升汽油。
+# - 代表 2 和代表 3 一起到达城市 1 ，消耗 1 升汽油。
+# - 代表 2 和代表 3 一起到达首都，消耗 1 升汽油。
+# - 代表 1 直接到达首都，消耗 1 升汽油。
+# - 代表 5 直接到达首都，消耗 1 升汽油。
+# - 代表 6 到达城市 4 ，消耗 1 升汽油。
+# - 代表 4 和代表 6 一起到达首都，消耗 1 升汽油。
+# 最少消耗 7 升汽油。
+# 示例 3：
+#
+#
+#
+# 输入：roads = [], seats = 1
 # 输出：0
-# 解释：不存在满足条件的三元组，所以返回 0 。
+# 解释：没有代表需要从别的城市到达首都。
 #
 #
 # 提示：
 #
-# 3 <= nums.length <= 100
-# 1 <= nums[i] <= 1000
+# 1 <= n <= 105
+# roads.length == n - 1
+# roads[i].length == 2
+# 0 <= ai, bi < n
+# ai != bi
+# roads 表示一棵合法的树。
+# 1 <= seats <= 105
 
 from typing import List
 from typing import Optional
@@ -121,21 +147,38 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def unequalTriplets(self, nums: List[int]) -> int:
-        n = len(nums)
-        ans = 0
-        for i in range(n):
-            for j in range(i + 1, n):
-                for k in range(j + 1, n):
-                    if nums[i] != nums[j] != nums[k] != nums[i]:
-                        ans += 1
-        return ans
+    def minimumFuelCost(self, roads: List[List[int]], seats: int) -> int:
+        map = defaultdict(list)
+        for x, y in roads:
+            map[x].append(y)
+            map[y].append(x)
+        map2 = defaultdict(list)  # x 节点的子节点列表，0 作为根节点
+        def dfs(v):
+            map2[v] = []
+            for x in map[v]:
+                if x not in map2:
+                    map2[v].append(x)
+            for s in map2[v]:
+                dfs(s)
+        dfs(0)
+        print(map2)
+        def calc(v):  # 人数，之前的油耗
+            nu, cu = 1, 0
+            for s in map2[v]:  # 依次计算每个子节点汇聚上来的人数和总共的油耗
+                x, y = calc(s)
+                cars = math.ceil(x / seats)
+                cu += (y + cars)
+                nu += x
+            return nu, cu
+        res = calc(0)
+        return res[1]
 
 
 
 so = Solution()
-print(so.unequalTriplets([4,4,2,4,3]))
-print(so.unequalTriplets([1,1,1,1,1]))
+print(so.minimumFuelCost(roads = [], seats = 1))
+print(so.minimumFuelCost(roads = [[0,1],[0,2],[0,3]], seats = 5))
+print(so.minimumFuelCost(roads = [[3,1],[3,2],[1,0],[0,4],[0,5],[4,6]], seats = 2))
 
 
 

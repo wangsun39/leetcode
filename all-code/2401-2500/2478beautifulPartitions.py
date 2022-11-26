@@ -1,33 +1,40 @@
-# 给你一个下标从 0 开始的正整数数组 nums 。请你找出并统计满足下述条件的三元组 (i, j, k) 的数目：
+# 给你一个字符串 s ，每个字符是数字 '1' 到 '9' ，再给你两个整数 k 和 minLength 。
 #
-# 0 <= i < j < k < nums.length
-# nums[i]、nums[j] 和 nums[k] 两两不同 。
-# 换句话说：nums[i] != nums[j]、nums[i] != nums[k] 且 nums[j] != nums[k] 。
-# 返回满足上述条件三元组的数目。
+# 如果对 s 的分割满足以下条件，那么我们认为它是一个 完美 分割：
+#
+# s 被分成 k 段互不相交的子字符串。
+# 每个子字符串长度都 至少 为 minLength 。
+# 每个子字符串的第一个字符都是一个 质数 数字，最后一个字符都是一个 非质数 数字。质数数字为 '2' ，'3' ，'5' 和 '7' ，剩下的都是非质数数字。
+# 请你返回 s 的 完美 分割数目。由于答案可能很大，请返回答案对 109 + 7 取余 后的结果。
+#
+# 一个 子字符串 是字符串中一段连续字符串序列。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums = [4,4,2,4,3]
+# 输入：s = "23542185131", k = 3, minLength = 2
 # 输出：3
-# 解释：下面列出的三元组均满足题目条件：
-# - (0, 2, 4) 因为 4 != 2 != 3
-# - (1, 2, 4) 因为 4 != 2 != 3
-# - (2, 3, 4) 因为 2 != 4 != 3
-# 共计 3 个三元组，返回 3 。
-# 注意 (2, 0, 4) 不是有效的三元组，因为 2 > 0 。
+# 解释：存在 3 种完美分割方案：
+# "2354 | 218 | 5131"
+# "2354 | 21851 | 31"
+# "2354218 | 51 | 31"
 # 示例 2：
 #
-# 输入：nums = [1,1,1,1,1]
-# 输出：0
-# 解释：不存在满足条件的三元组，所以返回 0 。
+# 输入：s = "23542185131", k = 3, minLength = 3
+# 输出：1
+# 解释：存在一种完美分割方案："2354 | 218 | 5131" 。
+# 示例 3：
+#
+# 输入：s = "3312958", k = 3, minLength = 1
+# 输出：1
+# 解释：存在一种完美分割方案："331 | 29 | 58" 。
 #
 #
 # 提示：
 #
-# 3 <= nums.length <= 100
-# 1 <= nums[i] <= 1000
+# 1 <= k, minLength <= s.length <= 1000
+# s 每个字符都为数字 '1' 到 '9' 之一。
 
 from typing import List
 from typing import Optional
@@ -121,21 +128,35 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def unequalTriplets(self, nums: List[int]) -> int:
-        n = len(nums)
-        ans = 0
-        for i in range(n):
-            for j in range(i + 1, n):
-                for k in range(j + 1, n):
-                    if nums[i] != nums[j] != nums[k] != nums[i]:
-                        ans += 1
-        return ans
-
-
+    def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:
+        MOD = int(1e9 + 7)
+        n = len(s)
+        A = [0]  # 所有可能的分界点
+        for i in range(n - 1):
+            if s[i] not in '2357' and s[i + 1] in '2357':
+                A.append(i)
+        A.append(n - 1)
+        m = len(A)
+        print(A)
+        dp = [[0] * m for _ in range(k)]  # dp[i][j] 表示 A[:j]中分i段的最大数量
+        for i in range(1, m):
+            if A[i] + 1 >= minLength:
+                dp[0][i] = 1
+        for i in range(1, k):
+            for j in range(1, m):
+                # if A[j] < i * minLength - 1 or A[j] > n - (k - i) * minLength + 1:
+                #     continue
+                for t in range(j):
+                    if A[j] - A[t] >= minLength and dp[i - 1][t]:
+                        dp[i][j] += (dp[i - 1][t])
+                        dp[i][j] %= MOD
+        print(dp)
+        return dp[-1][-1]
 
 so = Solution()
-print(so.unequalTriplets([4,4,2,4,3]))
-print(so.unequalTriplets([1,1,1,1,1]))
+print(so.beautifulPartitions(s = "3312958", k = 3, minLength = 1))  # 1
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 2))  # 3
+print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 3))  # 1
 
 
 
