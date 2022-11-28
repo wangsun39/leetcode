@@ -91,35 +91,39 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:
-        MOD = int(1e9 + 7)
-        n = len(s)
-        A = [0]  # 所有可能的分界点
-        for i in range(n - 1):
-            if s[i] not in '2357' and s[i + 1] in '2357':
-                A.append(i)
-        A.append(n - 1)
-        m = len(A)
-        print(A)
-        dp = [[0] * m for _ in range(k)]  # dp[i][j] 表示 A[:j]中分i段的最大数量
-        for i in range(1, m):
-            if A[i] + 1 >= minLength:
-                dp[0][i] = 1
-        for i in range(1, k):
-            for j in range(1, m):
-                # if A[j] < i * minLength - 1 or A[j] > n - (k - i) * minLength + 1:
-                #     continue
-                for t in range(j):
-                    if A[j] - A[t] >= minLength and dp[i - 1][t]:
-                        dp[i][j] += (dp[i - 1][t])
-                        dp[i][j] %= MOD
-        print(dp)
-        return dp[-1][-1]
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        pos = nums.index(k)
+        n = len(nums)
+        left, right = defaultdict(int), defaultdict(int) # 左右两侧小于k和大于k之差的计数
+        left[0] = 1
+        right[0] = 1
+        a1 = b1 = 0
+        for i in range(pos - 1, -1, -1):
+            if nums[i] > k:
+                a1 += 1
+            else:
+                b1 += 1
+            left[a1 - b1] += 1
+        a1 = b1 = 0
+        for i in range(pos + 1, n):
+            if nums[i] > k:
+                a1 += 1
+            else:
+                b1 += 1
+            right[a1 - b1] += 1
+        print(left, right)
+        ans = 0
+        for k in left:
+            ans += left[k] * right[-k]
+            ans += left[k] * right[-k + 1]
+        return ans
+
+
+
 
 so = Solution()
-print(so.beautifulPartitions(s = "3312958", k = 3, minLength = 1))  # 1
-print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 2))  # 3
-print(so.beautifulPartitions(s = "23542185131", k = 3, minLength = 3))  # 1
+print(so.countSubarrays(nums = [3,2,1,4,5], k = 4))
+print(so.countSubarrays(nums = [2,3,1], k = 3))
 
 
 

@@ -90,66 +90,25 @@ from sortedcontainers import SortedList
     # SortedList.count(value)
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 class Solution:
-    def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
-        nums = []
-        def dfs(node):
-            if node is None:
-                return []
-            dfs(node.left)
-            nums.append(node.val)
-            dfs(node.right)
-            return
-        dfs(root)
-        ans = []
-        for q in queries:
-            if q < nums[0]:
-                ans.append([-1, nums[0]])
-            elif q > nums[-1]:
-                ans.append([nums[-1], -1])
+    def appendCharacters(self, s: str, t: str) -> int:
+        i = j = 0
+        while i < len(s):
+            if s[i] == t[j]:
+                i += 1
+                j += 1
+                if j == len(t):
+                    return 0
             else:
-                pos = bisect.bisect_left(nums, q)
-                if nums[pos] == q:
-                    ans.append([q, q])
-                else:
-                    ans.append([nums[pos - 1], nums[pos]])
-        return ans
-    # def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
-    #     def find(q):
-    #         cur = root
-    #         if cur.val == q:
-    #             return [q, q]
-    #         mi = ma = -1
-    #         if cur.val < q:
-    #             mi = cur.val
-    #         else:
-    #             ma = cur.val
-    #         while cur:
-    #             if cur.val == q:
-    #                 return [q, q]
-    #             if cur.val < q:
-    #                 mi = cur.val
-    #                 cur = cur.right
-    #             else:
-    #                 ma = cur.val
-    #                 cur = cur.left
-    #         return [mi, ma]
-    #     ans = []
-    #     for q in queries:
-    #         ans.append(find(q))
-    #     return ans
+                i += 1
+        return len(t) - j
 
 
-root = TreeNode(6)
-root.right = TreeNode(9)
 
 so = Solution()
-print(so.closestNodes(root, [3]))
+print(so.appendCharacters(s = "coaching", t = "coding"))
+print(so.appendCharacters(s = "abcde", t = "a"))
+print(so.appendCharacters(s = "z", t = "abcde"))
 
 
 
