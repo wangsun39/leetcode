@@ -36,10 +36,25 @@ from typing import List
 import bisect
 class Solution:
     def soupServings(self, n: int) -> float:
+        n = (n + 24) // 25  # 上取整
+        if n >= 500: return 1
+        dp = [[0.0] * 500 for _ in range(500)]  # dp[i][j] 表示剩余A i份，剩余B j份的最后概率
+        dp[0][0] = 0.5
+        for i in range(1, n + 1):
+            dp[i][0] = 0.0
+            dp[0][i] = 1.0
+        for i in range(1, n + 1):
+            for j in range(1, n + 1):
+                dp[i][j] = (dp[max(i - 4, 0)][j] + dp[max(i - 3, 0)][max(j - 1, 0)] + dp[max(i - 2, 0)][max(j - 2, 0)] + dp[max(i - 1, 0)][max(j - 3, 0)]) / 4.0
+
+        return dp[n][n]
+
 
 so = Solution()
-print(so.numberOfLines(widths = [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], s = "abcdefghijklmnopqrstuvwxyz"))
-print(so.numberOfLines(widths = [4,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], s = "bbbcccdddaaa"))
+print(so.soupServings(800))
+print(so.soupServings(1))
+print(so.soupServings(50))
+print(so.soupServings(100))
 
 
 

@@ -91,24 +91,27 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def appendCharacters(self, s: str, t: str) -> int:
-        i = j = 0
-        while i < len(s):
-            if s[i] == t[j]:
-                i += 1
-                j += 1
-                if j == len(t):
-                    return 0
-            else:
-                i += 1
-        return len(t) - j
-
+    def onesMinusZeros(self, grid: List[List[int]]) -> List[List[int]]:
+        r, c = len(grid), len(grid[0])
+        o_r = [sum(e) for e in grid]
+        z_r = [c - e for e in o_r]
+        o_c = [0] * c
+        for i in range(r):
+            for j in range(c):
+                o_c[j] += grid[i][j]
+        z_c = [r - e for e in o_c]
+        diff = [[0] * c for _ in range(r)]
+        print(o_r, z_r)
+        print(o_c, z_c)
+        for i in range(r):
+            for j in range(c):
+                diff[i][j] = o_r[i] + o_c[j] - z_r[i] - z_c[j]
+        return diff
 
 
 so = Solution()
-print(so.appendCharacters(s = "coaching", t = "coding"))
-print(so.appendCharacters(s = "abcde", t = "a"))
-print(so.appendCharacters(s = "z", t = "abcde"))
+print(so.onesMinusZeros( [[1,1,1],[1,1,1]]))
+print(so.onesMinusZeros([[0,1,1],[1,0,1],[0,0,1]]))
 
 
 

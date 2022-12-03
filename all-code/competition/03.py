@@ -90,32 +90,42 @@ from sortedcontainers import SortedList
     # SortedList.count(value)
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
 class Solution:
-    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        cur = head
-        stack = []
-        while cur:
-            while len(stack) and stack[-1].val < cur.val:
-                stack.pop()
-                if len(stack):
-                    stack[-1].next = cur
-            stack.append(cur)
-            cur = cur.next
-        return stack[0]
+    def bestClosingTime(self, customers: str) -> int:
+        customers += 'N'
+        n = len(customers)
+        # s1, s2 = [0 if customers[0] == 'Y' else 1], [1 if customers[-1] == 'Y' else 0]
+        s1, s2 = [0] * n, [0] * n
+        if customers[0] == 'N':
+            s1[0] = 1
+        if customers[-1] == 'Y':
+            s2[n - 1] = 1
+        for i in range(1, n):
+            s1[i] = s1[i - 1]
+            if customers[i] == 'N':
+                s1[i] += 1
+        # for c in customers[n - 2::-1]:
+        for i in range(n - 2, -1, -1):
+            s2[i] = s2[i + 1]
+            if customers[i] == 'Y':
+                s2[i] += 1
+        # print(s1, s2)
+        cost = s2[0]
+        ans = 0
+        for i in range(1, n):
+            if s1[i - 1] + s2[i] < cost:
+                cost = s1[i - 1] + s2[i]
+                ans = i
+        # if cost > s1[-1]:
+        #     return n
+        return ans
 
-head = ListNode(5)
-head.next = ListNode(2)
-head.next.next = ListNode(13)
-head.next.next.next = ListNode(3)
-head.next.next.next.next = ListNode(8)
 
 so = Solution()
-print(so.removeNodes(head))
+print(so.bestClosingTime("YNYY"))
+print(so.bestClosingTime("YYNY"))
+print(so.bestClosingTime("NNNNN"))
+print(so.bestClosingTime("YYYY"))
 
 
 

@@ -1,3 +1,32 @@
+# 给你一个长度为 n 的数组 nums ，该数组由从 1 到 n 的 不同 整数组成。另给你一个正整数 k 。
+#
+# 统计并返回 num 中的 中位数 等于 k 的非空子数组的数目。
+#
+# 注意：
+#
+# 数组的中位数是按 递增 顺序排列后位于 中间 的那个元素，如果数组长度为偶数，则中位数是位于中间靠 左 的那个元素。
+# 例如，[2,3,1,4] 的中位数是 2 ，[8,4,3,5,1] 的中位数是 4 。
+# 子数组是数组中的一个连续部分。
+#
+#
+# 示例 1：
+#
+# 输入：nums = [3,2,1,4,5], k = 4
+# 输出：3
+# 解释：中位数等于 4 的子数组有：[4]、[4,5] 和 [1,4,5] 。
+# 示例 2：
+#
+# 输入：nums = [2,3,1], k = 3
+# 输出：1
+# 解释：[3] 是唯一一个中位数等于 3 的子数组。
+#
+#
+# 提示：
+#
+# n == nums.length
+# 1 <= n <= 105
+# 1 <= nums[i], k <= n
+# nums 中的整数互不相同
 
 from typing import List
 from typing import Optional
@@ -91,15 +120,39 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def numberOfCuts(self, n: int) -> int:
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        pos = nums.index(k)
+        n = len(nums)
+        left, right = defaultdict(int), defaultdict(int) # 左右两侧小于k和大于k之差的计数
+        left[0] = 1
+        right[0] = 1
+        a1 = b1 = 0
+        for i in range(pos - 1, -1, -1):
+            if nums[i] > k:
+                a1 += 1
+            else:
+                b1 += 1
+            left[a1 - b1] += 1
+        a1 = b1 = 0
+        for i in range(pos + 1, n):
+            if nums[i] > k:
+                a1 += 1
+            else:
+                b1 += 1
+            right[a1 - b1] += 1
+        print(left, right)
+        ans = 0
+        for k in left:
+            ans += left[k] * right[-k]
+            ans += left[k] * right[-k + 1]
+        return ans
 
-        if n & 1:
-            return n if n > 1 else 0
-        return n // 2
+
 
 
 so = Solution()
-print(so.numberOfCuts(4))
+print(so.countSubarrays(nums = [3,2,1,4,5], k = 4))
+print(so.countSubarrays(nums = [2,3,1], k = 3))
 
 
 

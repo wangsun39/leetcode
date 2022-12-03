@@ -91,39 +91,50 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countSubarrays(self, nums: List[int], k: int) -> int:
-        pos = nums.index(k)
-        n = len(nums)
-        left, right = defaultdict(int), defaultdict(int) # 左右两侧小于k和大于k之差的计数
-        left[0] = 1
-        right[0] = 1
-        a1 = b1 = 0
-        for i in range(pos - 1, -1, -1):
-            if nums[i] > k:
-                a1 += 1
-            else:
-                b1 += 1
-            left[a1 - b1] += 1
-        a1 = b1 = 0
-        for i in range(pos + 1, n):
-            if nums[i] > k:
-                a1 += 1
-            else:
-                b1 += 1
-            right[a1 - b1] += 1
-        print(left, right)
+    def countPalindromes(self, s: str) -> int:
+        MOD = 10 ** 9 + 7
+        n = len(s)
+        c1, c2 = [[0] * 10 for _ in range(n)], [[0] * 10 for _ in range(n)]  # i 左右(包括i)分别有多少个 0 - 9
+        c3, c4 = [[0] * 100 for _ in range(n)], [[0] * 100 for _ in range(n)]  # i 左右(包括i)分别有多少个 00 - 99
+        for i in range(n):
+            num = int(s[i])
+            if i > 0:
+                c1[i] = [e for e in c1[i - 1]]
+                c3[i] = [e for e in c3[i - 1]]
+            c1[i][num] += 1
+            if i > 0:
+                for j in range(10):
+                    idx = j * 10 + num
+                    c3[i][idx] += c1[i - 1][j]
+
+        for i in range(n - 1, -1, -1):
+            num = int(s[i])
+            if i < n - 1:
+                c2[i] = [e for e in c2[i + 1]]
+                c4[i] = [e for e in c4[i + 1]]
+            c2[i][num] += 1
+            if i < n - 1:
+                for j in range(10):
+                    idx = num * 10 + j
+                    c4[i][idx] += c2[i + 1][j]
+        # print(c1)
+        # print(c2)
+        # print(c3)
+        # print(c4)
         ans = 0
-        for k in left:
-            ans += left[k] * right[-k]
-            ans += left[k] * right[-k + 1]
+        for i in range(2, n - 2):
+            for j in range(100):
+                left = c3[i - 1][j]
+                right = c4[i + 1][(j%10)*10 + j // 10]
+                ans += (left * right)
+                ans %= MOD
         return ans
 
-
-
-
 so = Solution()
-print(so.countSubarrays(nums = [3,2,1,4,5], k = 4))
-print(so.countSubarrays(nums = [2,3,1], k = 3))
+print(so.countPalindromes("00000"))
+print(so.countPalindromes("103301"))
+print(so.countPalindromes("0000000"))
+print(so.countPalindromes("9999900000"))
 
 
 
