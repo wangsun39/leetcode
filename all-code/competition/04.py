@@ -91,50 +91,16 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPalindromes(self, s: str) -> int:
-        MOD = 10 ** 9 + 7
-        n = len(s)
-        c1, c2 = [[0] * 10 for _ in range(n)], [[0] * 10 for _ in range(n)]  # i 左右(包括i)分别有多少个 0 - 9
-        c3, c4 = [[0] * 100 for _ in range(n)], [[0] * 100 for _ in range(n)]  # i 左右(包括i)分别有多少个 00 - 99
-        for i in range(n):
-            num = int(s[i])
-            if i > 0:
-                c1[i] = [e for e in c1[i - 1]]
-                c3[i] = [e for e in c3[i - 1]]
-            c1[i][num] += 1
-            if i > 0:
-                for j in range(10):
-                    idx = j * 10 + num
-                    c3[i][idx] += c1[i - 1][j]
+    def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        for x, y in edges:
+            adj[x].append(y)
+            adj[y].append(x)
+        def dfs
 
-        for i in range(n - 1, -1, -1):
-            num = int(s[i])
-            if i < n - 1:
-                c2[i] = [e for e in c2[i + 1]]
-                c4[i] = [e for e in c4[i + 1]]
-            c2[i][num] += 1
-            if i < n - 1:
-                for j in range(10):
-                    idx = num * 10 + j
-                    c4[i][idx] += c2[i + 1][j]
-        # print(c1)
-        # print(c2)
-        # print(c3)
-        # print(c4)
-        ans = 0
-        for i in range(2, n - 2):
-            for j in range(100):
-                left = c3[i - 1][j]
-                right = c4[i + 1][(j%10)*10 + j // 10]
-                ans += (left * right)
-                ans %= MOD
-        return ans
 
 so = Solution()
-print(so.countPalindromes("00000"))
-print(so.countPalindromes("103301"))
-print(so.countPalindromes("0000000"))
-print(so.countPalindromes("9999900000"))
+print(so.magnificentSets(123456))
 
 
 

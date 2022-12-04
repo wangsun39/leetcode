@@ -91,15 +91,20 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def numberOfCuts(self, n: int) -> int:
-
-        if n & 1:
-            return n if n > 1 else 0
-        return n // 2
+    def isCircularSentence(self, sentence: str) -> bool:
+        words = sentence.split(' ')
+        # print(words)
+        n = len(words)
+        for i in range(1, n):
+            if words[i][0] != words[i - 1][-1]:
+                return False
+        return words[0][0] == words[-1][-1]
 
 
 so = Solution()
-print(so.numberOfCuts(4))
+print(so.isCircularSentence("leetcode exercises sound delightful"))
+print(so.isCircularSentence("eetcode"))
+print(so.isCircularSentence("Leetcode is cool"))
 
 
 

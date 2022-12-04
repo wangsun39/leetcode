@@ -91,27 +91,27 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def onesMinusZeros(self, grid: List[List[int]]) -> List[List[int]]:
-        r, c = len(grid), len(grid[0])
-        o_r = [sum(e) for e in grid]
-        z_r = [c - e for e in o_r]
-        o_c = [0] * c
-        for i in range(r):
-            for j in range(c):
-                o_c[j] += grid[i][j]
-        z_c = [r - e for e in o_c]
-        diff = [[0] * c for _ in range(r)]
-        print(o_r, z_r)
-        print(o_c, z_c)
-        for i in range(r):
-            for j in range(c):
-                diff[i][j] = o_r[i] + o_c[j] - z_r[i] - z_c[j]
-        return diff
+    def dividePlayers(self, skill: List[int]) -> int:
+        n = len(skill)
+        s = sum(skill)
+        if s % (n // 2):
+            return -1
+        avg = s // (n // 2)
+        # print(avg)
+        skill.sort()
+        ans = 0
+        for i in range(n // 2):
+            if skill[i] + skill[n - i - 1] != avg:
+                return -1
+            ans += (skill[i] * (skill[n - i - 1]))
+        return ans
 
 
 so = Solution()
-print(so.onesMinusZeros( [[1,1,1],[1,1,1]]))
-print(so.onesMinusZeros([[0,1,1],[1,0,1],[0,0,1]]))
+print(so.dividePlayers([2,1,5,2]))
+print(so.dividePlayers([3,2,5,1,3,4]))
+print(so.dividePlayers([3,4]))
+print(so.dividePlayers([1,1,2,3]))
 
 
 

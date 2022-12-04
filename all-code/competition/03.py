@@ -91,41 +91,39 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def bestClosingTime(self, customers: str) -> int:
-        customers += 'N'
-        n = len(customers)
-        # s1, s2 = [0 if customers[0] == 'Y' else 1], [1 if customers[-1] == 'Y' else 0]
-        s1, s2 = [0] * n, [0] * n
-        if customers[0] == 'N':
-            s1[0] = 1
-        if customers[-1] == 'Y':
-            s2[n - 1] = 1
-        for i in range(1, n):
-            s1[i] = s1[i - 1]
-            if customers[i] == 'N':
-                s1[i] += 1
-        # for c in customers[n - 2::-1]:
-        for i in range(n - 2, -1, -1):
-            s2[i] = s2[i + 1]
-            if customers[i] == 'Y':
-                s2[i] += 1
-        # print(s1, s2)
-        cost = s2[0]
-        ans = 0
-        for i in range(1, n):
-            if s1[i - 1] + s2[i] < cost:
-                cost = s1[i - 1] + s2[i]
-                ans = i
-        # if cost > s1[-1]:
-        #     return n
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        minL = {}
+        for x, y, d in roads:
+            adj[x].append(y)
+            adj[y].append(x)
+            if x in minL:
+                minL[x] = min(minL[x], d)
+            else:
+                minL[x] = d
+            if y in minL:
+                minL[y] = min(minL[y], d)
+            else:
+                minL[y] = d
+        print(minL)
+        ans = inf
+        exist = set()
+        @cache
+        def dfs(node):
+            nonlocal ans
+            exist.add(node)
+            for nn in adj[node]:
+                ans = min(ans, minL[nn])
+                if nn not in exist:
+                    dfs(nn)
+
+        dfs(1)
         return ans
 
 
 so = Solution()
-print(so.bestClosingTime("YNYY"))
-print(so.bestClosingTime("YYNY"))
-print(so.bestClosingTime("NNNNN"))
-print(so.bestClosingTime("YYYY"))
+print(so.minScore(n = 4, roads = [[1,2,9],[2,3,6],[2,4,5],[1,4,7]]))
+print(so.minScore(n = 4, roads = [[1,2,2],[1,3,4],[3,4,7]]))
 
 
 
