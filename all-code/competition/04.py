@@ -94,13 +94,45 @@ class Solution:
     def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
         adj = defaultdict(list)
         for x, y in edges:
-            adj[x].append(y)
-            adj[y].append(x)
-        def dfs
+            adj[x - 1].append(y - 1)
+            adj[y - 1].append(x - 1)
+        color = [-1] * n  # 2分图着色，两种颜色，0 和 1
+        def col(i, c):
+            for x in adj[i]:
+                if color[x] == c:
+                    return False
+                if color[x] == -1:
+                    color[x] = 1 - c
+                    if not col(x, 1 - c):
+                        return False
+            return True
+        # 尝试着色
+        for i in range(n):
+            if color[i] == -1:
+                if not col(i, 0):
+                    return -1
+        def bfs(start):
+            flg = [0] * n
+            q1, q2 = [start], []
+            ans = 1
+            while len(q1):
+                ans += 1
+                while len(q1):
+                    x = q1.pop()
+                    for y in adj[x]:
+                        if flg[y] == 1:
+                            continue
+                        q2.append(y)
+                        flg[y] = 1
+                q1, q2 = q2, []
+            return ans
+
+
 
 
 so = Solution()
-print(so.magnificentSets(123456))
+print(so.magnificentSets(n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]))
+print(so.magnificentSets(n = 3, edges = [[1,2],[2,3],[3,1]]))
 
 
 
