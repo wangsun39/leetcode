@@ -41,7 +41,6 @@ class MyCircularQueue:
         self.queue = [0] * k
         self.length = k
         self.front, self.rear = -1, -1
-        
 
 
     def enQueue(self, value: int) -> bool:
