@@ -8,7 +8,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise
+#from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -78,7 +78,7 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
+# from sortedcontainers import SortedList
     # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
     # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
     # SortedList.clear() 移除所有元素。时间复杂度O(n).
@@ -96,41 +96,54 @@ class Solution:
         for x, y in edges:
             adj[x - 1].append(y - 1)
             adj[y - 1].append(x - 1)
-        color = [-1] * n  # 2分图着色，两种颜色，0 和 1
+        color = [0] * n  # 2分图着色，两种颜色，-1 和 1
         def col(i, c):
+            color[i] = c
             for x in adj[i]:
                 if color[x] == c:
                     return False
-                if color[x] == -1:
-                    color[x] = 1 - c
-                    if not col(x, 1 - c):
+                if color[x] == 0:
+                    nodes.append(x)
+                    if not col(x, -c):
                         return False
             return True
-        # 尝试着色
-        for i in range(n):
-            if color[i] == -1:
-                if not col(i, 0):
-                    return -1
-        def bfs(start):
+
+        def bfs(start):   # 从 start 点开始 bfs，start的分组从 grp 开始
             flg = [0] * n
-            q1, q2 = [start], []
-            ans = 1
+            q1, q2 = deque([start]), deque()
+            flg[start] = 1
+            ans = 0
             while len(q1):
                 ans += 1
                 while len(q1):
-                    x = q1.pop()
+                    x = q1.popleft()
                     for y in adj[x]:
                         if flg[y] == 1:
                             continue
                         q2.append(y)
                         flg[y] = 1
-                q1, q2 = q2, []
+                q1, q2 = q2, deque()
             return ans
+
+        ans = 0
+        for i, node in enumerate(color):
+            if node: continue
+            nodes = [i]
+            if not col(i, 1):  # 对一个连通分量进行着色
+                return -1
+            mx = 0
+            for j in nodes:
+                mx = max(mx, bfs(j))
+            ans += mx
+        return ans
+
+
 
 
 
 
 so = Solution()
+print(so.magnificentSets(n = 2, edges = [[1,2]]))
 print(so.magnificentSets(n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]))
 print(so.magnificentSets(n = 3, edges = [[1,2],[2,3],[3,1]]))
 
