@@ -62,6 +62,9 @@ from typing import List
 # x | (x + 1)	将x最右边的0置为1
 # x & 1	判断奇偶性 真为奇，假为偶
 
+# x / y 上取整 (x + y - 1) // y
+# x / y 下取整 x // y
+# x / y 四舍五入 int(x / y + 0.5)
 
 import string
 # string.digits  表示 0123456789
