@@ -146,23 +146,36 @@ from sortedcontainers import SortedList
 
 class Solution:
     def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
-        def dfs(r, f):
-            if len(r) == 0: return 0
-            ans = 1e18
-            for idx, ff in enumerate(f):
-                cur = 0
-                if ff[1] > 0:
-                    cur += abs(r[0] - ff[0])
-                    newf = copy.deepcopy(f)
-                    newf[idx][1] -= 1
-                    cur += dfs(r[1:], newf)
-                    ans = min(ans, cur)
-            return ans
-        return dfs(robot, factory)
+        robot.sort()
+        factory.sort()
+        n, m = len(robot), len(factory)
+        dp = [[inf] * n for _ in range(m)]
+        if factory[0][1]:
+            dp[0][0] = abs(robot[0] - factory[0][0])
+        for i in range(1, n):
+            if i + 1 <= factory[0][1]:
+                dp[0][i] = dp[0][i-1] + abs(robot[i] - factory[0][0])
+        for i in range(1, m):
+            for j in range(n):
+                mi = inf
+                sm = 0
+                for k in range(j, -1, -1):
+                    if j - k > factory[i][1]:
+                        break
+                    mi = min(mi, sm + dp[i - 1][k])
+                    sm += abs(robot[k] - factory[i][0])
+                if j + 1 <= factory[i][1]:
+                    mi = min(mi, sm)
+                dp[i][j] = mi
+        print(dp)
+        return dp[-1][-1]
 
 
 so = Solution()
-print(so.minimumTotalDistance(robot = [0,4,6], factory = [[2,2],[6,2]]))
+print(so.minimumTotalDistance(robot = [-333539942,359275673,89966494,949684497,-733065249,241002388,325009248,403868412,-390719486,-670541382,563735045,119743141,323190444,534058139,-684109467,425503766,761908175], factory = [[-590277115,0],[-80676932,3],[396659814,0],[480747884,9],[118956496,10]]))  # 4412966458
+print(so.minimumTotalDistance(robot = [9,11,99,101], factory = [[10,1],[7,1],[14,1],[100,1],[96,1],[103,1]]))  # 6
+print(so.minimumTotalDistance(robot = [1,-1], factory = [[-2,1],[2,1]]))  # 2
+print(so.minimumTotalDistance(robot = [0,4,6], factory = [[2,2],[6,2]]))  # 4
 
 
 
