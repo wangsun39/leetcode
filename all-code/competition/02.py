@@ -62,6 +62,9 @@ from typing import List
 # x | (x + 1)	将x最右边的0置为1
 # x & 1	判断奇偶性 真为奇，假为偶
 
+# x / y 上取整 (x + y - 1) // y
+# x / y 下取整 x // y
+# x / y 四舍五入 int(x / y + 0.5)
 
 import string
 # string.digits  表示 0123456789
@@ -91,27 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def dividePlayers(self, skill: List[int]) -> int:
-        n = len(skill)
-        s = sum(skill)
-        if s % (n // 2):
-            return -1
-        avg = s // (n // 2)
-        # print(avg)
-        skill.sort()
-        ans = 0
-        for i in range(n // 2):
-            if skill[i] + skill[n - i - 1] != avg:
-                return -1
-            ans += (skill[i] * (skill[n - i - 1]))
-        return ans
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.dividePlayers([2,1,5,2]))
-print(so.dividePlayers([3,2,5,1,3,4]))
-print(so.dividePlayers([3,4]))
-print(so.dividePlayers([1,1,2,3]))
+print(so.removeDigit(123456))
 
 
 

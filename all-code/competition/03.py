@@ -62,6 +62,9 @@ from typing import List
 # x | (x + 1)	将x最右边的0置为1
 # x & 1	判断奇偶性 真为奇，假为偶
 
+# x / y 上取整 (x + y - 1) // y
+# x / y 下取整 x // y
+# x / y 四舍五入 int(x / y + 0.5)
 
 import string
 # string.digits  表示 0123456789
@@ -91,39 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minScore(self, n: int, roads: List[List[int]]) -> int:
-        adj = defaultdict(list)
-        minL = {}
-        for x, y, d in roads:
-            adj[x].append(y)
-            adj[y].append(x)
-            if x in minL:
-                minL[x] = min(minL[x], d)
-            else:
-                minL[x] = d
-            if y in minL:
-                minL[y] = min(minL[y], d)
-            else:
-                minL[y] = d
-        print(minL)
-        ans = inf
-        exist = set()
-        @cache
-        def dfs(node):
-            nonlocal ans
-            exist.add(node)
-            for nn in adj[node]:
-                ans = min(ans, minL[nn])
-                if nn not in exist:
-                    dfs(nn)
-
-        dfs(1)
-        return ans
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.minScore(n = 4, roads = [[1,2,9],[2,3,6],[2,4,5],[1,4,7]]))
-print(so.minScore(n = 4, roads = [[1,2,2],[1,3,4],[3,4,7]]))
+print(so.removeDigit(123456))
 
 
 
