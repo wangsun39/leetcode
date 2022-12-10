@@ -1,6 +1,7 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2022-11-27| 第321场周赛  | Q4  | [统计中位数为 K 的子数组](https://leetcode.cn/problems/count-subarrays-with-median-k/) |       | 本周AK<br>前三题比较顺利。这题想了一会儿，最后考虑采用中心向左右拓展计算 (大于的元素个数-小于的元素个数) 的方法，再用哈希 |
+|2022-11-27| 第321场周赛  | Q4  | [将节点分成尽可能多的组](https://leetcode.cn/problems/divide-nodes-into-the-maximum-number-of-groups/) |    2415   | 本周前三题WA了一次，大概半小时完成<br>然后就进入垃圾时间了，实际当时理解题目也有问题，\|y - x\| = 1，看成了\|y - x\| <= 1。总之，这题难度有点大了 |
+|2022-11-27| 第321场周赛  | Q4  | [统计中位数为 K 的子数组](https://leetcode.cn/problems/count-subarrays-with-median-k/) |    1998   | 本周AK<br>前三题比较顺利。这题想了一会儿，最后考虑采用中心向左右拓展计算 (大于的元素个数-小于的元素个数) 的方法，再用哈希 |
 |2022-11-20| 第320场周赛  | Q2  | [二叉搜索树最近节点查询](https://leetcode.cn/problems/closest-nodes-queries-in-a-binary-search-tree/) |  1596     | 本周Q2 Q4都没完成，这题本来不难，想到了思路，先中序遍历，再二分查找，<br>但中序遍历的DFS，复杂度是O(n^2)，python的这种中序遍历法还是要注意。 |
 |2022-11-20| 第320场周赛  | Q4  | [完美分割的方案数](https://leetcode.cn/problems/number-of-beautiful-partitions/) |  2344     | 第四题比赛时，没有时间看，时间都耗在Q2上了。赛后思考，也想到了DP的方法，但复杂度是O(n^3)，还需要加一个前缀和的优化步骤，这题还是比较难的 |
 |2022-11-13| 第319场周赛  | Q4  | [不重叠回文子字符串的最大数目](https://leetcode.cn/problems/maximum-number-of-non-overlapping-palindrome-substrings/) |   2013    | 本周和上次情况类似，前三题做完基本到时间了，<br>第二题wa了2次，花了差不多1小时，又是想歪了。<br> 第四题需要用的DP，以及求出所有回文子串的方法：中心拓展法，之前有些类似的题目，[132](https://leetcode.cn/problems/palindrome-partitioning-ii/)、[647](https://leetcode.cn/problems/palindromic-substrings/)<br>目前的一个问题：会做的题不能快速做出来。 |
