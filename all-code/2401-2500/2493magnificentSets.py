@@ -1,51 +1,44 @@
-# 句子 是由单个空格分隔的一组单词，且不含前导或尾随空格。
+# 给你一个正整数 n ，表示一个 无向 图中的节点数目，节点编号从 1 到 n 。
 #
-# 例如，"Hello World"、"HELLO"、"hello world hello world" 都是符合要求的句子。
-# 单词 仅 由大写和小写英文字母组成。且大写和小写字母会视作不同字符。
+# 同时给你一个二维整数数组 edges ，其中 edges[i] = [ai, bi] 表示节点 ai 和 bi 之间有一条 双向 边。注意给定的图可能是不连通的。
 #
-# 如果句子满足下述全部条件，则认为它是一个 回环句 ：
+# 请你将图划分为 m 个组（编号从 1 开始），满足以下要求：
 #
-# 单词的最后一个字符和下一个单词的第一个字符相等。
-# 最后一个单词的最后一个字符和第一个单词的第一个字符相等。
-# 例如，"leetcode exercises sound delightful"、"eetcode"、"leetcode eats soul" 都是回环句。然而，"Leetcode is cool"、"happy Leetcode"、"Leetcode" 和 "I like Leetcode" 都 不 是回环句。
-#
-# 给你一个字符串 sentence ，请你判断它是不是一个回环句。如果是，返回 true ；否则，返回 false 。
+# 图中每个节点都只属于一个组。
+# 图中每条边连接的两个点 [ai, bi] ，如果 ai 属于编号为 x 的组，bi 属于编号为 y 的组，那么 |y - x| = 1 。
+# 请你返回最多可以将节点分为多少个组（也就是最大的 m ）。如果没办法在给定条件下分组，请你返回 -1 。
 #
 #
 #
 # 示例 1：
 #
-# 输入：sentence = "leetcode exercises sound delightful"
-# 输出：true
-# 解释：句子中的单词是 ["leetcode", "exercises", "sound", "delightful"] 。
-# - leetcode 的最后一个字符和 exercises 的第一个字符相等。
-# - exercises 的最后一个字符和 sound 的第一个字符相等。
-# - sound 的最后一个字符和 delightful 的第一个字符相等。
-# - delightful 的最后一个字符和 leetcode 的第一个字符相等。
-# 这个句子是回环句。
+#
+#
+# 输入：n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]
+# 输出：4
+# 解释：如上图所示，
+# - 节点 5 在第一个组。
+# - 节点 1 在第二个组。
+# - 节点 2 和节点 4 在第三个组。
+# - 节点 3 和节点 6 在第四个组。
+# 所有边都满足题目要求。
+# 如果我们创建第五个组，将第三个组或者第四个组中任何一个节点放到第五个组，至少有一条边连接的两个节点所属的组编号不符合题目要求。
 # 示例 2：
 #
-# 输入：sentence = "eetcode"
-# 输出：true
-# 解释：句子中的单词是 ["eetcode"] 。
-# - eetcode 的最后一个字符和 eetcode 的第一个字符相等。
-# 这个句子是回环句。
-# 示例 3：
-#
-# 输入：sentence = "Leetcode is cool"
-# 输出：false
-# 解释：句子中的单词是 ["Leetcode", "is", "cool"] 。
-# - Leetcode 的最后一个字符和 is 的第一个字符 不 相等。
-# 这个句子 不 是回环句。
+# 输入：n = 3, edges = [[1,2],[2,3],[3,1]]
+# 输出：-1
+# 解释：如果我们将节点 1 放入第一个组，节点 2 放入第二个组，节点 3 放入第三个组，前两条边满足题目要求，但第三条边不满足题目要求。
+# 没有任何符合题目要求的分组方式。
 #
 #
 # 提示：
 #
-# 1 <= sentence.length <= 500
-# sentence 仅由大小写英文字母和空格组成
-# sentence 中的单词由单个空格进行分隔
-# 不含任何前导或尾随空格
-
+# 1 <= n <= 500
+# 1 <= edges.length <= 104
+# edges[i].length == 2
+# 1 <= ai, bi <= n
+# ai != bi
+# 两个点之间至多只有一条边。
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -55,7 +48,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise
+#from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -125,7 +118,7 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
+# from sortedcontainers import SortedList
     # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
     # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
     # SortedList.clear() 移除所有元素。时间复杂度O(n).
@@ -138,20 +131,61 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def isCircularSentence(self, sentence: str) -> bool:
-        words = sentence.split(' ')
-        # print(words)
-        n = len(words)
-        for i in range(1, n):
-            if words[i][0] != words[i - 1][-1]:
-                return False
-        return words[0][0] == words[-1][-1]
+    def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        for x, y in edges:
+            adj[x - 1].append(y - 1)
+            adj[y - 1].append(x - 1)
+        color = [0] * n  # 2分图着色，两种颜色，-1 和 1
+        def col(i, c):
+            color[i] = c
+            for x in adj[i]:
+                if color[x] == c:
+                    return False
+                if color[x] == 0:
+                    nodes.append(x)
+                    if not col(x, -c):
+                        return False
+            return True
+
+        def bfs(start):   # 从 start 点开始 bfs，start的分组从 grp 开始
+            flg = [0] * n
+            q1, q2 = deque([start]), deque()
+            flg[start] = 1
+            ans = 0
+            while len(q1):
+                ans += 1
+                while len(q1):
+                    x = q1.popleft()
+                    for y in adj[x]:
+                        if flg[y] == 1:
+                            continue
+                        q2.append(y)
+                        flg[y] = 1
+                q1, q2 = q2, deque()
+            return ans
+
+        ans = 0
+        for i, node in enumerate(color):
+            if node: continue
+            nodes = [i]
+            if not col(i, 1):  # 对一个连通分量进行着色
+                return -1
+            mx = 0
+            for j in nodes:
+                mx = max(mx, bfs(j))
+            ans += mx
+        return ans
+
+
+
+
 
 
 so = Solution()
-print(so.isCircularSentence("leetcode exercises sound delightful"))
-print(so.isCircularSentence("eetcode"))
-print(so.isCircularSentence("Leetcode is cool"))
+print(so.magnificentSets(n = 2, edges = [[1,2]]))
+print(so.magnificentSets(n = 6, edges = [[1,2],[1,4],[1,5],[2,6],[2,3],[4,6]]))
+print(so.magnificentSets(n = 3, edges = [[1,2],[2,3],[3,1]]))
 
 
 
