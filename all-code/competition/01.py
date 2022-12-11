@@ -94,12 +94,29 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def deleteGreatestValue(self, grid: List[List[int]]) -> int:
+        ans = 0
+        def proc(g):
+            nonlocal ans
+            curM = 0
+            res = []
+            for line in g:
+                ml = max(line)
+                curM = max(curM, ml)
+                i = line.index(ml)
+                res.append(line[:i] + line[i+1:])
+            ans += curM
+            return res
+        m, n = len(grid), len(grid[0])
+        g = grid
+        for i in range(n):
+            g = proc(g)
+        return ans
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.deleteGreatestValue([[1,2,4],[3,3,1]]))
+print(so.deleteGreatestValue([[10]]))
 
 
 

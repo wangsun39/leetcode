@@ -39,7 +39,7 @@ from collections import defaultdict
 class Solution:
     def checkRecord(self, n: int) -> int:
         MOD = 10 ** 9 + 7
-        dp1 = [1,1,0,1,0,0,0]  # 分别表示以'A',('L','LL','P')未出现过'A',('L','LL','P')出现过'A'结尾的个数
+        dp1 = [1,1,0,1,0,0,0]  # 分别表示以'A',('L','LL','P')未出现过'A',('L','LL','P')出现过'A' 结尾的个数
         dp2 = [0,0,0,0,0,0,0]
         for i in range(1, n):
             dp2[0] = sum(dp1[1:4]) % MOD

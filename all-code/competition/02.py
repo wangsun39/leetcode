@@ -94,12 +94,30 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
-
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        nums.sort()
+        snums = set(nums)
+        ans = -1
+        for e in nums:
+            if e not in snums:
+                continue
+            cur = -1
+            i = 2
+            while True:
+                next = e * e
+                if next in snums:
+                    cur = i
+                    i += 1
+                    e = next
+                    snums.remove(e)
+                else:
+                    break
+            ans = max(ans, cur)
+        return ans
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.longestSquareStreak([4,3,6,16,8,2]))
+print(so.longestSquareStreak([2,3,5,6,7]))
 
 
 

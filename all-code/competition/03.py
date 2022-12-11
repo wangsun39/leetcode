@@ -93,13 +93,45 @@ from sortedcontainers import SortedList
     # SortedList.count(value)
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+class Allocator:
+
+    def __init__(self, n: int):
+        self.mem = [0] * n
 
 
-so = Solution()
-print(so.removeDigit(123456))
+    def allocate(self, size: int, mID: int) -> int:
+        start = 0
+        for i in range(len(self.mem)):
+            if self.mem[i] != 0:
+                start = i + 1
+                continue
+            if i - start + 1 == size:
+                for j in range(start, i + 1):
+                    self.mem[j] = mID
+                return start
+        return -1
+
+
+    def free(self, mID: int) -> int:
+        ans = 0
+        for i in range(len(self.mem)):
+            if self.mem[i] == mID:
+                ans += 1
+                self.mem[i] = 0
+        return ans
+
+
+so = Allocator(10)
+print(so.allocate(1, 1))
+print(so.allocate(1,2))
+print(so.allocate(1,3))
+print(so.free(2))
+print(so.allocate(3, 4))
+print(so.allocate(1,1))
+print(so.allocate(1,1))
+print(so.free(1))
+print(so.allocate(10,2))
+print(so.free(7))
 
 
 
