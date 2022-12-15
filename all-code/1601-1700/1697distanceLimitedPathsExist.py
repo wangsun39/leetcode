@@ -44,11 +44,32 @@ from collections import defaultdict
 # Definition for a binary tree node.
 class Solution:
     def distanceLimitedPathsExist(self, n: int, edgeList: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        fa = list(range(n))
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        ans = [False] * len(queries)
+        edgeList.sort(key=lambda e: e[2])
+
+        j = 0
+        for i, (x, y, w) in sorted(enumerate(queries), key=lambda x: x[1][2]):
+            while j < len(edgeList) and edgeList[j][2] < w:
+                union(edgeList[j][0], edgeList[j][1])
+                j += 1
+            ans[i] = (find(x) == find(y))
+        return ans
+
+
 
 
 so = Solution()
 
-print(so.reformatNumber("123 4-567"))
+print(so.distanceLimitedPathsExist(n = 3, edgeList = [[0,1,2],[1,2,4],[2,0,8],[1,0,16]], queries = [[0,1,2],[0,2,5]]))  # [false,true]
+print(so.distanceLimitedPathsExist(n = 5, edgeList = [[0,1,10],[1,2,5],[2,3,9],[3,4,13]], queries = [[0,4,14],[1,4,13]]))  # [true,false]
 
 
 
