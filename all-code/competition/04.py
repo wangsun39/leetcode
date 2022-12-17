@@ -94,49 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
-        row, col = len(grid), len(grid[0])
-        n = len(queries)
-        ans = []
-        qu = [[i, e] for i, e in enumerate(queries)]
-        qu.sort(key=lambda x: x[1])
-        queue = deque([[0, 0]])
-        flag = set()  # 放入过队列中的点（包括已经被覆盖的点，和在队列中的点）
-        flag.add((0,0))
-        pre = 0
-        def bfs(val):
-            nonlocal queue
-            q = deque([])
-            res = 0
-            dir = [[-1,0],[1,0],[0,-1],[0,1]]
-            while len(queue):
-                x, y = queue.popleft()
-                if grid[x][y] >= val:
-                    q.append([x, y])
-                    continue
-                res += 1
-                for u, v in dir:
-                    xx, yy = x + u, y + v
-                    if 0 <= xx < row and 0 <= yy < col and (xx, yy) not in flag:
-                        queue.append([xx, yy])
-                        flag.add((xx, yy))
-            queue = q
-            return res
-
-        for i in range(n):
-            cur = bfs(qu[i][1])
-            ans.append(pre + cur)
-            pre += cur
-        anss = [0] * n
-        for i in range(n):
-            j = qu[i][0]
-            anss[j] = ans[i]
-        return anss
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxPoints(grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2]))
-print(so.maxPoints([[5,2,1],[1,1,2]], queries = [3]))
+print(so.removeDigit(123456))
 
 
 

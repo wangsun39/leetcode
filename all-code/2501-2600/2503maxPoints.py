@@ -1,4 +1,38 @@
-
+# 给你一个大小为 m x n 的整数矩阵 grid 和一个大小为 k 的数组 queries 。
+#
+# 找出一个大小为 k 的数组 answer ，且满足对于每个整数 queres[i] ，你从矩阵 左上角 单元格开始，重复以下过程：
+#
+# 如果 queries[i] 严格 大于你当前所处位置单元格，如果该单元格是第一次访问，则获得 1 分，并且你可以移动到所有 4 个方向（上、下、左、右）上任一 相邻 单元格。
+# 否则，你不能获得任何分，并且结束这一过程。
+# 在过程结束后，answer[i] 是你可以获得的最大分数。注意，对于每个查询，你可以访问同一个单元格 多次 。
+#
+# 返回结果数组 answer 。
+#
+#
+#
+# 示例 1：
+#
+#
+# 输入：grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2]
+# 输出：[5,8,1]
+# 解释：上图展示了每个查询中访问并获得分数的单元格。
+# 示例 2：
+#
+#
+# 输入：grid = [[5,2,1],[1,1,2]], queries = [3]
+# 输出：[0]
+# 解释：无法获得分数，因为左上角单元格的值大于等于 3 。
+#
+#
+# 提示：
+#
+# m == grid.length
+# n == grid[i].length
+# 2 <= m, n <= 1000
+# 4 <= m * n <= 105
+# k == queries.length
+# 1 <= k <= 104
+# 1 <= grid[i][j], queries[i] <= 106
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -94,18 +128,49 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maximumValue(self, strs: List[str]) -> int:
-        ans = 0
-        for s in strs:
-            if s.isdigit():
-                ans = max(ans, int(s))
-            else:
-                ans = max(ans, len(s))
-        return ans
+    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        row, col = len(grid), len(grid[0])
+        n = len(queries)
+        ans = []
+        qu = [[i, e] for i, e in enumerate(queries)]
+        qu.sort(key=lambda x: x[1])
+        queue = deque([[0, 0]])
+        flag = set()  # 放入过队列中的点（包括已经被覆盖的点，和在队列中的点）
+        flag.add((0,0))
+        pre = 0
+        def bfs(val):
+            nonlocal queue
+            q = deque([])
+            res = 0
+            dir = [[-1,0],[1,0],[0,-1],[0,1]]
+            while len(queue):
+                x, y = queue.popleft()
+                if grid[x][y] >= val:
+                    q.append([x, y])
+                    continue
+                res += 1
+                for u, v in dir:
+                    xx, yy = x + u, y + v
+                    if 0 <= xx < row and 0 <= yy < col and (xx, yy) not in flag:
+                        queue.append([xx, yy])
+                        flag.add((xx, yy))
+            queue = q
+            return res
+
+        for i in range(n):
+            cur = bfs(qu[i][1])
+            ans.append(pre + cur)
+            pre += cur
+        anss = [0] * n
+        for i in range(n):
+            j = qu[i][0]
+            anss[j] = ans[i]
+        return anss
 
 
 so = Solution()
-print(so.maximumValue(["alic3","bob","3","4","00000"]))
+print(so.maxPoints(grid = [[1,2,3],[2,5,7],[3,5,1]], queries = [5,6,2]))
+print(so.maxPoints([[5,2,1],[1,1,2]], queries = [3]))
 
 
 
