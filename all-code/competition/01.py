@@ -94,18 +94,22 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maximumValue(self, strs: List[str]) -> int:
+    def similarPairs(self, words: List[str]) -> int:
+        def judge(w1, w2):
+            s1, s2 = set(w1), set(w2)
+            return s1 == s2
+        n = len(words)
         ans = 0
-        for s in strs:
-            if s.isdigit():
-                ans = max(ans, int(s))
-            else:
-                ans = max(ans, len(s))
+        for i in range(n):
+            for j in range(i + 1, n):
+                if judge(words[i], words[j]):
+                    ans += 1
         return ans
 
 
 so = Solution()
-print(so.maximumValue(["alic3","bob","3","4","00000"]))
+print(so.similarPairs(["aba","aabb","abcd","bac","aabc"]))
+print(so.similarPairs(["aabb","ab","ba"]))
 
 
 

@@ -94,32 +94,30 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def smallestValue(self, n: int) -> int:
-        def proc(e):
-            ans = 0
-            m = e
-            x = 2
-            while m >= x != e:
-                if m % x == 0:
-                    m //= x
-                    ans += x
-                else:
-                    x += 1
-            return ans
-        ans = n
-        while True:
-            next = proc(n)
-            if next == 0 or next == n:
-                return ans
-            n = next
-            ans = min(ans, n)
+    def maxJump(self, stones: List[int]) -> int:
+        n = len(stones)
+        l1, l2 = [], []
+        for i in range(n):
+            if i == 0 or i == n - 1:
+                l1.append(stones[i])
+                l2.append(stones[i])
+            elif i & 1:
+                l1.append(stones[i])
+            else:
+                l2.append(stones[i])
+        print(l1, l2)
+        ans = -inf
+        for i in range(len(l1) - 1):
+            ans = max(ans, l1[i + 1] - l1[i])
+        for i in range(len(l2) - 1):
+            ans = max(ans, l2[i + 1] - l2[i])
+        return ans
+
 
 
 so = Solution()
-print(so.smallestValue(4))
-print(so.smallestValue(2))
-print(so.smallestValue(15))
-print(so.smallestValue(3))
+print(so.maxJump([0,2,5,6,7]))
+print(so.maxJump([0,3,9]))
 
 
 

@@ -94,32 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def smallestValue(self, n: int) -> int:
-        def proc(e):
-            ans = 0
-            m = e
-            x = 2
-            while m >= x != e:
-                if m % x == 0:
-                    m //= x
-                    ans += x
-                else:
-                    x += 1
-            return ans
-        ans = n
-        while True:
-            next = proc(n)
-            if next == 0 or next == n:
-                return ans
-            n = next
-            ans = min(ans, n)
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.smallestValue(4))
-print(so.smallestValue(2))
-print(so.smallestValue(15))
-print(so.smallestValue(3))
+print(so.removeDigit(123456))
 
 
 
