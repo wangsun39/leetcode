@@ -94,31 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def cycleLengthQueries(self, n: int, queries: List[List[int]]) -> List[int]:
-        def find(x, y):
-            s1, s2 = set(), set()
-            while x:
-                s1.add(x)
-                x //= 2
-            while y:
-                s2.add(y)
-                y //= 2
-            return max(s1 & s2)
-        ans = []
-        for x, y in queries:
-            z = find(x, y)
-            d0 = int(math.log(z, 2))
-            d1, d2 = int(math.log(x, 2)), int(math.log(y, 2))
-            ans.append(d1 - d0 + d2 - d0 + 1)
-        return ans
-
-
+    def removeDigit(self, number) -> str:
+        pass
 
 
 so = Solution()
-print(so.cycleLengthQueries(n = 5, queries = [[17,21],[23,5],[15,7],[3,21],[31,9],[5,15],[11,2],[19,7]]))
-print(so.cycleLengthQueries(n = 3, queries = [[5,3],[4,7],[2,3]]))
-print(so.cycleLengthQueries(n = 2, queries = [[1,2]]))
+print(so.removeDigit(123456))
 
 
 
