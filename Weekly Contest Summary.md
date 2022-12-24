@@ -1,6 +1,8 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2022-11-27| 第321场周赛  | Q4  | [将节点分成尽可能多的组](https://leetcode.cn/problems/divide-nodes-into-the-maximum-number-of-groups/) |    2415   | 本周前三题WA了一次，大概半小时完成<br>然后就进入垃圾时间了，实际当时理解题目也有问题，\|y - x\| = 1，看成了\|y - x\| <= 1。总之，这题难度有点大了 |
+|2022-12-18| 第324场周赛  | Q4  | [查询树中环的长度](https://leetcode.cn/problems/cycle-length-queries-in-a-tree/) |       | 本周AK，WA 3次 <br>总体上说难度不是很大，但3,4两题都掉到一个坑里去了  |
+|2022-12-11| 第323场周赛  | Q4  | [矩阵查询可获得的最大分数](https://leetcode.cn/problems/maximum-number-of-points-from-grid-queries/) |    2195   | 本周AK，没有WA <br>对查询数组进行排序，对每个查询跑一下BFS，就可以避免重复计算 <br>其他方法，可以用更好的方法：并查集  |
+|2022-12-4| 第322场周赛  | Q4  | [将节点分成尽可能多的组](https://leetcode.cn/problems/divide-nodes-into-the-maximum-number-of-groups/) |    2415   | 本周前三题WA了一次，大概半小时完成<br>然后就进入垃圾时间了，实际当时理解题目也有问题，\|y - x\| = 1，看成了\|y - x\| <= 1。总之，这题难度有点大了 |
 |2022-11-27| 第321场周赛  | Q4  | [统计中位数为 K 的子数组](https://leetcode.cn/problems/count-subarrays-with-median-k/) |    1998   | 本周AK<br>前三题比较顺利。这题想了一会儿，最后考虑采用中心向左右拓展计算 (大于的元素个数-小于的元素个数) 的方法，再用哈希 |
 |2022-11-20| 第320场周赛  | Q2  | [二叉搜索树最近节点查询](https://leetcode.cn/problems/closest-nodes-queries-in-a-binary-search-tree/) |  1596     | 本周Q2 Q4都没完成，这题本来不难，想到了思路，先中序遍历，再二分查找，<br>但中序遍历的DFS，复杂度是O(n^2)，python的这种中序遍历法还是要注意。 |
 |2022-11-20| 第320场周赛  | Q4  | [完美分割的方案数](https://leetcode.cn/problems/number-of-beautiful-partitions/) |  2344     | 第四题比赛时，没有时间看，时间都耗在Q2上了。赛后思考，也想到了DP的方法，但复杂度是O(n^3)，还需要加一个前缀和的优化步骤，这题还是比较难的 |
