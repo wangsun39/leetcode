@@ -94,12 +94,78 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    # def takeCharacters1(self, s: str, k: int) -> int:
+    #     if k == 0: return 0
+    #     left, right = {'a': [], 'b': [], 'c': []}, {'a': [], 'b': [], 'c': []}
+    #     n = len(s)
+    #     f1 = False
+    #     for i in range(n):
+    #         if len(left[s[i]]) < k:
+    #             left[s[i]].append(i + 1)
+    #         if len(left['a']) >= k and len(left['b']) >= k and len(left['c']) >= k:
+    #             f1 = True
+    #             break
+    #     if not f1:
+    #         return -1
+    #     for i in range(n):
+    #         if len(right[s[n - i - 1]]) < k:
+    #             right[s[n - i - 1]].append(i + 1)
+    #         if len(right['a']) >= k and len(right['b']) >= k and len(right['c']) >= k:
+    #             break
+    #     print(left, right)
+    #     ma = min(left['a'][i] + right['a'][k - i - 2] for i in range(k - 1))
+    #     ma = min(ma, left['a'][k - 1], right['a'][k - 1])
+    #     mb = min(left['b'][i] + right['b'][k - i - 2] for i in range(k - 1))
+    #     mb = min(mb, left['b'][k - 1], right['b'][k - 1])
+    #     mc = min(left['c'][i] + right['c'][k - i - 2] for i in range(k - 1))
+    #     mc = min(mc, left['c'][k - 1], right['c'][k - 1])
+    #
+    #     m = min(left['a'][i] + right['a'][k - i - 2] +  for i in range(k - 1))
+    #     m = min(m, left['a'][k - 1], right['a'][k - 1])
+    #     print(ma, mb, mc)
+    #     return max(ma, mb, mc)
+
+    def takeCharacters(self, s: str, k: int) -> int:
+        if k == 0: return 0
+        n = len(s)
+        left, right = {'a': [0], 'b': [0], 'c': [0]}, {'a': [0], 'b': [0], 'c': [0]}
+        for i in range(n):
+            left['a'].append(left['a'][-1])
+            right['a'].append(right['a'][-1])
+            left['b'].append(left['b'][-1])
+            right['b'].append(right['b'][-1])
+            left['c'].append(left['c'][-1])
+            right['c'].append(right['c'][-1])
+            left[s[i]][-1] += 1
+            right[s[n - i - 1]][-1] += 1
+        print(left)
+        if left['a'][-1] < k or left['b'][-1] < k or left['c'][-1] < k:
+            return -1
+        for i in range(n + 1):
+            if left['a'][i] >= k and left['b'][i] >= k and left['c'][i] >= k:
+                pl = i
+                ans = i
+                break
+        for i in range(n + 1):
+            if right['a'][i] >= k and right['b'][i] >= k and right['c'][i] >= k:
+                pr = i
+                ans = min(ans, pr)
+                break
+        pl = 1
+        while pr > 0:
+            while left['a'][pl] + right['a'][pr] >= k and left['b'][pl] + right['b'][pr] >= k and left['c'][pl] + right['c'][pr] >= k and pr > 0:
+                ans = min(ans, pl + pr)
+                pr -= 1
+            pl += 1
+            if left['a'][pl] + right['a'][pr] >= k and left['b'][pl] + right['b'][pr] >= k and left['c'][pl] + right['c'][pr] >= k:
+                ans = min(ans, pl + pr)
+        return ans
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.takeCharacters(s = "aabaaaacaabc", k = 2))
+print(so.takeCharacters(s = "a", k = 1))
+# print(so.takeCharacters(s = "aabaaaacaabc", k = 2))
 
 
 

@@ -13,6 +13,9 @@ from itertools import pairwise
 from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
+# print(c.most_common(2)) # n = 2
+#  [('c', 3), ('b', 2)]
+
 # d = defaultdict(int)
 import math
 import random

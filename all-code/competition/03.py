@@ -94,8 +94,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def maximumTastiness(self, price: List[int], k: int) -> int:
+        price.sort()
+        n = len(price)
+        diff = [price[i] - price[i-1] for i in range(1, n)]
+        diff.s
+
 
 
 so = Solution()

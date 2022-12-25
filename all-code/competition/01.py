@@ -94,12 +94,26 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def closetTarget(self, words: List[str], target: str, startIndex: int) -> int:
+        p1 = p2 = startIndex
+        step = 0
+        n = len(words)
+        while True:
+            if words[p1] == target or words[p2] == target:
+                return step
+            step += 1
+            p1 = (p1 + n - 1) % n
+            p2 = (p2 + 1) % n
+            if p1 == startIndex:
+                return -1
+        return step
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.closetTarget(["lwgdugypkmsvxwhwbrccrbtemvudwhctnaaonednsbodptendi","lumylagwxpmmivpujfawgvdbtxpluwekdpeakrqelpvrflnsnr","lngqwiijizfzzhlvvszaownnachqunlktsnhgsjeluvcpmavuj","nabbqiyarxmzleesxrfaynypfxonyhvwhebfjsxyinepggxnns","oiqghjtvrhpgvsjlzmrwbwpmomqqliqytdzawhkwematskflgf","dtiwjpdgcsmhaiwxrgligxlibfmvclobjjhljrqlvpuiufskix","svqgvooghuqszkrmcrayqclotygdqnxfetdrfrfvbypgiizzdk","qzrmfzdiodkdbhwifsinmamljlztwqtaoivufkcyeydsvpmdzw","ihaekjyxvnmhvtanysybyqvrtmffpkgmnxisgmmhkhbtonlwgo","ucrvwdlifpckbimcvevgsniepuewjqpakwnxksumgvrnmhmtuk","lngqwiijizfzzhlvvszaownnachqunlktsnhgsjeluvcpmavuj","lngqwiijizfzzhlvvszaownnachqunlktsnhgsjeluvcpmavuj","vdtvcclyyraevotgikgojlbefpfmlzypychxehnglgettackoz","qxspwpzxfxyxalrjuliwtbyllamkifbknnhzyfeabavwvvdkzk","vdtvcclyyraevotgikgojlbefpfmlzypychxehnglgettackoz","ucrvwdlifpckbimcvevgsniepuewjqpakwnxksumgvrnmhmtuk","dtiwjpdgcsmhaiwxrgligxlibfmvclobjjhljrqlvpuiufskix","vtbfahotrkxwcfwzlijfoqdkrvdmavpllbcfvibrqeuntsmrcs","mfhqksxfeeltpiupaijavavbpphjxyuzqlqehirxnmviiaqnfv","oowbnwbktlmsawtbilyvksqkbuohhjxqbepxgklkrwpjzcvipe","mpnnvwuqbczvmrwhzvsmtuumwjczqehuumjvfbpgoxlurjbckq","byaschxhjcgnnodazzpisqriyszffaqqiwljbuigdvzzobrlmc","dmctcimgeztojrvqwyygmnzfwtsrmmbgednmytsludnrpjjjvk","qxspwpzxfxyxalrjuliwtbyllamkifbknnhzyfeabavwvvdkzk","cawzflwjjopbemxqazpsrsrlxljwqlvzpvjbjarqeqgythrsou","ydqjqvalipkkrcbdprgjjangclswdjpaajiwhxeupidxirlith","lwgdugypkmsvxwhwbrccrbtemvudwhctnaaonednsbodptendi","ejtkmbyqtwrlhwynnqggpjaaaydjqnczhtyphfgugpbardzlvj","cawzflwjjopbemxqazpsrsrlxljwqlvzpvjbjarqeqgythrsou","oowbnwbktlmsawtbilyvksqkbuohhjxqbepxgklkrwpjzcvipe","khhwlijglujhgimvfvuwgggigppichzscdtsiklalgqeqsencq","khhwlijglujhgimvfvuwgggigppichzscdtsiklalgqeqsencq","lngqwiijizfzzhlvvszaownnachqunlktsnhgsjeluvcpmavuj","frdsoraagsllmgtatzybegxotrtgsuwfzpzxkpegggvpodnhrr","ynuartuisymsqxxdqwndonpqhczqpuekwbayfidfisjpriqogx","shmpixycafoqskoegqfvsrvboiegqwlbrkiuoeetncdxqlqsov","oiqghjtvrhpgvsjlzmrwbwpmomqqliqytdzawhkwematskflgf","xjtatoefvpwwgsvmepltadmzngxtnahqypfxgjppbqsmqnjvxm","vtbfahotrkxwcfwzlijfoqdkrvdmavpllbcfvibrqeuntsmrcs","dmctcimgeztojrvqwyygmnzfwtsrmmbgednmytsludnrpjjjvk","dsohnrdxdqrbwdjhqpphwvlzfyizqyoedckthdlhmkxjxewubc","qriythowwswwwucgwmezpqqneatemdxfqzpeytlozzojguywby","lyhmqyjnztwzqotqkpmvpueyzjfroousgkkerqvmwjnjtmlkuf","qzrmfzdiodkdbhwifsinmamljlztwqtaoivufkcyeydsvpmdzw","qzrmfzdiodkdbhwifsinmamljlztwqtaoivufkcyeydsvpmdzw","gxrtwoayoosijaddrlbvxqsvbbvaziqemcpxgljlnexvjnnakk","mjftbskulmuztejkopyftjsdeoyuvhvqragbkqlfhgqqkafvau","mjftbskulmuztejkopyftjsdeoyuvhvqragbkqlfhgqqkafvau","qzrmfzdiodkdbhwifsinmamljlztwqtaoivufkcyeydsvpmdzw","qxspwpzxfxyxalrjuliwtbyllamkifbknnhzyfeabavwvvdkzk"],"ydqjqvalipkkrcbdprgjjangclswdjpaajiwhxeupidxirlith",0))
+print(so.closetTarget(words = ["hello","i","am","leetcode","hello"], target = "hello", startIndex = 1))
+print(so.closetTarget(words = ["a","b","leetcode"], target = "leetcode", startIndex = 0))
+print(so.closetTarget(words = ["i","eat","leetcode"], target = "ate", startIndex = 0))
 
 
 
