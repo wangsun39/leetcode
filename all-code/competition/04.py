@@ -94,12 +94,29 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def countPartitions(self, nums: List[int], k: int) -> int:
+        if sum(nums) < k * 2: return 0
+        MOD = 10 ** 9 + 7
+        n = len(nums)
+        pre = [1 if i + 1 <= nums[0] else 2 for i in range(k)]  # 1 表示空集，2表示空集 + {nums[0]}
+        # print(pre)
+        dp = [0] * k  # dp[j] 子集的和小于 j+1 的子集个数
+        for i in range(1, n):
+            for j in range(k):
+                if j >= nums[i]:
+                    dp[j] = pre[j - nums[i]] + pre[j]
+                    dp[j] %= MOD
+                else:
+                    dp[j] = pre[j]
+            pre, dp = dp, [0] * k
+            # print(pre)
+        return ((pow(2, n, MOD) + MOD) - pre[-1] * 2) % MOD
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.countPartitions(nums = [6,6], k = 2))  # 2
+print(so.countPartitions(nums = [3,3,3], k = 4))  # 0
+print(so.countPartitions(nums = [1,2,3,4], k = 4))  # 6
 
 
 
