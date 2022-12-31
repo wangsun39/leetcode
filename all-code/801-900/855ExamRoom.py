@@ -34,23 +34,25 @@ class ExamRoom:
     def __init__(self, n: int):
         # self.num = 0
         self.n = n
-        self.arr = [[-n // 2, 0, (n - 1)]]  # -空闲区间长度，区间左端点，区间右端点
+        self.arr = [[-n, 0, (n - 1)]]  # [-空闲区间长度，区间左端点，区间右端点] ,arr是有序的
+        # 如果[0, x] 或 [x, n - 1]，第一个字段的值为整个空闲区间的长度，因为0 和 n - 1是最远的点，
+        # 其他区间都是区间长度的一半是最远距离
         self.d = {}  # idx: [左边第一个非空闲点, 右边第一个非空闲点]
 
 
     def seat(self) -> int:
         l, r = self.arr[0][1], self.arr[0][2]
         if l == 0:
-            new = [-r // 2, 1, r]
+            new = [-r // 2, 1, r] if r < self.n - 1 else [-r, 1, r]
             self.arr = self.arr[1:]
             if new[0] < 0:  # 更新后的空闲区间长度为正
                 bisect.insort_left(self.arr, new)
             self.d[0] = [-1, r + 1]
             if r + 1 < self.n:
-                self.d[r + 1] = 0
+                self.d[r + 1][0] = 0
             return 0
         if r == self.n - 1:
-            new = [-(self.n - l - 1) // 2, l, self.n - 2]
+            new = [-(self.n - l - 1) // 2, l, self.n - 2] if l > 0 else [-(self.n - l - 1), l, self.n - 2]
             self.arr = self.arr[1:]
             if new[0] < 0:  # 更新后的空闲区间长度为正
                 bisect.insort_left(self.arr, new)
@@ -59,7 +61,14 @@ class ExamRoom:
                 self.d[l - 1][1] = self.n - 1
             return self.n - 1
         mid = (l + r) // 2
-        n1, n2 = [-(mid - l) // 2, l, mid - 1], [-(r - mid) // 2, mid + 1, r]
+        if l == 0:
+            n1 = [-(mid - l), l, mid - 1]
+        else:
+            n1 = [-(mid - l) // 2, l, mid - 1]
+        if r == self.n - 1:
+            n2 = [-(r - mid), mid + 1, r]
+        else:
+            n2 = [-(r - mid) // 2, mid + 1, r]
         self.arr = self.arr[1:]
         if n1[0] < 0:
             bisect.insort_left(self.arr, n1)
@@ -76,14 +85,21 @@ class ExamRoom:
 
     def leave(self, p: int) -> None:
         l, r = self.d[p]
-        s1, s2 = [-(p - 1 - l) // 2, l + 1, p - 1], [-(r - 1 - p) // 2, p + 1, r - 1]
+        if l + 1 == 0:
+            s1 = [-(p - 1 - l), l + 1, p - 1]
+        else:
+            s1 = [-(p - 1 - l) // 2, l + 1, p - 1]
+        if r - 1 == self.n - 1:
+            s2 = [-(r - 1 - p), p + 1, r - 1]
+        else:
+            s2 = [-(r - 1 - p) // 2, p + 1, r - 1]
         if s1[0] < 0 < p:
             p1 = bisect.bisect_left(self.arr, s1)
             self.arr = self.arr[:p1] + self.arr[p1 + 1:]
         if p < self.n and s2[0] < 0:
             p2 = bisect.bisect_left(self.arr, s2)
             self.arr = self.arr[:p2] + self.arr[p2 + 1:]
-        new = [-(r - 1 - l) // 2, l + 1, r - 1]
+        new = [-(r - 1 - l), l + 1, r - 1] if l + 1 == 0 or r - 1 == self.n - 1 else [-(r - 1 - l) // 2, l + 1, r - 1]
         bisect.insort_left(self.arr, new)
         if l >= 0:
             self.d[l][1] = r
@@ -92,23 +108,23 @@ class ExamRoom:
         del(self.d[p])
 
 
-so = ExamRoom(10)
+so = ExamRoom(8)
 
 print(so.seat())  # 0
-print(so.seat())  # 9
-print(so.seat())  # 4
+print(so.seat())  # 7
+print(so.seat())  # 3
 print(so.leave(0))
-print(so.leave(4))
+print(so.leave(7))
 print(so.d)
 print(so.arr)
+print(so.seat())  # 7
+print(so.seat())  # 0
 print(so.seat())  #
 print(so.seat())  #
 print(so.seat())  #
 print(so.seat())  #
 print(so.seat())  #
-print(so.seat())  #
-print(so.seat())  #
-print(so.seat())  #
+# print(so.seat())  #
 
 
 # so = ExamRoom(10)

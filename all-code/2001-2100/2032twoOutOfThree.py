@@ -29,11 +29,11 @@
 # 1 <= nums1[i], nums2[j], nums3[k] <= 100
 
 
-
-
 from typing import List
 from collections import Counter
 from collections import deque
+
+
 # Definition for a binary tree node.
 class Solution:
     def twoOutOfThree(self, nums1: List[int], nums2: List[int], nums3: List[int]) -> List[int]:
@@ -45,9 +45,6 @@ class Solution:
                 ans.append(cc)
         return ans
 
+
 so = Solution()
-print(so.twoOutOfThree(nums1 = [1,1,3,2], nums2 = [2,3], nums3 = [3]))
-
-
-
-
+print(so.twoOutOfThree(nums1=[1, 1, 3, 2], nums2=[2, 3], nums3=[3]))
