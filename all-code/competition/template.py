@@ -97,12 +97,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self, number) -> str:
+    def removeDigit(self) -> str:
         pass
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.removeDigit())
 
 
 

@@ -13,6 +13,9 @@ from itertools import pairwise
 from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
+# print(c.most_common(2)) # n = 2
+#  [('c', 3), ('b', 2)]
+
 # d = defaultdict(int)
 import math
 import random
@@ -94,29 +97,36 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPartitions(self, nums: List[int], k: int) -> int:
-        if sum(nums) < k * 2: return 0
-        MOD = 10 ** 9 + 7
-        n = len(nums)
-        pre = [1 if i + 1 <= nums[0] else 2 for i in range(k)]  # 1 表示空集，2表示空集 + {nums[0]}
-        # print(pre)
-        dp = [0] * k  # dp[j] 子集的和小于 j+1 的子集个数
-        for i in range(1, n):
-            for j in range(k):
-                if j >= nums[i]:
-                    dp[j] = pre[j - nums[i]] + pre[j]
-                    dp[j] %= MOD
-                else:
-                    dp[j] = pre[j]
-            pre, dp = dp, [0] * k
-            # print(pre)
-        return ((pow(2, n, MOD) + MOD) - pre[-1] * 2) % MOD
+    def closestPrimes(self, left: int, right: int) -> List[int]:
+        primes = []
+        def all_prime(mi, mx):  # 获取[mi, mx) 内所有质数
+            if mx < 2:
+                return 0
+            isPrime = [1] * mx
+            isPrime[0] = isPrime[1] = 0
+            for i in range(2, int(mx ** 0.5) + 1):
+                if isPrime[i]:
+                    isPrime[i * i:mx:i] = [0] * ((mx - 1 - i * i) // i + 1)
+            for i in range(mi, mx):
+                if isPrime[i]:
+                    primes.append(i)
+        all_prime(left, right + 1)
+        mi = inf
+        ans = [-1, -1]
+        for i in range(len(primes)):
+            if i == len(primes) -1 or primes[i + 1] > right:
+                break
+            if left <= primes[i] < primes[i + 1] <= right:
+                if primes[i + 1] - primes[i] < mi:
+                    mi = primes[i + 1] - primes[i]
+                    ans = [primes[i], primes[i + 1]]
+
+        return ans
 
 
 so = Solution()
-print(so.countPartitions(nums = [6,6], k = 2))  # 2
-print(so.countPartitions(nums = [3,3,3], k = 4))  # 0
-print(so.countPartitions(nums = [1,2,3,4], k = 4))  # 6
+print(so.closestPrimes(left = 10, right = 19))
+print(so.closestPrimes(left = 4, right = 6))
 
 
 

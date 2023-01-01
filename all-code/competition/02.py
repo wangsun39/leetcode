@@ -13,6 +13,9 @@ from itertools import pairwise
 from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
+# print(c.most_common(2)) # n = 2
+#  [('c', 3), ('b', 2)]
+
 # d = defaultdict(int)
 import math
 import random
@@ -94,78 +97,37 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    # def takeCharacters1(self, s: str, k: int) -> int:
-    #     if k == 0: return 0
-    #     left, right = {'a': [], 'b': [], 'c': []}, {'a': [], 'b': [], 'c': []}
-    #     n = len(s)
-    #     f1 = False
-    #     for i in range(n):
-    #         if len(left[s[i]]) < k:
-    #             left[s[i]].append(i + 1)
-    #         if len(left['a']) >= k and len(left['b']) >= k and len(left['c']) >= k:
-    #             f1 = True
-    #             break
-    #     if not f1:
-    #         return -1
-    #     for i in range(n):
-    #         if len(right[s[n - i - 1]]) < k:
-    #             right[s[n - i - 1]].append(i + 1)
-    #         if len(right['a']) >= k and len(right['b']) >= k and len(right['c']) >= k:
-    #             break
-    #     print(left, right)
-    #     ma = min(left['a'][i] + right['a'][k - i - 2] for i in range(k - 1))
-    #     ma = min(ma, left['a'][k - 1], right['a'][k - 1])
-    #     mb = min(left['b'][i] + right['b'][k - i - 2] for i in range(k - 1))
-    #     mb = min(mb, left['b'][k - 1], right['b'][k - 1])
-    #     mc = min(left['c'][i] + right['c'][k - i - 2] for i in range(k - 1))
-    #     mc = min(mc, left['c'][k - 1], right['c'][k - 1])
-    #
-    #     m = min(left['a'][i] + right['a'][k - i - 2] +  for i in range(k - 1))
-    #     m = min(m, left['a'][k - 1], right['a'][k - 1])
-    #     print(ma, mb, mc)
-    #     return max(ma, mb, mc)
-
-    def takeCharacters(self, s: str, k: int) -> int:
-        if k == 0: return 0
-        n = len(s)
-        left, right = {'a': [0], 'b': [0], 'c': [0]}, {'a': [0], 'b': [0], 'c': [0]}
-        for i in range(n):
-            left['a'].append(left['a'][-1])
-            right['a'].append(right['a'][-1])
-            left['b'].append(left['b'][-1])
-            right['b'].append(right['b'][-1])
-            left['c'].append(left['c'][-1])
-            right['c'].append(right['c'][-1])
-            left[s[i]][-1] += 1
-            right[s[n - i - 1]][-1] += 1
-        print(left)
-        if left['a'][-1] < k or left['b'][-1] < k or left['c'][-1] < k:
-            return -1
-        for i in range(n + 1):
-            if left['a'][i] >= k and left['b'][i] >= k and left['c'][i] >= k:
-                pl = i
-                ans = i
-                break
-        for i in range(n + 1):
-            if right['a'][i] >= k and right['b'][i] >= k and right['c'][i] >= k:
-                pr = i
-                ans = min(ans, pr)
-                break
-        pl = 1
-        while pr > 0:
-            while left['a'][pl] + right['a'][pr] >= k and left['b'][pl] + right['b'][pr] >= k and left['c'][pl] + right['c'][pr] >= k and pr > 0:
-                ans = min(ans, pl + pr)
-                pr -= 1
-            pl += 1
-            if left['a'][pl] + right['a'][pr] >= k and left['b'][pl] + right['b'][pr] >= k and left['c'][pl] + right['c'][pr] >= k:
-                ans = min(ans, pl + pr)
-        return ans
+    def distinctPrimeFactors(self, nums: List[int]) -> int:
+        s = set()
+        # primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997]
+        primes = []
+        def all_prime(mi, mx):  # 获取[mi, mx) 内所有质数
+            if mx < 2:
+                return 0
+            isPrime = [1] * mx
+            isPrime[0] = isPrime[1] = 0
+            for i in range(2, int(mx ** 0.5) + 1):
+                if isPrime[i]:
+                    isPrime[i * i:mx:i] = [0] * ((mx - 1 - i * i) // i + 1)
+            for i in range(mi, mx):
+                if isPrime[i]:
+                    primes.append(i)
+        all_prime(2, 1001)
+        def foreach(num):
+            for i in primes:
+                if i > num:
+                    break
+                if num % i == 0:
+                    s.add(i)
+        for num in nums:
+            foreach(num)
+        # print(s)
+        return len(s)
 
 
 so = Solution()
-print(so.takeCharacters(s = "aabaaaacaabc", k = 2))
-print(so.takeCharacters(s = "a", k = 1))
-# print(so.takeCharacters(s = "aabaaaacaabc", k = 2))
+print(so.distinctPrimeFactors([2,4,3,7,10,6]))
+print(so.distinctPrimeFactors([2,4,8,16]))
 
 
 

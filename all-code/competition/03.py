@@ -13,6 +13,9 @@ from itertools import pairwise
 from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
+# print(c.most_common(2)) # n = 2
+#  [('c', 3), ('b', 2)]
+
 # d = defaultdict(int)
 import math
 import random
@@ -94,38 +97,26 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maximumTastiness(self, price: List[int], k: int) -> int:
-        price.sort()
-        n = len(price)
-        def judge(val):  # 判断某个甜蜜度是否能达到
-            pre = price[0]
-            cnt = 0
-            for i in range(1, n):
-                if price[i] - pre >= val:
-                    cnt += 1
-                    pre = price[i]
-                    if cnt >= k - 1:
-                        return True
-            return False
-
-        lo, hi = 0, price[-1] - price[0]
-        if judge(hi):
-            return hi
-        while lo < hi:   # 类型bisect_left， 找到第一个不能满足的数，它的前一个就是答案
-            mid = (lo + hi) // 2
-            if judge(mid):
-                lo = mid + 1
+    def minimumPartition(self, s: str, k: int) -> int:
+        start = 0
+        cur = 0
+        ans = 0
+        while cur < len(s):
+            if int(s[start: cur + 1]) <= k:
+                cur += 1
             else:
-                hi = mid
-        return lo - 1
+                if start == cur:
+                    return -1
+                start = cur
+                ans += 1
+        return ans + 1
 
 
 so = Solution()
-print(so.maximumTastiness(price = [144,69,103,148,184,50,129,154,2], k = 4))  # 55
-print(so.maximumTastiness(price = [34,116,83,15,150,56,69,42,26], k = 6))  # 19
-print(so.maximumTastiness(price = [13,5,1,8,21,2], k = 3))  # 8
-print(so.maximumTastiness(price = [1,3,1], k = 2))  # 2
-print(so.maximumTastiness(price = [7,7,7,7], k = 2))  # 0
+print(so.minimumPartition(s = "1", k = 1))
+print(so.minimumPartition(s = "222", k = 3))
+print(so.minimumPartition(s = "165462", k = 60))
+print(so.minimumPartition(s = "238182", k = 5))
 
 
 
