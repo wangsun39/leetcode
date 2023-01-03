@@ -123,11 +123,29 @@ class Solution:
             foreach(num)
         # print(s)
         return len(s)
+    def distinctPrimeFactors1(self, nums: List[int]) -> int:  # 另一种写法
+        s = set()
+        def foreach(num):
+            i = 2
+            while i * i <= num:
+                if num % i == 0:
+                    s.add(i)
+                    while num % i == 0:
+                        num //= i
+                i += 1
+            if num > 1:
+                s.add(num)
+
+        for num in nums:
+            foreach(num)
+        print(s)
+        return len(s)
 
 
 so = Solution()
-print(so.distinctPrimeFactors([2,4,3,7,10,6]))
-print(so.distinctPrimeFactors([2,4,8,16]))
+print(so.distinctPrimeFactors1([3]))  # 1
+print(so.distinctPrimeFactors1([2,4,3,7,10,6]))  # 4
+print(so.distinctPrimeFactors1([2,4,8,16]))  # 1
 
 
 
