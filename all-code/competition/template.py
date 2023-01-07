@@ -8,7 +8,8 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise
+from itertools import pairwise, accumulate
+# list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -33,7 +34,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-import bisect
+from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -41,7 +42,7 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
+from heapq import *
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)

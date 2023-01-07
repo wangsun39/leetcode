@@ -8,7 +8,8 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise
+from itertools import pairwise, accumulate
+# list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -33,7 +34,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-import bisect
+from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -41,7 +42,7 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
+from heapq import *
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -97,26 +98,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minimumPartition(self, s: str, k: int) -> int:
-        start = 0
-        cur = 0
-        ans = 0
-        while cur < len(s):
-            if int(s[start: cur + 1]) <= k:
-                cur += 1
-            else:
-                if start == cur:
-                    return -1
-                start = cur
-                ans += 1
-        return ans + 1
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minimumPartition(s = "1", k = 1))
-print(so.minimumPartition(s = "222", k = 3))
-print(so.minimumPartition(s = "165462", k = 60))
-print(so.minimumPartition(s = "238182", k = 5))
+print(so.removeDigit())
 
 
 

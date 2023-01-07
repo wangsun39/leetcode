@@ -1,3 +1,31 @@
+# 给你两个正整数 left 和 right ，请你找到两个整数 num1 和 num2 ，它们满足：
+#
+# left <= nums1 < nums2 <= right  。
+# nums1 和 nums2 都是 质数 。
+# nums2 - nums1 是满足上述条件的质数对中的 最小值 。
+# 请你返回正整数数组 ans = [nums1, nums2] 。如果有多个整数对满足上述条件，请你返回 nums1 最小的质数对。如果不存在符合题意的质数对，请你返回 [-1, -1] 。
+#
+# 如果一个整数大于 1 ，且只能被 1 和它自己整除，那么它是一个质数。
+#
+#
+#
+# 示例 1：
+#
+# 输入：left = 10, right = 19
+# 输出：[11,13]
+# 解释：10 到 19 之间的质数为 11 ，13 ，17 和 19 。
+# 质数对的最小差值是 2 ，[11,13] 和 [17,19] 都可以得到最小差值。
+# 由于 11 比 17 小，我们返回第一个质数对。
+# 示例 2：
+#
+# 输入：left = 4, right = 6
+# 输出：[-1,-1]
+# 解释：给定范围内只有一个质数，所以题目条件无法被满足。
+#
+#
+# 提示：
+#
+# 1 <= left <= right <= 106
 
 from typing import List
 from typing import Optional
@@ -8,8 +36,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
-# list(accumulate(nums))  数组前缀和
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -34,7 +61,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-from bisect import *
+import bisect
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -42,7 +69,7 @@ from bisect import *
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-from heapq import *
+import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -98,12 +125,26 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumPartition(self, s: str, k: int) -> int:
+        start = 0
+        cur = 0
+        ans = 0
+        while cur < len(s):
+            if int(s[start: cur + 1]) <= k:
+                cur += 1
+            else:
+                if start == cur:
+                    return -1
+                start = cur
+                ans += 1
+        return ans + 1
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumPartition(s = "1", k = 1))
+print(so.minimumPartition(s = "222", k = 3))
+print(so.minimumPartition(s = "165462", k = 60))
+print(so.minimumPartition(s = "238182", k = 5))
 
 
 

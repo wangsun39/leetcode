@@ -8,7 +8,8 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise
+from itertools import pairwise, accumulate
+# list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -33,7 +34,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-import bisect
+from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -41,7 +42,7 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
+from heapq import *
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -97,36 +98,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def closestPrimes(self, left: int, right: int) -> List[int]:
-        primes = []
-        def all_prime(mi, mx):  # 获取[mi, mx) 内所有质数
-            if mx < 2:
-                return 0
-            isPrime = [1] * mx
-            isPrime[0] = isPrime[1] = 0
-            for i in range(2, int(mx ** 0.5) + 1):
-                if isPrime[i]:
-                    isPrime[i * i:mx:i] = [0] * ((mx - 1 - i * i) // i + 1)
-            for i in range(mi, mx):
-                if isPrime[i]:
-                    primes.append(i)
-        all_prime(left, right + 1)
-        mi = inf
-        ans = [-1, -1]
-        for i in range(len(primes)):
-            if i == len(primes) -1 or primes[i + 1] > right:
-                break
-            if left <= primes[i] < primes[i + 1] <= right:
-                if primes[i + 1] - primes[i] < mi:
-                    mi = primes[i + 1] - primes[i]
-                    ans = [primes[i], primes[i + 1]]
-
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.closestPrimes(left = 10, right = 19))
-print(so.closestPrimes(left = 4, right = 6))
+print(so.removeDigit())
 
 
 

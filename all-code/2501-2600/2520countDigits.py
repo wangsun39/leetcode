@@ -1,3 +1,30 @@
+# 给你一个整数 num ，返回 num 中能整除 num 的数位的数目。
+#
+# 如果满足 nums % val == 0 ，则认为整数 val 可以整除 nums 。
+#
+#
+#
+# 示例 1：
+#
+# 输入：num = 7
+# 输出：1
+# 解释：7 被自己整除，因此答案是 1 。
+# 示例 2：
+#
+# 输入：num = 121
+# 输出：2
+# 解释：121 可以被 1 整除，但无法被 2 整除。由于 1 出现两次，所以返回 2 。
+# 示例 3：
+#
+# 输入：num = 1248
+# 输出：4
+# 解释：1248 可以被它每一位上的数字整除，因此答案是 4 。
+#
+#
+# 提示：
+#
+# 1 <= num <= 109
+# num 的数位中不含 0
 
 from typing import List
 from typing import Optional
@@ -8,8 +35,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
-# list(accumulate(nums))  数组前缀和
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -34,7 +60,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-from bisect import *
+import bisect
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -42,7 +68,7 @@ from bisect import *
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-from heapq import *
+import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -98,12 +124,19 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countDigits(self, num: int) -> int:
+        s = str(num)
+        ans = 0
+        for ss in s:
+            if num % int(ss) == 0:
+                ans += 1
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countDigits(7))
+print(so.countDigits(121))
+print(so.countDigits(1248))
 
 
 
