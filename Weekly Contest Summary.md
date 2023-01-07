@@ -1,5 +1,6 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2023-1-1| 第326场周赛  | Q4  | [范围内最接近的两个质数](https://leetcode.cn/problems/closest-prime-numbers-in-range/) |   1649    | 本周AK，素数的判断出现在两道题上，比赛时参考了网上的埃氏筛，后来从灵神的视频中了解了欧拉筛，可以总结一下素数的模板 |
 |2022-12-25| 第325场周赛  | Q3  | [礼盒的最大甜蜜度](https://leetcode.cn/problems/maximum-tastiness-of-candy-basket/) |    2021   | 本周除了第一题，都有难度。差点第二题都没做完，外加身体还没恢复（&#x1F637;, 当然恢复了，估计这题也做不出来） <br> 这题正着想很难，需要逆向思考，然后用二分就比较容易了 |
 |2022-12-25| 第325场周赛  | Q4  | [好分区的数目](https://leetcode.cn/problems/number-of-great-partitions/) |   2415    | 这题同样是计算不满足的组合数，再用总数减，外带DP  |
 |2022-12-18| 第324场周赛  | Q3  | [添加边使所有节点度数都为偶数](https://leetcode.cn/problems/add-edges-to-make-degrees-of-all-nodes-even/) |   2060    | 本周AK，WA 3次 <br>总体上说难度不是很大，但3,4两题各掉到一个坑里去了  |
