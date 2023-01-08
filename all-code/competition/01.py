@@ -98,12 +98,20 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumCount(self, nums: List[int]) -> int:
+        pos = neg = 0
+        for e in nums:
+            if e > 0:
+                pos += 1
+            elif e < 0:
+                neg += 1
+        return max(pos, neg)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maximumCount([-2,-1,-1,1,2,3]))
+print(so.maximumCount([-3,-2,-1,0,0,1,2]))
+print(so.maximumCount([5,20,66,1314]))
 
 
 
