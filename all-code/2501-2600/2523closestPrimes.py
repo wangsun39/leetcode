@@ -148,14 +148,11 @@ class Solution:
                 if primes[i + 1] - primes[i] < mi:
                     mi = primes[i + 1] - primes[i]
                     ans = [primes[i], primes[i + 1]]
-
         return ans
 
 
 so = Solution()
 print(so.closestPrimes(left = 10, right = 19))
 print(so.closestPrimes(left = 4, right = 6))
-
-
 
 
