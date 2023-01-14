@@ -33,7 +33,7 @@
 from typing import List
 from collections import deque
 class Solution:
-    def crackSafe(self, n: int, k: int) -> str:
+    def crackSafe1(self, n: int, k: int) -> str:
         seen = set()
         ans = list()
         highest = 10 ** (n - 1)
@@ -48,12 +48,30 @@ class Solution:
 
         dfs(0)
         return "".join(ans) + "0" * (n - 1)
+    def crackSafe(self, n: int, k: int) -> str:
+        # 欧拉回路，每次出发从相邻最大的节点开始往下走
+        # seen = set()
+        if n == 1: return ''.join([str(i) for i in range(k)])
+        ans = ['0' * (n - 1)]
+        highest = 10 ** (n - 1)
+        n_node = 10 ** (n - 1)
+        node = [k - 1] * n_node
+        cur = 0
+        while node[cur] >= 0:
+            t = cur
+            cur = (t * 10 + node[t]) % highest
+            node[t] -= 1
+            ans.append(str(cur % 10))
+        return ''.join(ans)
+
 
 
 
 
 
 so = Solution()
+print(so.crackSafe(2, 2))
+print(so.crackSafe(1, 2))
 print(so.crackSafe(2, 3))
 
 
