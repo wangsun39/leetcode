@@ -98,23 +98,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maxKelements(self, nums: List[int], k: int) -> int:
-        hq = []
-        for num in nums:
-            heappush(hq, -num)
-        ans = 0
-        for _ in range(k):
-            x = -heappop(hq)
-            ans += x
-            x = (x + 2) // 3
-            heappush(hq, -x)
-        return ans
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxKelements(nums = [10,10,10,10,10], k = 5))
-print(so.maxKelements(nums = [1,10,3,3,3], k = 3))
+print(so.removeDigit())
 
 
 

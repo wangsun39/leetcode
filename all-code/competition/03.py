@@ -98,33 +98,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-
-    def isItPossible(self, word1: str, word2: str) -> bool:
-        c1, c2 = Counter(word1), Counter(word2)
-        if len(c1) > len(c2): c1, c2 = c2, c1
-        if len(c2) - len(c1) > 2: return False
-        if len(c1) == len(c2) and len(c1.keys() & c2.keys()): return True
-        n1, n2 = len(c1), len(c2)
-        for x in c1:
-            for y in c2:
-                if x == y and c1[x] > 0 and c2[y] > 0:
-                    continue
-                d1 = 0 if c1[x] > 1 else -1
-                d1 += (0 if y in c1 else 1)
-                d2 = 0 if c2[y] > 1 else -1
-                d2 += (0 if x in c2 else 1)
-                if n1 + d1 == n2 + d2:
-                    return True
-        return False
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.isItPossible(word1 = "a", word2 = "bb"))
-print(so.isItPossible(word1 = "ab", word2 = "abcc"))
-print(so.isItPossible(word1 = "ac", word2 = "b"))
-print(so.isItPossible(word1 = "abcc", word2 = "aab"))
-print(so.isItPossible(word1 = "abcde", word2 = "fghij"))
+print(so.removeDigit())
 
 
 

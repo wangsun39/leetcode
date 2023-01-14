@@ -42,22 +42,6 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-# 数位DP，https://leetcode.cn/problems/count-special-integers/
-
-# 将 n 转换成字符串 s，定义 f(i,mask,isLimit,isNum) 表示构造从左往右第 ii 位及其之后数位的合法方案数，其余参数的含义为：
-#
-# mask 表示前面选过的数字集合，换句话说，第 ii 位要选的数字不能在 mask 中。
-# isLimit 表示当前是否受到了 nn 的约束。若为真，则第 ii 位填入的数字至多为 s[i]s[i]，否则可以是 99。如果在受到约束的情况下填了 s[i]，那么后续填入的数字仍会受到 n 的约束。
-# isNum 表示 i 前面的数位是否填了数字。若为假，则当前位可以跳过（不填数字），或者要填入的数字至少为 1；若为真，则要填入的数字可以从 0 开始。
-# 后面两个参数可适用于其它数位 DP 题目。
-#
-# 枚举要填入的数字，具体实现逻辑见代码。
-#
-# 下面代码中 Java/C++/Go 只需要记忆化 (i,mask) 这个状态，因为：
-#
-# 对于一个固定的 (i,mask)，这个状态受到 isLimit 或 isNum 的约束在整个递归过程中至多会出现一次，没必要记忆化。
-# 另外，如果只记忆化 (i,mask)，dp 数组的含义就变成在不受到约束时的合法方案数，所以要在 !isLimit && isNum 成立时才去记忆化。
-
 
 class Solution:
 
