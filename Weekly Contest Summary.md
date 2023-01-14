@@ -1,5 +1,7 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2023-1-8| 第327场周赛  | Q3  | [使字符串总不同字符的数目相等](https://leetcode.cn/problems/make-number-of-distinct-characters-equal/) |   1776    | 这题在比赛中花了近一个小时，WA了3次，考虑分类讨论，想的复杂了。4分的难度不应该想的太复杂 |
+|2023-1-8| 第327场周赛  | Q4  | [过桥的时间](https://leetcode.cn/problems/time-to-cross-a-bridge/) |   2589    | 比赛中时间太少没能做出来，赛后，花了1-2个小时独立完成，这题是模拟类型的题，比较繁琐，要考虑好如何建模 |
 |2023-1-1| 第326场周赛  | Q4  | [范围内最接近的两个质数](https://leetcode.cn/problems/closest-prime-numbers-in-range/) |   1649    | 本周AK，素数的判断出现在两道题上，比赛时参考了网上的埃氏筛，后来从灵神的视频中了解了欧拉筛，可以总结一下素数的模板 |
 |2022-12-25| 第325场周赛  | Q3  | [礼盒的最大甜蜜度](https://leetcode.cn/problems/maximum-tastiness-of-candy-basket/) |    2021   | 本周除了第一题，都有难度。差点第二题都没做完，外加身体还没恢复（&#x1F637;, 当然恢复了，估计这题也做不出来） <br> 这题正着想很难，需要逆向思考，然后用二分就比较容易了 |
 |2022-12-25| 第325场周赛  | Q4  | [好分区的数目](https://leetcode.cn/problems/number-of-great-partitions/) |   2415    | 这题同样是计算不满足的组合数，再用总数减，外带DP  |
