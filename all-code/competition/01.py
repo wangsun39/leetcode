@@ -98,12 +98,19 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def differenceOfSum(self, nums: List[int]) -> int:
+        s1 = sum(nums)
+        s2 = 0
+        for num in nums:
+            while num > 0:
+                s2 += (num % 10)
+                num //= 10
+        return abs(s1 - s2)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.differenceOfSum([1,15,6,3]))
+print(so.differenceOfSum([1,2,3,4]))
 
 
 

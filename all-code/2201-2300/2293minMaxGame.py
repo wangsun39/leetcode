@@ -67,7 +67,7 @@ from typing import List
 # @lru_cache(None)
 
 class Solution:
-    def minMaxGame(self, nums: List[int]) -> int:
+    def minMaxGame1(self, nums: List[int]) -> int:
         def helper(nums):
             ans = []
             for i in range(len(nums) // 2):
@@ -80,6 +80,23 @@ class Solution:
             nums = helper(nums)
             print(nums)
         return nums[0]
+    def minMaxGame(self, nums: List[int]) -> int:
+        def f(nms):
+            n = len(nms) // 2
+            res = [0] * n
+            for i in range(n):
+                if i & 1:
+                    res[i] = max(nms[2 * i], nms[2 * i + 1])
+                else:
+                    res[i] = min(nms[2 * i], nms[2 * i + 1])
+            return res
+
+        while True:
+            ans = f(nums)
+            print(ans, len(ans))
+            if len(ans) == 1:
+                return ans[0]
+            nums = ans
 
 
 

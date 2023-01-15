@@ -52,10 +52,7 @@ class Solution:
             if y - 1 not in tree[x - 1]:
                 tree[x - 1].add(y - 1)
                 preNum[y - 1] += 1
-        queue = []
-        for i in range(n):
-            if preNum[i] == 0:
-                queue.append(i)
+        queue = [i for i in range(n) if preNum[i] == 0]
         ans = []
         while len(queue):
             q = queue.pop(0)
@@ -64,6 +61,8 @@ class Solution:
                 preNum[x] -= 1
                 if preNum[x] == 0:
                     queue.append(x)
+        if len(ans) != n:
+            return []  # 存在圈
         return ans
 
 so = Solution()

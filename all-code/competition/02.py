@@ -98,12 +98,30 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
+        mat = [[0] * n for _ in range(n)]
+        def add(r1, c1, r2, c2):
+            for i in range(r1, r2 + 1):
+                mat[i][c1] += 1
+                if c2 + 1 < n:
+                    mat[i][c2 + 1] -= 1
+            # print("mat:", mat)
+        for x1, y1, x2, y2 in queries:
+            add(x1, y1, x2, y2)
+        ans = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                if j == 0:
+                    ans[i][j] = mat[i][j]
+                else:
+                    ans[i][j] = ans[i][j - 1] + mat[i][j]
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.rangeAddQueries(n = 3, queries = [[1,1,2,2],[0,0,1,1]]))
+print(so.rangeAddQueries(n = 2, queries = [[0,0,1,1]]))
 
 
 

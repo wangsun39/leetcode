@@ -98,12 +98,32 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countGood(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        start = 0
+        counter = defaultdict(int)
+        ans = 0
+        pair_num = 0
+        for cur in range(n):
+            counter[nums[cur]] += 1
+            pair_num += (counter[nums[cur]] - 1)
+            if pair_num < k:
+                ans += start  # 这步很关键
+                continue
+            while start < cur and pair_num >= k:  # 始终保证 [start, cur] 不是一个好子数组，但[start - 1, cur] 是好子数组
+                pair_num -= (counter[nums[start]] - 1)
+                counter[nums[start]] -= 1
+                start += 1
+            ans += start
+
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countGood([2,3,1,3,2], 1))   # 4
+print(so.countGood([2,3,1,3,2,3,3,3,1,1,3,2,2,2], 18))   # 9
+print(so.countGood(nums = [1,1,1,1,1], k = 10))  # 1
+print(so.countGood(nums = [3,1,4,3,2,2,4], k = 2))  # 4
 
 
 

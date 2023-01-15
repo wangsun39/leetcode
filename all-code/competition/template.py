@@ -50,6 +50,7 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
+# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List

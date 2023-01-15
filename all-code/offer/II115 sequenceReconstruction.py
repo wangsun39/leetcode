@@ -102,6 +102,42 @@ class Solution:
                 return False
         return True
 
+    def sequenceReconstruction(self, nums: List[int], sequences: List[List[int]]) -> bool:
+        # 2023/1/15 拓扑排序模板法
+        def buildTopo(conditions, n):
+            tree = defaultdict(set)
+            preNum = [0] * n
+            for x, y in conditions:
+                if y - 1 not in tree[x - 1]:
+                    tree[x - 1].add(y - 1)
+                    preNum[y - 1] += 1
+            queue = []
+            for i in range(n):
+                if preNum[i] == 0:
+                    queue.append(i)
+            ans = []
+            while len(queue) == 1:   # 这里把模板稍作修改
+                q = queue.pop(0)
+                ans.append(q)
+                for x in tree[q]:
+                    preNum[x] -= 1
+                    if preNum[x] == 0:
+                        queue.append(x)
+            if len(ans) != n:
+                return []  # 存在圈
+            return ans
+
+        seqs = []
+        for seq in sequences:
+            for i in range(1, len(seq)):
+                seqs.append([seq[i - 1], seq[i]])
+        new = buildTopo(seqs, len(nums))
+        if len(new) < len(nums): return False
+
+        print(new)
+        return True
+
+
 
 
 
