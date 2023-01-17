@@ -31,8 +31,9 @@
 
 from typing import List
 
+from collections import defaultdict
 class Solution:
-    def canFinish(self, numCourses, prerequisites) -> bool:
+    def canFinish1(self, numCourses, prerequisites) -> bool:
         self.adjDict = self.getAdjNode(prerequisites)
         self.haveCheckNode = []
         for node in self.adjDict:
@@ -67,29 +68,34 @@ class Solution:
                 return False
         return True
 
-
-    def canFinish1(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        def topo():
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # 2023/1/17 拓扑排序模板
+        def buildTopo(conditions, n):
+            tree = defaultdict(set)
+            pre_num = [0] * n
+            for x, y in conditions:
+                if y not in tree[x]:
+                    tree[x].add(y)
+                    pre_num[y] += 1
+            queue = [i for i in range(n) if pre_num[i] == 0]
             ans = []
-            graph = defaultdict(list)
-            preNum = [0] * numCourses
-            queue = []
-            for x, y in prerequisites:
-                graph[y].append(x)
-                preNum[x] += 1
-            for i in range(numCourses):
-                if preNum[i] == 0:
-                    queue.append(i)
             while len(queue):
-                x = queue.pop(0)
-                ans.append(x)
-                for y in graph[x]:
-                    preNum[y] -= 1
-                    if preNum[y] == 0:
-                        queue.append(y)
+                q = queue.pop(0)
+                ans.append(q)
+                for x in tree[q]:
+                    pre_num[x] -= 1
+                    if pre_num[x] == 0:
+                        queue.append(x)
+            if len(ans) != n:
+                return []  # 存在圈
             return ans
-        ans = topo()
+
+        relation = []
+        for x, y in prerequisites:
+            relation.append([y, x])
+        ans = buildTopo(relation, numCourses)
         return len(ans) == numCourses
+
 
 so = Solution()
 #print(so.findKthLargest([3,2,1,5,6,4], 2))

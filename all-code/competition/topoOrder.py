@@ -43,30 +43,50 @@ from typing import List
 # value = int(s, 2)
 
 
-class Solution:
+# conditions 中的节点 id 从 0 到 n - 1
+# conditions 中每对 [x,y] 表示先x后y，顺序不能颠倒
+def buildTopo(conditions, n):
+    tree = defaultdict(set)
+    pre_num = [0] * n
+    for x, y in conditions:
+        if y not in tree[x]:
+            tree[x].add(y)
+            pre_num[y] += 1
+    queue = [i for i in range(n) if pre_num[i] == 0]
+    ans = []
+    while len(queue):
+        q = queue.pop(0)
+        ans.append(q)
+        for x in tree[q]:
+            pre_num[x] -= 1
+            if pre_num[x] == 0:
+                queue.append(x)
+    if len(ans) != n:
+        return []  # 存在圈
+    return ans
 
-    def buildTopo(self, conditions, n):
-        tree = defaultdict(set)
-        preNum = [0] * n
-        for x, y in conditions:
-            if y - 1 not in tree[x - 1]:
-                tree[x - 1].add(y - 1)
-                preNum[y - 1] += 1
-        queue = [i for i in range(n) if preNum[i] == 0]
-        ans = []
-        while len(queue):
-            q = queue.pop(0)
-            ans.append(q)
-            for x in tree[q]:
-                preNum[x] -= 1
-                if preNum[x] == 0:
-                    queue.append(x)
-        if len(ans) != n:
-            return []  # 存在圈
-        return ans
+# 另一种拓扑序
+# 统计每个节点拓扑序小的点的某种属性的极值  (851)
+def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
+    n = len(quiet)
+    tree = defaultdict(set)
+    ans = [i for i in range(n)]  # 比自己richer的最安静值对应的id
+    preNum = [0] * n
+    for x, y in richer:
+        if y not in tree[x]:
+            tree[x].add(y)
+            preNum[y] += 1
+    queue = [i for i in range(n) if preNum[i] == 0]
+    while len(queue):
+        q = queue.pop(0)
+        for x in tree[q]:
+            preNum[x] -= 1
+            if quiet[ans[q]] < quiet[ans[x]]:
+                ans[x] = ans[q]
+            if preNum[x] == 0:
+                queue.append(x)
+    return ans
 
-so = Solution()
-# print(so.removeDigit(123456))
 
 
 
