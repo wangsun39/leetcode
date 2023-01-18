@@ -75,8 +75,9 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
+import time
 class Solution:
-    def longestCycle(self, edges: List[int]) -> int:
+    def longestCycle1(self, edges: List[int]) -> int:
         # @lru_cache(None)
         n = len(edges)
         flag = [0] * n
@@ -98,6 +99,43 @@ class Solution:
                 ans = max(ans, dis - d[node])
         for i in range(n):
             dfs(i)
+        return ans
+    def longestCycle(self, edges: List[int]) -> int:
+        # 拓扑排序实现 2023/1/18
+        # 这题还是 DFS 更容易实现
+        def buildTopo(conditions, n):  # 迭代删除入度为 1 的点
+            tree = defaultdict(set)
+            pre_num = [0] * n
+            for x, y in enumerate(conditions):
+                if y != -1 and y not in tree[x]:
+                    tree[x].add(y)
+                    pre_num[y] += 1
+            queue = deque([i for i in range(n) if pre_num[i] == 0])
+            ans = set([i for i in range(n)])
+            while len(queue):
+                q = queue.popleft()
+                ans.remove(q)
+                for x in tree[q]:
+                    pre_num[x] -= 1
+                    if pre_num[x] == 0:
+                        queue.append(x)
+            return list(ans)
+        n = len(edges)
+        # start = time.time_ns()
+        remain = buildTopo(edges, n)
+        # print((time.time_ns() - start) / (1000 * 1000))
+        # if len(remain) == 0: return -1
+        flag = {k: 0 for k in remain}
+        ans = -1
+        for x in remain:
+            if flag[x] > 0: continue
+            length = 0
+            while flag[x] == 0:
+                flag[x] = 1
+                length += 1
+                x = edges[x]
+            ans = max(ans, length)
+        # print((time.time_ns() - start) / (1000 * 1000))
         return ans
 
 
