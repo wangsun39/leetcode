@@ -42,7 +42,7 @@ from collections import Counter
 from functools import lru_cache
 class Solution:
 
-    def longestPath(self, parent: List[int], s: str) -> int:
+    def longestPath1(self, parent: List[int], s: str) -> int:
         N = len(parent)
         son = [[] for _ in range(N)]
         for idx, p in enumerate(parent):
@@ -82,8 +82,33 @@ class Solution:
             maxL = max(maxL, findFrom(i))
         return maxL
 
+    def longestPath(self, parent: List[int], s: str) -> int:
+        n = len(parent)
+        graph = [[] for _ in range(n)]
+        for i, p in enumerate(parent):
+            if p == -1: continue
+            graph[i].append(p)
+            graph[p].append(i)
+        ans = 1
+        def dfs(x, fa):
+            nonlocal ans
+            mx = 0
+            for y in graph[x]:
+                if y == fa: continue
+                if s[y] == s[x]:
+                    dfs(y, x)
+                    continue
+                mx_sub = dfs(y, x)
+                ans = max(ans, mx + mx_sub + 1)
+                mx = max(mx, mx_sub)
+            return mx + 1
+        dfs(0, -1)
+        return ans
 
 
 so = Solution()
+print(so.longestPath(parent = [-1,0,1], s = "aab"))
+print(so.longestPath(parent = [-1,0,0,0], s = "aabc"))
+print(so.longestPath(parent = [-1,0,0,1,1,2], s = "abacbe"))
 
 
