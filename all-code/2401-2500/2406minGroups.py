@@ -83,7 +83,7 @@ import string
 # string.uppercase：包含所有大写字母的字符串
 
 class Solution:
-    def minGroups(self, intervals: List[List[int]]) -> int:
+    def minGroups1(self, intervals: List[List[int]]) -> int:
         intervals.sort()
         group = [intervals[0][1]]
         for iv in intervals[1:]:
@@ -93,6 +93,17 @@ class Solution:
             else:
                 bisect.insort_right(group, iv[1])
         return len(group)
+
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+        heap = [intervals[0][1]]
+        for it in intervals[1:]:
+            if heap[0] >= it[0]:
+                heapq.heappush(heap, it[1])
+            else:
+                heapq.heappop(heap)
+                heapq.heappush(heap, it[1])
+        return len(heap)
 
 so = Solution()
 print(so.minGroups([[1,3],[5,6],[8,10],[11,13]]))
