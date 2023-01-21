@@ -1,6 +1,8 @@
+import bisect
 import math
+from typing import List
 class Solution:
-    def lengthOfLIS(self, nums):
+    def lengthOfLIS1(self, nums):
         number = len(nums)
         if number == 0:
             return 0
@@ -19,6 +21,28 @@ class Solution:
                 A[i] = max_v
         print(A)
         return max(A)
+
+    def lengthOfLIS2(self, nums: List[int]) -> int:
+        # 2023/1/20  一维DP  O(n^2)
+        n = len(nums)
+        dp = [1] * n  # dp[i] 表示以 nums[:i+1] 中的最长递增子序列长度
+        for i, x in enumerate(nums):
+            cur_mx = 1
+            for j in range(i):
+                if x > nums[j]:
+                    cur_mx = max(cur_mx, dp[j] + 1)
+            dp[i] = cur_mx
+        return max(dp)
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        # 2023/1/20  单调栈 + 二分  O(nlogn)
+        stack = [nums[0]]  # 单调栈
+        for i, x in enumerate(nums):
+            if len(stack) == 0 or x > stack[-1]:
+                stack.append(x)
+                continue
+            pos = bisect.bisect_left(stack, x)
+            stack[pos] = x
+        return len(stack)
 
 
 

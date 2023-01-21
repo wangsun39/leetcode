@@ -32,7 +32,7 @@
 
 
 class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
+    def isSubsequence1(self, s: str, t: str) -> bool:
         if 0 == len(s):
             return True
         if len(s) > len(t):
@@ -45,6 +45,17 @@ class Solution:
             idx = pos + 1
         return True
 
+    def isSubsequence(self, s: str, t: str) -> bool:
+        # 2023/1/20  双指针
+        i = j = 0
+        ns, nt = len(s), len(t)
+        while i < ns and j < nt:
+            if s[i] == t[j]:
+                i += 1
+                j += 1
+            else:
+                j += 1
+        return i == ns
 
 so = Solution()
 print(so.isSubsequence("aaaaaa", "bbaaaa"))
