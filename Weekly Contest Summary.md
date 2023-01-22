@@ -1,5 +1,6 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2023-1-22| 第329场周赛  | Q4  | [拆分数组的最小代价](https://leetcode.cn/problems/minimum-cost-to-split-an-array/) |       | 大年初一，AK <br> 这题用了记忆化回朔，性能不是很高O(n^2)。要学习一下DP的方法，也是O(n^2)，会有一定的提升|
 |2023-1-15| 第328场周赛  | Q3  | [统计好子数组的数目](https://leetcode.cn/problems/count-the-number-of-good-subarrays/) |       | 本周只做出来两题，很郁闷 <br> 这题开始想了好几种方法，都是错的。最后也想到了用双指针，但就是没有通过，赛后后来发现了代码的一处问题，还是基本功不扎实|
 |2023-1-15| 第328场周赛  | Q4  | [最大价值和与最小价值和的差值](https://leetcode.cn/problems/difference-between-maximum-and-minimum-price-sum/) |       | 这题完全没时间想 |
 |2023-1-8| 第327场周赛  | Q3  | [使字符串总不同字符的数目相等](https://leetcode.cn/problems/make-number-of-distinct-characters-equal/) |   1776    | 这题在比赛中花了近一个小时，WA了3次，考虑分类讨论，想的复杂了。4分的难度不应该想的太复杂 |
