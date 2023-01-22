@@ -18,7 +18,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-import math
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -50,6 +50,7 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
+# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List
@@ -98,19 +99,20 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def differenceOfSum(self, nums: List[int]) -> int:
-        s1 = sum(nums)
-        s2 = 0
-        for num in nums:
-            while num > 0:
-                s2 += (num % 10)
-                num //= 10
-        return abs(s1 - s2)
+    def alternateDigitSum(self, n: int) -> int:
+        s = str(n)
+        sign = 1
+        ans = 0
+        for ss in s:
+            ans += (int(ss) * sign)
+            sign = -sign
+        return ans
 
 
 so = Solution()
-print(so.differenceOfSum([1,15,6,3]))
-print(so.differenceOfSum([1,2,3,4]))
+print(so.alternateDigitSum(521))
+print(so.alternateDigitSum(111))
+print(so.alternateDigitSum(886996))
 
 
 

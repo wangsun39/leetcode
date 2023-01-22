@@ -18,7 +18,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-import math
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -50,6 +50,7 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
+# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List
@@ -98,12 +99,36 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minCost(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        len_trim = [[0] * n for _ in range(n)]
+        for i in range(n):
+            counter = Counter()
+            counter[nums[i]] = 1
+            for j in range(i + 1, n):
+                len_trim[i][j] = len_trim[i][j - 1]
+                counter[nums[j]] += 1
+                if counter[nums[j]] == 2:
+                    len_trim[i][j] += 2
+                elif counter[nums[j]] > 2:
+                    len_trim[i][j] += 1
+        # print(len_trim)
+        @cache
+        def dfs(i, j):   # [i, j)
+            if i + 1 > j: return 0
+            res = inf
+            for t in range(i, j):  # [i, t]  (t, j)
+                res = min(res, k + len_trim[i][t] + dfs(t + 1, j))
+            # print(i, j, res)
+            return res
+        return dfs(0, n)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minCost(nums = [1,2,1,2,1], k = 5))
+print(so.minCost(nums = [1,2,1], k = 2))
+print(so.minCost(nums = [1,2,1,2,1], k = 2))
+print(so.minCost(nums = [1,2,1,2,1,3,3], k = 2))
 
 
 

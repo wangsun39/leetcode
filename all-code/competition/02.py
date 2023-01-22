@@ -18,7 +18,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-import math
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -50,6 +50,7 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
+# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List
@@ -98,30 +99,23 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
-        mat = [[0] * n for _ in range(n)]
-        def add(r1, c1, r2, c2):
-            for i in range(r1, r2 + 1):
-                mat[i][c1] += 1
-                if c2 + 1 < n:
-                    mat[i][c2 + 1] -= 1
-            # print("mat:", mat)
-        for x1, y1, x2, y2 in queries:
-            add(x1, y1, x2, y2)
-        ans = [[0] * n for _ in range(n)]
-        for i in range(n):
-            for j in range(n):
-                if j == 0:
-                    ans[i][j] = mat[i][j]
-                else:
-                    ans[i][j] = ans[i][j - 1] + mat[i][j]
+    def sortTheStudents1(self, score: List[List[int]], k: int) -> List[List[int]]:
+        array = [[x[k], i] for i, x in enumerate(score)]
+        array.sort(reverse=True)
+        ans = []
+        for x, y in array:
+            ans.append(score[y])
         return ans
 
+    def sortTheStudents(self, score: List[List[int]], k: int) -> List[List[int]]:
+        # 更简洁的做法
+        score.sort(key=lambda x: x[k], reverse=True)
+        return score
 
 
 so = Solution()
-print(so.rangeAddQueries(n = 3, queries = [[1,1,2,2],[0,0,1,1]]))
-print(so.rangeAddQueries(n = 2, queries = [[0,0,1,1]]))
+print(so.sortTheStudents(score = [[10,6,9,1],[7,5,11,2],[4,8,3,15]], k = 2))
+print(so.sortTheStudents(score = [[3,4],[5,6]], k = 0))
 
 
 
