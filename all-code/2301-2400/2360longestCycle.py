@@ -138,6 +138,33 @@ class Solution:
         # print((time.time_ns() - start) / (1000 * 1000))
         return ans
 
+    def longestCycle(self, edges: List[int]) -> int:
+        def buildTopo(conditions, n):
+            pre = set(i for i in range(n))
+            for x, y in enumerate(conditions):
+                if y != -1:
+                    pre[y].add(x)
+            return [pre[x] for x in pre]
+
+
+        n = len(edges)
+        left = buildTopo(edges, n)
+
+        if len(left) == 0: return -1
+        ans = 0
+        while len(left):
+            x = left[0]
+            left.remove(x)
+            length = 0
+            while True:
+                y = edges[x]
+                length += 1
+                if y not in left: break
+                left.remove(y)
+                x = y
+            ans = max(ans, length)
+        return ans
+
 
 
 
