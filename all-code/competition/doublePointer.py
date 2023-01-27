@@ -36,49 +36,23 @@ import heapq
 
 from functools import lru_cache
 from typing import List
-# @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()
-# value = int(s, 2)
 
 
+from math import *
 
-class Trie:
-
-    def __init__(self):
-        self.root = {}
-
-    def insert(self, word: str) -> None:  # O(log(len(word)))
-        cur = self.root
-        for e in word:
-            if e not in cur:
-                cur[e] = {}
-            cur = cur[e]
-        cur['end'] = True
-
-
-    def search(self, word: str) -> bool:
-        cur = self.root
-        for e in word:
-            if e in cur:
-                cur = cur[e]
-            else:
-                return False
-        return 'end' in cur
-
-
-
-    def startsWith(self, prefix: str) -> bool:
-        cur = self.root
-        for e in prefix:
-            if e in cur:
-                cur = cur[e]
-            else:
-                return False
-        return True
-
-# print(so.removeDigit(123456))
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        left = 0
+        s = 0  # [left, right] 的和
+        ans = inf
+        for right, x in enumerate(nums):
+            s += x
+            if s < target: continue
+            while left <= right and s - nums[left] >= target:  # 这题可以不要 left <= right
+                s -= nums[left]
+                left += 1
+            ans = min(ans, right - left + 1)
+        return ans if ans < inf else 0
 
 
 

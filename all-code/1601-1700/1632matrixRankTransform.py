@@ -63,7 +63,7 @@ class Solution:
         row_val, col_val = [-inf] * row, [-inf] * col  # 根据已计算出秩的元素，对应的矩阵行列的元素最大值
         row_rank, col_rank = [1] * row, [1] * col
 
-        def proc(val, s): # 集合 s 中的点在matrix中的值都相同，并且这些点都在一个并查集中
+        def proc(val, s): # list s 中的点在matrix中的值都相同，并且这些点都在一个并查集中
             mx_rank = 0
             for ss in s:
                 x, y = ss // col, ss % col

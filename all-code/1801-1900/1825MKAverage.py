@@ -57,7 +57,7 @@ class MKAverage:
 
     def __init__(self, m: int, k: int):
         self.m, self.k = m, k
-        self.last_m = deque([])
+        self.last_m = deque([])  # 最近放入的 m 个数字
         self.sorted_m = SortedList([])
         self.sum = 0
         self.lo, self.hi = self.k, self.m - self.k - 1  # 中间部分为下标区间[self.lo, self.hi]
