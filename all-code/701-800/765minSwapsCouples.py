@@ -48,7 +48,9 @@ class Solution:
             pos_p = d[p]  # 对象的位置
 
             row[i + 1], row[pos_p] = p, row[i + 1]
-            d[row[i + 1]], d[p] = pos_p, i + 1
+            d[row[pos_p]], d[p] = pos_p, i + 1
+            print(row)
+            print(d)
             ans += 1
 
         return ans
@@ -77,7 +79,7 @@ class Solution:
 
 
 so = Solution()
-print(so.minSwapsCouples(row = [0,2,4,6,7,1,3,5]))  # 3
+print(so.minSwapsCouples1(row = [0,2,4,6,7,1,3,5]))  # 3
 print(so.minSwapsCouples(row = [0,2,1,3]))  # 1
 print(so.minSwapsCouples(row = [3,2,0,1]))  # 0
 

@@ -75,6 +75,7 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
+# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -99,23 +100,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def sortTheStudents1(self, score: List[List[int]], k: int) -> List[List[int]]:
-        array = [[x[k], i] for i, x in enumerate(score)]
-        array.sort(reverse=True)
-        ans = []
-        for x, y in array:
-            ans.append(score[y])
-        return ans
-
-    def sortTheStudents(self, score: List[List[int]], k: int) -> List[List[int]]:
-        # 更简洁的做法
-        score.sort(key=lambda x: x[k], reverse=True)
-        return score
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.sortTheStudents(score = [[10,6,9,1],[7,5,11,2],[4,8,3,15]], k = 2))
-print(so.sortTheStudents(score = [[3,4],[5,6]], k = 0))
+print(so.removeDigit())
 
 
 

@@ -75,6 +75,7 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
+# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -99,21 +100,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def makeStringsEqual(self, s: str, target: str) -> bool:
-        cs1, cs0 = s.count('1'), s.count('0')
-        ct1, ct0 = target.count('1'), target.count('0')
-        if cs1 > ct1:
-            return ct1 > 0
-        if cs1 < ct1:
-            return cs1 > 0
-        return True
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.makeStringsEqual(s = "1111", target = "1110"))
-print(so.makeStringsEqual(s = "00", target = "01"))
-print(so.makeStringsEqual(s = "11", target = "00"))
-print(so.makeStringsEqual(s = "1010", target = "0110"))
+print(so.removeDigit())
 
 
 

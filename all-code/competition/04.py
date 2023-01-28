@@ -75,6 +75,7 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
+# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -99,36 +100,12 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minCost(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        len_trim = [[0] * n for _ in range(n)]
-        for i in range(n):
-            counter = Counter()
-            counter[nums[i]] = 1
-            for j in range(i + 1, n):
-                len_trim[i][j] = len_trim[i][j - 1]
-                counter[nums[j]] += 1
-                if counter[nums[j]] == 2:
-                    len_trim[i][j] += 2
-                elif counter[nums[j]] > 2:
-                    len_trim[i][j] += 1
-        # print(len_trim)
-        @cache
-        def dfs(i, j):   # [i, j)
-            if i + 1 > j: return 0
-            res = inf
-            for t in range(i, j):  # [i, t]  (t, j)
-                res = min(res, k + len_trim[i][t] + dfs(t + 1, j))
-            # print(i, j, res)
-            return res
-        return dfs(0, n)
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minCost(nums = [1,2,1,2,1], k = 5))
-print(so.minCost(nums = [1,2,1], k = 2))
-print(so.minCost(nums = [1,2,1,2,1], k = 2))
-print(so.minCost(nums = [1,2,1,2,1,3,3], k = 2))
+print(so.removeDigit())
 
 
 

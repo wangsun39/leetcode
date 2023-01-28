@@ -75,7 +75,6 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
-# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -100,12 +99,20 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def alternateDigitSum(self, n: int) -> int:
+        s = str(n)
+        sign = 1
+        ans = 0
+        for ss in s:
+            ans += (int(ss) * sign)
+            sign = -sign
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.alternateDigitSum(521))
+print(so.alternateDigitSum(111))
+print(so.alternateDigitSum(886996))
 
 
 
