@@ -1,5 +1,6 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
+|2023-1-29| 第330场周赛  | Q4  | [统计上升四元组](https://leetcode.cn/contest/weekly-contest-330/problems/count-increasing-quadruplets/) |       | 前三题半小时多一点完成，第三题还有点小思维 <br> 这题就比较大思维了，没能想出来，需要枚举中间两个数，在分别统计第一个数和最后一个数的所有可能，这题还是属于做题少，没怎么见过的问题|
 |2023-1-22| 第329场周赛  | Q4  | [拆分数组的最小代价](https://leetcode.cn/problems/minimum-cost-to-split-an-array/) |       | 大年初一，AK <br> 这题用了记忆化回溯法，性能不是很高O(n^2)。要学习一下DP的方法，也是O(n^2)，会有一定的提升|
 |2023-1-15| 第328场周赛  | Q3  | [统计好子数组的数目](https://leetcode.cn/problems/count-the-number-of-good-subarrays/) |  1891     | 本周只做出来两题，很郁闷 <br> 这题开始想了好几种方法，都是错的。最后也想到了用双指针，但就是没有通过，赛后后来发现了代码的一处问题，还是基本功不扎实|
 |2023-1-15| 第328场周赛  | Q4  | [最大价值和与最小价值和的差值](https://leetcode.cn/problems/difference-between-maximum-and-minimum-price-sum/) |  2397     | 这题完全没时间想 |
