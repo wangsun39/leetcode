@@ -145,7 +145,7 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minCost(self, nums: List[int], k: int) -> int:
+    def minCost1(self, nums: List[int], k: int) -> int:
         n = len(nums)
         len_trim = [[0] * n for _ in range(n)]
         for i in range(n):
@@ -169,12 +169,29 @@ class Solution:
             return res
         return dfs(0, n)
 
+    def minCost(self, nums: List[int], k: int) -> int:
+        # DP
+        n = len(nums)
+        dp = [inf] * (n + 1)  # dp[i] 表示 nums[:i] 的最小代价
+        dp[0] = 0
+        for i in range(1, n + 1):
+            counter = Counter()
+            s = 0
+            for j in range(i - 1, -1, -1):  # 计算 nums[j + 1] ... nums[i] 这段的重要性
+                counter[nums[j]] += 1
+                if counter[nums[j]] == 2:
+                    s += 2
+                elif counter[nums[j]] > 2:
+                    s += 1
+                dp[i] = min(dp[i], dp[j] + k + s)  # dp[i] = min(dp[i], dp[j] + k + 子数组 nums[j: i] 的重要性
+        return dp[-1]
+
 
 so = Solution()
-print(so.minCost(nums = [1,2,1,2,1], k = 5))
-print(so.minCost(nums = [1,2,1], k = 2))
-print(so.minCost(nums = [1,2,1,2,1], k = 2))
-print(so.minCost(nums = [1,2,1,2,1,3,3], k = 2))
+print(so.minCost(nums = [1,2,1,2,1], k = 5))  # 10
+print(so.minCost(nums = [1,2,1], k = 2))  #
+print(so.minCost(nums = [1,2,1,2,1], k = 2))  # 6
+print(so.minCost(nums = [1,2,1,2,1,3,3], k = 2))  # 8
 
 
 

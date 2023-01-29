@@ -100,12 +100,26 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def distinctIntegers(self, n: int) -> int:
+        s = set()
+        s.add(n)
+        cnt = 1
+        while cnt < 10 ** 9:
+            s2 = set()
+            for ss in s:
+                for i in range(1, ss):
+                    if ss % i == 1:
+                        s2.add(i)
+            s2 = s | s2
+            if len(s2) == len(s):
+                return len(s2)
+            s = s2
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.distinctIntegers(5))
+print(so.distinctIntegers(3))
 
 
 

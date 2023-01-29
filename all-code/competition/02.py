@@ -100,12 +100,13 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def monkeyMove(self, n: int) -> int:
+        MOD = 10 ** 9 + 7
+        return (int(pow(2, n, MOD)) + MOD - 2) % MOD
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.monkeyMove(3))
 
 
 

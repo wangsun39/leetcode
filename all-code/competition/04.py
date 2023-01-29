@@ -100,12 +100,34 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countQuadruplets(self, nums: List[int]) -> int:
+        n = len(nums)
+        gt = [[0] * n for _ in range(n)]  # gt[i][j] 在 [i, n) 中，比 nums[j] 大的元素个数， j < i
+        for j in range(n):
+            for i in range(n - 1, j, -1):
+                if i + 1 < n:
+                    gt[i][j] = gt[i + 1][j] + (nums[i] > nums[j])
+                else:
+                    gt[i][j] = int(nums[i] > nums[j])
+        lt = [[0] * n for _ in range(n)]  # lt[i][j] 在 [0, i) 中，比 nums[j] 小的元素个数  i < j
+        for j in range(n):
+            for i in range(j):
+                if i > 0:
+                    lt[i][j] = lt[i - 1][j] + (nums[i] < nums[j])
+                else:
+                    lt[i][j] = int(nums[i] < nums[j])
+
+        ans = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                if nums[i] - nums[j] > 0:
+                    ans += lt[i][j] * gt[j][i]
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countQuadruplets([1,3,2,4,5]))   # 2
+print(so.countQuadruplets([1,2,3,4]))   # 0
 
 
 

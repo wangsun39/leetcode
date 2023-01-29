@@ -100,12 +100,23 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def putMarbles(self, weights: List[int], k: int) -> int:
+        if k == 1: return 0
+        n = len(weights)
+        adj = []
+        for i in range(1, n):
+            adj.append(weights[i - 1] + weights[i])
+        mn_l = sorted(adj)
+        mx_l = mn_l[::-1]
+        s1 = sum(mn_l[: k - 1])
+        s2 = sum(mx_l[: k - 1])
+        return s2 - s1
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.putMarbles(weights = [1,3,5,1], k = 2))
+print(so.putMarbles(weights = [1, 3], k = 2))
 
 
 
