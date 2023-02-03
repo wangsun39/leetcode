@@ -79,11 +79,10 @@ class Solution:
 
 
 
-
 so = Solution()
 
-print(so.maxScore([1,2,3,4,5,6]))   # 14
 print(so.maxScore([3,4,6,8]))   # 11
+print(so.maxScore([1,2,3,4,5,6]))   # 14
 print(so.maxScore([1,2]))   # 1
 
 
