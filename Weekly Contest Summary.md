@@ -1,7 +1,8 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2023-1-29| 第330场周赛  | Q4  | [统计上升四元组](https://leetcode.cn/contest/weekly-contest-330/problems/count-increasing-quadruplets/) |       | 前三题半小时多一点完成，第三题还有点小思维 <br> 这题就比较大思维了，没能想出来，需要枚举中间两个数，在分别统计第一个数和最后一个数的所有可能，这题还是属于做题少，没怎么见过的问题|
-|2023-1-22| 第329场周赛  | Q4  | [拆分数组的最小代价](https://leetcode.cn/problems/minimum-cost-to-split-an-array/) |       | 大年初一，AK <br> 这题用了记忆化回溯法，性能不是很高O(n^2)。要学习一下DP的方法，也是O(n^2)，会有一定的提升|
+|2023-2-5| 第331场周赛  | Q4  | [重排水果](https://leetcode.cn/problems/rearranging-fruits/) |       | 前三题20多分钟做完，第三题用了二分法<br>这题想到了大致的方法，有个陷阱在WA后，也有了解决的方法，但因为有个考虑错误的地方（不应该把两个diff数组混在一起排序），一直到最后都没有通过，由于是最后一个用例不过，比赛时也不给看用例是啥样子（当然看了用处也不大，用例太长）|
+|2023-1-29| 第330场周赛  | Q4  | [统计上升四元组](https://leetcode.cn/problems/count-increasing-quadruplets/) |   2432    | 前三题半小时多一点完成，第三题还有点小思维 <br> 这题就比较大思维了，没能想出来，需要枚举中间两个数，在分别统计第一个数和最后一个数的所有可能，这题还是属于做题少，没怎么见过的问题|
+|2023-1-22| 第329场周赛  | Q4  | [拆分数组的最小代价](https://leetcode.cn/problems/minimum-cost-to-split-an-array/) |   2019    | 大年初一，AK <br> 这题用了记忆化回溯法，性能不是很高O(n^2)。要学习一下DP的方法，也是O(n^2)，会有一定的提升|
 |2023-1-15| 第328场周赛  | Q3  | [统计好子数组的数目](https://leetcode.cn/problems/count-the-number-of-good-subarrays/) |  1891     | 本周只做出来两题，很郁闷 <br> 这题开始想了好几种方法，都是错的。最后也想到了用双指针，但就是没有通过，赛后后来发现了代码的一处问题，还是基本功不扎实|
 |2023-1-15| 第328场周赛  | Q4  | [最大价值和与最小价值和的差值](https://leetcode.cn/problems/difference-between-maximum-and-minimum-price-sum/) |  2397     | 这题完全没时间想 |
 |2023-1-8| 第327场周赛  | Q3  | [使字符串总不同字符的数目相等](https://leetcode.cn/problems/make-number-of-distinct-characters-equal/) |   1776    | 这题在比赛中花了近一个小时，WA了3次，考虑分类讨论，想的复杂了。4分的难度不应该想的太复杂 |
