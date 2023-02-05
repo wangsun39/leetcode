@@ -1,4 +1,4 @@
-
+import heapq
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -100,26 +100,21 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def distinctIntegers(self, n: int) -> int:
-        s = set()
-        s.add(n)
-        cnt = 1
-        while cnt < 10 ** 9:
-            s2 = set()
-            for ss in s:
-                for i in range(1, ss):
-                    if ss % i == 1:
-                        s2.add(i)
-            s2 = s | s2
-            if len(s2) == len(s):
-                return len(s2)
-            s = s2
-
+    def pickGifts(self, gifts: List[int], k: int) -> int:
+        q = []
+        heapify(q)
+        for g in gifts:
+            heappush(q, -g)
+        while k > 0:
+            x = int((-heappop(q)) ** 0.5)
+            heappush(q, -x)
+            k -= 1
+        return -sum(q)
 
 
 so = Solution()
-print(so.distinctIntegers(5))
-print(so.distinctIntegers(3))
+print(so.pickGifts(gifts = [25,64,9,4,100], k = 4))
+print(so.pickGifts(gifts = [1,1,1,1], k = 4))
 
 
 

@@ -18,7 +18,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -100,13 +100,24 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def monkeyMove(self, n: int) -> int:
-        MOD = 10 ** 9 + 7
-        return (int(pow(2, n, MOD)) + MOD - 2) % MOD
+    def vowelStrings(self, words: List[str], queries: List[List[int]]) -> List[int]:
+        pre = [0]
+        for word in words:
+            if word[0] in 'aeiou' and word[-1] in 'aeiou':
+                pre.append(pre[-1] + 1)
+            else:
+                pre.append(pre[-1])
+        # print(pre)
+        ans = []
+        for i, j in queries:
+            ans.append(pre[j + 1] - pre[i])
+        return ans
+
 
 
 so = Solution()
-print(so.monkeyMove(3))
+print(so.vowelStrings(words = ["aba","bcb","ece","aa","e"], queries = [[0,2],[1,4],[1,1]]))
+print(so.vowelStrings(words = ["a","e","i"], queries = [[0,2],[0,1],[2,2]]))
 
 
 

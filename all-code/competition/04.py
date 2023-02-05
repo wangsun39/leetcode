@@ -100,34 +100,41 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countQuadruplets(self, nums: List[int]) -> int:
-        n = len(nums)
-        gt = [[0] * n for _ in range(n)]  # gt[i][j] 在 [i, n) 中，比 nums[j] 大的元素个数， j < i
-        for j in range(n):
-            for i in range(n - 1, j, -1):
-                if i + 1 < n:
-                    gt[i][j] = gt[i + 1][j] + (nums[i] > nums[j])
-                else:
-                    gt[i][j] = int(nums[i] > nums[j])
-        lt = [[0] * n for _ in range(n)]  # lt[i][j] 在 [0, i) 中，比 nums[j] 小的元素个数  i < j
-        for j in range(n):
-            for i in range(j):
-                if i > 0:
-                    lt[i][j] = lt[i - 1][j] + (nums[i] < nums[j])
-                else:
-                    lt[i][j] = int(nums[i] < nums[j])
-
+    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
+        c1, c2 = Counter(basket1), Counter(basket2)
+        c = c1 + c2
+        for v in c.values():
+            if v & 1:
+                return -1
+        mn = min(c)
+        d1, d2 =[], []
+        for k, v in c1.items():
+            if v <= c[k] // 2:
+                continue
+            d1.extend([k] * (v - c[k] // 2))
+        for k, v in c2.items():
+            if v <= c[k] // 2:
+                continue
+            d2.extend([k] * (v - c[k] // 2))
+        d1.sort()
+        d2.sort(reverse=True)
         ans = 0
-        for i in range(n):
-            for j in range(i + 1, n):
-                if nums[i] - nums[j] > 0:
-                    ans += lt[i][j] * gt[j][i]
+        for i in range(len(d1)):
+            ans += min(d1[i], d2[i], mn * 2)
         return ans
 
 
+
+
+
+
+
 so = Solution()
-print(so.countQuadruplets([1,3,2,4,5]))   # 2
-print(so.countQuadruplets([1,2,3,4]))   # 0
+print(so.minCost([4,4,4,4,4,4], [1,1,5,5,2,2]))
+print(so.minCost([84,80,43,8,80,88,43,14,100,88], [32,32,42,68,68,100,42,84,14,8]))
+print(so.minCost([5,8,15,7], [5,7,8,15]))
+print(so.minCost(basket1 = [4,2,2,2], basket2 = [1,4,1,2]))
+print(so.minCost(basket1 = [2,3,4,1], basket2 = [3,2,5,1]))
 
 
 
