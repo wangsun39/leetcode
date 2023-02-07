@@ -100,30 +100,43 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPartitions(self, nums: List[int], k: int) -> int:
-        MOD = 10 ** 9 + 7
-        s = sum(nums)
-        if s < 2 * k: return 0
-        n = len(nums)
-        dp = [[0] * (1000) for _ in range(n)]  # dp[i][j]  前 i + 1 个数中和 == j 的子集个数
-        dp[0][0] = 1   # 空集
-        if nums[0] < 1000: dp[0][nums[0]] = 1
-        for i in range(1, n):
-            for j in range(1000):
-                dp[i][j] = dp[i - 1][j]
-                if nums[i] <= j:
-                    dp[i][j] += dp[i - 1][j - nums[i]]
-        total = pow(2, n, MOD) + MOD
-        return (total - sum(dp[-1][:k]) * 2) % MOD
+    def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
+        n = len(costs)
+        left, right = candidates - 1, n - candidates
+        heap = []
+        for i in range(n):
+            if i < candidates or i > n - 1 - candidates:
+                heappush(heap, [costs[i], i])
+        ans = 0
+        print(n)
+        for i in range(k):
+            x, y = heappop(heap)
+            print(i, x, y)
+            ans += x
+            if left >= right - 1:
+                continue
+            if y <= left:
+                if costs[left + 1] == 80:
+                    pass
+                heappush(heap, [costs[left + 1], left + 1])
+                left += 1
+            else:
+                if costs[right - 1] == 80:
+                    pass
+                heappush(heap, [costs[right - 1], right - 1])
+                right -= 1
+        return ans
+
 
 
 
 so = Solution()
-print(so.countPartitions([73,16,86,25,98,92,15,11,87,88,88,94,83,74,1,48,91,9,45], 61))
-print(so.countPartitions([96,40,22,98,9,97,45,22,79,57,95,62], 505))
-print(so.countPartitions(nums = [1,2,3,4], k = 4))
-print(so.countPartitions(nums = [3,3,3], k = 4))
-print(so.countPartitions(nums = [6,6], k = 2))
+print(so.totalCost([28,35,21,13,21,72,35,52,74,92,25,65,77,1,73,32,43,68,8,100,84,80,14,88,42,53,98,69,64,40,60,23,99,83,5,21,76,34],
+32,
+12))
+print(so.totalCost([31,25,72,79,74,65,84,91,18,59,27,9,81,33,17,58],11,2))
+print(so.totalCost(costs = [17,12,10,2,7,2,11,20,8], k = 3, candidates = 4))
+print(so.totalCost(costs = [1,2,4,1], k = 3, candidates = 3))
 
 
 
