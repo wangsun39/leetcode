@@ -1,5 +1,5 @@
 
-class Solution:
+class Solution1:
     def removeSubfolders1(self, folders):
         res = []
         for folder in folders:
@@ -39,6 +39,42 @@ class Solution:
         return res
 
 
+# 2023/2/8  前缀树法
+class Trie:
+
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word: list) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {}
+            cur = cur[e]
+        cur['end'] = True
+
+
+    def judge(self, word: list) -> bool:
+        cur = self.root
+        n = len(word)
+        for i in range(n):
+            if 'end' in cur:
+                return False
+            cur = cur[word[i]]
+        return True
+
+class Solution:
+    def removeSubfolders(self, folder: List[str]) -> List[str]:
+        tr = Trie()
+        for f in folder:
+            l = f.split('/')
+            tr.insert(l[1:])
+        ans = []
+        for f in folder:
+            l = f.split('/')
+            if tr.judge(l[1:]):
+                ans.append(f)
+        return ans
 
 obj = Solution()
 print(obj.removeSubfolders(["/aa/ab/ac/ae","/aa/ab/af/ag","/ap/aq/ar/as","/ap/aq/ar","/ap/ax/ay/az","/ap","/ap/aq/ar/at","/aa/ab/af/ah","/aa/ai/aj/ak","/aa/ai/am/ao"]))

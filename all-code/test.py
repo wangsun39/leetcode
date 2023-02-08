@@ -100,43 +100,35 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
-        n = len(costs)
-        left, right = candidates - 1, n - candidates
-        heap = []
-        for i in range(n):
-            if i < candidates or i > n - 1 - candidates:
-                heappush(heap, [costs[i], i])
-        ans = 0
-        print(n)
-        for i in range(k):
-            x, y = heappop(heap)
-            print(i, x, y)
-            ans += x
-            if left >= right - 1:
-                continue
-            if y <= left:
-                if costs[left + 1] == 80:
-                    pass
-                heappush(heap, [costs[left + 1], left + 1])
-                left += 1
-            else:
-                if costs[right - 1] == 80:
-                    pass
-                heappush(heap, [costs[right - 1], right - 1])
-                right -= 1
+    def cycleLengthQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        def calc(x, y):
+            px, py = [], []
+            dx, dy = {}, {}
+            i = 0
+            while x > 0:
+                px.append(x)
+                dx[x] = i
+                x //= 2
+                i += 1
+            i = 0
+            while y > 0:
+                py.append(y)
+                dy[y] = i
+                y //= 2
+                i += 1
+            for z in px:
+                if z in dy:
+                    return dx[z] + dy[z] + 1
+        ans = []
+        for x, y in queries:
+            ans.append(calc(x, y))
         return ans
 
 
-
-
 so = Solution()
-print(so.totalCost([28,35,21,13,21,72,35,52,74,92,25,65,77,1,73,32,43,68,8,100,84,80,14,88,42,53,98,69,64,40,60,23,99,83,5,21,76,34],
-32,
-12))
-print(so.totalCost([31,25,72,79,74,65,84,91,18,59,27,9,81,33,17,58],11,2))
-print(so.totalCost(costs = [17,12,10,2,7,2,11,20,8], k = 3, candidates = 4))
-print(so.totalCost(costs = [1,2,4,1], k = 3, candidates = 3))
+print(so.cycleLengthQueries(n = 5, queries = [[17,21],[23,5],[15,7],[3,21],[31,9],[5,15],[11,2],[19,7]]))
+print(so.cycleLengthQueries(n = 3, queries = [[5,3],[4,7],[2,3]]))
+print(so.cycleLengthQueries(n = 2, queries = [[1,2]]))
 
 
 

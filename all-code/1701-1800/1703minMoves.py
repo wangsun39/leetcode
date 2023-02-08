@@ -32,7 +32,7 @@
 # Definition for a binary tree node.
 from typing import List
 class Solution:
-    def minMoves(self, nums: List[int], k: int) -> int:
+    def minMoves1(self, nums: List[int], k: int) -> int:
         idx = [i for i, e in enumerate(nums) if e == 1]
         l_idx = len(idx)
         # idx 数组进行长度为k的滑动窗口
@@ -64,12 +64,48 @@ class Solution:
                 ans = min(ans, r - l)
             return ans - k * k // 4
 
+    def minMoves(self, nums: List[int], k: int) -> int:
+        # 2023/2/8
+        # 用灵神的解法 https://leetcode.cn/problems/minimum-adjacent-swaps-for-k-consecutive-ones/solution/tu-jie-zhuan-huan-cheng-zhong-wei-shu-ta-iz4v/
+        pi = []  # pi 记录所有1下标的前j
+        j = 0
+        for i, x in enumerate(nums):
+            if x == 1:
+                pi.append(i - j)
+                j += 1
+        n = len(pi)
+        if k & 1:
+            mid = (k - 1) // 2
+            l = sum(pi[mid] - x for x in pi[:mid])
+            r = sum(x - pi[mid] for x in pi[mid + 1: k])
+            ans = cur = l + r
+            begin, end = 0, k - 1
+            for _ in range(n - k):
+                cur += (-(pi[mid] - pi[begin]) + (pi[end + 1] - pi[mid + 1]))
+                ans = min(ans, cur)
+                begin += 1
+                end += 1
+                mid += 1
+        else:
+            mid = (k - 1) // 2
+            l = sum(pi[mid] - x for x in pi[:mid])
+            r = sum(x - pi[mid] for x in pi[mid + 1: k])
+            ans = cur = l + r
+            begin, end = 0, k - 1
+            for _ in range(n - k):
+                cur += (-(pi[mid] - pi[begin]) + (pi[end + 1] - pi[mid + 1]) - (pi[mid + 1] -pi[mid]))
+                ans = min(ans, cur)
+                begin += 1
+                end += 1
+                mid += 1
+        return ans
+
 so = Solution()
 
+print(so.minMoves(nums = [1,0,0,1,0,1], k = 2))  # 1
+print(so.minMoves(nums = [1,1,0,1], k = 2))  # 0
 print(so.minMoves(nums = [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1], k = 14))  # 1
 print(so.minMoves(nums = [1,0,0,1,0,1,1,1,0,1,1], k = 7))  # 6
 print(so.minMoves(nums = [1,0,0,0,0,0,1,1], k = 3))  # 5
-print(so.minMoves(nums = [1,1,0,1], k = 2))  # 0
-print(so.minMoves(nums = [1,0,0,1,0,1], k = 2))  # 1
 
 
