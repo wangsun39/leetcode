@@ -1,4 +1,40 @@
+# 给你一个整数数组 gifts ，表示各堆礼物的数量。每一秒，你需要执行以下操作：
+#
+# 选择礼物数量最多的那一堆。
+# 如果不止一堆都符合礼物数量最多，从中选择任一堆即可。
+# 选中的那一堆留下平方根数量的礼物（向下取整），取走其他的礼物。
+# 返回在 k 秒后剩下的礼物数量。
+#
+#
+#
+# 示例 1：
+#
+# 输入：gifts = [25,64,9,4,100], k = 4
+# 输出：29
+# 解释：
+# 按下述方式取走礼物：
+# - 在第一秒，选中最后一堆，剩下 10 个礼物。
+# - 接着第二秒选中第二堆礼物，剩下 8 个礼物。
+# - 然后选中第一堆礼物，剩下 5 个礼物。
+# - 最后，再次选中最后一堆礼物，剩下 3 个礼物。
+# 最后剩下的礼物数量分别是 [5,8,9,4,3] ，所以，剩下礼物的总数量是 29 。
+# 示例 2：
+#
+# 输入：gifts = [1,1,1,1], k = 4
+# 输出：4
+# 解释：
+# 在本例中，不管选中哪一堆礼物，都必须剩下 1 个礼物。
+# 也就是说，你无法获取任一堆中的礼物。
+# 所以，剩下礼物的总数量是 4 。
+#
+#
+# 提示：
+#
+# 1 <= gifts.length <= 103
+# 1 <= gifts[i] <= 109
+# 1 <= k <= 103
 
+import heapq
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -88,25 +124,33 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # SortedList.clear() 移除所有元素。时间复杂度O(n).
+    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # SortedList.bisect_left(value)
+    # SortedList.bisect_right(value)
+    # SortedList.count(value)
+    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def pickGifts(self, gifts: List[int], k: int) -> int:
+        q = []
+        heapify(q)
+        for g in gifts:
+            heappush(q, -g)
+        while k > 0:
+            x = int((-heappop(q)) ** 0.5)
+            heappush(q, -x)
+            k -= 1
+        return -sum(q)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.pickGifts(gifts = [25,64,9,4,100], k = 4))
+print(so.pickGifts(gifts = [1,1,1,1], k = 4))
 
 
 

@@ -25,11 +25,12 @@
 
 
 from typing import List
-from collections import defaultdict
+from collections import defaultdict, Counter
 from math import inf
+from sortedcontainers import SortedList
 
 class Solution:
-    def beautySum(self, s: str) -> int:
+    def beautySum1(self, s: str) -> int:
         n = len(s)
         # print(su)
         ans = 0
@@ -53,6 +54,21 @@ class Solution:
                 counter[c] -= 1
                 counter[c + 1] += 1
                 ans += (mx - mi)
+        return ans
+
+    def beautySum(self, s: str) -> int:
+        # 更新一种性能较差的方法 2023/2/11
+        n = len(s)
+        ans = 0
+        for i in range(n):
+            counter = Counter()
+            sl = SortedList()
+            for j in range(i, n):
+                if counter[s[j]] > 0:
+                    sl.remove(counter[s[j]])
+                counter[s[j]] += 1
+                sl.add(counter[s[j]])
+                ans += (sl[-1] - sl[0])
         return ans
 
 so = Solution()

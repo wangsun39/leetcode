@@ -44,10 +44,10 @@
 
 from typing import List
 from functools import cache
-
+from math import *
 
 class Solution:
-    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
+    def maximumScore1(self, nums: List[int], multipliers: List[int]) -> int:
         n, m = len(nums), len(multipliers)
         @cache
         def dfs(i, j):
@@ -61,6 +61,30 @@ class Solution:
             return max(multipliers[k] * nums[i] + dfs(i + 1, j),
                        multipliers[k] * nums[j] + dfs(i, j - 1))
         return dfs(0, n - 1)
+
+    def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:
+        # 用DP的写法 2023/2/11
+        n, m = len(nums), len(multipliers)
+        ans = -inf
+        dp = [[-inf] * (m + 1) for _ in range(m + 1)]  # dp[i][j] 表示 移除 nums 左侧i项，右侧j项，获得最大分数
+        dp[0][0] = 0
+        for i in range(m + 1):
+            for j in range(m + 1):
+                if i == j == 0:
+                    continue
+                if i + j > m:
+                    break
+                mk = multipliers[i + j - 1] # 将要使用的项
+                if i == 0:
+                    dp[i][j] = dp[i][j - 1] + mk * nums[n - j]
+                elif j == 0:
+                    dp[i][j] = dp[i - 1][j] + mk * nums[i - 1]
+                else:
+                    dp[i][j] = max(dp[i][j - 1] + mk * nums[n - j], dp[i - 1][j] + mk * nums[i - 1])
+                if i + j == m:
+                    ans = max(ans, dp[i][j])
+        # print(dp)
+        return ans
 
 
 
