@@ -88,53 +88,25 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
-        c1, c2 = Counter(basket1), Counter(basket2)
-        c = c1 + c2
-        for v in c.values():
-            if v & 1:
-                return -1
-        mn = min(c)
-        d1, d2 =[], []
-        for k, v in c1.items():
-            if v <= c[k] // 2:
-                continue
-            d1.extend([k] * (v - c[k] // 2))
-        for k, v in c2.items():
-            if v <= c[k] // 2:
-                continue
-            d2.extend([k] * (v - c[k] // 2))
-        d1.sort()
-        d2.sort(reverse=True)
-        ans = 0
-        for i in range(len(d1)):
-            ans += min(d1[i], d2[i], mn * 2)
-        return ans
-
-
-
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minCost([4,4,4,4,4,4], [1,1,5,5,2,2]))
-print(so.minCost([84,80,43,8,80,88,43,14,100,88], [32,32,42,68,68,100,42,84,14,8]))
-print(so.minCost([5,8,15,7], [5,7,8,15]))
-print(so.minCost(basket1 = [4,2,2,2], basket2 = [1,4,1,2]))
-print(so.minCost(basket1 = [2,3,4,1], basket2 = [3,2,5,1]))
+print(so.removeDigit())
 
 
 

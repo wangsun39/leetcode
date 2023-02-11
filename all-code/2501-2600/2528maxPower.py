@@ -1,3 +1,47 @@
+# 给你一个下标从 0 开始长度为 n 的整数数组 stations ，其中 stations[i] 表示第 i 座城市的供电站数目。
+#
+# 每个供电站可以在一定 范围 内给所有城市提供电力。换句话说，如果给定的范围是 r ，在城市 i 处的供电站可以给所有满足 |i - j| <= r 且 0 <= i, j <= n - 1 的城市 j 供电。
+#
+# |x| 表示 x 的 绝对值 。比方说，|7 - 5| = 2 ，|3 - 10| = 7 。
+# 一座城市的 电量 是所有能给它供电的供电站数目。
+#
+# 政府批准了可以额外建造 k 座供电站，你需要决定这些供电站分别应该建在哪里，这些供电站与已经存在的供电站有相同的供电范围。
+#
+# 给你两个整数 r 和 k ，如果以最优策略建造额外的发电站，返回所有城市中，最小供电站数目的最大值是多少。
+#
+# 这 k 座供电站可以建在多个城市。
+#
+#
+#
+# 示例 1：
+#
+# 输入：stations = [1,2,4,5,0], r = 1, k = 2
+# 输出：5
+# 解释：
+# 最优方案之一是把 2 座供电站都建在城市 1 。
+# 每座城市的供电站数目分别为 [1,4,4,5,0] 。
+# - 城市 0 的供电站数目为 1 + 4 = 5 。
+# - 城市 1 的供电站数目为 1 + 4 + 4 = 9 。
+# - 城市 2 的供电站数目为 4 + 4 + 5 = 13 。
+# - 城市 3 的供电站数目为 5 + 4 = 9 。
+# - 城市 4 的供电站数目为 5 + 0 = 5 。
+# 供电站数目最少是 5 。
+# 无法得到更优解，所以我们返回 5 。
+# 示例 2：
+#
+# 输入：stations = [4,4,4,4], r = 0, k = 3
+# 输出：4
+# 解释：
+# 无论如何安排，总有一座城市的供电站数目是 4 ，所以最优解是 4 。
+#
+#
+# 提示：
+#
+# n == stations.length
+# 1 <= n <= 105
+# 0 <= stations[i] <= 105
+# 0 <= r <= n - 1
+# 0 <= k <= 109
 
 from typing import List
 from typing import Optional
@@ -8,8 +52,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
-# list(accumulate(nums))  数组前缀和
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -18,7 +61,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -34,7 +77,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-from bisect import *
+import bisect
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -42,7 +85,7 @@ from bisect import *
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-from heapq import *
+import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -50,7 +93,6 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
-# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List
@@ -75,7 +117,6 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
-# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -111,8 +152,8 @@ class Solution:
         total = [diff[0]]  # 记录每个城市的电量
         for x in diff[1:]:
             total.append(total[-1] + x)
-        print(diff)
-        print(total)
+        # print(diff)
+        # print(total)
         def judge(t):
             acc = 0
             d = [x for x in diff]
@@ -142,13 +183,6 @@ class Solution:
         return lo
 
 
-
-
-
-so = Solution()
-print(so.maxPower(stations = [1,2,4,5,0], r = 1, k = 2))
-print(so.maxPower(stations = [4,2], r = 1, k = 1))
-print(so.maxPower(stations = [4,4,4,4], r = 0, k = 3))
 
 
 

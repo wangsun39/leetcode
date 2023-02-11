@@ -1,3 +1,43 @@
+# 给你一个下标从 0 开始的整数数组 nums 。
+#
+# 三个下标 i ，j 和 k 的 有效值 定义为 ((nums[i] | nums[j]) & nums[k]) 。
+#
+# 一个数组的 xor 美丽值 是数组中所有满足 0 <= i, j, k < n  的三元组 (i, j, k) 的 有效值 的异或结果。
+#
+# 请你返回 nums 的 xor 美丽值。
+#
+# 注意：
+#
+# val1 | val2 是 val1 和 val2 的按位或。
+# val1 & val2 是 val1 和 val2 的按位与。
+#
+#
+# 示例 1：
+#
+# 输入：nums = [1,4]
+# 输出：5
+# 解释：
+# 三元组和它们对应的有效值如下：
+# - (0,0,0) 有效值为 ((1 | 1) & 1) = 1
+# - (0,0,1) 有效值为 ((1 | 1) & 4) = 0
+# - (0,1,0) 有效值为 ((1 | 4) & 1) = 1
+# - (0,1,1) 有效值为 ((1 | 4) & 4) = 4
+# - (1,0,0) 有效值为 ((4 | 1) & 1) = 1
+# - (1,0,1) 有效值为 ((4 | 1) & 4) = 4
+# - (1,1,0) 有效值为 ((4 | 4) & 1) = 0
+# - (1,1,1) 有效值为 ((4 | 4) & 4) = 4
+# 数组的 xor 美丽值为所有有效值的按位异或 1 ^ 0 ^ 1 ^ 4 ^ 1 ^ 4 ^ 0 ^ 4 = 5 。
+# 示例 2：
+#
+# 输入：nums = [15,45,20,2,34,35,5,44,32,30]
+# 输出：34
+# 解释：数组的 xor 美丽值为 34 。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 105
+# 1 <= nums[i] <= 109
 
 from typing import List
 from typing import Optional
@@ -8,8 +48,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
-# list(accumulate(nums))  数组前缀和
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
@@ -18,7 +57,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-from math import *
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -34,7 +73,7 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-from bisect import *
+import bisect
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
@@ -42,7 +81,7 @@ from bisect import *
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-from heapq import *
+import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -50,7 +89,6 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
-# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
 from typing import List
@@ -75,7 +113,6 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
-# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -88,25 +125,24 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # SortedList.clear() 移除所有元素。时间复杂度O(n).
+    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # SortedList.bisect_left(value)
+    # SortedList.bisect_right(value)
+    # SortedList.count(value)
+    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def xorBeauty(self, nums: List[int]) -> int:
+        ans = 0
+        for x in nums:
+            ans ^= x
+        return ans
 
-
-so = Solution()
-print(so.removeDigit())
 
 
 

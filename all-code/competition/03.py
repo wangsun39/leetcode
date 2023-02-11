@@ -88,48 +88,25 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minCapability(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        def judge(cap):
-            cnt = 0
-            idx = 0
-            while idx < n:
-                if nums[idx] <= cap:
-                    cnt += 1
-                    if cnt >= k:
-                        return True
-                    idx += 2
-                else:
-                    idx += 1
-            return False
-
-
-        lo, hi = min(nums), max(nums)
-        if judge(lo): return lo
-        while lo + 1 < hi:
-            mid = (lo + hi) // 2
-            if judge(mid):
-                hi = mid
-            else:
-                lo = mid
-        return lo + 1
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minCapability(nums = [2,3,5,9], k = 2))
-print(so.minCapability(nums = [2,7,9,3,1], k = 2))
+print(so.removeDigit())
 
 
 
