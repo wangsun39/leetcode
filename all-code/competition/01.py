@@ -101,12 +101,20 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def findTheArrayConcVal(self, nums: List[int]) -> int:
+        n = len(nums)
+        ans = 0
+        for i in range(n // 2):
+            s1, s2 = str(nums[i]), str(nums[n - 1 - i])
+            ans += int(s1 + s2)
+        if n & 1:
+            ans += int(nums[n // 2])
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.findTheArrayConcVal([7,52,2,4]))
+print(so.findTheArrayConcVal([5,14,13,8,12]))
 
 
 

@@ -100,13 +100,74 @@ from sortedcontainers import SortedList
     # sl.count(value)
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
+class Trie:
+
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, idx, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {}
+            cur = cur[e]
+        if 'end' in cur:
+            cur['end'].append(idx)
+        else:
+            cur['end'] = [idx]
+
+
+    def search(self, word: str) -> list:
+        cur = self.root
+        ans = []
+        for e in word:
+            if e in cur:
+                cur = cur[e]
+                if 'end' in cur:
+                    ans += cur['end']
+            else:
+                return ans
+        return ans
+
+
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:
+        target = []
+        for x, y in queries:
+            target.append(bin(x ^ y)[2:])
+        # print(target)
+        tr = Trie()
+        for i, t in enumerate(target):
+            tr.insert(i, t)
+
+        n = len(s)
+        ans = [[-1, -1] for _ in range(len(queries))]
+        for i in range(n):
+            ids = tr.search(s[i:])
+            if len(ids) == 0:
+                continue
+            for x in ids:
+                if ans[x] != [-1, -1]:
+                    continue
+                ans[x] = [i, i + len(target[x]) - 1]
+        return ans
+
+
+        # ans = []
+        # for t in target:
+        #     pos = find(s, t)
+        #     if pos == -1:
+        #         ans.append([-1, -1])
+        #     else:
+        #         ans.append([pos, pos + len(t) - 1])
+        # return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.substringXorQueries(s = "101101", queries = [[0,5],[1,2]]))
+print(so.substringXorQueries(s = "0101", queries = [[12,8]]))
+print(so.substringXorQueries(s = "1", queries = [[4,5]]))
 
 
 

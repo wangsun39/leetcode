@@ -101,8 +101,25 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumScore(self, s: str, t: str) -> int:
+        n, m = len(s), len(t)
+        i = j = 0
+        ans = inf
+        @cache
+        def find(i, j, k):  # 查找s[i:], t[j:]的答案，之前最早删除的是t[k]
+            if j == m - 1:
+                return 0
+            if i == n - 1:
+                return m - 1 - j
+            if s[i] == t[j]:
+                return find(i + 1, j + 1)
+            res = find(i + 1, j)
+            if k == -1:
+                find(i, j + 1, j)
+            else:
+
+
+
 
 
 so = Solution()
