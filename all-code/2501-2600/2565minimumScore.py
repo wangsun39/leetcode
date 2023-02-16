@@ -139,14 +139,43 @@ from sortedcontainers import SortedList
 class Solution:
     def minimumScore(self, s: str, t: str) -> int:
         n, m = len(s), len(t)
-        
-
+        left, right = [0] * n, [0] * n  # s[:i + 1], s[n - 1 - i:] 从左右方向分别与 t 做匹配，能最长匹配的前缀的长度
+        i = 0
+        for j in range(n):
+            if j > 0:
+                left[j] = left[j - 1]
+            if s[j] != t[i]:
+                continue
+            i += 1
+            if i == m:
+                return 0
+            left[j] = i
+        left = [0] + left
+        print(left)
+        i = m - 1
+        for j in range(n - 1, -1, -1):
+            if j < n - 1:
+                right[j] = right[j + 1]
+            if s[j] != t[i]:
+                continue
+            i -= 1
+            if i == -1:
+                return 0
+            right[j] = m - 1 - i
+        right = right + [0]
+        print(right)
+        ans = m
+        for i in range(n + 1):
+            ans = min(ans, m - left[i] - right[i])
+        return ans
 
 
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumScore("abecdebe","eaebceae"))
+print(so.minimumScore(s = "abacaba", t = "bzaa"))
+print(so.minimumScore(s = "cde", t = "xyz"))
 
 
 

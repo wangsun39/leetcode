@@ -100,55 +100,31 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maxPower(self, stations: List[int], r: int, k: int) -> int:
-        n = len(stations)
-        diff = [0] * n  # 记录差分
-        for i, x in enumerate(stations):
-            start, end = max(0, i - r), i + r + 1
-            diff[start] += x
-            if end < n:
-                diff[end] -= x
-        total = [diff[0]]  # 记录每个城市的电量
-        for x in diff[1:]:
-            total.append(total[-1] + x)
-        print(diff)
-        print(total)
-        def judge(t):
-            acc = 0
-            d = [x for x in diff]
-            prefix = 0
-            for i, x in enumerate(d):
-                if prefix + x < t:
-                    delta = t - (prefix + x)
-                    acc += delta
-                    if acc > k:
-                        return False
-                    d[i] += delta
-                    if i + r * 2 + 1 < n:
-                        d[i + r * 2 + 1] -= delta
-                    prefix = t
-                else:
-                    prefix += x
-            return True
-        lo = min(total)
-        hi = lo + k
-        if judge(hi): return hi
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if judge(mid):
-                lo = mid
-            else:
-                hi = mid
-        return lo
+    def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:
+        n = len(s)
+        ans = [[-1, -1] for _ in range(len(queries))]
+        d = {}
+        for i in range(n):
+            for j in range(1, 32):
+                if s[i: i + j] not in d:
+                    d[s[i: i + j]] = i
+        for i, (x, y) in enumerate(queries):
+            val = str(bin(x ^ y))[2:]
+            m = len(val)
+            if val in d:
+                ans[i] = [d[val], d[val] + m - 1]
+        return ans
+
+
 
 
 
 
 
 so = Solution()
-print(so.maxPower(stations = [1,2,4,5,0], r = 1, k = 2))
-print(so.maxPower(stations = [4,2], r = 1, k = 1))
-print(so.maxPower(stations = [4,4,4,4], r = 0, k = 3))
+print(so.substringXorQueries(s = "1", queries = [[4,5]]))
+print(so.substringXorQueries(s = "101101", queries = [[0,5],[1,2]]))
+print(so.substringXorQueries(s = "0101", queries = [[12,8]]))
 
 
 
