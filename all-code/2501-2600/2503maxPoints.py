@@ -72,7 +72,7 @@ import bisect
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
+from heapq import *
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -129,6 +129,7 @@ from sortedcontainers import SortedList
 
 class Solution:
     def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        # 比赛中的方法，通过不了最后一个用例，可能这个用例是后加的
         row, col = len(grid), len(grid[0])
         n = len(queries)
         ans = []
@@ -166,6 +167,33 @@ class Solution:
             j = qu[i][0]
             anss[j] = ans[i]
         return anss
+
+    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        # 2023/2/18  优先队列
+        ans = [0] * len(queries)
+        r, c = len(grid), len(grid[0])
+        dir = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+        nextq = [[grid[0][0], 0, 0]]
+        heapify(nextq)
+        vis = {(0, 0)}
+        s = 0
+        def helper(val):
+            nonlocal s
+            while len(nextq) and nextq[0][0] < val:
+                v, x, y = heappop(nextq)
+                # vis.add((x, y))
+                s += 1
+                for u, v in dir:
+                    xx, yy = x + u, y + v
+                    if 0 <= xx < r and 0 <= yy < c and (xx, yy) not in vis:
+                        heappush(nextq, [grid[xx][yy], xx, yy])
+                        vis.add((xx, yy))
+
+            return s
+
+        for x, i in sorted([[x, i] for i, x in enumerate(queries)]):
+            ans[i] = helper(x)
+        return ans
 
 
 so = Solution()

@@ -100,31 +100,13 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:
-        n = len(s)
-        ans = [[-1, -1] for _ in range(len(queries))]
-        d = {}
-        for i in range(n):
-            for j in range(1, 32):
-                if s[i: i + j] not in d:
-                    d[s[i: i + j]] = i
-        for i, (x, y) in enumerate(queries):
-            val = str(bin(x ^ y))[2:]
-            m = len(val)
-            if val in d:
-                ans[i] = [d[val], d[val] + m - 1]
-        return ans
-
-
+    def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
 
 
 
 
 
 so = Solution()
-print(so.substringXorQueries(s = "1", queries = [[4,5]]))
-print(so.substringXorQueries(s = "101101", queries = [[0,5],[1,2]]))
-print(so.substringXorQueries(s = "0101", queries = [[12,8]]))
-
+print(so.magnificentSets(n = 4, roads = [[1,2,9],[2,3,6],[2,4,5],[1,4,7]]))
 
 
