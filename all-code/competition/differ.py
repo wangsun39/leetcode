@@ -67,7 +67,6 @@ class Solution:
         return diff
 
 so = Solution()
-print(so.removeDigit(123456))
 
 
 

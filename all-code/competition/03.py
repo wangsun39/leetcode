@@ -100,74 +100,52 @@ from sortedcontainers import SortedList
     # sl.count(value)
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class Trie:
-
-    def __init__(self):
-        self.root = {}
-
-    def insert(self, idx, word: str) -> None:  # O(log(len(word)))
-        cur = self.root
-        for e in word:
-            if e not in cur:
-                cur[e] = {}
-            cur = cur[e]
-        if 'end' in cur:
-            cur['end'].append(idx)
-        else:
-            cur['end'] = [idx]
-
-
-    def search(self, word: str) -> list:
-        cur = self.root
-        ans = []
-        for e in word:
-            if e in cur:
-                cur = cur[e]
-                if 'end' in cur:
-                    ans += cur['end']
-            else:
-                return ans
-        return ans
-
-
 class Solution:
-    def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:
-        target = []
-        for x, y in queries:
-            target.append(bin(x ^ y)[2:])
-        # print(target)
-        tr = Trie()
-        for i, t in enumerate(target):
-            tr.insert(i, t)
 
-        n = len(s)
-        ans = [[-1, -1] for _ in range(len(queries))]
+    def squareFreeSubsets(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        primes = [2,3,5,7,11,13,17,19,23,29]
+        m = 1024
+        nums = [x for x in nums if x % 4 and x % 9 and x % 16 and x % 25]
+        # print(nums)
+        n = len(nums)
+        if n == 0: return 0
+        bi = [0] * n
+        for i, x in enumerate(nums):
+            bb = 0
+            for j, p in enumerate(primes):
+                if x % p == 0:
+                    bb |= (1 << j)
+            bi[i] = bb
+        # print(bi)
+        dp = [[0] * m for _ in range(n)]  # 前 i 个数中，乘积为 j 的子数组数量
         for i in range(n):
-            ids = tr.search(s[i:])
-            if len(ids) == 0:
-                continue
-            for x in ids:
-                if ans[x] != [-1, -1]:
-                    continue
-                ans[x] = [i, i + len(target[x]) - 1]
-        return ans
+            dp[i][bi[i]] = 1
+        # print(dp)
+        for i in range(1, n):
+            for j in range(m):
+                dp[i][j] += dp[i - 1][j]
+                dp[i][j] %= MOD
+            for j in range(m):
+                if bi[i] & j == 0:
+                    dp[i][bi[i] | j] += dp[i - 1][j]
+                    dp[i][bi[i] | j] %= MOD
+        ans = 0
+        for i in range(m):
+            # print(i)
+            ans += dp[-1][i]
+        return ans % MOD
 
-
-        # ans = []
-        # for t in target:
-        #     pos = find(s, t)
-        #     if pos == -1:
-        #         ans.append([-1, -1])
-        #     else:
-        #         ans.append([pos, pos + len(t) - 1])
-        # return ans
 
 
 
 so = Solution()
-print(so.substringXorQueries(s = "101101", queries = [[0,5],[1,2]]))
-print(so.substringXorQueries(s = "0101", queries = [[12,8]]))
-print(so.substringXorQueries(s = "1", queries = [[4,5]]))
+print(so.squareFreeSubsets([1,23,25,1,2,1]))  # 31
+print(so.squareFreeSubsets([14,5,21,22,20,21,22]))  # 19
+print(so.squareFreeSubsets([16,25,4,4,25,16,9,4,4,16,9,4,16,4,9,25,9,4,25,25,25,16,25,9,9,4,25,25,4,16,9,9,16,25,25,25,4,4,4,25,9,9,16,4,4,25,16,16,4,4,9,9,4,16,25,16,25,4,9,25,4,9,25,9,16,4,16,16,9,9,4,9,25,9,9,9,4,16,25,4,25,9,4,25,16,4,25,25,16,16,16,9,16,9,25,25,4,9,4,25]))
+print(so.squareFreeSubsets([14,5,21,22,20,21,22,29,25,22,18,13,8,6,2,1,23,25,1,2,1,14,24,1,4,22,12,26,12,12,16,23,14,27,1,14,10,24,25,10,8,8,26,26,10,15,11,3,29,29,19,26,10,5,15,29,15,9,27,20,14,29,22,28,1,4,11,21,30,30,26,19,14,11,29,12,24,18,9,23,15,18,9,11,1,18,8,10,13,3,17,22,1,10,22,11]))
+print(so.squareFreeSubsets([3,4,4,5]))
+print(so.squareFreeSubsets([1]))
 
 
 
