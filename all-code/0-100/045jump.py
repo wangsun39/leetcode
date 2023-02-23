@@ -55,6 +55,19 @@ class Solution:
                     step += 1
         return step
 
+    def jump3(self, nums: List[int]) -> int:
+        # 贪心 2023/2/23 本质上应该和上面的方法是相同的
+        n = len(nums)
+        ans = right = cur = 0  # right 记录当前能跳到的最远距离
+        while right < n - 1:
+            next = right
+            while cur <= right:
+                next = max(next, cur + nums[cur])
+                cur += 1
+            ans += 1
+            right = next
+        return ans
+
 so = Solution()
 print(so.jump([1,2,3]))
 print(so.jump([2,3,1,1,4]))
