@@ -101,45 +101,12 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minOperations(self, n: int) -> int:
-        # b = bin(n)[2:]
-        # print(b)
-        # cnt0, cnt1 = b.count('0'), b.count('1')
-        # return min(cnt0 + 2, cnt1)
-        ex = [-1] * (n * 2 + 2)
-        q = [1]
-        while q[-1] * 2 <= n * 2:
-            q.append(q[-1] * 2)
-        mi = [x for x in q]
-        q = deque(q)
-        step = 1
-        while len(q):
-            qq = deque([])
-            while len(q):
-                x = q.popleft()
-                ex[x] = step
-                if x == n:
-                    return step
-                for y in mi:
-                    if x + y < len(ex) and ex[x + y] == -1:
-                        qq.append(x + y)
-                        ex[x + y] = 0
-                    if x > y and ex[x - y] == -1:
-                        qq.append(x - y)
-                        ex[x - y] = 0
-            step += 1
-            q = qq
-            # print(ex[64])
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minOperations(56))  # 2
-print(so.minOperations(40))  # 2
-print(so.minOperations(39))  # 3
-print(so.minOperations(27))  # 3
-print(so.minOperations(38))
-print(so.minOperations(54))  # 3
+print(so.removeDigit())
 
 
 
