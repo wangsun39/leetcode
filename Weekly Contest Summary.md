@@ -1,7 +1,9 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2023-2-12| 第333场周赛  | Q3  | [无平方子集计数](https://leetcode.cn/problems/count-the-number-of-square-free-subsets/) |       | 比赛的时候，这题基本都做出来，用状态压缩+DP，只是模数写错了，10 ^ 9 + 7 写成了 10 ^ 7... <br>这有点太可惜了|
-|2023-2-12| 第333场周赛  | Q4  | [找出对应 LCP 矩阵的字符串](https://leetcode.cn/problems/find-the-string-with-lcp/) |       | 这题压根没时间看|
+|2023-2-26| 第334场周赛  | Q3  | [找出对应 LCP 矩阵的字符串](https://leetcode.cn/problems/find-the-string-with-lcp/) |       | 这题比赛时用了很长的时间，WA了5次，最终发现实际是个双指针的题，说明还是不熟练，需要一个数学的转换|
+|2023-2-26| 第334场周赛  | Q4  | [在网格图中访问一个格子的最少时间](https://leetcode.cn/problems/minimum-time-to-visit-a-cell-in-a-grid/) |       | 这题当时没时间看，最终是一个最短路径的问题，学习一下Dijkstra算法|
+|2023-2-19| 第333场周赛  | Q3  | [无平方子集计数](https://leetcode.cn/problems/count-the-number-of-square-free-subsets/) |       | 比赛的时候，这题基本都做出来，用状态压缩+DP，只是模数写错了，10 ^ 9 + 7 写成了 10 ^ 7... <br>这有点太可惜了|
+|2023-2-19| 第333场周赛  | Q4  | [找出对应 LCP 矩阵的字符串](https://leetcode.cn/problems/find-the-string-with-lcp/) |       | 这题压根没时间看|
 |2023-2-12| 第332场周赛  | Q3  | [子字符串异或查询](https://leetcode.cn/problems/substring-xor-queries/) |       | 这题做出来了，就是花的时间有点长，当时并没有想到firsti, secondi的长度并不会很长，"暴力搜索"是可以的。<br>比赛想了一招用前缀树，感觉也是一种不错的思路）|
 |2023-2-12| 第332场周赛  | Q4  | [最少得分子序列](https://leetcode.cn/problems/subsequence-with-the-minimum-score/) |       | 比赛时没有什么思路，需要用到前后缀分解，新学一招|
 |2023-2-5| 第331场周赛  | Q4  | [重排水果](https://leetcode.cn/problems/rearranging-fruits/) |   2222    | 前三题20多分钟做完，第三题用了二分法<br>这题想到了大致的方法，有个陷阱在WA后，也有了解决的方法，但因为有个考虑错误的地方（不应该把两个diff数组混在一起排序），一直到最后都没有通过，由于是最后一个用例不过，比赛时也不给看用例是啥样子（当然看了用处也不大，用例太长）|
