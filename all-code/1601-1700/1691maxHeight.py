@@ -65,10 +65,29 @@ class Solution:
         print(dp)
         return max(dp)
 
+    def maxHeight(self, cuboids: List[List[int]]) -> int:
+        # 2023/2/26 调整下排序的key，其实是都可以，但一定要把三个数都参与排序，防止高相同的长宽小的反而在前面了
+        for x in cuboids:
+            x.sort()
+        n = len(cuboids)
+        cuboids.sort(key=lambda x:[x[2], x[1], x[0]])
+        print(cuboids)
+        dp = [z for _, _, z in cuboids]  # 前 cuboids[:i+1]能组成的最大高度
+        for i, (x, y, z) in enumerate(cuboids):
+            for j in range(i):
+                if cuboids[j][0] <= x and cuboids[j][1] <= y:
+                # if cuboids[j][1] <= y and cuboids[j][2] <= z:
+                    dp[i] = max(dp[i], dp[j] + z)
+        print(dp)
+        return max(dp)
+
+
+
 
 
 so = Solution()
 
+print(so.maxHeight([[29,59,36],[12,13,97],[49,86,43],[9,57,50],[97,19,10],[17,92,69],[92,36,15],[16,63,8],[94,24,78],[52,11,39],[48,61,57],[15,44,79],[6,69,98],[30,70,41],[23,17,33],[85,86,12],[13,75,98],[75,30,30],[89,18,27],[94,83,81]]))  # 435
 print(so.maxHeight([[35,32,11],[7,6,65],[3,39,41]]))  # 65
 print(so.maxHeight([[50,45,20],[95,37,53],[45,23,12]]))  # 190
 print(so.maxHeight([[38,25,45],[76,35,3]]))  # 76

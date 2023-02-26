@@ -101,12 +101,44 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumTime(self, grid: List[List[int]]) -> int:
+        r, c = len(grid), len(grid[0])
+        if not ((r > 1 and grid[1][0] <= 1) or (c > 1 and grid[0][1] <= 1)):
+            return -1
+        dir = [[0, -1], [0, 1], [-1, 0], [1, 0]]
+        dq = deque([(0, 0)])
+        dp = [[inf] * c for _ in range(r)]
+        dp[0][0] = 0
+        while len(dq):
+            next = deque()
+            while len(dq):
+                x, y = dq.popleft()
+                old = dp[x][y]
+                nx = []
+                for x0, y0 in dir:
+                    u, v = x + x0, y + y0
+                    if 0 <= u < r and 0 <= v < c:
+                        if dp[u][v] < dp[x][y]:
+                            if dp[u][v] + 1 >= grid[x][y]:
+                                dp[x][y] = min(dp[x][y], dp[u][v] + 1)
+                            else:
+                                if (grid[x][y] - dp[u][v] - 1) & 1: # 相差奇数
+                                    dp[x][y] = grid[x][y] + 1
+                                else:
+                                    dp[x][y] = grid[x][y]
+                        else:
+                            nx.append((u, v))
+                if old > dp[x][y] or x == y == 0:
+                    next.extend(nx)
+
+            dq = next
+        print(dp)
+        return dp[-1][-1]
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumTime([[0,1,3,2],[5,1,2,5],[4,3,8,6]]))
+print(so.minimumTime([[0,2,4],[3,2,1],[1,0,4]]))
 
 
 

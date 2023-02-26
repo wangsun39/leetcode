@@ -101,12 +101,21 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def leftRigthDifference(self, nums: List[int]) -> List[int]:
+        left = [0]
+        right = [0]
+        n = len(nums)
+        for i in range(n - 1):
+            left.append(left[-1] + nums[i])
+            right.insert(0, right[0] + nums[n - i - 1])
+        ans = [abs(left[i] - right[i]) for i in range(n)]
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.leftRigthDifference([10,4,8,3]))
+print(so.leftRigthDifference([1]))
+print(so.leftRigthDifference([10,4,8,3]))
 
 
 
