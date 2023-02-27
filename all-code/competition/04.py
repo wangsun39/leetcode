@@ -105,40 +105,37 @@ class Solution:
         r, c = len(grid), len(grid[0])
         if not ((r > 1 and grid[1][0] <= 1) or (c > 1 and grid[0][1] <= 1)):
             return -1
+        dp = [[-1] * c for _ in range(r)]
+        # dp[0][0] = 0
         dir = [[0, -1], [0, 1], [-1, 0], [1, 0]]
-        dq = deque([(0, 0)])
-        dp = [[inf] * c for _ in range(r)]
-        dp[0][0] = 0
-        while len(dq):
-            next = deque()
-            while len(dq):
-                x, y = dq.popleft()
-                old = dp[x][y]
-                nx = []
-                for x0, y0 in dir:
-                    u, v = x + x0, y + y0
-                    if 0 <= u < r and 0 <= v < c:
-                        if dp[u][v] < dp[x][y]:
-                            if dp[u][v] + 1 >= grid[x][y]:
-                                dp[x][y] = min(dp[x][y], dp[u][v] + 1)
-                            else:
-                                if (grid[x][y] - dp[u][v] - 1) & 1: # 相差奇数
-                                    dp[x][y] = grid[x][y] + 1
-                                else:
-                                    dp[x][y] = grid[x][y]
-                        else:
-                            nx.append((u, v))
-                if old > dp[x][y] or x == y == 0:
-                    next.extend(nx)
+        hp = []
+        heapify(hp)
+        heappush(hp, [0, (0, 0)])
+        while len(hp):
+            d, (x, y) = heappop(hp)
+            # print(d, x, y)
+            if dp[x][y] != -1:
+                continue
+            if x == r - 1 and y == c - 1:
+                return d
+            dp[x][y] = d
+            for x0, y0 in dir:
+                u, v = x + x0, y + y0
+                if 0 <= u < r and 0 <= v < c and dp[u][v] == -1:
+                    if d + 1 >= grid[u][v]:
+                        heappush(hp, [d + 1, (u, v)])
+                    elif (grid[u][v] - d) & 1:  # 奇数
+                        heappush(hp, [grid[u][v], (u, v)])
+                    else:
+                        heappush(hp, [grid[u][v] + 1, (u, v)])
 
-            dq = next
-        print(dp)
-        return dp[-1][-1]
+
+
 
 
 so = Solution()
-print(so.minimumTime([[0,1,3,2],[5,1,2,5],[4,3,8,6]]))
-print(so.minimumTime([[0,2,4],[3,2,1],[1,0,4]]))
+print(so.minimumTime([[0,1,3,2],[5,1,2,5],[4,3,8,6]]))  # 7
+print(so.minimumTime([[0,2,4],[3,2,1],[1,0,4]]))  # -1
 
 
 
