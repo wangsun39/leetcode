@@ -100,14 +100,45 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
-        pass
+    def closestCost(self, baseCosts: List[int], toppingCosts: List[int], target: int) -> int:
+        n, m = len(baseCosts), len(toppingCosts)
+        ans = 0
+        mi_diff = inf
 
+        @cache
+        def proc(i, j, cur_val):   # 从 toppingCosts[i] 往后选， 其中 toppingCosts[i] 已经选了 j 个，前面累计值 cur_val，计算过程中更新 ans 和 mi_diff
+            print(i, j, cur_val)
+            nonlocal ans, mi_diff
+            if i > m - 1: return
+            if mi_diff > abs(cur_val - target):
+                mi_diff = abs(cur_val - target)
+                ans = cur_val
+            elif mi_diff == abs(cur_val - target) and cur_val < ans:
+                ans = cur_val
 
+            if cur_val >= target:
+                return
+            if j == 2:
+                proc(i + 1, 0, cur_val)
+            elif j == 1:
+                proc(i, 2, cur_val + toppingCosts[i])
+                proc(i + 1, 0, cur_val)
+            else:
+                proc(i, 1, cur_val + toppingCosts[i])
+                proc(i, 2, cur_val + toppingCosts[i] * 2)
+                proc(i + 1, 0, cur_val)
 
+        for i in range(n):
+            proc(0, 0, baseCosts[i])
+
+        return ans
 
 
 so = Solution()
-print(so.magnificentSets(n = 4, roads = [[1,2,9],[2,3,6],[2,4,5],[1,4,7]]))
+print(so.closestCost([9,10,1], [1,8,8,1,1,8], 8))  # 7
+# print(so.closestCost(baseCosts = [10], toppingCosts = [1], target = 1))  # 10
+# print(so.closestCost(baseCosts = [3,10], toppingCosts = [2,5], target = 9))  # 8
+# print(so.closestCost(baseCosts = [1,7], toppingCosts = [3,4], target = 10))  # 10
+# print(so.closestCost(baseCosts = [2,3], toppingCosts = [4,5,100], target = 18))  # 17
 
 
