@@ -101,24 +101,12 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def divisibilityArray(self, word: str, m: int) -> List[int]:
-        n = len(word)
-        ans = [0] * n
-        lm = len(str(m))
-        cur = 0
-        for i in range(n):
-            cur += int(word[i])
-            print(i, cur)
-            if cur % m == 0:
-                ans[i] = 1
-            cur = (cur * 10) % m
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.divisibilityArray("8917171717276217174131", 17))
-print(so.divisibilityArray(word = "998244353", m = 3))
-print(so.divisibilityArray(word = "1010", m = 10))
+print(so.removeDigit())
 
 
 

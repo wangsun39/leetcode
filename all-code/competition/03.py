@@ -101,33 +101,12 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
-        n = len(nums)
-        nums.sort()
-        ans = 0
-        cur = n // 2
-        left = deque(nums[cur:])
-        for i in range(n // 2):
-            while len(left) and left[0] < nums[i] * 2:
-                left.popleft()
-            if len(left):
-                # print(nums[i], left[0])
-                ans += 2
-                left.popleft()
-            else:
-                break
-        return ans
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxNumOfMarkedIndices([72,97,60,79,68,25,63,82,88,60,37,60,44,14,62,36,52,73,26,98,86,50,74,68,53,80,90,60,78,56,53,84,2]))  # 14
-print(so.maxNumOfMarkedIndices([1,78,27,48,14,86,79,68,77,20,57,21,18,67,5,51,70,85,47,56,22,79,41,8,39,81,59,74,14,45,49,15,10,28,16,77,22,65,8,36,79,94,44,80,72,8,96,78,39,92,69,55,9,44,26,76,40,77,16,69,40,64,12,48,66,7,59,10]))  # 64
-print(so.maxNumOfMarkedIndices([3,5,2,4]))  # 2
-print(so.maxNumOfMarkedIndices([42,83,48,10,24,55,9,100,10,17,17,99,51,32,16,98,99,31,28,68,71,14,64,29,15,40]))  # 26
-print(so.maxNumOfMarkedIndices([9,2,5,4]))  # 4
-print(so.maxNumOfMarkedIndices([7,6,8]))
+print(so.removeDigit())
 
 
 

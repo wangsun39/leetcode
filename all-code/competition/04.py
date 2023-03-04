@@ -101,41 +101,12 @@ from sortedcontainers import SortedList
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def minimumTime(self, grid: List[List[int]]) -> int:
-        r, c = len(grid), len(grid[0])
-        if not ((r > 1 and grid[1][0] <= 1) or (c > 1 and grid[0][1] <= 1)):
-            return -1
-        dp = [[-1] * c for _ in range(r)]
-        # dp[0][0] = 0
-        dir = [[0, -1], [0, 1], [-1, 0], [1, 0]]
-        hp = []
-        heapify(hp)
-        heappush(hp, [0, (0, 0)])
-        while len(hp):
-            d, (x, y) = heappop(hp)
-            # print(d, x, y)
-            if dp[x][y] != -1:
-                continue
-            if x == r - 1 and y == c - 1:
-                return d
-            dp[x][y] = d
-            for x0, y0 in dir:
-                u, v = x + x0, y + y0
-                if 0 <= u < r and 0 <= v < c and dp[u][v] == -1:
-                    if d + 1 >= grid[u][v]:
-                        heappush(hp, [d + 1, (u, v)])
-                    elif (grid[u][v] - d) & 1:  # 奇数
-                        heappush(hp, [grid[u][v], (u, v)])
-                    else:
-                        heappush(hp, [grid[u][v] + 1, (u, v)])
-
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minimumTime([[0,1,3,2],[5,1,2,5],[4,3,8,6]]))  # 7
-print(so.minimumTime([[0,2,4],[3,2,1],[1,0,4]]))  # -1
+print(so.removeDigit())
 
 
 

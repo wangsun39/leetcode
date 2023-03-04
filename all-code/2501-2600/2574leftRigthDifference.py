@@ -1,3 +1,33 @@
+# 给你一个下标从 0 开始的整数数组 nums ，请你找出一个下标从 0 开始的整数数组 answer ，其中：
+#
+# answer.length == nums.length
+# answer[i] = |leftSum[i] - rightSum[i]|
+# 其中：
+#
+# leftSum[i] 是数组 nums 中下标 i 左侧元素之和。如果不存在对应的元素，leftSum[i] = 0 。
+# rightSum[i] 是数组 nums 中下标 i 右侧元素之和。如果不存在对应的元素，rightSum[i] = 0 。
+# 返回数组 answer 。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [10,4,8,3]
+# 输出：[15,1,11,22]
+# 解释：数组 leftSum 为 [0,10,14,22] 且数组 rightSum 为 [15,11,3,0] 。
+# 数组 answer 为 [|0 - 15|,|10 - 11|,|14 - 3|,|22 - 0|] = [15,1,11,22] 。
+# 示例 2：
+#
+# 输入：nums = [1]
+# 输出：[0]
+# 解释：数组 leftSum 为 [0] 且数组 rightSum 为 [0] 。
+# 数组 answer 为 [|0 - 0|] = [0] 。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 1000
+# 1 <= nums[i] <= 105
 
 from typing import List
 from typing import Optional
@@ -18,7 +48,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -88,65 +118,35 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPalindromes(self, s: str) -> int:
-        MOD = 10 ** 9 + 7
-        n = len(s)
-        if n < 5: return 0
-        l1 = [[0] * 10 for _ in range(n)]
-        l2 = [[0] * 100 for _ in range(n)]
-        r1 = [[0] * 10 for _ in range(n)]
-        r2 = [[0] * 100 for _ in range(n)]
-        l1[1][int(s[0])] = 1
-        r1[n - 2][int(s[n - 1])] = 1
-        for i in range(2, n):
-            l1[i] = [x for x in l1[i - 1]]
-            l1[i][int(s[i - 1])] += 1
-        for i in range(n - 3, -1, -1):
-            r1[i] = [x for x in r1[i + 1]]
-            r1[i][int(s[i + 1])] += 1
-        # print(l1)
-        # print(r1)
-        # l2[2][int(s[:2])] = 1
-        for i in range(2, n):
-            l2[i] = [x for x in l2[i - 1]]
-            for j in range(10):
-                l2[i][j * 10 + int(s[i - 1])] += l1[i - 1][j]
-        # for i in range(n):
-        #     print(i, l2[i][10], l2[i][13], l2[i][3])
-        for i in range(n - 3, -1, -1):
-            r2[i] = [x for x in r2[i + 1]]
-            for j in range(10):
-                r2[i][j + int(s[i + 1]) * 10] += r1[i + 1][j]
-        # for i in range(n):
-        #     print(i, r2[i][1], r2[i][31], r2[i][30])
-
-        ans = 0
-        for i in range(2, n - 2):
-            for j in range(100):
-                oppo = (j % 10) * 10 + j // 10
-                ans += l2[i][j] * r2[i][oppo]
-                ans %= MOD
+    def leftRigthDifference(self, nums: List[int]) -> List[int]:
+        left = [0]
+        right = [0]
+        n = len(nums)
+        for i in range(n - 1):
+            left.append(left[-1] + nums[i])
+            right.insert(0, right[0] + nums[n - i - 1])
+        ans = [abs(left[i] - right[i]) for i in range(n)]
         return ans
 
 
-
-
-
 so = Solution()
-print(so.countPalindromes("103301"))  #
-print(so.countPalindromes("0000000"))  #
-print(so.countPalindromes("9999900000"))  #
+print(so.leftRigthDifference([10,4,8,3]))
+print(so.leftRigthDifference([1]))
+print(so.leftRigthDifference([10,4,8,3]))
+
+
 
 

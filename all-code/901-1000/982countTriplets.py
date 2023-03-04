@@ -39,7 +39,7 @@ from collections import Counter
 from typing import List
 
 class Solution:
-    def countTriplets(self, nums: List[int]) -> int:
+    def countTriplets1(self, nums: List[int]) -> int:
         counter = Counter()  # counter[i]  记录与 i 做 & 运算为 0 的元素的个数
         for i in range(2 ** 16):
             for x in nums:
@@ -53,6 +53,18 @@ class Solution:
                     ans += counter[x & y] * 2
                 else:
                     ans += counter[x]
+        return ans
+
+    def countTriplets(self, nums: List[int]) -> int:
+        counter = Counter()  # counter[i]  记录 i 的个数
+        for x in nums:
+            for y in nums:
+                counter[x & y] += 1
+        ans = 0
+        for x in nums:
+            for k, v in counter.items():
+                if x & k == 0:
+                    ans += v
         return ans
 
 

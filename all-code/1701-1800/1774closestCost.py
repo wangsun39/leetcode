@@ -58,9 +58,11 @@
 
 from typing import List
 import bisect
+from math import inf
+from functools import cache
 
 class Solution:
-    def closestCost(self, baseCosts: List[int], toppingCosts: List[int], target: int) -> int:
+    def closestCost1(self, baseCosts: List[int], toppingCosts: List[int], target: int) -> int:
         n, m = len(baseCosts), len(toppingCosts)
         l = [0]
         for i in range(m):
@@ -88,7 +90,35 @@ class Solution:
                 ans = baseCosts[i] + l[pos]
         return ans
 
+    def closestCost(self, baseCosts: List[int], toppingCosts: List[int], target: int) -> int:
+        n, m = len(baseCosts), len(toppingCosts)
+        ans = 0
+        mi_diff = inf
+
+        @cache
+        def proc(i, cur_val):   # 从 toppingCosts[i] 往后选， 前面累计值 cur_val，计算过程中更新 ans 和 mi_diff
+            nonlocal ans, mi_diff
+            if mi_diff > abs(cur_val - target):
+                mi_diff = abs(cur_val - target)
+                ans = cur_val
+            elif mi_diff == abs(cur_val - target) and cur_val < ans:
+                ans = cur_val
+
+            if cur_val >= target:
+                return
+            if i > m - 1: return
+
+            proc(i + 1, cur_val)
+            proc(i + 1, cur_val + toppingCosts[i])
+            proc(i + 1, cur_val + toppingCosts[i] * 2)
+
+        for i in range(n):
+            proc(0, baseCosts[i])
+
+        return ans
+
 so = Solution()
+print(so.closestCost([3], [3], 9))  # 9
 print(so.closestCost([8,4,4,5,8], [3,10,9,10,8,10,10,9,3], 6))  # 5
 print(so.closestCost(baseCosts = [8,10], toppingCosts = [1], target = 4))  # 8
 print(so.closestCost(baseCosts = [2,3], toppingCosts = [4,5,100], target = 18))  # 17

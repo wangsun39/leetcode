@@ -1,3 +1,36 @@
+# 给你一个下标从 0 开始的整数数组 nums 。
+#
+# 一开始，所有下标都没有被标记。你可以执行以下操作任意次：
+#
+# 选择两个 互不相同且未标记 的下标 i 和 j ，满足 2 * nums[i] <= nums[j] ，标记下标 i 和 j 。
+# 请你执行上述操作任意次，返回 nums 中最多可以标记的下标数目。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [3,5,2,4]
+# 输出：2
+# 解释：第一次操作中，选择 i = 2 和 j = 1 ，操作可以执行的原因是 2 * nums[2] <= nums[1] ，标记下标 2 和 1 。
+# 没有其他更多可执行的操作，所以答案为 2 。
+# 示例 2：
+#
+# 输入：nums = [9,2,5,4]
+# 输出：4
+# 解释：第一次操作中，选择 i = 3 和 j = 0 ，操作可以执行的原因是 2 * nums[3] <= nums[0] ，标记下标 3 和 0 。
+# 第二次操作中，选择 i = 1 和 j = 2 ，操作可以执行的原因是 2 * nums[1] <= nums[2] ，标记下标 1 和 2 。
+# 没有其他更多可执行的操作，所以答案为 4 。
+# 示例 3：
+#
+# 输入：nums = [7,6,8]
+# 输出：0
+# 解释：没有任何可以执行的操作，所以答案为 0 。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 105
+# 1 <= nums[i] <= 109
 
 from typing import List
 from typing import Optional
@@ -18,7 +51,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -88,65 +121,47 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPalindromes(self, s: str) -> int:
-        MOD = 10 ** 9 + 7
-        n = len(s)
-        if n < 5: return 0
-        l1 = [[0] * 10 for _ in range(n)]
-        l2 = [[0] * 100 for _ in range(n)]
-        r1 = [[0] * 10 for _ in range(n)]
-        r2 = [[0] * 100 for _ in range(n)]
-        l1[1][int(s[0])] = 1
-        r1[n - 2][int(s[n - 1])] = 1
-        for i in range(2, n):
-            l1[i] = [x for x in l1[i - 1]]
-            l1[i][int(s[i - 1])] += 1
-        for i in range(n - 3, -1, -1):
-            r1[i] = [x for x in r1[i + 1]]
-            r1[i][int(s[i + 1])] += 1
-        # print(l1)
-        # print(r1)
-        # l2[2][int(s[:2])] = 1
-        for i in range(2, n):
-            l2[i] = [x for x in l2[i - 1]]
-            for j in range(10):
-                l2[i][j * 10 + int(s[i - 1])] += l1[i - 1][j]
-        # for i in range(n):
-        #     print(i, l2[i][10], l2[i][13], l2[i][3])
-        for i in range(n - 3, -1, -1):
-            r2[i] = [x for x in r2[i + 1]]
-            for j in range(10):
-                r2[i][j + int(s[i + 1]) * 10] += r1[i + 1][j]
-        # for i in range(n):
-        #     print(i, r2[i][1], r2[i][31], r2[i][30])
-
+    def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
+        n = len(nums)
+        nums.sort()
         ans = 0
-        for i in range(2, n - 2):
-            for j in range(100):
-                oppo = (j % 10) * 10 + j // 10
-                ans += l2[i][j] * r2[i][oppo]
-                ans %= MOD
+        cur = n // 2
+        left = deque(nums[cur:])
+        for i in range(n // 2):
+            while len(left) and left[0] < nums[i] * 2:
+                left.popleft()
+            if len(left):
+                # print(nums[i], left[0])
+                ans += 2
+                left.popleft()
+            else:
+                break
         return ans
 
 
 
 
-
 so = Solution()
-print(so.countPalindromes("103301"))  #
-print(so.countPalindromes("0000000"))  #
-print(so.countPalindromes("9999900000"))  #
+print(so.maxNumOfMarkedIndices([72,97,60,79,68,25,63,82,88,60,37,60,44,14,62,36,52,73,26,98,86,50,74,68,53,80,90,60,78,56,53,84,2]))  # 14
+print(so.maxNumOfMarkedIndices([1,78,27,48,14,86,79,68,77,20,57,21,18,67,5,51,70,85,47,56,22,79,41,8,39,81,59,74,14,45,49,15,10,28,16,77,22,65,8,36,79,94,44,80,72,8,96,78,39,92,69,55,9,44,26,76,40,77,16,69,40,64,12,48,66,7,59,10]))  # 64
+print(so.maxNumOfMarkedIndices([3,5,2,4]))  # 2
+print(so.maxNumOfMarkedIndices([42,83,48,10,24,55,9,100,10,17,17,99,51,32,16,98,99,31,28,68,71,14,64,29,15,40]))  # 26
+print(so.maxNumOfMarkedIndices([9,2,5,4]))  # 4
+print(so.maxNumOfMarkedIndices([7,6,8]))
+
+
 
 
