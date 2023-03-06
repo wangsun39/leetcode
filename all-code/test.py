@@ -1,4 +1,4 @@
-
+import math
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -100,53 +100,29 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def countPalindromes(self, s: str) -> int:
+    def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
         MOD = 10 ** 9 + 7
-        n = len(s)
-        if n < 5: return 0
-        l1 = [[0] * 10 for _ in range(n)]
-        l2 = [[0] * 100 for _ in range(n)]
-        r1 = [[0] * 10 for _ in range(n)]
-        r2 = [[0] * 100 for _ in range(n)]
-        l1[1][int(s[0])] = 1
-        r1[n - 2][int(s[n - 1])] = 1
-        for i in range(2, n):
-            l1[i] = [x for x in l1[i - 1]]
-            l1[i][int(s[i - 1])] += 1
-        for i in range(n - 3, -1, -1):
-            r1[i] = [x for x in r1[i + 1]]
-            r1[i][int(s[i + 1])] += 1
-        # print(l1)
-        # print(r1)
-        # l2[2][int(s[:2])] = 1
-        for i in range(2, n):
-            l2[i] = [x for x in l2[i - 1]]
-            for j in range(10):
-                l2[i][j * 10 + int(s[i - 1])] += l1[i - 1][j]
-        # for i in range(n):
-        #     print(i, l2[i][10], l2[i][13], l2[i][3])
-        for i in range(n - 3, -1, -1):
-            r2[i] = [x for x in r2[i + 1]]
-            for j in range(10):
-                r2[i][j + int(s[i + 1]) * 10] += r1[i + 1][j]
-        # for i in range(n):
-        #     print(i, r2[i][1], r2[i][31], r2[i][30])
-
-        ans = 0
-        for i in range(2, n - 2):
-            for j in range(100):
-                oppo = (j % 10) * 10 + j // 10
-                ans += l2[i][j] * r2[i][oppo]
-                ans %= MOD
-        return ans
-
-
-
+        n = len(types)
+        dp = [[0] * (target + 1) for _ in range(n)]  # 前 i 种类型的题，得到 j 分的总数
+        for i in range(n):
+            for j in range(1, types[i][0] + 1):
+                if j * types[i][1] <= target:
+                    dp[i][j * types[i][1]] = 1
+            for j in range(1, target + 1):
+                for k in range(types[i][0] + 1):
+                    if j - types[i][1] * k >= 0 and i > 0:
+                        dp[i][j] += dp[i - 1][j - types[i][1] * k]
+                        dp[i][j] %= MOD
+        # ans = 0
+        print(dp)
+        return dp[-1][target]
 
 
 so = Solution()
-print(so.countPalindromes("103301"))  #
-print(so.countPalindromes("0000000"))  #
-print(so.countPalindromes("9999900000"))  #
+print(so.waysToReachTarget(1000,[[50,50]]))  # 1
+print(so.waysToReachTarget(6,[[6,1],[6,1]]))  # 7
+print(so.waysToReachTarget(target = 6, types = [[6,1],[3,2],[2,3]]))  # 7
+print(so.waysToReachTarget(target = 5, types = [[50,1],[50,2],[50,5]]))  # 4
+print(so.waysToReachTarget(target = 18, types = [[6,1],[3,2],[2,3]]))  # 1
 
 
