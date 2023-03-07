@@ -23,6 +23,7 @@
 
 
 from typing import List
+from collections import deque
 
 class Solution:
     def trap(self, height: List[int]) -> int:
@@ -45,6 +46,23 @@ class Solution:
                 highest = i
         return res
 
+    def trap(self, height: List[int]) -> int:
+        # 2023/3/6 单调栈方法
+        stack = deque([[height[0], 0]])  # 单调递减栈
+        ans = 0
+        for i, x in enumerate(height[1:], 1):
+            base = -1
+            if stack[-1][0] < x:
+                base = stack[-1][0]
+
+            while len(stack) and stack[-1][0] <= x:
+                y, j = stack.pop()
+                ans += (y - base) * (i - j - 1)  # 增加 高度差 * 宽度
+                base = y
+            if len(stack) and base != -1:
+                ans += (x - base) * (i - stack[-1][1] - 1)
+            stack.append([x, i])
+        return ans
 
 
 so = Solution()

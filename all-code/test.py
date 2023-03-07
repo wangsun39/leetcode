@@ -100,29 +100,26 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
-        MOD = 10 ** 9 + 7
-        n = len(types)
-        dp = [[0] * (target + 1) for _ in range(n)]  # 前 i 种类型的题，得到 j 分的总数
-        for i in range(n):
-            for j in range(1, types[i][0] + 1):
-                if j * types[i][1] <= target:
-                    dp[i][j * types[i][1]] = 1
-            for j in range(1, target + 1):
-                for k in range(types[i][0] + 1):
-                    if j - types[i][1] * k >= 0 and i > 0:
-                        dp[i][j] += dp[i - 1][j - types[i][1] * k]
-                        dp[i][j] %= MOD
-        # ans = 0
-        print(dp)
-        return dp[-1][target]
+    def trap(self, height: List[int]) -> int:
+        stack = deque([[height[0], 0]])  # 单调递减栈
+        ans = 0
+        for i, x in enumerate(height[1:], 1):
+            base = -1
+            if stack[-1][0] < x:
+                base = stack[-1][0]
+
+            while len(stack) and stack[-1][0] <= x:
+                y, j = stack.pop()
+                ans += (y - base) * (i - j - 1)  # 增加 高度差 * 宽度
+                base = y
+            if len(stack) and base != -1:
+                ans += (x - base) * (i - stack[-1][1] - 1)
+            stack.append([x, i])
+        return ans
 
 
 so = Solution()
-print(so.waysToReachTarget(1000,[[50,50]]))  # 1
-print(so.waysToReachTarget(6,[[6,1],[6,1]]))  # 7
-print(so.waysToReachTarget(target = 6, types = [[6,1],[3,2],[2,3]]))  # 7
-print(so.waysToReachTarget(target = 5, types = [[50,1],[50,2],[50,5]]))  # 4
-print(so.waysToReachTarget(target = 18, types = [[6,1],[3,2],[2,3]]))  # 1
+print(so.trap([4,2,0,3,2,5]))  # 9
+print(so.trap([0,1,0,2,1,0,1,3,2,1,2,1]))  # 6
 
 
