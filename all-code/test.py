@@ -99,27 +99,40 @@ from sortedcontainers import SortedList
     # SortedList.count(value)
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class Solution:
-    def trap(self, height: List[int]) -> int:
-        stack = deque([[height[0], 0]])  # 单调递减栈
-        ans = 0
-        for i, x in enumerate(height[1:], 1):
-            base = -1
-            if stack[-1][0] < x:
-                base = stack[-1][0]
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
-            while len(stack) and stack[-1][0] <= x:
-                y, j = stack.pop()
-                ans += (y - base) * (i - j - 1)  # 增加 高度差 * 宽度
-                base = y
-            if len(stack) and base != -1:
-                ans += (x - base) * (i - stack[-1][1] - 1)
-            stack.append([x, i])
+class Solution:
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        pos = nums.index(k)
+        n = len(nums)
+        left = [0] * (pos + 1)
+        right = [0] * (n - pos)
+        if pos > 0:
+            for i in range(pos - 1, -1, -1):
+                if nums[i] > k:
+                    left[i] = left[i + 1] + 1
+                else:
+                    left[i] = left[i + 1] - 1
+        if pos < n - 1:
+            for i in range(1, n - pos):
+                if nums[pos + i] < k:
+                    right[i] = right[i - 1] + 1
+                else:
+                    right[i] = right[i - 1] - 1
+        cl, cr = Counter(left), Counter(right)
+        ans = 0
+        for kk, v in cl.items():
+            ans += (v * cr[kk])
+            ans += v * cr[kk - 1]
         return ans
 
 
+
 so = Solution()
-print(so.trap([4,2,0,3,2,5]))  # 9
-print(so.trap([0,1,0,2,1,0,1,3,2,1,2,1]))  # 6
+print(so.countSubarrays(nums = [3,2,1,4,5], k = 4))  # 3
+print(so.countSubarrays(nums = [2,3,1], k = 3))  # 1
 
 

@@ -53,7 +53,7 @@ from heapq import *
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List
+from typing import List, Tuple
 # @lru_cache(None)
 
 # bit位 函数：
@@ -100,6 +100,10 @@ from sortedcontainers import SortedList
     # sl.count(value)
     # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
 class Solution:
     def removeDigit(self) -> str:
         pass
