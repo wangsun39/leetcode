@@ -104,13 +104,37 @@ from sortedcontainers import SortedList
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
+
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def findMinimumTime(self, tasks: List[List[int]]) -> int:
+        tasks.sort()
+        n = len(tasks)
+        counter = Counter()
+        for x, y, d in tasks:
+            for i in range(x, y + 1):
+                counter[i] += 1
+
+        ans = set()
+        while len(counter):
+            k, v = counter.most_common(1)[0]
+            ans.add(k)
+            counter = Counter()
+            for i in range(n):
+                if tasks[i][0] <= k <= tasks[i][1]:
+                    tasks[i][2] -= 1
+                    if tasks[i][2] == 0:
+                        continue
+                for j in range(tasks[i][0], tasks[i][1] + 1):
+                    if j not in ans:
+                        counter[j] += 1
+
+        return len(ans)
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.findMinimumTime([[1,3,2],[2,5,3],[5,6,2]]))
+print(so.findMinimumTime([[2,3,1],[4,5,1],[1,5,2]]))
 
 
 

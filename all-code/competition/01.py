@@ -104,13 +104,20 @@ from sortedcontainers import SortedList
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
+
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def vowelStrings(self, words: List[str], left: int, right: int) -> int:
+        ans = 0
+        for word in words[left: right + 1]:
+            if word[0] in 'aeoui' and word[-1] in 'aeoui':
+                ans += 1
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.vowelStrings(words = ["are","amy","u"], left = 0, right = 2))
+print(so.vowelStrings(words = ["hey","aeo","mu","ooo","artro"], left = 1, right = 4))
+print(so.vowelStrings(words = ["are","amy","u"], left = 0, right = 2))
 
 
 

@@ -104,13 +104,33 @@ from sortedcontainers import SortedList
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
+
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maxScore(self, nums: List[int]) -> int:
+        p, n = [], []
+        for x in nums:
+            if x > 0:
+                p.append(x)
+            else:
+                n.append(x)
+        # p.sort()
+        n.sort(reverse=True)
+        nums = p + n
+        cur = sum(p)
+        ans = len(p)
+        print(p, n, cur)
+        for x in n:
+            if cur + x > 0:
+                ans += 1
+                cur += x
+            else:
+                break
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maxScore([2,-1,0,1,-3,3,-3]))
+print(so.maxScore([-2,-3,0]))
 
 
 
