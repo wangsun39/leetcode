@@ -105,22 +105,14 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
-class Solution:
-    def beautifulSubarrays(self, nums: List[int]) -> int:
-        s = [0]
-        for x in nums:
-            s.append(s[-1] ^ x)
-        counter = Counter(s)
-        ans = 0
-        for k, v in counter.items():
-            ans += (v * (v - 1) // 2)
-        return ans
 
+class Solution:
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.beautifulSubarrays([4,3,1,2,4]))
-print(so.beautifulSubarrays([1,10,4]))
+print(so.removeDigit())
 
 
 

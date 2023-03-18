@@ -32,6 +32,7 @@
 
 from typing import List
 from functools import lru_cache
+from collections import deque, defaultdict
 class Solution:
     def longestIncreasingPath1(self, matrix: List[List[int]]) -> int:
         row = len(matrix)
@@ -105,6 +106,36 @@ class Solution:
                 res = max(res, get(i, j))
         return res
 
+    def longestIncreasingPath3(self, matrix: List[List[int]]) -> int:
+        # 2023/3/18 拓扑排序
+        r, c = len(matrix), len(matrix[0])
+        ans = [[1] * c for _ in range(r)]
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        g = defaultdict(set)
+        pre = defaultdict(int)
+        for i in range(r):
+            for j in range(c):
+                for u, v in dir:
+                    x, y = i + u, j + v
+                    if 0 <= x < r and 0 <= y < c and matrix[i][j] < matrix[x][y]:
+                        g[(i, j)].add((x, y))
+                        pre[(x, y)] += 1
+        queue = deque()
+        for i in range(r):
+            for j in range(c):
+                if pre[(i, j)] == 0:
+                    queue.append((i, j))
+        res = 1
+        while queue:
+            i, j = queue.popleft()
+            for x, y in g[(i, j)]:
+                ans[x][y] = max(ans[x][y], ans[i][j] + 1)
+                if ans[x][y] > res:
+                    res = ans[x][y]
+                pre[(x, y)] -= 1
+                if pre[(x, y)] == 0:
+                    queue.append((x, y))
+        return res
 
 so = Solution()
 print('res =', so.longestIncreasingPath([[9,9,4],[6,6,8],[2,1,1]]))

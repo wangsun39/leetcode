@@ -1,4 +1,40 @@
-import math
+# 给你一个下标从 0 开始的整数数组nums 。每次操作中，你可以：
+#
+# 选择两个满足 0 <= i, j < nums.length 的不同下标 i 和 j 。
+# 选择一个非负整数 k ，满足 nums[i] 和 nums[j] 在二进制下的第 k 位（下标编号从 0 开始）是 1 。
+# 将 nums[i] 和 nums[j] 都减去 2k 。
+# 如果一个子数组内执行上述操作若干次后，该子数组可以变成一个全为 0 的数组，那么我们称它是一个 美丽 的子数组。
+#
+# 请你返回数组 nums 中 美丽子数组 的数目。
+#
+# 子数组是一个数组中一段连续 非空 的元素序列。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [4,3,1,2,4]
+# 输出：2
+# 解释：nums 中有 2 个美丽子数组：[4,3,1,2,4] 和 [4,3,1,2,4] 。
+# - 按照下述步骤，我们可以将子数组 [3,1,2] 中所有元素变成 0 ：
+#   - 选择 [3, 1, 2] 和 k = 1 。将 2 个数字都减去 21 ，子数组变成 [1, 1, 0] 。
+#   - 选择 [1, 1, 0] 和 k = 0 。将 2 个数字都减去 20 ，子数组变成 [0, 0, 0] 。
+# - 按照下述步骤，我们可以将子数组 [4,3,1,2,4] 中所有元素变成 0 ：
+#   - 选择 [4, 3, 1, 2, 4] 和 k = 2 。将 2 个数字都减去 22 ，子数组变成 [0, 3, 1, 2, 0] 。
+#   - 选择 [0, 3, 1, 2, 0] 和 k = 0 。将 2 个数字都减去 20 ，子数组变成 [0, 2, 0, 2, 0] 。
+#   - 选择 [0, 2, 0, 2, 0] 和 k = 1 。将 2 个数字都减去 21 ，子数组变成 [0, 0, 0, 0, 0] 。
+# 示例 2：
+#
+# 输入：nums = [1,10,4]
+# 输出：0
+# 解释：nums 中没有任何美丽子数组。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 105
+# 0 <= nums[i] <= 106
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -18,7 +54,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -53,7 +89,7 @@ from heapq import *
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List
+from typing import List, Tuple
 # @lru_cache(None)
 
 # bit位 函数：
@@ -88,47 +124,40 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
 
 class Solution:
-    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
-        n = len(quiet)
-        tree = defaultdict(set)
-        pre_num = [0] * n
-        ans = list(range(n))
-        for x, y in richer:
-            if y not in tree[x]:
-                tree[x].add(y)
-                pre_num[y] += 1
-        queue = deque([i for i in range(n) if pre_num[i] == 0]) # deque 在操作大数组时，性能比 list 好很多
-        while len(queue):
-            q = queue.popleft()
-            # ans.append(q)
-            for x in tree[q]:
-                pre_num[x] -= 1
-                if quiet[ans[x]] > quiet[ans[q]]:
-                    ans[x] = ans[q]
-                if pre_num[x] == 0:
-                    queue.append(x)
+    def beautifulSubarrays(self, nums: List[int]) -> int:
+        s = [0]
+        for x in nums:
+            s.append(s[-1] ^ x)
+        counter = Counter(s)
+        ans = 0
+        for k, v in counter.items():
+            ans += (v * (v - 1) // 2)
         return ans
 
 
 
 so = Solution()
-print(so.loudAndRich(richer = [[1,0],[2,1],[3,1],[3,7],[4,3],[5,3],[6,3]], quiet = [3,2,5,4,6,1,7,0]))  #
+print(so.beautifulSubarrays([4,3,1,2,4]))
+print(so.beautifulSubarrays([1,10,4]))
+
+
 
 

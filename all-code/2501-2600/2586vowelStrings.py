@@ -1,4 +1,39 @@
-import math
+# 给你一个下标从 0 开始的字符串数组 words 和两个整数：left 和 right 。
+#
+# 如果字符串以元音字母开头并以元音字母结尾，那么该字符串就是一个 元音字符串 ，其中元音字母是 'a'、'e'、'i'、'o'、'u' 。
+#
+# 返回 words[i] 是元音字符串的数目，其中 i 在闭区间 [left, right] 内。
+#
+#
+#
+# 示例 1：
+#
+# 输入：words = ["are","amy","u"], left = 0, right = 2
+# 输出：2
+# 解释：
+# - "are" 是一个元音字符串，因为它以 'a' 开头并以 'e' 结尾。
+# - "amy" 不是元音字符串，因为它没有以元音字母结尾。
+# - "u" 是一个元音字符串，因为它以 'u' 开头并以 'u' 结尾。
+# 在上述范围中的元音字符串数目为 2 。
+# 示例 2：
+#
+# 输入：words = ["hey","aeo","mu","ooo","artro"], left = 1, right = 4
+# 输出：3
+# 解释：
+# - "aeo" 是一个元音字符串，因为它以 'a' 开头并以 'o' 结尾。
+# - "mu" 不是元音字符串，因为它没有以元音字母开头。
+# - "ooo" 是一个元音字符串，因为它以 'o' 开头并以 'o' 结尾。
+# - "artro" 是一个元音字符串，因为它以 'a' 开头并以 'o' 结尾。
+# 在上述范围中的元音字符串数目为 3 。
+#
+#
+# 提示：
+#
+# 1 <= words.length <= 1000
+# 1 <= words[i].length <= 10
+# words[i] 仅由小写英文字母组成
+# 0 <= left <= right < words.length
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -18,7 +53,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -53,7 +88,7 @@ from heapq import *
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List
+from typing import List, Tuple
 # @lru_cache(None)
 
 # bit位 函数：
@@ -88,47 +123,37 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
 
 class Solution:
-    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
-        n = len(quiet)
-        tree = defaultdict(set)
-        pre_num = [0] * n
-        ans = list(range(n))
-        for x, y in richer:
-            if y not in tree[x]:
-                tree[x].add(y)
-                pre_num[y] += 1
-        queue = deque([i for i in range(n) if pre_num[i] == 0]) # deque 在操作大数组时，性能比 list 好很多
-        while len(queue):
-            q = queue.popleft()
-            # ans.append(q)
-            for x in tree[q]:
-                pre_num[x] -= 1
-                if quiet[ans[x]] > quiet[ans[q]]:
-                    ans[x] = ans[q]
-                if pre_num[x] == 0:
-                    queue.append(x)
+    def vowelStrings(self, words: List[str], left: int, right: int) -> int:
+        ans = 0
+        for word in words[left: right + 1]:
+            if word[0] in 'aeoui' and word[-1] in 'aeoui':
+                ans += 1
         return ans
 
 
-
 so = Solution()
-print(so.loudAndRich(richer = [[1,0],[2,1],[3,1],[3,7],[4,3],[5,3],[6,3]], quiet = [3,2,5,4,6,1,7,0]))  #
+print(so.vowelStrings(words = ["are","amy","u"], left = 0, right = 2))
+print(so.vowelStrings(words = ["hey","aeo","mu","ooo","artro"], left = 1, right = 4))
+print(so.vowelStrings(words = ["are","amy","u"], left = 0, right = 2))
+
+
 
 

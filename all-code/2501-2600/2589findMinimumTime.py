@@ -1,4 +1,38 @@
-import math
+# 你有一台电脑，它可以 同时 运行无数个任务。给你一个二维整数数组 tasks ，其中 tasks[i] = [starti, endi, durationi] 表示第 i 个任务需要在 闭区间 时间段 [starti, endi] 内运行 durationi 个整数时间点（但不需要连续）。
+#
+# 当电脑需要运行任务时，你可以打开电脑，如果空闲时，你可以将电脑关闭。
+#
+# 请你返回完成所有任务的情况下，电脑最少需要运行多少秒。
+#
+#
+#
+# 示例 1：
+#
+# 输入：tasks = [[2,3,1],[4,5,1],[1,5,2]]
+# 输出：2
+# 解释：
+# - 第一个任务在闭区间 [2, 2] 运行。
+# - 第二个任务在闭区间 [5, 5] 运行。
+# - 第三个任务在闭区间 [2, 2] 和 [5, 5] 运行。
+# 电脑总共运行 2 个整数时间点。
+# 示例 2：
+#
+# 输入：tasks = [[1,3,2],[2,5,3],[5,6,2]]
+# 输出：4
+# 解释：
+# - 第一个任务在闭区间 [2, 3] 运行
+# - 第二个任务在闭区间 [2, 3] 和 [5, 5] 运行。
+# - 第三个任务在闭区间 [5, 6] 运行。
+# 电脑总共运行 4 个整数时间点。
+#
+#
+# 提示：
+#
+# 1 <= tasks.length <= 2000
+# tasks[i].length == 3
+# 1 <= starti, endi <= 2000
+# 1 <= durationi <= endi - starti + 1
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -18,7 +52,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -53,7 +87,7 @@ from heapq import *
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List
+from typing import List, Tuple
 # @lru_cache(None)
 
 # bit位 函数：
@@ -88,47 +122,44 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
 
 class Solution:
-    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
-        n = len(quiet)
-        tree = defaultdict(set)
-        pre_num = [0] * n
-        ans = list(range(n))
-        for x, y in richer:
-            if y not in tree[x]:
-                tree[x].add(y)
-                pre_num[y] += 1
-        queue = deque([i for i in range(n) if pre_num[i] == 0]) # deque 在操作大数组时，性能比 list 好很多
-        while len(queue):
-            q = queue.popleft()
-            # ans.append(q)
-            for x in tree[q]:
-                pre_num[x] -= 1
-                if quiet[ans[x]] > quiet[ans[q]]:
-                    ans[x] = ans[q]
-                if pre_num[x] == 0:
-                    queue.append(x)
-        return ans
-
+    def findMinimumTime(self, tasks: List[List[int]]) -> int:
+        tasks.sort(key=lambda x: x[1])
+        vis = set()
+        # print(tasks)
+        for l, r, d in tasks:
+            cand = []
+            for i in range(l, r + 1):
+                if i not in vis:
+                    cand.append(i)
+            need = d - (r - l + 1 - len(cand))
+            for i in range(need):
+                vis.add(cand[-i - 1])
+        # print(vis)
+        return len(vis)
 
 
 so = Solution()
-print(so.loudAndRich(richer = [[1,0],[2,1],[3,1],[3,7],[4,3],[5,3],[6,3]], quiet = [3,2,5,4,6,1,7,0]))  #
+print(so.findMinimumTime([[1,3,2],[2,5,3],[5,6,2]]))
+print(so.findMinimumTime([[2,3,1],[4,5,1],[1,5,2]]))
+
+
 
 
