@@ -107,12 +107,27 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        n = len(nums)
+        s = Counter()
+        for i, x in enumerate(nums):
+            s[nums[i] % value] += 1
+
+        for i in range(n):
+            j = i % value
+            if s[j] > 0:
+                s[j] -= 1
+            else:
+                return i
+        return n
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.findSmallestInteger([1,2,3,4,0], 4))
+print(so.findSmallestInteger([3,0,3,2,4,2,1,1,0,4], 5))
+print(so.findSmallestInteger(nums = [1,-10,7,13,6,8], value = 7))
+print(so.findSmallestInteger(nums = [1,-10,7,13,6,8], value = 5))
 
 
 

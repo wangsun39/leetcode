@@ -107,12 +107,26 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def evenOddBit(self, n: int) -> List[int]:
+        b = bin(n)[2:]
+        # print(b)
+        n = len(b)
+        x = y = 0
+        for i in range(n):
+            if i & 1:
+                if b[n - 1 - i] == '1':
+                    y += 1
+            else:
+                if b[n - 1 - i] == '1':
+                    x += 1
+        return [x, y]
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.evenOddBit(17))
+print(so.evenOddBit(2))
 
 
 
