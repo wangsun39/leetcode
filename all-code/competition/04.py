@@ -105,29 +105,17 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
 
 class Solution:
-    def findSmallestInteger(self, nums: List[int], value: int) -> int:
-        n = len(nums)
-        s = Counter()
-        for i, x in enumerate(nums):
-            s[nums[i] % value] += 1
-
-        for i in range(n):
-            j = i % value
-            if s[j] > 0:
-                s[j] -= 1
-            else:
-                return i
-        return n
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.findSmallestInteger([1,2,3,4,0], 4))
-print(so.findSmallestInteger([3,0,3,2,4,2,1,1,0,4], 5))
-print(so.findSmallestInteger(nums = [1,-10,7,13,6,8], value = 7))
-print(so.findSmallestInteger(nums = [1,-10,7,13,6,8], value = 5))
+print(so.removeDigit())
 
 
 

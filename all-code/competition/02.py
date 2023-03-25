@@ -105,34 +105,17 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
 
 class Solution:
-    def checkValidGrid(self, grid: List[List[int]]) -> bool:
-        pos = {}
-        n = len(grid)
-        for i in range(n):
-            for j in range(n):
-                pos[grid[i][j]] = (i, j)
-        def check(a, b):
-            x, y = a
-            u, v = b
-            if abs(x - u) == 2 and abs(y - v) == 1:
-                return True
-            if abs(x - u) == 1 and abs(y - v) == 2:
-                return True
-            return False
-        if pos[0] != (0, 0): return False
-        for i in range(n * n - 1):
-            if not check(pos[i], pos[i + 1]):
-                return False
-        return True
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.checkValidGrid([[24,11,22,17,4],[21,16,5,12,9],[6,23,10,3,18],[15,20,1,8,13],[0,7,14,19,2]]))
-print(so.checkValidGrid(grid = [[0,11,16,5,20],[17,4,19,10,15],[12,1,8,21,6],[3,18,23,14,9],[24,13,2,7,22]]))
-print(so.checkValidGrid(grid = [[0,3,6],[5,8,1],[2,7,4]]))
+print(so.removeDigit())
 
 
 

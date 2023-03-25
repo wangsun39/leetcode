@@ -105,36 +105,17 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
 
 class Solution:
-    def beautifulSubsets(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        ans = 0
-        ss = set()
-        for i in range(n):
-            for j in range(i + 1, n):
-                if abs(nums[i] - nums[j]) == k:
-                    ss.add((i, j))
-        def judge(mask):
-            for x, y in ss:
-                if mask & (1 << x) and mask & (1 << y):
-                    return False
-            return True
-
-        for i in range(1, 2 ** n):
-            if judge(i):
-                ans += 1
-        return ans
-
-
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.beautifulSubsets(nums = [2,4,6], k = 2))
-print(so.beautifulSubsets([9,5,7,10,6,2], 9))
-print(so.beautifulSubsets(nums = [1], k = 1))
+print(so.removeDigit())
 
 
 

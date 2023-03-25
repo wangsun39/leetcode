@@ -105,30 +105,12 @@ class ListNode:
         self.next = next
 
 class Solution:
-    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
-        n = len(quiet)
-        tree = defaultdict(set)
-        pre_num = [0] * n
-        ans = list(range(n))
-        for x, y in richer:
-            if y not in tree[x]:
-                tree[x].add(y)
-                pre_num[y] += 1
-        queue = deque([i for i in range(n) if pre_num[i] == 0]) # deque 在操作大数组时，性能比 list 好很多
-        while len(queue):
-            q = queue.popleft()
-            # ans.append(q)
-            for x in tree[q]:
-                pre_num[x] -= 1
-                if quiet[ans[x]] > quiet[ans[q]]:
-                    ans[x] = ans[q]
-                if pre_num[x] == 0:
-                    queue.append(x)
-        return ans
+    def circleGame(self, toys: List[List[int]], circles: List[List[int]], r: int) -> int:
+        pass
 
 
 
 so = Solution()
-print(so.loudAndRich(richer = [[1,0],[2,1],[3,1],[3,7],[4,3],[5,3],[6,3]], quiet = [3,2,5,4,6,1,7,0]))  #
+print(so.flipChess(toys = [[3,3,1],[3,2,1]], circles = [[4,3]], r = 2))  #
 
 

@@ -105,6 +105,9 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
 
 class Solution:
     def removeDigit(self) -> str:
