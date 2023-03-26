@@ -1,6 +1,8 @@
 | 时间 | 场次 | 题号 | 题目      | 难度 | 说明 |
 |----|----|---------|-----|-----|--------|
-|2023-3-17| 第337场周赛  | Q3  | [美丽子集的数目](https://leetcode.cn/problems/the-number-of-beautiful-subsets/) |       | 本周AK，这题当时用了暴力法，实际有更合理的方法|
+|2023-3-26| 第338场周赛  | Q3  | [使数组元素全部相等的最少操作次数](https://leetcode.cn/problems/minimum-operations-to-make-all-array-elements-equal/) |       | 这题花了比较多的的时间，后来才想到就是个前缀和|
+|2023-3-26| 第338场周赛  | Q4  | [收集树中金币](https://leetcode.cn/problems/collect-coins-in-a-tree/) |       | 比赛没有时间做，这个难度太高了，其实这周正好训练的就是拓扑排序，但还是联想不到|
+|2023-3-19| 第337场周赛  | Q3  | [美丽子集的数目](https://leetcode.cn/problems/the-number-of-beautiful-subsets/) |   2023    | 本周AK，这题当时用了暴力法，实际有更合理的方法|
 |2023-3-12| 第336场周赛  | Q4  | [完成所有任务的最少时间](https://leetcode.cn/problems/minimum-time-to-complete-all-tasks/) |  2380     | 比赛时没有想到这种常用的思想，按区间左右端点排序，然后在贪心|
 |2023-2-26| 第334场周赛  | Q3  | [找出对应 LCP 矩阵的字符串](https://leetcode.cn/problems/find-the-string-with-lcp/) |   1843    | 这题比赛时用了很长的时间，WA了5次，最终发现实际是个双指针的题，说明还是不熟练，需要一个数学的转换|
 |2023-2-26| 第334场周赛  | Q4  | [在网格图中访问一个格子的最少时间](https://leetcode.cn/problems/minimum-time-to-visit-a-cell-in-a-grid/) |   2381    | 这题当时没时间看，最终是一个最短路径的问题，学习一下Dijkstra算法|
