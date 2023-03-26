@@ -110,12 +110,15 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def kItemsWithMaximumSum(self, numOnes: int, numZeros: int, numNegOnes: int, k: int) -> int:
+        nums = [1] * numOnes + [0] * numZeros + [-1] * numNegOnes
+        nums.sort(reverse=True)
+        return sum(nums[:k])
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 2))
+print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 4))
 
 
 

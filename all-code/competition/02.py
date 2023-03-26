@@ -110,12 +110,47 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def primeSubOperation(self, nums: List[int]) -> bool:
+        def all_primes(n):
+            is_prime = [False, False] + [True] * (n - 1)
+            primes = []
+            flg = False
+            for i in range(2, n + 1):
+                if not is_prime[i]: continue
+                primes.append(i)
+                if flg:
+                    continue
+                if i * i > n:
+                    flg = True
+                    continue
+                j = i * i
+                while j < n + 1:
+                    is_prime[j] = False
+                    j += i
+            return primes
+        mx = max(nums)
+        primes = all_primes(1200)
+        print(primes)
+        pre = 0
+        for i, x in enumerate(nums):
+            pos = bisect_left(primes, x - pre)
+            if pos == 0:
+                if x <= pre:
+                    return False
+                pre = x
+            elif x - primes[pos - 1] > 0:
+                pre = x - primes[pos - 1]
+            else:
+                return False
+        return True
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.primeSubOperation([2,2]))
+print(so.primeSubOperation([5,8,3]))
+print(so.primeSubOperation([998,2]))
+print(so.primeSubOperation([6,8,11,12]))
+print(so.primeSubOperation([4,9,6,10]))
 
 
 
