@@ -110,15 +110,19 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def kItemsWithMaximumSum(self, numOnes: int, numZeros: int, numNegOnes: int, k: int) -> int:
-        nums = [1] * numOnes + [0] * numZeros + [-1] * numNegOnes
-        nums.sort(reverse=True)
-        return sum(nums[:k])
+    def findTheLongestBalancedSubstring(self, s: str) -> int:
+        n = len(s)
+        for i in range(n // 2, 0, -1):
+            if s.find('0' * i + '1' * i) != -1:
+                return i * 2
+        return 0
 
 
 so = Solution()
-print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 2))
-print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 4))
+print(so.findTheLongestBalancedSubstring("01000111"))
+print(so.findTheLongestBalancedSubstring("000111"))
+print(so.findTheLongestBalancedSubstring("00111"))
+print(so.findTheLongestBalancedSubstring("111"))
 
 
 

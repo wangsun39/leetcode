@@ -1,31 +1,34 @@
-# 给你一个由正整数组成的数组 nums 和一个 正 整数 k 。
+# 袋子中装有一些物品，每个物品上都标记着数字 1 、0 或 -1 。
 #
-# 如果 nums 的子集中，任意两个整数的绝对差均不等于 k ，则认为该子数组是一个 美丽 子集。
+# 给你四个非负整数 numOnes 、numZeros 、numNegOnes 和 k 。
 #
-# 返回数组 nums 中 非空 且 美丽 的子集数目。
+# 袋子最初包含：
 #
-# nums 的子集定义为：可以经由 nums 删除某些元素（也可能不删除）得到的一个数组。只有在删除元素时选择的索引不同的情况下，两个子集才会被视作是不同的子集。
+# numOnes 件标记为 1 的物品。
+# numZeroes 件标记为 0 的物品。
+# numNegOnes 件标记为 -1 的物品。
+# 现计划从这些物品中恰好选出 k 件物品。返回所有可行方案中，物品上所标记数字之和的最大值。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums = [2,4,6], k = 2
-# 输出：4
-# 解释：数组 nums 中的美丽子集有：[2], [4], [6], [2, 6] 。
-# 可以证明数组 [2,4,6] 中只存在 4 个美丽子集。
+# 输入：numOnes = 3, numZeros = 2, numNegOnes = 0, k = 2
+# 输出：2
+# 解释：袋子中的物品分别标记为 {1, 1, 1, 0, 0} 。取 2 件标记为 1 的物品，得到的数字之和为 2 。
+# 可以证明 2 是所有可行方案中的最大值。
 # 示例 2：
 #
-# 输入：nums = [1], k = 1
-# 输出：1
-# 解释：数组 nums 中的美丽数组有：[1] 。
-# 可以证明数组 [1] 中只存在 1 个美丽子集。
+# 输入：numOnes = 3, numZeros = 2, numNegOnes = 0, k = 4
+# 输出：3
+# 解释：袋子中的物品分别标记为 {1, 1, 1, 0, 0} 。取 3 件标记为 1 的物品，1 件标记为 0 的物品，得到的数字之和为 3 。
+# 可以证明 3 是所有可行方案中的最大值。
 #
 #
 # 提示：
 #
-# 1 <= nums.length <= 20
-# 1 <= nums[i], k <= 1000
+# 0 <= numOnes, numZeros, numNegOnes <= 50
+# 0 <= k <= numOnes + numZeros + numNegOnes
 
 from typing import List
 from typing import Optional
@@ -133,36 +136,20 @@ from sortedcontainers import SortedList
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
 
 class Solution:
-    def beautifulSubsets(self, nums: List[int], k: int) -> int:
-        n = len(nums)
-        ans = 0
-        ss = set()
-        for i in range(n):
-            for j in range(i + 1, n):
-                if abs(nums[i] - nums[j]) == k:
-                    ss.add((i, j))
-        def judge(mask):
-            for x, y in ss:
-                if mask & (1 << x) and mask & (1 << y):
-                    return False
-            return True
-
-        for i in range(1, 2 ** n):
-            if judge(i):
-                ans += 1
-        return ans
-
-
-
-
+    def kItemsWithMaximumSum(self, numOnes: int, numZeros: int, numNegOnes: int, k: int) -> int:
+        nums = [1] * numOnes + [0] * numZeros + [-1] * numNegOnes
+        nums.sort(reverse=True)
+        return sum(nums[:k])
 
 
 so = Solution()
-print(so.beautifulSubsets(nums = [2,4,6], k = 2))
-print(so.beautifulSubsets([9,5,7,10,6,2], 9))
-print(so.beautifulSubsets(nums = [1], k = 1))
+print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 2))
+print(so.kItemsWithMaximumSum(numOnes = 3, numZeros = 2, numNegOnes = 0, k = 4))
 
 
 
