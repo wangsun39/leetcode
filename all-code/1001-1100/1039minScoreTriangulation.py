@@ -43,20 +43,14 @@ class Solution:
         n = len(values)
 
         @cache
-        def dfs(t):
-            ll_t = list(t)
+        def dfs(i, j):  # 在 [i, j] 区间上的最小得分
+            if j - i < 2: return 0
             res = inf
-            m = len(ll_t)
-            if len(ll_t) == 3:
-                return values[ll_t[0]] * values[ll_t[1]] * values[ll_t[2]]
-            for i in range(m):
-                # print(i - 1, i + 1, ll_t[i - 1], ll_t[i + 1])
-                v = values[ll_t[i - 1]] * values[ll_t[i]] * values[ll_t[(i + 1) % m]]
-                tt = tuple(ll_t[:i] + ll_t[i + 1:])
-                res = min(res, dfs(tt) + v)
+            for k in range(i + 1, j):
+                res = min(res, dfs(i, k) + dfs(k, j) + values[i] * values[j] * values[k])
             return res
+        return dfs(0, n - 1)
 
-        return dfs(tuple(range(n)))
 
 
 obj = Solution()
