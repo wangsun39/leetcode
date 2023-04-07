@@ -1,5 +1,5 @@
 class Solution:
-    def baseNeg2(self, N: int):
+    def baseNeg21(self, N: int):
         quotient = N
         strings = ''
         if 0 == N:
@@ -16,6 +16,22 @@ class Solution:
         remainder = 1
         quotient = (N - remainder) / (-2)
         return quotient, remainder
+
+    def baseNeg2(self, N: int):
+        # 2023/4/6
+        def div2(x):
+            q, r = divmod(x, -2)
+            if r == -1:
+                q += 1
+                r = 1
+            return q, r
+        if N == 0: return '0'
+        ans = []
+        while N != 0:
+            q, r = div2(N)
+            N = q
+            ans.append(str(r))
+        return ''.join(ans[::-1])
 
 
 # Your MapSum object will be instantiated and called as such:
