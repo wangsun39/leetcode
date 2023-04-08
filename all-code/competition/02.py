@@ -110,22 +110,12 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def findMatrix(self, nums: List[int]) -> List[List[int]]:
-        counter = Counter(nums)
-        l = [[k, v] for k, v in counter.items()]
-        l.sort(key=lambda x:x[1], reverse=True)
-        ans = []
-        for _ in range(l[0][1]):
-            ans.append([l[0][0]])
-        for k, v in l[1:]:
-            for i in range(v):
-                ans[i].append(k)
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.findMatrix([1,3,4,1,2,3,1]))
-print(so.findMatrix([1,2,3,4]))
+print(so.removeDigit())
 
 
 
