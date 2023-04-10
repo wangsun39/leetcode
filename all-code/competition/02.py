@@ -110,12 +110,29 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def distance(self, nums: List[int]) -> List[int]:
+        d = defaultdict(list)
+        n = len(nums)
+        ans = [0] * n
+        for i, x in enumerate(nums):
+            d[x].append(i)
+        for l in d.values():
+            m = len(l)
+            if m == 1: continue
+            left_sum, right_sum = 0, sum(l)
+            left, right = 0, m
+            for i in l:
+                right_sum -= i
+                right -= 1
+                ans[i] = right_sum - i * right + i * left - left_sum
+                left += 1
+                left_sum += i
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.distance([1,3,1,1,2]))
+print(so.distance([0,5,3]))
 
 
 

@@ -110,12 +110,39 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimizeMax(self, nums: List[int], p: int) -> int:
+        if p == 0: return 0
+        nums.sort()
+        n = len(nums)
+
+        def check(m):
+            num = 0
+            i = 0
+            while i + 1 < n:
+                if nums[i + 1] - nums[i] <= m:
+                    num += 1
+                    if num >= p:
+                        return True
+                    i += 2
+                else:
+                    i += 1
+            return False
+
+        lo, hi = 0, nums[-1] - nums[0]
+        if check(lo): return lo
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return lo + 1
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimizeMax(nums = [0,5,3,4], p = 0))
+print(so.minimizeMax(nums = [10,1,2,7,1,3], p = 0))
+print(so.minimizeMax(nums = [4,2,1,2], p = 1))
 
 
 
