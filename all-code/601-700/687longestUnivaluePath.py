@@ -55,7 +55,7 @@ class Solution:
         if root is not None:
             helper(root)
         return longest
-    def longestUnivaluePath(self, root: Optional[TreeNode]) -> int:
+    def longestUnivaluePath2(self, root: Optional[TreeNode]) -> int:
         def helper(node):
             a1, a2 = 1, 1
             if node.left:
@@ -77,6 +77,25 @@ class Solution:
         x, y = helper(root)
         return y - 1
 
+    def longestUnivaluePath(self, root: Optional[TreeNode]) -> int:
+        # 2023/4/19 树形 DP
+        ans = 0
+        def dfs(x):
+            if x is None:return 0
+            nonlocal ans
+            l = r = res = 0
+            if x.left:
+                res = dfs(x.left)
+                if x.val == x.left.val:
+                    l = res
+            if x.right:
+                res = dfs(x.right)
+                if x.val == x.right.val:
+                    r = res
+            ans = max(ans, l + r + 1)
+            return max(l, r) + 1
+        dfs(root)
+        return ans - 1 if ans > 0 else 0
 
 
 so = Solution()
