@@ -112,28 +112,6 @@ from sortedcontainers import SortedList, SortedDict
 
 
 class Solution:
-    def fieldOfGreatestBlessing1(self, forceField: List[List[int]]) -> int:
-        ff = [(x - side / 2, x + side / 2, y - side / 2, y + side / 2, 1 << i) for i, (x, y, side) in enumerate(forceField)]
-        print(len(ff))
-        def proc(fff):
-            res = set()
-            flg = set()
-            m = len(fff)
-            for i in range(m):
-                for j in range(i + 1, m):
-                    x, y = fff[i], fff[j]
-                    if x[4]|y[4] in flg: continue
-                    if x[0] > y[1] or y[0] > x[1] or x[2] > y[3] or y[2] > x[3]:  # 无交集
-                        continue
-                    res.add((max(x[0],y[0]), min(x[1], y[1]), max(x[2], y[2]), min(x[3], y[3]), x[4]|y[4]))
-                    flg.add(x[4]|y[4])
-            return list(res)
-
-        ans = 0
-        while len(ff):
-            ans += 1
-            ff = proc(ff)
-        return ans
 
     def fieldOfGreatestBlessing(self, forceField: List[List[int]]) -> int:
         ff = [(x - side / 2, x + side / 2, y - side / 2, y + side / 2) for x, y, side in forceField]
