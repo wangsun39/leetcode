@@ -73,6 +73,14 @@ def euler_all_primes(n):
 
     return primes
 
+def is_prime(n: int) -> bool:
+    i = 2
+    while i * i <= n:
+        if n % i == 0:
+            return False
+        i += 1
+    return n >= 2  # 1 不是质数
+
 print(euler_all_primes(100))
 
 

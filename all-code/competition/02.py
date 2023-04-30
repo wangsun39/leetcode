@@ -87,18 +87,26 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
-    # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+from sortedcontainers import SortedList, SortedDict, SortedSet
+# sl = SortedList()
+# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+# sl.clear() 移除所有元素。时间复杂度O(n).
+# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+# sl.bisect_left(value)
+# sl.bisect_right(value)
+# sl.count(value)
+# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
 
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
@@ -110,33 +118,25 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def adventureCamp(self, expeditions: List[str]) -> int:
-        s = set(expeditions[0].split('->'))
-        def f(exp):
-            if len(exp) == 0: return 0
-            res = 0
-            l = exp.split('->')
-            for x in l:
-                if x not in s:
-                    res += 1
-                    s.add(x)
-            return res
-
-        mx = 0
-        ans = -1
-        for i, x in enumerate(expeditions[1:], 1):
-            cur = f(x)
-            if mx < cur:
-                mx = cur
-                ans = i
-        return ans
-
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        d = {}
+        r, c = len(mat), len(mat[0])
+        for i in range(r):
+            for j in range(c):
+                d[mat[i][j]] = (i, j)
+        vis_r = [0] * r
+        vis_c = [0] * c
+        for i, x in enumerate(arr):
+            row, col = d[x]
+            vis_r[row] += 1
+            vis_c[col] += 1
+            if vis_r[row] == c or vis_c[col] == r:
+                return i
 
 
 so = Solution()
-print(so.adventureCamp(["Alice->Dex","","Dex"]))
-print(so.adventureCamp(["leet->code","leet->code->Campsite->Leet","leet->code->leet->courier"]))
-print(so.adventureCamp(["","Gryffindor->Slytherin->Gryffindor","Hogwarts->Hufflepuff->Ravenclaw"]))
+print(so.firstCompleteIndex(arr = [1,3,4,2], mat = [[1,4],[2,3]]))
+print(so.firstCompleteIndex(arr = [2,8,7,4,1,3,5,6,9], mat = [[3,2,5],[1,4,6],[8,7,9]]))
 
 
 

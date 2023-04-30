@@ -110,12 +110,31 @@ from sortedcontainers import SortedList
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def smallestBeautifulString(self, s: str, k: int) -> str:
+        n = len(s)
+        nt = [None] * n
+        ov = [False] * n
+        mx = ord('a') + k - 1
+        for i, x in enumerate(s):
+            if ord(x) + 1 < mx:
+                if i == 0:
+                    nt[i] = chr(ord(x) + 1)
+                    continue
+                if ord(s[i - 1]) != ord(x) + 1:
+                    nt[i] = chr(ord(x) + 1)
+                    continue
+                if i > 1 and ord(s[i - 2]) != ord(x) + 2:
+                    nt[i] = chr(ord(x) + 2)
+                    continue
+            else:
+                ov[i] = True
+                if i > 0 and ord(s[i - 1]) != ord(x) + 1:
+                    pass
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.smallestBeautifulString())
 
 
 

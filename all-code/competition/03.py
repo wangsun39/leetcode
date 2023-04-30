@@ -87,20 +87,26 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList, SortedDict
-
-
+from sortedcontainers import SortedList, SortedDict, SortedSet
 # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+# sl.clear() 移除所有元素。时间复杂度O(n).
+# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+# sl.bisect_left(value)
+# sl.bisect_right(value)
+# sl.count(value)
+# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
 
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
@@ -112,70 +118,68 @@ from sortedcontainers import SortedList, SortedDict
 
 
 class Solution:
-    def fieldOfGreatestBlessing1(self, forceField: List[List[int]]) -> int:
-        ff = [(x - side / 2, x + side / 2, y - side / 2, y + side / 2, 1 << i) for i, (x, y, side) in enumerate(forceField)]
-        print(len(ff))
-        def proc(fff):
-            res = set()
-            flg = set()
-            m = len(fff)
-            for i in range(m):
-                for j in range(i + 1, m):
-                    x, y = fff[i], fff[j]
-                    if x[4]|y[4] in flg: continue
-                    if x[0] > y[1] or y[0] > x[1] or x[2] > y[3] or y[2] > x[3]:  # 无交集
-                        continue
-                    res.add((max(x[0],y[0]), min(x[1], y[1]), max(x[2], y[2]), min(x[3], y[3]), x[4]|y[4]))
-                    flg.add(x[4]|y[4])
-            return list(res)
+    def minimumCost(self, start: List[int], target: List[int], specialRoads: List[List[int]]) -> int:
+        p_2_i = {}
+        p_2_i[(start[0], start[1])] = 0
+        n = 1
+        if (target[0], target[1]) not in p_2_i:
+            p_2_i[(target[0], target[1])] = n
+            n += 1
+        begin, end = p_2_i[(start[0], start[1])], p_2_i[(target[0], target[1])]
+        ss = set()
+        for x, y, u, v, _ in specialRoads:
+            ss.add((x, y))
+            ss.add((u, v))
+        ss.add((start[0], start[1]))
+        ss.add((target[0], target[1]))
+        ll = list(ss)
+        road = {}
+        for x, y in ll:
+            if (x, y) not in p_2_i:
+                p_2_i[(x, y)] = n
+                n += 1
+        for i in range(n):
+            for j in range(n):
+                if (ll[i][0], ll[i][1], ll[j][0], ll[j][1]) not in road:
+                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1])
+                else:
+                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = min(road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])], abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1]))
 
-        ans = 0
-        while len(ff):
-            ans += 1
-            ff = proc(ff)
-        return ans
+        for x, y, u, v, cost in specialRoads:
+            if (x, y, u, v) in road and road[(x, y, u, v)] > cost:
+                road[(x, y, u, v)] = cost
 
-    def fieldOfGreatestBlessing(self, forceField: List[List[int]]) -> int:
-        ff = [(x - side / 2, x + side / 2, y - side / 2, y + side / 2) for x, y, side in forceField]
 
-        p_x = set()
-        for rec in ff:
-            p_x.add(rec[0])
-            p_x.add(rec[1])
-        p_x = list(p_x)
-        # p_x.sort()
+        g = defaultdict(list)
+        for k, v in road.items():
+            a, b = p_2_i[(k[0], k[1])], p_2_i[(k[2], k[3])]
+            g[a].append([b, v])
 
-        def f(l):
-            d = SortedDict()
-            for start, end in l:
-                d[start] = d.setdefault(start, 0) + 1
-                d[end + 0.001] = d.setdefault(end, 0) - 1
+        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
+            dist = [inf] * len(g)
+            dist[start] = 0
+            h = [(0, start)]
+            while h:
+                d, x = heappop(h)
+                if d > dist[x]:
+                    continue
+                for y, wt in g[x]:
+                    new_d = dist[x] + wt
+                    if new_d < dist[y]:
+                        dist[y] = new_d
+                        heappush(h, (new_d, y))
+            return dist
+        dis = dijkstra(g, 0)
+        return dis[end]
 
-            ans = mx = 0
-            for freq in d.values():
-                mx += freq
-                ans = max(ans, mx)
-            return ans
 
-        m = len(p_x)
-        ans = 0
-        for i in range(m):
-            p_y = []
-            for rec in ff:
-                if p_x[i] < rec[0] or p_x[i] > rec[1]: continue
-                p_y.append([rec[2], rec[3]])
-            # p_y.sort()
-            res = f(p_y)
-            if res > ans:
-                ans = res
-        return ans
+
 
 
 
 so = Solution()
-print(so.fieldOfGreatestBlessing([[932,566,342],[546,489,250],[723,454,748],[830,887,334],[617,534,721],[924,267,892],[151,64,65],[318,825,196],[102,941,940],[748,562,582],[76,938,228],[921,15,245],[871,96,823],[701,737,991],[339,861,146],[484,409,823],[574,728,557],[104,845,459],[363,804,94],[445,685,83],[324,641,328],[626,2,897],[656,627,521],[935,506,956],[210,848,502],[990,889,112]]))
-print(so.fieldOfGreatestBlessing([[0,0,1],[1,0,1]]))
-print(so.fieldOfGreatestBlessing([[4,4,6],[7,5,3],[1,6,2],[5,6,3]]))
+print(so.minimumCost(start = [1,1], target = [4,5], specialRoads = [[1,2,3,3,2],[3,4,4,5,1]]))
+print(so.minimumCost(start = [3,2], target = [5,7], specialRoads = [[3,2,3,4,4],[3,3,5,5,5],[3,4,5,6,6]]))
 
 
 

@@ -38,18 +38,60 @@
 # 1 <= words[i].length, results.length <= 7
 # words[i], result 只含有大写英文字母
 # 表达式中使用的不同字符数最大为 10
-
-
+from functools import cache
 from typing import List
 
 class Solution:
     def isSolvable(self, words: List[str], result: str) -> bool:
-        pass
+        head = set(w[0] for w in words)
+        head.add(result[0])
+        all_char = set()
+        for w in words + [result]:
+            for x in w:
+                all_char.add(x)
+        c = list(head) + list(all_char - head)
+        n_h = len(head)
+        n = len(c)
+
+        map = {}
+        # @cache
+        def dfs(i, mask):
+            if i == n:
+                l = []
+                for w in words:
+                    v = 0
+                    for x in w:
+                        v = v * 10 + map[x]
+                    l.append(v)
+                res = 0
+                for x in result:
+                    res = res * 10 + map[x]
+                # print(l, res, bin(mask), map)
+                return sum(l) == res
+
+
+            begin = 1 if i < n_h else 0
+            for k in range(begin, 10):
+                if mask & (1 << k) == 0:
+                    n_mask = mask | (1 << k)
+                    map[c[i]] = k
+                    res = dfs(i + 1, n_mask)
+                    if res: return res
+                    map.pop(c[i])
+
+            return False
+
+        return dfs(0, 0)
+
 
 
 
 so = Solution()
+print(so.isSolvable(["BUT","ITS","STILL"], "FUNNY"))
 print(so.isSolvable(words = ["SEND","MORE"], result = "MONEY"))
+print(so.isSolvable(words = ["SIX","SEVEN","SEVEN"], result = "TWENTY"))
+print(so.isSolvable(words = ["THIS","IS","TOO"], result = "FUNNY"))
+print(so.isSolvable(words = ["LEET","CODE"], result = "POINT"))
 
 
 

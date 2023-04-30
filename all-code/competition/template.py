@@ -87,7 +87,7 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList, SortedDict
+from sortedcontainers import SortedList, SortedDict, SortedSet
 # sl = SortedList()
 # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
 # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
@@ -99,6 +99,14 @@ from sortedcontainers import SortedList, SortedDict
 # sl.bisect_right(value)
 # sl.count(value)
 # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
 
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
