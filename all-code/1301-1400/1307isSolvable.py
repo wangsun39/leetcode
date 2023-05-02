@@ -43,55 +43,70 @@ from typing import List
 
 class Solution:
     def isSolvable(self, words: List[str], result: str) -> bool:
-        head = set(w[0] for w in words)
-        head.add(result[0])
-        all_char = set()
-        for w in words + [result]:
-            for x in w:
-                all_char.add(x)
-        c = list(head) + list(all_char - head)
-        n_h = len(head)
-        n = len(c)
-
-        map = {}
-        # @cache
-        def dfs(i, mask):
-            if i == n:
-                l = []
-                for w in words:
-                    v = 0
-                    for x in w:
-                        v = v * 10 + map[x]
-                    l.append(v)
-                res = 0
-                for x in result:
-                    res = res * 10 + map[x]
-                # print(l, res, bin(mask), map)
-                return sum(l) == res
-
-
-            begin = 1 if i < n_h else 0
-            for k in range(begin, 10):
-                if mask & (1 << k) == 0:
-                    n_mask = mask | (1 << k)
-                    map[c[i]] = k
-                    res = dfs(i + 1, n_mask)
-                    if res: return res
-                    map.pop(c[i])
-
+        h = set(w[0] for w in words + [result] if len(w) > 1)  # 首字母
+        d = {}  # 字母到数字的映射
+        words = [list(w[::-1]) for w in words]  # 倒序放置
+        result = list(result[::-1])
+        # print(words)
+        n = len(words)
+        if len(result) < max(map(len, words)):
             return False
+        m = len(result)
 
-        return dfs(0, 0)
+        def dfs(idx, mask, carry):
+            if idx > m - 1: return carry == 0
+            s = 0
+            # 寻找 words[0][idx] + ... + words[n - 1][idx] == result[idx]
+            not_finish = 0
+            for i in range(n):
+                if len(words[i]) <= idx: continue
+                if words[i][idx] in d:
+                    s += d[words[i][idx]]
+                    continue
+                not_finish = 1
+                # 走到这说明进入这个函数的时候，有的字母还没有全部映射到数字，需要在下面的for中映射
+                # 如果在for中找到正确的组合，那就在for中能return True，否则就失败了
+                for j in range(10):
+                    if mask & 1 << j: continue
+                    if words[i][idx] in h and j == 0: continue
+                    d[words[i][idx]] = j
+                    res = dfs(idx, mask | (1 << j), carry)
+                    if res: return True
+                    d.pop(words[i][idx])
+                if not_finish:  # 这个地方很关键，开始把这段放在了 i 的for循环之外，性能差了很多！！！
+                    return False
+            # 走到这里说明进入这个函数的时，所有的字母都已经映射到数字，只要校验一下即可
+            if result[idx] in d:
+                if d[result[idx]] != (s + carry) % 10:
+                    return False
+                return dfs(idx + 1, mask, (s + carry) // 10)
+
+            v = (s + carry) % 10
+            if mask & 1 << v or (v == 0 and result[idx] in h): return False
+            d[result[idx]] = v
+            res = dfs(idx + 1, mask | 1 << v, (s + carry) // 10)
+            if res: return True
+            d.pop(result[idx])
+
+        return dfs(0, 0, 0)
+
+
 
 
 
 
 so = Solution()
+print(so.isSolvable(["AB","CD","EF"], "GHIJ"))  # False
+print(so.isSolvable(["AA","BB"], "AA"))  # True
+print(so.isSolvable(["A","B"], "A"))  # True
+print(so.isSolvable(["CHE","IJGD","GFJG","GAD","GCG"], "EEIE"))  # True
+print(so.isSolvable(["CBA","CBA","CBA","CBA","CBA"], "EDD"))  # False
+print(so.isSolvable(words = ["SEND","MORE"], result = "MONEY"))  # True
+# print(so.isSolvable(["I","THINK","IT","BE","THINE"], "INDEED"))
+print(so.isSolvable(words = ["LEET","CODE"], result = "POINT"))  # False
 print(so.isSolvable(["BUT","ITS","STILL"], "FUNNY"))
-print(so.isSolvable(words = ["SEND","MORE"], result = "MONEY"))
 print(so.isSolvable(words = ["SIX","SEVEN","SEVEN"], result = "TWENTY"))
 print(so.isSolvable(words = ["THIS","IS","TOO"], result = "FUNNY"))
-print(so.isSolvable(words = ["LEET","CODE"], result = "POINT"))
 
 
 
