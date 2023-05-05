@@ -38,6 +38,11 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
+# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
+
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
