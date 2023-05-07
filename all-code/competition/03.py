@@ -38,6 +38,11 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
+# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
+
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -118,68 +123,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def minimumCost(self, start: List[int], target: List[int], specialRoads: List[List[int]]) -> int:
-        p_2_i = {}
-        p_2_i[(start[0], start[1])] = 0
-        n = 1
-        if (target[0], target[1]) not in p_2_i:
-            p_2_i[(target[0], target[1])] = n
-            n += 1
-        begin, end = p_2_i[(start[0], start[1])], p_2_i[(target[0], target[1])]
-        ss = set()
-        for x, y, u, v, _ in specialRoads:
-            ss.add((x, y))
-            ss.add((u, v))
-        ss.add((start[0], start[1]))
-        ss.add((target[0], target[1]))
-        ll = list(ss)
-        road = {}
-        for x, y in ll:
-            if (x, y) not in p_2_i:
-                p_2_i[(x, y)] = n
-                n += 1
-        for i in range(n):
-            for j in range(n):
-                if (ll[i][0], ll[i][1], ll[j][0], ll[j][1]) not in road:
-                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1])
-                else:
-                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = min(road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])], abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1]))
-
-        for x, y, u, v, cost in specialRoads:
-            if (x, y, u, v) in road and road[(x, y, u, v)] > cost:
-                road[(x, y, u, v)] = cost
-
-
-        g = defaultdict(list)
-        for k, v in road.items():
-            a, b = p_2_i[(k[0], k[1])], p_2_i[(k[2], k[3])]
-            g[a].append([b, v])
-
-        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
-            dist = [inf] * len(g)
-            dist[start] = 0
-            h = [(0, start)]
-            while h:
-                d, x = heappop(h)
-                if d > dist[x]:
-                    continue
-                for y, wt in g[x]:
-                    new_d = dist[x] + wt
-                    if new_d < dist[y]:
-                        dist[y] = new_d
-                        heappush(h, (new_d, y))
-            return dist
-        dis = dijkstra(g, 0)
-        return dis[end]
-
-
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minimumCost(start = [1,1], target = [4,5], specialRoads = [[1,2,3,3,2],[3,4,4,5,1]]))
-print(so.minimumCost(start = [3,2], target = [5,7], specialRoads = [[3,2,3,4,4],[3,3,5,5,5],[3,4,5,6,6]]))
+print(so.removeDigit())
 
 
 

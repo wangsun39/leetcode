@@ -38,6 +38,11 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
+# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
+
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -87,18 +92,26 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
-    # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+from sortedcontainers import SortedList, SortedDict, SortedSet
+# sl = SortedList()
+# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+# sl.clear() 移除所有元素。时间复杂度O(n).
+# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+# sl.bisect_left(value)
+# sl.bisect_right(value)
+# sl.count(value)
+# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
 
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，

@@ -38,11 +38,6 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
-# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
-
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -123,12 +118,25 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        d = {}
+        r, c = len(mat), len(mat[0])
+        for i in range(r):
+            for j in range(c):
+                d[mat[i][j]] = (i, j)
+        vis_r = [0] * r
+        vis_c = [0] * c
+        for i, x in enumerate(arr):
+            row, col = d[x]
+            vis_r[row] += 1
+            vis_c[col] += 1
+            if vis_r[row] == c or vis_c[col] == r:
+                return i
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.firstCompleteIndex(arr = [1,3,4,2], mat = [[1,4],[2,3]]))
+print(so.firstCompleteIndex(arr = [2,8,7,4,1,3,5,6,9], mat = [[3,2,5],[1,4,6],[8,7,9]]))
 
 
 

@@ -38,11 +38,6 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
-# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
-
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -123,12 +118,26 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def isWinner(self, player1: List[int], player2: List[int]) -> int:
+        def get(player):
+            score = 0
+            for i, x in enumerate(player):
+                if (i > 0 and player[i - 1] == 10) or (i > 1 and player[i - 2] == 10):
+                    score += x * 2
+                else:
+                    score += x
+            return score
+        s1, s2 = get(player1), get(player2)
+        if s1 == s2:
+            return 0
+        return 1 if s1 > s2 else 2
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.isWinner([5,6,1,10], [5,1,10,5]))
+print(so.isWinner(player1 = [4,10,7,9], player2 = [6,5,2,3]))
+print(so.isWinner(player1 = [3,5,7,6], player2 = [8,10,10,2]))
+print(so.isWinner(player1 = [2,3], player2 = [4,1]))
 
 
 
