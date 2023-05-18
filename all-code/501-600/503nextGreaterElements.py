@@ -36,7 +36,7 @@ class Solution:
                 order_seq.pop(0)
         return nextGList
 
-    def nextGreaterElements(self, nums):
+    def nextGreaterElements2(self, nums):
         nextGList = [] #记录下个更大元素对应列表
         for i in range(len(nums)):
             nextGList.append(-1)
@@ -64,6 +64,23 @@ class Solution:
                 idx_dict.pop(order_seq[0])
                 order_seq.pop(0)
         return nextGList
+
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        # 2023/5/16
+        stack = []
+        n = len(nums)
+        ans = [0] * n
+        for i, x in enumerate(nums + nums):
+            while len(stack) and stack[-1][1] < x:
+                j, y = stack.pop()
+                if j < n:
+                    ans[j] = x
+            stack.append([i, x])
+        while len(stack):
+            i, x = stack.pop()
+            if i < n:
+                ans[i] = -1
+        return ans
 
 
 
