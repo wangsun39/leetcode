@@ -1,3 +1,35 @@
+# 如果一个字符串满足以下条件，则称其为 美丽字符串 ：
+#
+# 它由英语小写字母表的前 k 个字母组成。
+# 它不包含任何长度为 2 或更长的回文子字符串。
+# 给你一个长度为 n 的美丽字符串 s 和一个正整数 k 。
+#
+# 请你找出并返回一个长度为 n 的美丽字符串，该字符串还满足：在字典序大于 s 的所有美丽字符串中字典序最小。如果不存在这样的字符串，则返回一个空字符串。
+#
+# 对于长度相同的两个字符串 a 和 b ，如果字符串 a 在与字符串 b 不同的第一个位置上的字符字典序更大，则字符串 a 的字典序大于字符串 b 。
+#
+# 例如，"abcd" 的字典序比 "abcc" 更大，因为在不同的第一个位置（第四个字符）上 d 的字典序大于 c 。
+#
+#
+# 示例 1：
+#
+# 输入：s = "abcz", k = 26
+# 输出："abda"
+# 解释：字符串 "abda" 既是美丽字符串，又满足字典序大于 "abcz" 。
+# 可以证明不存在字符串同时满足字典序大于 "abcz"、美丽字符串、字典序小于 "abda" 这三个条件。
+# 示例 2：
+#
+# 输入：s = "dc", k = 4
+# 输出：""
+# 解释：可以证明，不存在既是美丽字符串，又字典序大于 "dc" 的字符串。
+#
+#
+# 提示：
+#
+# 1 <= n == s.length <= 105
+# 4 <= k <= 26
+# s 是一个美丽字符串
+
 
 from typing import List
 from typing import Optional
@@ -118,59 +150,9 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def minimumCost(self, start: List[int], target: List[int], specialRoads: List[List[int]]) -> int:
-        p_2_i = {}
-        p_2_i[(start[0], start[1])] = 0
-        n = 1
-        if (target[0], target[1]) not in p_2_i:
-            p_2_i[(target[0], target[1])] = n
-            n += 1
-        begin, end = p_2_i[(start[0], start[1])], p_2_i[(target[0], target[1])]
-        ss = set()
-        for x, y, u, v, _ in specialRoads:
-            ss.add((x, y))
-            ss.add((u, v))
-        ss.add((start[0], start[1]))
-        ss.add((target[0], target[1]))
-        ll = list(ss)
-        road = {}
-        for x, y in ll:
-            if (x, y) not in p_2_i:
-                p_2_i[(x, y)] = n
-                n += 1
-        for i in range(n):
-            for j in range(n):
-                if (ll[i][0], ll[i][1], ll[j][0], ll[j][1]) not in road:
-                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1])
-                else:
-                    road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])] = min(road[(ll[i][0], ll[i][1], ll[j][0], ll[j][1])], abs(ll[i][0] - ll[j][0]) + abs(ll[i][1] - ll[j][1]))
-
-        for x, y, u, v, cost in specialRoads:
-            if (x, y, u, v) in road and road[(x, y, u, v)] > cost:
-                road[(x, y, u, v)] = cost
+    def smallestBeautifulString(self, s: str, k: int) -> str:
 
 
-        g = defaultdict(list)
-        for k, v in road.items():
-            a, b = p_2_i[(k[0], k[1])], p_2_i[(k[2], k[3])]
-            g[a].append([b, v])
-
-        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
-            dist = [inf] * len(g)
-            dist[start] = 0
-            h = [(0, start)]
-            while h:
-                d, x = heappop(h)
-                if d > dist[x]:
-                    continue
-                for y, wt in g[x]:
-                    new_d = dist[x] + wt
-                    if new_d < dist[y]:
-                        dist[y] = new_d
-                        heappush(h, (new_d, y))
-            return dist
-        dis = dijkstra(g, 0)
-        return dis[end]
 
 
 

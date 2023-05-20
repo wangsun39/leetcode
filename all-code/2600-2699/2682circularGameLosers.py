@@ -1,4 +1,43 @@
-
+# n 个朋友在玩游戏。这些朋友坐成一个圈，按 顺时针方向 从 1 到 n 编号。从第 i 个朋友的位置开始顺时针移动 1 步会到达第 (i + 1) 个朋友的位置（1 <= i < n），而从第 n 个朋友的位置开始顺时针移动 1 步会回到第 1 个朋友的位置。
+#
+# 游戏规则如下：
+#
+# 第 1 个朋友接球。
+#
+# 接着，第 1 个朋友将球传给距离他顺时针方向 k 步的朋友。
+# 然后，接球的朋友应该把球传给距离他顺时针方向 2 * k 步的朋友。
+# 接着，接球的朋友应该把球传给距离他顺时针方向 3 * k 步的朋友，以此类推。
+# 换句话说，在第 i 轮中持有球的那位朋友需要将球传递给距离他顺时针方向 i * k 步的朋友。
+#
+# 当某个朋友第 2 次接到球时，游戏结束。
+#
+# 在整场游戏中没有接到过球的朋友是 输家 。
+#
+# 给你参与游戏的朋友数量 n 和一个整数 k ，请按升序排列返回包含所有输家编号的数组 answer 作为答案。
+#
+#
+#
+# 示例 1：
+#
+# 输入：n = 5, k = 2
+# 输出：[4,5]
+# 解释：以下为游戏进行情况：
+# 1）第 1 个朋友接球，第 1 个朋友将球传给距离他顺时针方向 2 步的玩家 —— 第 3 个朋友。
+# 2）第 3 个朋友将球传给距离他顺时针方向 4 步的玩家 —— 第 2 个朋友。
+# 3）第 2 个朋友将球传给距离他顺时针方向 6 步的玩家 —— 第 3 个朋友。
+# 4）第 3 个朋友接到两次球，游戏结束。
+# 示例 2：
+#
+# 输入：n = 4, k = 4
+# 输出：[2,3,4]
+# 解释：以下为游戏进行情况：
+# 1）第 1 个朋友接球，第 1 个朋友将球传给距离他顺时针方向 4 步的玩家 —— 第 1 个朋友。
+# 2）第 1 个朋友接到两次球，游戏结束。
+#
+#
+# 提示：
+#
+# 1 <= k <= n <= 50
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -123,39 +162,25 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def maxMoves(self, grid: List[List[int]]) -> int:
-        ans = 0
-        r, c = len(grid), len(grid[0])
-        dp = [[0] * c for _ in range(r)]
-        for i in range(r):
-            dp[i][0] = 1
-        for j in range(1, c):
-            nx = 0
-            for i in range(r):
-                if dp[i][j-1] and grid[i][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                elif i > 0 and dp[i-1][j-1] and grid[i - 1][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                elif i < r - 1 and dp[i+1][j-1] and grid[i + 1][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                if dp[i][j] > 0:
-                    ans = j
-                    nx = 1
-            if nx == 0:
-                break
+    def circularGameLosers(self, n: int, k: int) -> List[int]:
+        s = set([i for i in range(n)])
+        x = 0
+        i = 1
+        while x in s:
+            s.remove(x)
+            x += i * k
+            x %= n
+            i += 1
+        l = list(s)
+        l.sort()
+        return [x + 1 for x in l]
 
-        return ans
 
 
 
 so = Solution()
-print(so.maxMoves([[187,167,209,251,152,236,263,128,135],
-                   [267,249,251,285,73,204,70,207,74],
-                   [189,159,235,66,84,89,153,111,189],
-                   [120,81,210,7,2,231,92,128,218],
-                   [193,131,244,293,284,175,226,205,245]]))
-print(so.maxMoves([[3,2,4],[2,1,9],[1,1,7]]))
-print(so.maxMoves([[2,4,3,5],[5,4,9,3],[3,4,2,11],[10,9,13,15]]))
+print(so.circularGameLosers(n = 5, k = 2))
+print(so.circularGameLosers(n = 4, k = 4))
 
 
 
