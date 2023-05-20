@@ -151,6 +151,7 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 class Solution:
     def smallestBeautifulString(self, s: str, k: int) -> str:
+        pass
 
 
 

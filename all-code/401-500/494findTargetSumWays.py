@@ -35,7 +35,7 @@
 from typing import List
 import bisect
 class Solution:
-    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+    def findTargetSumWays1(self, nums: List[int], target: int) -> int:
         N = len(nums)
         upper = sum(nums[:-1])  # 剩余数的上界
         dp1 = {target: 1}
@@ -63,8 +63,31 @@ class Solution:
             res += dp1[-nums[0]]
         return res
 
+
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        # 0-1 背包 20235/20
+        s = sum(nums)
+        # 目标求 nums 的一个子集，其元素之和为(s + target) // 2
+        if (s + target) & 1 or (s + target < 0): return 0
+        t = (s + target) // 2
+        n = len(nums)
+        dp = [[0] * (t + 1) for _ in range(n)]  # dp[i][j] 前 i 个数的所有子集元素和为j的个数
+        dp[0][0] = 1
+        if nums[0] <= t:
+            dp[0][nums[0]] += 1
+        for i in range(1, n):
+            for j in range(t + 1):
+                dp[i][j] += dp[i-1][j]
+                x = j + nums[i]
+                if x > t: continue
+                dp[i][x] += dp[i - 1][j]
+        print(dp)
+        return dp[-1][t]
+
 so = Solution()
+print(so.findTargetSumWays([0,1], 1))   # 256
 print(so.findTargetSumWays([0,0,0,0,0,0,0,0,1], 1))   # 256
+print(so.findTargetSumWays([1000], 1000))   # 5
 print(so.findTargetSumWays([1,1,1,1,1], 3))   # 5
 print(so.findTargetSumWays([1], 1))  # 1
 
