@@ -123,18 +123,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def doesValidArrayExist(self, derived: List[int]) -> bool:
-        n = len(derived)
-        orig = [0] * n
-        for i in range(1, n):
-            orig[i] = orig[i - 1] ^ derived[i - 1]
-        return 0 == orig[-1] ^ derived[-1]
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.doesValidArrayExist(derived = [1,1,0]))
-print(so.doesValidArrayExist(derived = [1,1]))
-print(so.doesValidArrayExist(derived = [1,0]))
+print(so.removeDigit())
 
 
 

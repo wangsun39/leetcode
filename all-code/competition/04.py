@@ -123,36 +123,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
-
-        fa = list(range(n))
-        def find(x):
-            if x != fa[x]:
-                fa[x] = find(fa[x])
-            return fa[x]
-
-        def union(x, y):
-            fa[find(y)] = find(x)
-
-        for x, y in edges:
-            union(x, y)
-        for i in range(n):
-            find(i)
-        # print(fa)
-        counter = Counter(fa)
-        edges_nums = defaultdict(int)
-        for x, y in edges:
-            edges_nums[fa[x]] += 1
-        ans = 0
-        for k, v in counter.items():
-            if v * (v - 1) // 2 == edges_nums[k]:
-                ans += 1
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.countCompleteComponents(n = 6, edges = [[0,1],[0,2],[1,2],[3,4]]))
-print(so.countCompleteComponents(n = 6, edges = [[0,1],[0,2],[1,2],[3,4],[3,5]]))
+print(so.removeDigit())
 
 
 

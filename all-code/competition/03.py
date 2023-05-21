@@ -123,39 +123,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def maxMoves(self, grid: List[List[int]]) -> int:
-        ans = 0
-        r, c = len(grid), len(grid[0])
-        dp = [[0] * c for _ in range(r)]
-        for i in range(r):
-            dp[i][0] = 1
-        for j in range(1, c):
-            nx = 0
-            for i in range(r):
-                if dp[i][j-1] and grid[i][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                elif i > 0 and dp[i-1][j-1] and grid[i - 1][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                elif i < r - 1 and dp[i+1][j-1] and grid[i + 1][j - 1] < grid[i][j]:
-                    dp[i][j] = 1
-                if dp[i][j] > 0:
-                    ans = j
-                    nx = 1
-            if nx == 0:
-                break
-
-        return ans
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxMoves([[187,167,209,251,152,236,263,128,135],
-                   [267,249,251,285,73,204,70,207,74],
-                   [189,159,235,66,84,89,153,111,189],
-                   [120,81,210,7,2,231,92,128,218],
-                   [193,131,244,293,284,175,226,205,245]]))
-print(so.maxMoves([[3,2,4],[2,1,9],[1,1,7]]))
-print(so.maxMoves([[2,4,3,5],[5,4,9,3],[3,4,2,11],[10,9,13,15]]))
+print(so.removeDigit())
 
 
 

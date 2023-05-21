@@ -123,25 +123,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def circularGameLosers(self, n: int, k: int) -> List[int]:
-        s = set([i for i in range(n)])
-        x = 0
-        i = 1
-        while x in s:
-            s.remove(x)
-            x += i * k
-            x %= n
-            i += 1
-        l = list(s)
-        l.sort()
-        return [x + 1 for x in l]
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.circularGameLosers(n = 5, k = 2))
-print(so.circularGameLosers(n = 4, k = 4))
+print(so.removeDigit())
 
 
 
