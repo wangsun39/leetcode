@@ -123,12 +123,27 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def makeSmallestPalindrome(self, s: str) -> str:
+        ls = list(s)
+        n = len(s)
+        if n == 1: return s
+        m = n // 2
+        for i in range(m):
+            if ls[i] == ls[n - i - 1]:
+                continue
+            if ls[i] < ls[n - i - 1]:
+                ls[n - i - 1] = ls[i]
+            else:
+                ls[i] = ls[n - i - 1]
+        return ''.join(ls)
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.makeSmallestPalindrome("egcfe"))
+print(so.makeSmallestPalindrome("abcd"))
+print(so.makeSmallestPalindrome("seven"))
 
 
 

@@ -123,12 +123,22 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minLength(self, s: str) -> int:
+        ans = s
+        while True:
+            s = s.replace('AB', '')
+            s = s.replace('CD', '')
+            if len(s) == len(ans):
+                return len(ans)
+            ans = s
+
+        return len(ans)
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minLength("ABFCACDB"))
+print(so.minLength("ACBBD"))
 
 
 

@@ -123,12 +123,31 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def punishmentNumber(self, n: int) -> int:
+        def check(x):  # 检查 x * x 是否满足条件
+            y = str(x * x)
+            m = len(y)
+            def dfs(i, t):  # 从i位开始向后，目标为t
+                if i == m: return t == 0
+                for j in range(m - i):
+                    seg = y[i: i + j + 1]
+                    if int(seg) > t:
+                        break
+                    if dfs(i + j + 1, t - int(seg)):
+                        return True
+                return False
+            return dfs(0, x)
+        ans = 0
+        for i in range(1, n + 1):
+            if check(i):
+                ans += i * i
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.punishmentNumber(10))
+print(so.punishmentNumber(37))
 
 
 
