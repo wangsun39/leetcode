@@ -1,4 +1,7 @@
 import math
+from functools import cache
+
+
 class Solution1:
     def numSquares(self, n: int):
         self.calc_dict = {}
@@ -55,9 +58,23 @@ class Solution:
             level += 1
             #print(l2)
             l1 = l2[:]
+    def numSquares1(self, n: int) -> int:
+        mx = int(n ** 0.5)
+        nums = [i * i for i in range(1, mx + 1)]
+        @cache
+        def dfs(i, s):  # 前 i 个平方数，构成 s 需要的最小平方数个数
+            if s == 0: return 0
+            if i == 0: return s
+            ans = dfs(i - 1, s)
+            if s >= nums[i]:
+                ans = min(ans, dfs(i, s - nums[i]) + 1)
+            return ans
+        return dfs(mx - 1, n)
 
 so = Solution1()
 #print(so.numSquares(13))
 print(so.numSquares(1))
 print(so.numSquares(4128))
 
+so = Solution()
+print(so.numSquares1(4128))

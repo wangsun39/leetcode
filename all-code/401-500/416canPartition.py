@@ -15,6 +15,17 @@ class Solution:
                     m[i][j] =m[i-1][j]
         return m[total_unit][half_M] == half_M
 
+    def canPartition1(self, nums: List[int]) -> bool:
+        # 2023/5/23  记忆化搜索
+        n = len(nums)
+        @cache
+        def dfs(idx, s): # 前 i 个数的子集，能否构成和s
+            if idx == 0: return s == 0 or s == nums[0]
+            return dfs(idx - 1, s) or dfs(idx - 1, s - nums[idx])
+        s = sum(nums)
+        if s & 1: return False
+        return dfs(n - 1, s // 2)
+
 
 
 
