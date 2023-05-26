@@ -1,4 +1,4 @@
-import math
+from math import *
 from functools import cache
 
 
@@ -14,7 +14,7 @@ class Solution1:
             return self.calc_dict[n]
         print(111, n)
         min_class = []
-        root = math.sqrt(n)
+        root = sqrt(n)
         if int(root) * int(root) == n:
             self.calc_dict[n] = [int(root)]
             return [int(root)]
@@ -58,7 +58,8 @@ class Solution:
             level += 1
             #print(l2)
             l1 = l2[:]
-    def numSquares1(self, n: int) -> int:
+    def numSquares11(self, n: int) -> int:
+        # 递归次数太多
         mx = int(n ** 0.5)
         nums = [i * i for i in range(1, mx + 1)]
         @cache
@@ -70,6 +71,20 @@ class Solution:
                 ans = min(ans, dfs(i, s - nums[i]) + 1)
             return ans
         return dfs(mx - 1, n)
+    def numSquares1(self, n: int) -> int:
+        # 2023/5/25 完全背包
+        mx = int(n ** 0.5)
+        nums = [i * i for i in range(1, mx + 1)]
+        dp1 = [inf] * (n + 1)
+        for i in range(n + 1):
+            dp1[i] = i
+        for i in range(1, mx):
+            for j in range(n + 1):
+                if j >= nums[i]:
+                    dp1[j] = min(dp1[j], dp1[j-nums[i]] + 1)
+        return dp1[n]
+
+
 
 so = Solution1()
 #print(so.numSquares(13))
@@ -77,4 +92,5 @@ print(so.numSquares(1))
 print(so.numSquares(4128))
 
 so = Solution()
+print(so.numSquares1(12))
 print(so.numSquares1(4128))
