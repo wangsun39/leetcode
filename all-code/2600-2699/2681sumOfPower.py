@@ -1,4 +1,34 @@
-
+# 给你一个下标从 0 开始的整数数组 nums ，它表示英雄的能力值。如果我们选出一部分英雄，这组英雄的 力量 定义为：
+#
+# i0 ，i1 ，... ik 表示这组英雄在数组中的下标。那么这组英雄的力量为 max(nums[i0],nums[i1] ... nums[ik])2 * min(nums[i0],nums[i1] ... nums[ik]) 。
+# 请你返回所有可能的 非空 英雄组的 力量 之和。由于答案可能非常大，请你将结果对 109 + 7 取余。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [2,1,4]
+# 输出：141
+# 解释：
+# 第 1 组：[2] 的力量为 22 * 2 = 8 。
+# 第 2 组：[1] 的力量为 12 * 1 = 1 。
+# 第 3 组：[4] 的力量为 42 * 4 = 64 。
+# 第 4 组：[2,1] 的力量为 22 * 1 = 4 。
+# 第 5 组：[2,4] 的力量为 42 * 2 = 32 。
+# 第 6 组：[1,4] 的力量为 42 * 1 = 16 。
+# 第​ ​​​​​​7 组：[2,1,4] 的力量为 42​​​​​​​ * 1 = 16 。
+# 所有英雄组的力量之和为 8 + 1 + 64 + 4 + 32 + 16 + 16 = 141 。
+# 示例 2：
+#
+# 输入：nums = [1,1,1]
+# 输出：7
+# 解释：总共有 7 个英雄组，每一组的力量都是 1 。所以所有英雄组的力量之和为 7 。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 105
+# 1 <= nums[i] <= 109
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -18,7 +48,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-from math import *
+# from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -121,17 +151,27 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
 # dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
-# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
-# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
-# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def sumOfPower(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        nums.sort()
+        ans = 0
+        s = 0  # 累计和
+        for i, x in enumerate(nums):  # 依次以x最为最大值时，求出所有可能的和
+            if i == 0:
+                s = 1 * nums[0]
+            else:
+                s = (s * 2 - nums[i-1] + x) % MOD  # s 取模很关键，不取模性能差很多
+            ans = (ans + (s * x) % MOD * x) % MOD
+        return ans
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.sumOfPower([2,1,4]))
+print(so.sumOfPower([1,1,1]))
 
 
 
