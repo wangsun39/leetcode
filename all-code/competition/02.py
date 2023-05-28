@@ -121,29 +121,30 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
 # dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
+# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
+# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
+# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def makeSmallestPalindrome(self, s: str) -> str:
-        ls = list(s)
-        n = len(s)
-        if n == 1: return s
-        m = n // 2
-        for i in range(m):
-            if ls[i] == ls[n - i - 1]:
-                continue
-            if ls[i] < ls[n - i - 1]:
-                ls[n - i - 1] = ls[i]
-            else:
-                ls[i] = ls[n - i - 1]
-        return ''.join(ls)
-
-
+    def differenceOfDistinctValues(self, grid: List[List[int]]) -> List[List[int]]:
+        r, c = len(grid), len(grid[0])
+        ans = [[0] * c for _ in range(r)]
+        for i in range(r):
+            for j in range(c):
+                s1, s2 = set(), set()
+                for k in range(1, min(i + 1, j + 1)):
+                    s1.add(grid[i-k][j-k])
+                x = len(s1)
+                for k in range(1, min(r - i, c - j)):
+                    s2.add(grid[i+k][j+k])
+                y = len(s2)
+                ans[i][j] = abs(x - y)
+        return ans
 
 
 so = Solution()
-print(so.makeSmallestPalindrome("egcfe"))
-print(so.makeSmallestPalindrome("abcd"))
-print(so.makeSmallestPalindrome("seven"))
+print(so.differenceOfDistinctValues(grid = [[1,2,3],[3,1,5],[3,2,1]]))
+print(so.differenceOfDistinctValues(grid = [[1]]))
 
 
 

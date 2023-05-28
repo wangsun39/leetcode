@@ -121,24 +121,22 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
 # dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
+# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
+# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
+# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def minLength(self, s: str) -> int:
-        ans = s
-        while True:
-            s = s.replace('AB', '')
-            s = s.replace('CD', '')
-            if len(s) == len(ans):
-                return len(ans)
-            ans = s
-
-        return len(ans)
-
+    def removeTrailingZeros(self, num: str) -> str:
+        n = len(num)
+        for i in range(n - 1, -1, -1):
+            if num[i] != '0':
+                break
+        return num[:i + 1]
 
 
 so = Solution()
-print(so.minLength("ABFCACDB"))
-print(so.minLength("ACBBD"))
+print(so.removeTrailingZeros("51230100"))
+print(so.removeTrailingZeros("123"))
 
 
 

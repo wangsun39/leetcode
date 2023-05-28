@@ -121,33 +121,46 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
 # dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
+# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
+# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
+# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def punishmentNumber(self, n: int) -> int:
-        def check(x):  # 检查 x * x 是否满足条件
-            y = str(x * x)
-            m = len(y)
-            def dfs(i, t):  # 从i位开始向后，目标为t
-                if i == m: return t == 0
-                for j in range(m - i):
-                    seg = y[i: i + j + 1]
-                    if int(seg) > t:
-                        break
-                    if dfs(i + j + 1, t - int(seg)):
-                        return True
-                return False
-            return dfs(0, x)
-        ans = 0
-        for i in range(1, n + 1):
-            if check(i):
-                ans += i * i
+    def minimumCost(self, s: str) -> int:
+        seg = []
+        start = 0
+        n = len(s)
+        for i, x in enumerate(s[1:], 1):
+            if x == s[start]:
+                continue
+            seg.append(i - start)
+            start = i
+        seg.append(n - start)
+        print(seg)
+        m = len(seg)
+        def func(sg):
+            ll = [0] * m
+            # acc = sg[0]  # 前缀和
+            # ll[0] = sg[0]
+            acc = 0  # 前缀和
+            ll[0] = 0
+            for i in range(m - 1):
+                acc += sg[i]
+                ll[i + 1] = ll[i] + acc
+            return ll
+
+        l, r = func(seg), func(seg[::-1])[::-1]
+        print(l, r)
+        ans = inf
+        for i in range(m):
+            ans = min(ans, l[i] + r[i])
         return ans
 
 
 
 so = Solution()
-print(so.punishmentNumber(10))
-print(so.punishmentNumber(37))
+print(so.minimumCost("0011"))
+print(so.minimumCost("010101"))
 
 
 
