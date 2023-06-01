@@ -32,7 +32,7 @@
 # 1 <= price.length <= 105
 # 1 <= price[i] <= 109
 # 2 <= k <= price.length
-
+from bisect import bisect_left
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -128,7 +128,7 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def maximumTastiness(self, price: List[int], k: int) -> int:
+    def maximumTastiness1(self, price: List[int], k: int) -> int:
         price.sort()
         n = len(price)
         def judge(val):  # 判断某个甜蜜度是否能达到
@@ -154,11 +154,28 @@ class Solution:
         return lo - 1
 
 
+    def maximumTastiness(self, price: List[int], k: int) -> int:
+        # 2023/6/1  用 bisect 函数
+        price.sort()
+        def check(val):
+            cnt = 1
+            cur = price[0]
+            for i, x in enumerate(price[1:], 1):
+                if x - cur >= val:
+                    cur = x
+                    cnt += 1
+                    if cnt >= k:
+                        return 0  # 表示满足
+            return 1  # 表示不满足
+        pos = bisect_left(range(price[-1] - price[0] + 2), 1, key=lambda x: check(x))
+        return pos - 1
+
+
 so = Solution()
+print(so.maximumTastiness(price = [1,3,1], k = 2))  # 2
+print(so.maximumTastiness(price = [13,5,1,8,21,2], k = 3))  # 8
 print(so.maximumTastiness(price = [144,69,103,148,184,50,129,154,2], k = 4))  # 55
 print(so.maximumTastiness(price = [34,116,83,15,150,56,69,42,26], k = 6))  # 19
-print(so.maximumTastiness(price = [13,5,1,8,21,2], k = 3))  # 8
-print(so.maximumTastiness(price = [1,3,1], k = 2))  # 2
 print(so.maximumTastiness(price = [7,7,7,7], k = 2))  # 0
 
 

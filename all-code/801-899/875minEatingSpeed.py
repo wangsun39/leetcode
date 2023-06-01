@@ -27,16 +27,12 @@
 # 1 <= piles.length <= 104
 # piles.length <= h <= 109
 # 1 <= piles[i] <= 109
-
-
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
+from bisect import bisect_left
 from typing import List
+
+
 class Solution:
-    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+    def minEatingSpeed1(self, piles: List[int], h: int) -> int:
         lower, upper = 1, max(piles)
         def fit(num):
             res = 0
@@ -54,6 +50,24 @@ class Solution:
         return lower
 
 
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        n = len(piles)
+        def check(val):
+            s = sum((x + val - 1) // val for x in piles)
+            if s <= h:
+                return True
+            return False
+        low, high = 0, max(piles)
+        while low < high - 1:
+            mid = (low + high) // 2
+            if check(mid):
+                high = mid
+            else:
+                low = mid
+
+        return high
+
 so = Solution()
+print(so.minEatingSpeed(piles = [3,6,7,11], h = 8))
 
 

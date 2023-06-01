@@ -36,12 +36,11 @@ from collections import deque, defaultdict
 class Solution:
     def mctFromLeafValues(self, arr: List[int]) -> int:
         n = len(arr)
-        min_max = [[[0] * 2 for _ in range(n)] for _ in range(n)]  # min_max[i][j] 表示区间 [i, j] 上的最小值和最大值
+        seg_max = [[0] * n for _ in range(n)]  # min_max[i][j] 表示区间 [i, j] 上的arr最大值
         for i in range(n):
             cur_mn, cur_mx = inf, -inf
             for j in range(i, n):
-                min_max[i][j][0] = cur_mn = min(arr[j], cur_mn)
-                min_max[i][j][1] = cur_mx = max(arr[j], cur_mx)
+                seg_max[i][j] = cur_mx = max(arr[j], cur_mx)
 
         @cache
         def dfs(x, y):  # 获取 区间 [x, y] 上的非叶节点的值的最小可能总和
@@ -49,7 +48,7 @@ class Solution:
                 return 0
             res = inf
             for i in range(x, y):
-                res = min(res, dfs(x, i) + dfs(i + 1, y) + min_max[x][i][1] * min_max[i + 1][y][1])
+                res = min(res, dfs(x, i) + dfs(i + 1, y) + seg_max[x][i] * seg_max[i + 1][y])
             # print(x, y, res)
             return res
 
