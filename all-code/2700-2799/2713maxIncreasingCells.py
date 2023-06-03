@@ -1,4 +1,3 @@
-
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -93,6 +92,8 @@ from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
 from sortedcontainers import SortedList, SortedDict, SortedSet
+
+
 # sl = SortedList()
 # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
 # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
@@ -126,13 +127,55 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maxIncreasingCells(self, mat: List[List[int]]) -> int:
+        n, m = len(mat), len(mat[0])
+        nt = [[[-1] * 2 for _ in range(m)] for _ in range(n)]  # next 矩阵
+        for i, r in enumerate(mat):
+            row = [[j, rr] for j, rr in enumerate(r)]
+            row.sort(key=lambda x: x[1])
+            start = 0
+            for kk, [k, v] in enumerate(row[1:], 1):
+                if v > row[start][1]:
+                    nt[i][row[start][0]][0] = k
+                    start = kk
+        xmat = list(zip(*mat))  # mat转置
+        # print(xmat)
+        for i, r in enumerate(xmat):
+            row = [[j, rr] for j, rr in enumerate(r)]
+            row.sort(key=lambda x: x[1])
+            start = 0
+            for kk, [k, v] in enumerate(row[1:], 1):
+                if v > row[start][1]:
+                    nt[row[start][0]][i][1] = k
+                    start = kk
+
+        print(nt)
+
+
+
+        # @cache
+        # def dfs(x, y):
+        #     if nt[x][y][0] == nt[x][y][1] == -1:
+        #         print(x, y, 1)
+        #         return 1
+        #     res = 0
+        #     if nt[x][y][0] != -1:
+        #         res = max(res, dfs(x, nt[x][y][0]) + 1)
+        #     if nt[x][y][1] != -1:
+        #         res = max(res, dfs(nt[x][y][1], y) + 1)
+        #     print(x, y, res)
+        #     return res
+        #
+        # ans = 0
+        # for i in range(n):
+        #     for j in range(m):
+        #         ans = max(ans, dfs(i, j))
+
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
-
-
-
-
+print(so.maxIncreasingCells([[7,6,3],[-7,-5,6],[-7,0,-4],[6,6,0],[-8,6,0]]))
+print(so.maxIncreasingCells([[3,1,6],[-9,5,7]]))
+print(so.maxIncreasingCells([[3, 1], [3, 4]]))
+print(so.maxIncreasingCells([[1,1],[1,1]]))

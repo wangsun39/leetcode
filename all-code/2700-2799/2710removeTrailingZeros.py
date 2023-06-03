@@ -126,12 +126,17 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def removeTrailingZeros(self, num: str) -> str:
+        n = len(num)
+        for i in range(n - 1, -1, -1):
+            if num[i] != '0':
+                break
+        return num[:i + 1]
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.removeTrailingZeros("51230100"))
+print(so.removeTrailingZeros("123"))
 
 
 

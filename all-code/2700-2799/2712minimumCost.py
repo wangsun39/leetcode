@@ -126,12 +126,41 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumCost(self, s: str) -> int:
+        seg = []
+        start = 0
+        n = len(s)
+        for i, x in enumerate(s[1:], 1):
+            if x == s[start]:
+                continue
+            seg.append(i - start)
+            start = i
+        seg.append(n - start)
+        print(seg)
+        m = len(seg)
+        def func(sg):
+            ll = [0] * m
+            # acc = sg[0]  # 前缀和
+            # ll[0] = sg[0]
+            acc = 0  # 前缀和
+            ll[0] = 0
+            for i in range(m - 1):
+                acc += sg[i]
+                ll[i + 1] = ll[i] + acc
+            return ll
+
+        l, r = func(seg), func(seg[::-1])[::-1]
+        print(l, r)
+        ans = inf
+        for i in range(m):
+            ans = min(ans, l[i] + r[i])
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumCost("0011"))
+print(so.minimumCost("010101"))
 
 
 

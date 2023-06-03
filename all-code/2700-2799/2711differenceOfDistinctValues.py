@@ -126,12 +126,25 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def differenceOfDistinctValues(self, grid: List[List[int]]) -> List[List[int]]:
+        r, c = len(grid), len(grid[0])
+        ans = [[0] * c for _ in range(r)]
+        for i in range(r):
+            for j in range(c):
+                s1, s2 = set(), set()
+                for k in range(1, min(i + 1, j + 1)):
+                    s1.add(grid[i-k][j-k])
+                x = len(s1)
+                for k in range(1, min(r - i, c - j)):
+                    s2.add(grid[i+k][j+k])
+                y = len(s2)
+                ans[i][j] = abs(x - y)
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.differenceOfDistinctValues(grid = [[1,2,3],[3,1,5],[3,2,1]]))
+print(so.differenceOfDistinctValues(grid = [[1]]))
 
 
 
