@@ -43,7 +43,7 @@ from typing import List
 
 
 class Solution:
-    def minimumSize(self, nums: List[int], maxOperations: int) -> int:
+    def minimumSize1(self, nums: List[int], maxOperations: int) -> int:
         n = len(nums)
         nums.sort()
         def helper(m):
@@ -63,6 +63,21 @@ class Solution:
                 lo = mid + 1
         return lo
 
+    def minimumSize(self, nums: List[int], maxOperations: int) -> int:
+        # 2023/6/5
+        def check(mx_num):  # mx_num 越大 越容易满足
+            s = sum((x + mx_num - 1) // mx_num - 1 for x in nums)
+            if s <= maxOperations:
+                return True
+            return False
+        lo, hi = 0, max(nums)
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
 
 
 

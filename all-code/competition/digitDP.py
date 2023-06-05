@@ -1,4 +1,3 @@
-
 from typing import List
 from typing import Optional
 from collections import deque
@@ -34,8 +33,10 @@ import heapq
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from functools import lru_cache
+from functools import lru_cache, cache
 from typing import List
+
+
 # @lru_cache(None)
 
 # bit位 函数：
@@ -63,7 +64,8 @@ class Solution:
 
     def countSpecialNumbers(self, n: int) -> int:
         s = str(n)
-        @lru_cache(None)
+
+        @cache
         def helper(i: int, mask: int, is_limit: bool, is_num: bool) -> int:
             if i == len(s):
                 return 1 if is_num else 0
@@ -76,11 +78,30 @@ class Solution:
                 if (1 << j) & mask == 0:
                     ans += helper(i + 1, mask | (1 << j), is_limit and j == upper, True)
             return ans
+
         return helper(0, 0, True, False)
+
+    # 2719
+    def count(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+        # 改造用数位DP的模板
+        MOD = 10 ** 9 + 7
+
+        def f(num: str):  # 数字 <= num 满足条件的所有数字
+            @cache
+            def digitDp(i: int, is_limit: bool, s: int) -> int:
+                if s > max_sum: return 0
+                if i == len(num):
+                    return min_sum <= s <= max_sum
+                ans = 0
+                upper = int(num[i]) if is_limit else 9  # 判断当前位是否受约束
+                for j in range(upper + 1):
+                    ans += digitDp(i + 1, is_limit and j == upper, s + j)
+                return ans
+            return digitDp(0, True, 0)
+
+        num1 = str(int(num1) - 1)
+        return (f(num2) + MOD - f(num1)) % MOD
+
 
 so = Solution()
 print(so.removeDigit(123456))
-
-
-
-

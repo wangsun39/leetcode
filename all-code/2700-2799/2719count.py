@@ -151,7 +151,8 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def count(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+    def count1(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+        # 赛后继续写的 solution
         MOD = 10 ** 9 + 7
         @cache
         def helper(upper, limit):  # 字符串 upper
@@ -179,6 +180,26 @@ class Solution:
                 ans %= MOD
             # print(upper, ans)
             return ans
+        num1 = str(int(num1) - 1)
+        return (f(num2) + MOD - f(num1)) % MOD
+
+    def count(self, num1: str, num2: str, min_sum: int, max_sum: int) -> int:
+        # 改造用数位DP的模板
+        MOD = 10 ** 9 + 7
+
+        def f(num: str):  # 数字 <= num 满足条件的所有数字
+            @cache
+            def digitDp(i: int, is_limit: bool, s: int) -> int:
+                if s > max_sum: return 0
+                if i == len(num):
+                    return min_sum <= s <= max_sum
+                ans = 0
+                upper = int(num[i]) if is_limit else 9  # 判断当前位是否受约束
+                for j in range(upper + 1):
+                    ans += digitDp(i + 1, is_limit and j == upper, s + j)
+                return ans
+            return digitDp(0, True, 0)
+
         num1 = str(int(num1) - 1)
         return (f(num2) + MOD - f(num1)) % MOD
 
