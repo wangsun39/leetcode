@@ -33,8 +33,7 @@
 # 1 <= n <= 50
 # 0 <= grid[i][j] < n2
 # grid[i][j] 中每个值 均无重复
-
-
+from collections import deque
 from typing import List
 from heapq import *
 
@@ -57,6 +56,69 @@ class Solution:
                     vis[x][y] = 1
                     heappush(hq, [grid[x][y], x, y])
         return ans
+
+    def swimInWater2(self, grid: List[List[int]]) -> int:
+        # 2023/6/11 BFS
+        r, c = len(grid), len(grid[0])
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        vis = [[0] * c for _ in range(c)]
+
+        dq = deque()
+        dq2 = deque()
+        t = grid[0][0]
+        dq.append([0, 0])
+        vis[0][0] = 1
+        while dq:
+            while dq:
+                x, y = dq.popleft()
+                if grid[x][y] > t:
+                    dq2.append([x, y])
+                    continue
+                if x == r - 1 and y == c - 1:
+                    return t
+                for dx, dy in dir:
+                    u, v = x + dx, y + dy
+                    if 0 <= u < r and 0 <= v < c and 0 == vis[u][v]:
+                        if grid[u][v] <= t:
+                            if u == r - 1 and v == c - 1:
+                                return t
+                            dq.append([u, v])
+                        else:
+                            dq2.append([u, v])
+                        vis[u][v] = 1
+            dq, dq2 = dq2, deque()
+            t += 1
+
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        # 2023/6/11 二分
+        n = len(grid)
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+        def check(val):
+            if grid[0][0] > val:
+                return False
+            vis = [[0] * n for _ in range(n)]
+            vis[0][0] = 1
+            dq = deque([[0, 0]])
+            while dq:
+                x, y = dq.popleft()
+                if x == n - 1 == y:
+                    return True
+                for dx, dy in dir:
+                    u, v = x + dx, y + dy
+                    if 0 <= u < n and 0 <= v < n and 0 == vis[u][v] and grid[u][v] <= val:
+                        dq.append([u, v])
+                        vis[u][v] = 1
+            return False
+
+        lo, hi = -1, n * n
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
 
 
 

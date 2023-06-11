@@ -126,12 +126,34 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def smallestString(self, s: str) -> str:
+        n = len(s)
+        start = -1
+        for i, x in enumerate(s):
+            if x != 'a':
+                start = i
+                break
+        if start == -1:
+            return s[:n - 1] + 'z'
+        pos = s.find('a', start)
+        if pos == -1:
+            end = n
+        else:
+            end = pos
+        l = list(s)
+        for i in range(start, end):
+            if l[i] == 'a':
+                l[i] = 'z'
+            else:
+                l[i] = chr(ord(l[i]) - 1)
+        return ''.join(l)
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.smallestString(s = "cbabc"))
+print(so.smallestString(s = "acbbc"))
+print(so.smallestString(s = "leetcode"))
 
 
 

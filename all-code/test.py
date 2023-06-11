@@ -1,4 +1,4 @@
-import math
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -18,7 +18,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -38,6 +38,11 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
+# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
+
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -53,7 +58,7 @@ from heapq import *
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List
+from typing import List, Tuple
 # @lru_cache(None)
 
 # bit位 函数：
@@ -87,30 +92,78 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
-    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # SortedList.clear() 移除所有元素。时间复杂度O(n).
-    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # SortedList.bisect_left(value)
-    # SortedList.bisect_right(value)
-    # SortedList.count(value)
-    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+from sortedcontainers import SortedList, SortedDict, SortedSet
+# sl = SortedList()
+# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+# sl.clear() 移除所有元素。时间复杂度O(n).
+# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+# sl.bisect_left(value)
+# sl.bisect_right(value)
+# sl.count(value)
+# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
+
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
+
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
+# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
+# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def circleGame(self, toys: List[List[int]], circles: List[List[int]], r: int) -> int:
-        pass
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+        def check(val):
+            if grid[0][0] > val:
+                return False
+            vis = [[0] * n for _ in range(n)]
+            vis[0][0] = 1
+            dq = deque([[0, 0]])
+            while dq:
+                x, y = dq.popleft()
+                if x == n - 1 == y:
+                    return True
+                for dx, dy in dir:
+                    u, v = x + dx, y + dy
+                    if 0 <= u < n and 0 <= v < n and 0 == vis[u][v] and grid[u][v] <= val:
+                        dq.append([u, v])
+                        vis[u][v] = 1
+            return False
+
+        lo, hi = -1, n * n
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
+
 
 
 
 so = Solution()
-print(so.flipChess(toys = [[3,3,1],[3,2,1]], circles = [[4,3]], r = 2))  #
+print(so.swimInWater(grid = [[10,12,4,6],[9,11,3,5],[1,7,13,8],[2,0,15,14]]))
+print(so.swimInWater(grid = [[0,2],[1,3]]))
+print(so.swimInWater(grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]))
+
+
 
 

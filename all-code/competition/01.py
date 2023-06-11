@@ -126,12 +126,17 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def findNonMinOrMax(self, nums: List[int]) -> int:
+        ss = SortedSet(nums)
+        if len(ss) < 3:
+            return -1
+        return ss[1]
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.findNonMinOrMax([3,2,1,4]))
+print(so.findNonMinOrMax([1,2]))
+print(so.findNonMinOrMax([2,1,3]))
 
 
 
