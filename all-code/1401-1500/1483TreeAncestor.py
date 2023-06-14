@@ -56,13 +56,23 @@ class TreeAncestor:
 
 
     def getKthAncestor(self, node: int, k: int) -> int:
-        pass
+        i = 0
+        while k:
+            if k & 1:
+                node = self.fa[node][i]
+                if node == -1:
+                    return -1
+            k >>= 1
+            i += 1
+        return node
 
 
 
 
 so = TreeAncestor(7, [-1,0,0,1,1,2,2])
 print(so.getKthAncestor(3, 1))
+print(so.getKthAncestor(5, 2))
+print(so.getKthAncestor(6, 3))
 
 
 
