@@ -126,12 +126,23 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def distanceTraveled(self, mainTank: int, additionalTank: int) -> int:
+        ans = 0
+        consume = 0
+        while mainTank:
+            consume += 1
+            mainTank -= 1
+            ans += 10
+            if consume % 5 == 0 and additionalTank:
+                additionalTank -= 1
+                mainTank += 1
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.distanceTraveled(mainTank = 5, additionalTank = 10))
+print(so.distanceTraveled(mainTank = 1, additionalTank = 2))
 
 
 

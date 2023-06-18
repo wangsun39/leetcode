@@ -126,12 +126,37 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def specialPerm(self, nums: List[int]) -> int:
+        n = len(nums)
+        pair = defaultdict(list)
+        for i in range(n):
+            for j in range(i + 1, n):
+                if nums[i] % nums[j] == 0 or nums[j] % nums[i] == 0:
+                    pair[i].append(j)
+                    pair[j].append(i)
+        ans = 0
+        MOD = 10 ** 9 + 7
+
+        @cache
+        def dfs(idx, mask): # 以 idx 开头的不同总数
+            if mask == 0: return 1
+            res = 0
+            for idy in pair[idx]:
+                if mask & (1 << idy) == 0: continue
+                res += dfs(idy, mask & (~(1 << idy)))
+                res %= MOD
+            return res
+
+        for i in range(n):
+            ans += dfs(i, (2 ** n - 1) & (~(1 << i)))
+            ans %= MOD
+
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.specialPerm([2,3,6]))
+print(so.specialPerm([1,4,3]))
 
 
 
