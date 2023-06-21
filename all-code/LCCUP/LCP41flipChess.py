@@ -118,6 +118,36 @@ class Solution:
                     ans = max(ans, res)
         return ans
 
+    def flipChess1(self, chessboard: List[str]) -> int:
+        # 2023/6/21  改进写法
+        dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+        r, c = len(chessboard), len(chessboard[0])
+        ans = 0
+        for i in range(r):
+            for j in range(c):
+                if chessboard[i][j] != '.': continue
+                cnt = 0
+                cb = [list(x) for x in chessboard]
+                dq = deque([[i, j]])  # 刚变成黑子的位置
+                while dq:
+                    x, y = dq.popleft()
+                    for u, v in dir:
+                        xx, yy = x + u, y + v
+                        while 0 <= xx < r and 0 <= yy < c and cb[xx][yy] == 'O':
+                            xx, yy = xx + u, yy + v
+                        if abs(xx - x) == 1 or not (0 <= xx < r and 0 <= yy < c) or cb[xx][yy] == '.':
+                            continue
+                        xx, yy = xx - u, yy - v
+                        while xx != x or yy != y:
+                            dq.append([xx, yy])
+                            cb[xx][yy] = 'X'
+                            xx, yy = xx - u, yy - v
+                            cnt += 1
+
+                ans = max(ans, cnt)
+
+        return ans
+
 
 so = Solution()
 print(so.flipChess([".....",".....","X....","OX...","OOOOX","OOO..",".OO..","X..X."]))  # 10

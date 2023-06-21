@@ -126,43 +126,40 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def swimInWater(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    def flipChess(self, chessboard: List[str]) -> int:
+        dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+        r, c = len(chessboard), len(chessboard[0])
+        ans = 0
+        for i in range(r):
+            for j in range(c):
+                if chessboard[i][j] != '.': continue
+                cnt = 0
+                cb = [list(x) for x in chessboard]
+                dq = deque([[i, j]])  # 刚变成黑子的位置
+                while dq:
+                    x, y = dq.popleft()
+                    for u, v in dir:
+                        xx, yy = x + u, y + v
+                        while 0 <= xx < r and 0 <= yy < c and cb[xx][yy] == 'O':
+                            xx, yy = xx + u, yy + v
+                        if abs(xx - x) == 1 or not (0 <= xx < r and 0 <= yy < c) or cb[xx][yy] == '.':
+                            continue
+                        xx, yy = xx - u, yy - v
+                        while xx != x or yy != y:
+                            dq.append([xx, yy])
+                            cb[xx][yy] = 'X'
+                            xx, yy = xx - u, yy - v
+                            cnt += 1
 
-        def check(val):
-            if grid[0][0] > val:
-                return False
-            vis = [[0] * n for _ in range(n)]
-            vis[0][0] = 1
-            dq = deque([[0, 0]])
-            while dq:
-                x, y = dq.popleft()
-                if x == n - 1 == y:
-                    return True
-                for dx, dy in dir:
-                    u, v = x + dx, y + dy
-                    if 0 <= u < n and 0 <= v < n and 0 == vis[u][v] and grid[u][v] <= val:
-                        dq.append([u, v])
-                        vis[u][v] = 1
-            return False
+                ans = max(ans, cnt)
 
-        lo, hi = -1, n * n
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                hi = mid
-            else:
-                lo = mid
-        return hi
-
-
+        return ans
 
 
 so = Solution()
-print(so.swimInWater(grid = [[10,12,4,6],[9,11,3,5],[1,7,13,8],[2,0,15,14]]))
-print(so.swimInWater(grid = [[0,2],[1,3]]))
-print(so.swimInWater(grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]))
+print(so.flipChess(chessboard = [".......",".......",".......","X......",".O.....","..O....","....OOX"]))
+print(so.flipChess(chessboard = [".X.",".O.","XO."]))
+print(so.flipChess(chessboard = ["....X.","....X.","XOOO..","......","......"]))
 
 
 
