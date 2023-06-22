@@ -125,41 +125,36 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
+
+
 class Solution:
-    def flipChess(self, chessboard: List[str]) -> int:
-        dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
-        r, c = len(chessboard), len(chessboard[0])
-        ans = 0
-        for i in range(r):
-            for j in range(c):
-                if chessboard[i][j] != '.': continue
-                cnt = 0
-                cb = [list(x) for x in chessboard]
-                dq = deque([[i, j]])  # 刚变成黑子的位置
-                while dq:
-                    x, y = dq.popleft()
-                    for u, v in dir:
-                        xx, yy = x + u, y + v
-                        while 0 <= xx < r and 0 <= yy < c and cb[xx][yy] == 'O':
-                            xx, yy = xx + u, yy + v
-                        if abs(xx - x) == 1 or not (0 <= xx < r and 0 <= yy < c) or cb[xx][yy] == '.':
-                            continue
-                        xx, yy = xx - u, yy - v
-                        while xx != x or yy != y:
-                            dq.append([xx, yy])
-                            cb[xx][yy] = 'X'
-                            xx, yy = xx - u, yy - v
-                            cnt += 1
+    def minimizeArrayValue(self, nums: List[int]) -> int:
+        if min(nums) == max(nums):
+            return nums[0]
+        def check(val):
+            acc = 0
+            for x in nums:
+                if x < val:
+                    acc += (val - x)
+                else:
+                    acc -= (x - val)
+                    if acc < 0:
+                        return False
+            return True
+        lo, hi = min(nums), max(nums)
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
 
-                ans = max(ans, cnt)
-
-        return ans
 
 
 so = Solution()
-print(so.flipChess(chessboard = [".......",".......",".......","X......",".O.....","..O....","....OOX"]))
-print(so.flipChess(chessboard = [".X.",".O.","XO."]))
-print(so.flipChess(chessboard = ["....X.","....X.","XOOO..","......","......"]))
+print(so.minimizeArrayValue([3,7,1,6]))
+print(so.minimizeArrayValue(nums = [10,1]))
 
 
 

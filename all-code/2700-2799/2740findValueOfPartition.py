@@ -1,43 +1,43 @@
-# 给你两个长度为 n 、下标从 0 开始的整数数组 nums1 和 nums2 ，另给你一个下标从 1 开始的二维数组 queries ，其中 queries[i] = [xi, yi] 。
+# 给你一个 正 整数数组 nums 。
 #
-# 对于第 i 个查询，在所有满足 nums1[j] >= xi 且 nums2[j] >= yi 的下标 j (0 <= j < n) 中，找出 nums1[j] + nums2[j] 的 最大值 ，如果不存在满足条件的 j 则返回 -1 。
+# 将 nums 分成两个数组：nums1 和 nums2 ，并满足下述条件：
 #
-# 返回数组 answer ，其中 answer[i] 是第 i 个查询的答案。
+# 数组 nums 中的每个元素都属于数组 nums1 或数组 nums2 。
+# 两个数组都 非空 。
+# 分区值 最小 。
+# 分区值的计算方法是 |max(nums1) - min(nums2)| 。
+#
+# 其中，max(nums1) 表示数组 nums1 中的最大元素，min(nums2) 表示数组 nums2 中的最小元素。
+#
+# 返回表示分区值的整数。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums1 = [4,3,1,2], nums2 = [2,4,9,5], queries = [[4,1],[1,3],[2,5]]
-# 输出：[6,10,7]
-# 解释：
-# 对于第 1 个查询：xi = 4 且 yi = 1 ，可以选择下标 j = 0 ，此时 nums1[j] >= 4 且 nums2[j] >= 1 。nums1[j] + nums2[j] 等于 6 ，可以证明 6 是可以获得的最大值。
-# 对于第 2 个查询：xi = 1 且 yi = 3 ，可以选择下标 j = 2 ，此时 nums1[j] >= 1 且 nums2[j] >= 3 。nums1[j] + nums2[j] 等于 10 ，可以证明 10 是可以获得的最大值。
-# 对于第 3 个查询：xi = 2 且 yi = 5 ，可以选择下标 j = 3 ，此时 nums1[j] >= 2 且 nums2[j] >= 5 。nums1[j] + nums2[j] 等于 7 ，可以证明 7 是可以获得的最大值。
-# 因此，我们返回 [6,10,7] 。
+# 输入：nums = [1,3,2,4]
+# 输出：1
+# 解释：可以将数组 nums 分成 nums1 = [1,2] 和 nums2 = [3,4] 。
+# - 数组 nums1 的最大值等于 2 。
+# - 数组 nums2 的最小值等于 3 。
+# 分区值等于 |2 - 3| = 1 。
+# 可以证明 1 是所有分区方案的最小值。
 # 示例 2：
 #
-# 输入：nums1 = [3,2,5], nums2 = [2,3,4], queries = [[4,4],[3,2],[1,1]]
-# 输出：[9,9,9]
-# 解释：对于这个示例，我们可以选择下标 j = 2 ，该下标可以满足每个查询的限制。
-# 示例 3：
-#
-# 输入：nums1 = [2,1], nums2 = [2,3], queries = [[3,3]]
-# 输出：[-1]
-# 解释：示例中的查询 xi = 3 且 yi = 3 。对于每个下标 j ，都只满足 nums1[j] < xi 或者 nums2[j] < yi 。因此，不存在答案。
+# 输入：nums = [100,1,10]
+# 输出：9
+# 解释：可以将数组 nums 分成 nums1 = [10] 和 nums2 = [100,1] 。
+# - 数组 nums1 的最大值等于 10 。
+# - 数组 nums2 的最小值等于 1 。
+# 分区值等于 |10 - 1| = 9 。
+# 可以证明 9 是所有分区方案的最小值。
 #
 #
 # 提示：
 #
-# nums1.length == nums2.length
-# n == nums1.length
-# 1 <= n <= 105
-# 1 <= nums1[i], nums2[i] <= 109
-# 1 <= queries.length <= 105
-# queries[i].length == 2
-# xi == queries[i][1]
-# yi == queries[i][2]
-# 1 <= xi, yi <= 109
+# 2 <= nums.length <= 105
+# 1 <= nums[i] <= 109
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -165,38 +165,19 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumSumQueries(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(nums1)
-        zip_num = sorted(zip(nums1, nums2), key=lambda x: x[0], reverse=True)
-        ans = [-1] * len(queries)
-        q = sorted(enumerate(queries), key=lambda x: x[1][0], reverse=True)
-        print(zip_num)
-        print(q)
-        # 单调栈，stack[i] == [a, b]  a 表示 nums2[k] 中的元素， b 表示 nums1[k] + nums2[k] 中的元素
-        # 按 a 递增， b 递减的顺序存放，在栈中的元素都是满足本次查询的
-        stack = []
-        i = 0  # 记录 zip_num 当前要处理的下标
-        for idx, [a, b] in q:
-            while i < n and zip_num[i][0] >= a:
-                while stack and zip_num[i][0] + zip_num[i][1] >= stack[-1][1]:
-                    stack.pop()
-                if len(stack) == 0 or zip_num[i][1] >= stack[-1][0]:
-                    stack.append([zip_num[i][1], zip_num[i][0] + zip_num[i][1]])
-                i += 1
-            # 在 单调栈中的元素 对于 nums1 都是满足要求的
-            pos = bisect_left(stack, [b,])
-            if pos < len(stack):
-                ans[idx] = stack[pos][1]
+    def findValueOfPartition(self, nums: List[int]) -> int:
+        nums.sort()
+        ans = inf
+        for i, x in enumerate(nums[1:], 1):
+            cur = abs(x - nums[i - 1])
+            ans = min(cur, ans)
         return ans
 
 
 
-
 so = Solution()
-print(so.maximumSumQueries(nums1 = [89,85], nums2 = [53,32], queries = [[75,48]]))
-print(so.maximumSumQueries(nums1 = [4,3,1,2], nums2 = [2,4,9,5], queries = [[4,1],[1,3],[2,5]]))
-print(so.maximumSumQueries(nums1 = [3,2,5], nums2 = [2,3,4], queries = [[4,4],[3,2],[1,1]]))
-print(so.maximumSumQueries(nums1 = [2,1], nums2 = [2,3], queries = [[3,3]]))
+print(so.findValueOfPartition([1,3,2,4]))
+print(so.findValueOfPartition([100,1,10]))
 
 
 

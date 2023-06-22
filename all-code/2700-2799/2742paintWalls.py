@@ -1,43 +1,30 @@
-# 给你两个长度为 n 、下标从 0 开始的整数数组 nums1 和 nums2 ，另给你一个下标从 1 开始的二维数组 queries ，其中 queries[i] = [xi, yi] 。
+# 给你两个长度为 n 下标从 0 开始的整数数组 cost 和 time ，分别表示给 n 堵不同的墙刷油漆需要的开销和时间。你有两名油漆匠：
 #
-# 对于第 i 个查询，在所有满足 nums1[j] >= xi 且 nums2[j] >= yi 的下标 j (0 <= j < n) 中，找出 nums1[j] + nums2[j] 的 最大值 ，如果不存在满足条件的 j 则返回 -1 。
-#
-# 返回数组 answer ，其中 answer[i] 是第 i 个查询的答案。
+# 一位需要 付费 的油漆匠，刷第 i 堵墙需要花费 time[i] 单位的时间，开销为 cost[i] 单位的钱。
+# 一位 免费 的油漆匠，刷 任意 一堵墙的时间为 1 单位，开销为 0 。但是必须在付费油漆匠 工作 时，免费油漆匠才会工作。
+# 请你返回刷完 n 堵墙最少开销为多少。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums1 = [4,3,1,2], nums2 = [2,4,9,5], queries = [[4,1],[1,3],[2,5]]
-# 输出：[6,10,7]
-# 解释：
-# 对于第 1 个查询：xi = 4 且 yi = 1 ，可以选择下标 j = 0 ，此时 nums1[j] >= 4 且 nums2[j] >= 1 。nums1[j] + nums2[j] 等于 6 ，可以证明 6 是可以获得的最大值。
-# 对于第 2 个查询：xi = 1 且 yi = 3 ，可以选择下标 j = 2 ，此时 nums1[j] >= 1 且 nums2[j] >= 3 。nums1[j] + nums2[j] 等于 10 ，可以证明 10 是可以获得的最大值。
-# 对于第 3 个查询：xi = 2 且 yi = 5 ，可以选择下标 j = 3 ，此时 nums1[j] >= 2 且 nums2[j] >= 5 。nums1[j] + nums2[j] 等于 7 ，可以证明 7 是可以获得的最大值。
-# 因此，我们返回 [6,10,7] 。
+# 输入：cost = [1,2,3,2], time = [1,2,3,2]
+# 输出：3
+# 解释：下标为 0 和 1 的墙由付费油漆匠来刷，需要 3 单位时间。同时，免费油漆匠刷下标为 2 和 3 的墙，需要 2 单位时间，开销为 0 。总开销为 1 + 2 = 3 。
 # 示例 2：
 #
-# 输入：nums1 = [3,2,5], nums2 = [2,3,4], queries = [[4,4],[3,2],[1,1]]
-# 输出：[9,9,9]
-# 解释：对于这个示例，我们可以选择下标 j = 2 ，该下标可以满足每个查询的限制。
-# 示例 3：
-#
-# 输入：nums1 = [2,1], nums2 = [2,3], queries = [[3,3]]
-# 输出：[-1]
-# 解释：示例中的查询 xi = 3 且 yi = 3 。对于每个下标 j ，都只满足 nums1[j] < xi 或者 nums2[j] < yi 。因此，不存在答案。
+# 输入：cost = [2,3,4,2], time = [1,1,1,1]
+# 输出：4
+# 解释：下标为 0 和 3 的墙由付费油漆匠来刷，需要 2 单位时间。同时，免费油漆匠刷下标为 1 和 2 的墙，需要 2 单位时间，开销为 0 。总开销为 2 + 2 = 4 。
 #
 #
 # 提示：
 #
-# nums1.length == nums2.length
-# n == nums1.length
-# 1 <= n <= 105
-# 1 <= nums1[i], nums2[i] <= 109
-# 1 <= queries.length <= 105
-# queries[i].length == 2
-# xi == queries[i][1]
-# yi == queries[i][2]
-# 1 <= xi, yi <= 109
+# 1 <= cost.length <= 500
+# cost.length == time.length
+# 1 <= cost[i] <= 106
+# 1 <= time[i] <= 500
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -165,38 +152,23 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumSumQueries(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(nums1)
-        zip_num = sorted(zip(nums1, nums2), key=lambda x: x[0], reverse=True)
-        ans = [-1] * len(queries)
-        q = sorted(enumerate(queries), key=lambda x: x[1][0], reverse=True)
-        print(zip_num)
-        print(q)
-        # 单调栈，stack[i] == [a, b]  a 表示 nums2[k] 中的元素， b 表示 nums1[k] + nums2[k] 中的元素
-        # 按 a 递增， b 递减的顺序存放，在栈中的元素都是满足本次查询的
-        stack = []
-        i = 0  # 记录 zip_num 当前要处理的下标
-        for idx, [a, b] in q:
-            while i < n and zip_num[i][0] >= a:
-                while stack and zip_num[i][0] + zip_num[i][1] >= stack[-1][1]:
-                    stack.pop()
-                if len(stack) == 0 or zip_num[i][1] >= stack[-1][0]:
-                    stack.append([zip_num[i][1], zip_num[i][0] + zip_num[i][1]])
-                i += 1
-            # 在 单调栈中的元素 对于 nums1 都是满足要求的
-            pos = bisect_left(stack, [b,])
-            if pos < len(stack):
-                ans[idx] = stack[pos][1]
-        return ans
+    def paintWalls(self, cost: List[int], time: List[int]) -> int:
+        n = len(cost)
 
-
+        @cache
+        def dfs(i, t):  # 处理 [0, i] 墙，并且之前付费匠已累计工作时间为 t 时，最小花费
+            if t >= i + 1: return 0
+            if i == -1 and t < 0: return inf
+            c1 = dfs(i - 1, t + time[i]) + cost[i]
+            c2 = dfs(i - 1, t - 1)
+            return min(c1, c2)
+        return dfs(n - 1, 0)
 
 
 so = Solution()
-print(so.maximumSumQueries(nums1 = [89,85], nums2 = [53,32], queries = [[75,48]]))
-print(so.maximumSumQueries(nums1 = [4,3,1,2], nums2 = [2,4,9,5], queries = [[4,1],[1,3],[2,5]]))
-print(so.maximumSumQueries(nums1 = [3,2,5], nums2 = [2,3,4], queries = [[4,4],[3,2],[1,1]]))
-print(so.maximumSumQueries(nums1 = [2,1], nums2 = [2,3], queries = [[3,3]]))
+print(so.paintWalls([42,8,28,35,21,13,21,35], [2,1,1,1,2,1,1,2]))
+print(so.paintWalls(cost = [1,2,3,2], time = [1,2,3,2]))
+print(so.paintWalls(cost = [2,3,4,2], time = [1,1,1,1]))
 
 
 
