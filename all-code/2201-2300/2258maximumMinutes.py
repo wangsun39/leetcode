@@ -123,6 +123,82 @@ class Solution:
 
         return fireMinTime - dp[0][0] - 1
 
+
+    def maximumMinutes1(self, grid: List[List[int]]) -> int:
+        # 2023/6/23  BFS + 二分
+        r, c = len(grid), len(grid[0])
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        dq1 = deque()
+        t = [[inf] * c for _ in range(r)]  # 火烧到的最早时间
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 1:
+                    dq1.append([i, j])
+        cur = 1
+        dq2 = deque()
+        while dq1:
+            while dq1:
+                x, y = dq1.popleft()
+                for u, v in dir:
+                    x1, y1 = x + u, y + v
+                    if 0 <= x1 < r and 0 <= y1 < c and grid[x1][y1] == 0 and t[x1][y1] == inf:
+                        t[x1][y1] = cur
+                        dq2.append([x1, y1])
+            cur += 1
+            dq1, dq2 = dq2, deque()
+
+        dq1, dq2 = deque([[0, 0]]), deque()
+        arr = [[inf] * c for _ in range(r)]  # 记录人到达的最早时间
+        arr[0][0] = 0
+        cur = 1
+        while dq1:
+            while dq1:
+                x, y = dq1.popleft()
+                for x1, y1 in dir:
+                    u, v = x + x1, y + y1
+                    if 0 <= u < r and 0 <= v < c and grid[u][v] == 0 and arr[u][v] == inf:
+                        if u == r - 1 and v == r - 1:
+                            if cur > t[u][v]:
+                                continue  # 已烧到
+                        elif cur >= t[u][v]: continue  # 已烧到
+                        arr[u][v] = cur
+                        dq2.append([u, v])
+            cur += 1
+            dq1, dq2 = dq2, deque()
+        if arr[-1][-1] == inf:
+            return -1
+        if t[-1][-1] == inf:
+            return 10 ** 9
+
+        def check(val):  # 判断提前val时间，能否完成
+            dq1, dq2 = deque([[0, 0]]), deque()
+            vis = [[0] * c for _ in range(r)]  # 记录人是否到达过
+            vis[0][0] = 1
+            cur = 1
+            while dq1:
+                while dq1:
+                    x, y = dq1.popleft()
+                    for x1, y1 in dir:
+                        u, v = x + x1, y + y1
+                        if 0 <= u < r and 0 <= v < c and grid[u][v] == 0 and vis[u][v] == 0:
+                            if u == r - 1 and v == c - 1 and t[u][v] - arr[u][v] >= val:
+                                return True
+                            if t[u][v] - arr[u][v] > val:
+                                dq2.append([u, v])
+                            vis[u][v] = 1
+
+                cur += 1
+                dq1, dq2 = dq2, deque()
+            return False
+        lo, hi = 0, r * c
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
+            else:
+                hi = mid
+        return lo
+
 so = Solution()
 print(so.maximumMinutes(grid = [[0,0,0,0,0],[0,2,0,2,0],[0,2,0,2,0],[0,2,1,2,0],[0,2,2,2,0],[0,0,0,0,0]]))
 print(so.maximumMinutes([[0,0,2,2,1,1,0,2,1,1,2,2,0,2,2,1,2,0,1,2,2,0,1,2,2,1,2,2],[2,2,2,1,1,2,2,1,2,0,1,1,1,2,2,1,1,0,2,2,2,0,1,0,1,2,2,2],[0,0,1,1,0,1,2,0,1,1,1,1,0,2,0,2,0,2,1,1,0,2,1,2,2,2,1,2],[2,2,0,0,0,0,1,0,1,0,2,0,1,0,2,0,0,1,2,1,0,1,1,1,2,0,2,0],[2,2,1,1,1,1,1,0,0,0,0,2,0,1,1,1,1,2,0,2,1,1,2,0,2,0,2,0],[0,1,0,1,2,2,2,0,2,0,2,2,1,2,0,0,1,0,2,0,2,0,1,2,2,0,2,0],[1,0,2,2,2,0,2,0,2,0,2,0,1,0,2,2,0,2,1,1,1,0,1,0,1,1,0,0],[0,1,2,0,1,0,1,0,2,1,2,0,1,1,1,1,0,1,1,0,0,2,0,1,0,1,0,2],[2,1,1,0,1,1,2,2,1,2,2,1,0,1,0,0,0,2,1,0,2,2,1,2,1,2,0,1],[1,1,2,0,2,2,1,2,0,2,1,1,0,0,0,2,2,2,2,1,2,2,0,2,1,1,2,0],[2,1,2,2,0,0,1,0,1,2,1,0,1,0,2,0,0,1,1,0,2,0,2,0,1,2,2,0],[1,0,1,1,0,0,0,0,0,1,0,2,0,2,1,2,1,1,0,1,0,0,2,1,2,1,0,2],[2,0,1,0,2,0,1,0,2,0,2,1,2,0,2,2,2,1,0,2,1,0,1,2,1,0,1,1],[0,2,2,1,0,2,1,0,1,2,2,1,2,2,1,2,0,1,2,2,0,2,1,0,2,1,0,0],[0,2,2,2,1,2,1,0,0,2,2,0,1,0,2,1,0,0,2,1,1,1,2,1,2,1,0,1],[2,2,2,1,1,1,1,0,2,2,2,1,0,0,2,2,0,0,1,1,0,0,2,1,2,1,2,2],[2,1,2,1,1,1,0,2,1,0,1,1,2,1,0,0,1,1,2,1,2,2,1,2,0,2,0,0]]))  # -1

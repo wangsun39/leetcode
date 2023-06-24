@@ -125,33 +125,35 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-
-
 class Solution:
-    def longestWPI(self, hours: List[int]) -> int:
-        hours = [1 if x > 8 else -1 for x in hours]
-        n = len(hours)
-        s = [0]  # 前缀和
-        st = [0]  # 递减单调栈，记录前缀和下标
-        for i, x in enumerate(hours, 1):
-            s.append(s[-1] + x)
-            if s[-1] < s[st[-1]]:
-                st.append(i)
-        # print(s)
-        # print(st)
-        ans = 0
-        for i in range(n, 0, -1):
-            while st and s[i] > s[st[-1]]:
-                j = st.pop()
-                ans = max(ans, i - j)
-        return ans
+    def maxDistance(self, position: List[int], m: int) -> int:
+        position.sort()
+        def check(val):
+            start = position[0]
+            acc = 1
+            for i, x in enumerate(position):
+                if x - start >= val:
+                    start = x
+                    acc += 1
+                    if acc == m:
+                        return True
+            return False
+        lo, hi = 0, max(position)
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
+            else:
+                hi = mid
+        return lo
 
 
 
 
 so = Solution()
-print(so.longestWPI(hours = [9,6,9]))
-print(so.longestWPI(hours = [9,9,6,0,6,6,9]))
-print(so.longestWPI(hours = [6,6,6]))
+print(so.maxDistance(position = [5,4,3,2,1,1000000000], m = 2))
+print(so.maxDistance(position = [1,2,3,4,7], m = 3))
+
+
 
 

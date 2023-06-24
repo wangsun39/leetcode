@@ -125,33 +125,19 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-
-
 class Solution:
-    def longestWPI(self, hours: List[int]) -> int:
-        hours = [1 if x > 8 else -1 for x in hours]
-        n = len(hours)
-        s = [0]  # 前缀和
-        st = [0]  # 递减单调栈，记录前缀和下标
-        for i, x in enumerate(hours, 1):
-            s.append(s[-1] + x)
-            if s[-1] < s[st[-1]]:
-                st.append(i)
-        # print(s)
-        # print(st)
-        ans = 0
-        for i in range(n, 0, -1):
-            while st and s[i] > s[st[-1]]:
-                j = st.pop()
-                ans = max(ans, i - j)
-        return ans
-
-
+    def threeConsecutiveOdds(self, arr: List[int]) -> bool:
+        n = len(arr)
+        for i in range(n - 2):
+            if arr[i] & 1 == arr[i + 1] & 1 == arr[i + 2] & 1 == 1:
+                return True
+        return False
 
 
 so = Solution()
-print(so.longestWPI(hours = [9,6,9]))
-print(so.longestWPI(hours = [9,9,6,0,6,6,9]))
-print(so.longestWPI(hours = [6,6,6]))
+print(so.threeConsecutiveOdds([2,6,4,1]))
+print(so.threeConsecutiveOdds([1,2,34,3,4,5,7,23,12]))
+
+
 
 
