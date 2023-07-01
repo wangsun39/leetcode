@@ -35,14 +35,18 @@
 # 1 <= nums[i] <= nums.length
 from functools import cache
 from math import inf
-from typing import Optional,List
-from collections import defaultdict
+from typing import Optional, List
+from collections import defaultdict, Counter
 
 
 # Definition for a binary tree node.
 class Solution:
-    def minimumIncompatibility(self, nums: List[int], k: int) -> int:
+    def minimumIncompatibility1(self, nums: List[int], k: int) -> int:
+        # 在处理掉一些特殊用例的情况下，这个记忆化搜索算法勉强通过
         n = len(nums)
+        ct = Counter(nums)
+        if max(ct.values()) > k: return -1
+        if k == n: return 0
         g = [-1] * (2 ** n)  # 预处理计算每个状态的不兼容性
         for i in range(2 ** n):
             if i.bit_count() != n // k: continue
@@ -63,21 +67,59 @@ class Solution:
             sub = mask
             res = inf
             while sub:
-                if sub == 5:
-                    pass
                 if g[sub] != -1:
                     res = min(res, dfs(mask & ~sub) + g[sub])
                 sub = (sub - 1) & mask
-            # print(mask, res)
             return res
-        ans = dfs(2 ** n - 1)
-        return -1 if ans == inf else ans
+        return dfs(2 ** n - 1)
+
+    def minimumIncompatibility(self, nums: List[int], k: int) -> int:
+        # 改为DP版本
+        n = len(nums)
+        ct = Counter(nums)
+        if max(ct.values()) > k: return -1
+        if k == n: return 0
+        g = [-1] * (2 ** n)  # 预处理计算每个状态的不兼容性
+        for i in range(2 ** n):
+            if i.bit_count() != n // k: continue
+            s = set()
+            skip = False
+            for j in range(n):
+                if i & (1 << j) == 0: continue
+                if nums[j] in s:
+                    skip = True
+                    break
+                s.add(nums[j])
+            if skip: continue
+            g[i] = max(s) - min(s)
+
+        dp = [inf] * (2 ** n)
+        dp[0] = 0
+        for i in range(2 ** n):
+            if dp[i] == inf: continue  # 这个continue 可以决定是不是能通过
+            mask = ((2 ** n - 1) ^ i) & (2 ** n - 1)
+            s = set()
+            for j in range(mask.bit_length()):
+                if mask & (1 << j):
+                    if nums[j] not in s:
+                        s.add(nums[j])
+                    else:
+                        mask &= ~(1 << j)
+            sub = mask
+            while sub:
+                if sub.bit_count() == n // k:
+                    dp[i | sub] = min(dp[i | sub], dp[i] + g[sub])
+                sub = (sub - 1) & mask
+
+        return dp[-1]
 
 
 so = Solution()
 
+print(so.minimumIncompatibility(nums = [1,2,1,4], k = 2))   # 4
 print(so.minimumIncompatibility(nums = [6,3,8,1,3,1,2,2], k = 4))
-print(so.minimumIncompatibility(nums = [1,2,1,4], k = 2))
+print(so.minimumIncompatibility(nums = [1, 1], k = 1))
+print(so.minimumIncompatibility(nums = [1], k = 1))
 print(so.minimumIncompatibility(nums = [5,3,3,6,3,3], k = 3))
 
 

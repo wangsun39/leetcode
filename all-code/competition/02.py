@@ -126,19 +126,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def findValueOfPartition(self, nums: List[int]) -> int:
-        nums.sort()
-        ans = inf
-        for i, x in enumerate(nums[1:], 1):
-            cur = abs(x - nums[i - 1])
-            ans = min(cur, ans)
-        return ans
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.findValueOfPartition([1,3,2,4]))
-print(so.findValueOfPartition([100,1,10]))
+print(so.removeDigit())
 
 
 

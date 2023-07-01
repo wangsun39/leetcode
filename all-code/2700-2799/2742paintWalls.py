@@ -165,6 +165,8 @@ class Solution:
         return dfs(n - 1, 0)
 
 
+
+
 so = Solution()
 print(so.paintWalls([42,8,28,35,21,13,21,35], [2,1,1,1,2,1,1,2]))
 print(so.paintWalls(cost = [1,2,3,2], time = [1,2,3,2]))

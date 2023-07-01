@@ -126,23 +126,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def paintWalls(self, cost: List[int], time: List[int]) -> int:
-        n = len(cost)
-
-        @cache
-        def dfs(i, t):  # 处理 [0, i] 墙，并且之前付费匠已累计工作时间为 t 时，最小花费
-            if t >= i + 1: return 0
-            if i == -1 and t < 0: return inf
-            c1 = dfs(i - 1, t + time[i]) + cost[i]
-            c2 = dfs(i - 1, t - 1)
-            return min(c1, c2)
-        return dfs(n - 1, 0)
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.paintWalls([42,8,28,35,21,13,21,35], [2,1,1,1,2,1,1,2]))
-print(so.paintWalls(cost = [1,2,3,2], time = [1,2,3,2]))
-print(so.paintWalls(cost = [2,3,4,2], time = [1,1,1,1]))
+print(so.removeDigit())
 
 
 
