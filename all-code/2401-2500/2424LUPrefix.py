@@ -125,13 +125,26 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-class Solution:
-    def removeDigit(self) -> str:
-        pass
+class LUPrefix:
+
+    def __init__(self, n: int):
+        self.sl1 = SortedList(range(1, n + 2))  # 未上传的
+
+    def upload(self, video: int) -> None:
+        self.sl1.remove(video)
+
+    def longest(self) -> int:
+        # if len(self.sl1) == 0: return
+        return self.sl1[0] - 1
 
 
-so = Solution()
-print(so.removeDigit())
+so = LUPrefix(3)
+print(so.upload(3))
+print(so.longest())
+print(so.upload(1))
+print(so.longest())
+print(so.upload(2))
+print(so.longest())
 
 
 

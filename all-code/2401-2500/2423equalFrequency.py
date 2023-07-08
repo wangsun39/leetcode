@@ -87,6 +87,19 @@ class Solution:
         k = sorted(list(ct2.keys()))
         return k[1] - k[0] == 1 and ( ct2[k[1]] == 1)
 
+    def equalFrequency1(self, word: str) -> bool:
+        # 2023/7/8
+        counter = Counter(word)
+        cc = sorted(list(counter.values()))
+        cc[-1] -= 1  # 删除第一个
+        if all(x == cc[0] for x in cc):
+            return True
+        cc[-1] += 1
+        if cc[0] == 1 and all(x == cc[1] for x in cc[1:]):  # 删除最后一个
+            return True
+
+        return False
+
 
 
 
