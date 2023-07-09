@@ -105,6 +105,9 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # sl.count(value)
 # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
+# sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
+# skv = sd.keys()  这个是有序的
+
 # ss = SortedSet()
 # ss.add(value)
 # ss.pop()
