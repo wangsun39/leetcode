@@ -1,3 +1,29 @@
+# 给你一个字符串 s ，它包含一个或者多个单词。单词之间用单个空格 ' ' 隔开。
+#
+# 如果字符串 t 中第 i 个单词是 s 中第 i 个单词的一个 排列 ，那么我们称字符串 t 是字符串 s 的同位异构字符串。
+#
+# 比方说，"acb dfe" 是 "abc def" 的同位异构字符串，但是 "def cab" 和 "adc bef" 不是。
+# 请你返回 s 的同位异构字符串的数目，由于答案可能很大，请你将它对 109 + 7 取余 后返回。
+#
+#
+#
+# 示例 1：
+#
+# 输入：s = "too hot"
+# 输出：18
+# 解释：输入字符串的一些同位异构字符串为 "too hot" ，"oot hot" ，"oto toh" ，"too toh" 以及 "too oht" 。
+# 示例 2：
+#
+# 输入：s = "aa"
+# 输出：1
+# 解释：输入字符串只有一个同位异构字符串。
+#
+#
+# 提示：
+#
+# 1 <= s.length <= 105
+# s 只包含小写英文字母和空格 ' ' 。
+# 相邻单词之间由单个空格隔开。
 
 from typing import List
 from typing import Optional
@@ -8,17 +34,13 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
-# list(accumulate(nums))  数组前缀和
+from itertools import pairwise
 # Definition for a binary tree node.
 from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
-# print(c.most_common(2)) # n = 2
-#  [('c', 3), ('b', 2)]
-
 # d = defaultdict(int)
-from math import *
+import math
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -34,20 +56,15 @@ import random
 # a.isspace()  # 判断字符串中是否所有的字符都是空白符
 # a.swapcase()  # 转换大小写
 
-from bisect import *
+import bisect
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
-# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
-
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-from heapq import *
+import heapq
 # heap.heapify(nums) # 小顶堆
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
@@ -55,10 +72,9 @@ from heapq import *
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
-# Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List, Tuple
+from typing import List
 # @lru_cache(None)
 
 # bit位 函数：
@@ -80,7 +96,6 @@ import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串
-# string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
@@ -92,49 +107,44 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList, SortedDict, SortedSet
-# sl = SortedList()
-# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-# sl.clear() 移除所有元素。时间复杂度O(n).
-# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-# sl.bisect_left(value)
-# sl.bisect_right(value)
-# sl.count(value)
-# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
-
-# sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
-# skv = sd.keys()  这个是有序的
-
-# ss = SortedSet()
-# ss.add(value)
-# ss.pop()
-# ss.pop(value)
-# ss.remove(value)
-# ss.remove(value)
-
-
-# 前缀和
-# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
-# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
-# s = list(accumulate(nums, initial=0))
-
-# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
-# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-
-# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
-# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
-# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
+from sortedcontainers import SortedList
+    # SortedList.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # SortedList.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # SortedList.clear() 移除所有元素。时间复杂度O(n).
+    # SortedList.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # SortedList.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # SortedList.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # SortedList.bisect_left(value)
+    # SortedList.bisect_right(value)
+    # SortedList.count(value)
+    # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countAnagrams(self, s: str) -> int:
+        l = s.split()
+        MOD = 10 ** 9 + 7
+
+        def calc(word):  # 计算一个单词的不同排列个数
+            counter = Counter(word)
+            n = len(word)
+            res = 1
+            for v in counter.values():
+                res *= math.comb(n, v)
+                res %= MOD
+                n -= v
+            return res
+
+        ans = 1
+        for x in l:
+            ans *= calc(x)
+            ans %= MOD
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countAnagrams(s = "too hot"))
+print(so.countAnagrams(s = "too hot"))
 
 
 
