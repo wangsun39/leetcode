@@ -53,7 +53,7 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]

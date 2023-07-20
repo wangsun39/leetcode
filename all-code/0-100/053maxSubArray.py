@@ -33,7 +33,7 @@
 
 from typing import List
 class Solution:
-    def maxSubArray(self, nums: List[int]) -> int:
+    def maxSubArray1(self, nums: List[int]) -> int:
         maxSegment = nums[0]
         start = None
         sumFromStart = nums[0]
@@ -53,6 +53,17 @@ class Solution:
                 sumFromStart = 0
         return maxSegment
 
+    def maxSubArray(self, nums: List[int]) -> int:
+        # 2023/7/20:  DP
+        ans = v = nums[0]
+        for i, x in enumerate(nums[1:], 1):
+            # v 表示以 x 结尾的最大子数组和
+            if v <= 0:  # 当前面的和 <= 0，那么:如果最大和子数组包含x,就不会包含x前的任何值
+                v = x
+            else:
+                v += x
+            ans = max(ans, v)
+        return ans
 
 so = Solution()
 print(so.maxSubArray([-2,1,-3,4,-1,2,1,-5,4]))
