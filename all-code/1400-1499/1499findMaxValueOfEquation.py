@@ -27,13 +27,13 @@
 # 0 <= k <= 2 * 10^8
 # 对于所有的1 <= i < j <= points.length ，points[i][0] < points[j][0] 都成立。也就是说，xi 是严格递增的。
 from heapq import *
-from collections import defaultdict
+from collections import defaultdict, deque
 from functools import cache
 from typing import List
 from math import *
 
 class Solution:
-    def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
+    def findMaxValueOfEquation1(self, points: List[List[int]], k: int) -> int:
         hp = [[points[0][0] - points[0][1], points[0][0]]]  # [-(y - x), x] 的优先队列，队头放的是 y - x 的最大值
         ans = -inf
         for x, y in points[1:]:
@@ -42,6 +42,19 @@ class Solution:
             if hp and -hp[0][0] + x + y > ans:
                 ans = -hp[0][0] + x + y
             heappush(hp, [x - y, x])
+        return ans
+
+    def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
+        dq = deque([[points[0][1] - points[0][0], points[0][0]]])  # [(y - x), x] 的单调减队列，队头放的是 y - x 的最大值
+        ans = -inf
+        for x, y in points[1:]:
+            while dq and x - dq[0][1] > k:
+                dq.popleft()
+            if dq and dq[0][0] + x + y > ans:
+                ans = dq[0][0] + x + y
+            while dq and dq[-1][0] < y - x:
+                dq.pop()
+            dq.append([y - x, x])
         return ans
 
 

@@ -62,17 +62,6 @@ from functools import lru_cache, cache
 from typing import List, Tuple
 # @lru_cache(None)
 
-# bit位 函数：
-# n.bit_length()  数值的二进制的长度数
-# value = int(s, 2)
-# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
-# n>>k & 1	求n的第k位数字
-# x | (1 << k)	将x第k位 置为1
-# x ^ (1 << k)	将x第k位取反
-# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
-# x | (x + 1)	将x最右边的0置为1
-# x & 1	判断奇偶性 真为奇，假为偶
-
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)

@@ -1,40 +1,4 @@
-# 给你一个下标从 0 开始的整数数组 nums 和一个 非负 整数 k 。
-#
-# 在一步操作中，你可以执行下述指令：
-#
-# 在范围 [0, nums.length - 1] 中选择一个 此前没有选过 的下标 i 。
-# 将 nums[i] 替换为范围 [nums[i] - k, nums[i] + k] 内的任一整数。
-# 数组的 美丽值 定义为数组中由相等元素组成的最长子序列的长度。
-#
-# 对数组 nums 执行上述操作任意次后，返回数组可能取得的 最大 美丽值。
-#
-# 注意：你 只 能对每个下标执行 一次 此操作。
-#
-# 数组的 子序列 定义是：经由原数组删除一些元素（也可能不删除）得到的一个新数组，且在此过程中剩余元素的顺序不发生改变。
-#
-#
-#
-# 示例 1：
-#
-# 输入：nums = [4,6,1,2], k = 2
-# 输出：3
-# 解释：在这个示例中，我们执行下述操作：
-# - 选择下标 1 ，将其替换为 4（从范围 [4,8] 中选出），此时 nums = [4,4,1,2] 。
-# - 选择下标 3 ，将其替换为 4（从范围 [0,4] 中选出），此时 nums = [4,4,1,4] 。
-# 执行上述操作后，数组的美丽值是 3（子序列由下标 0 、1 、3 对应的元素组成）。
-# 可以证明 3 是我们可以得到的由相等元素组成的最长子序列长度。
-# 示例 2：
-#
-# 输入：nums = [1,1,1,1], k = 10
-# 输出：4
-# 解释：在这个示例中，我们无需执行任何操作。
-# 数组 nums 的美丽值是 4（整个数组）。
-#
-#
-# 提示：
-#
-# 1 <= nums.length <= 105
-# 0 <= nums[i], k <= 105
+
 
 from typing import List
 from typing import Optional
@@ -89,7 +53,7 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
@@ -97,17 +61,6 @@ from heapq import *
 from functools import lru_cache, cache
 from typing import List, Tuple
 # @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()  数值的二进制的长度数
-# value = int(s, 2)
-# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
-# n>>k & 1	求n的第k位数字
-# x | (1 << k)	将x第k位 置为1
-# x ^ (1 << k)	将x第k位取反
-# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
-# x | (x + 1)	将x最右边的0置为1
-# x & 1	判断奇偶性 真为奇，假为偶
 
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
@@ -166,23 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumBeauty(self, nums: List[int], k: int) -> int:
-        nums.sort()
-        n = len(nums)
-        hi, lo = max(nums), min(nums)
-        ans = 0
-        for x in range(hi, lo - 1, -1):
-            # x = nums[i]
-            p1 = bisect_left(nums, x - k)
-            p2 = bisect_right(nums, x + k)
-            ans = max(ans, p2 - p1)
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maximumBeauty([49,26], 12))
-print(so.maximumBeauty(nums = [4,6,1,2], k = 2))
-print(so.maximumBeauty(nums = [1,1,1,1], k = 10))
+print(so.removeDigit())
 
 
 

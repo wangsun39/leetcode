@@ -1,29 +1,5 @@
-# 给你一个下标从 1 开始、长度为 n 的整数数组 nums 。
-#
-# 对 nums 中的元素 nums[i] 而言，如果 n 能够被 i 整除，即 n % i == 0 ，则认为 num[i] 是一个 特殊元素 。
-#
-# 返回 nums 中所有 特殊元素 的 平方和 。
-#
-#
-#
-# 示例 1：
-#
-# 输入：nums = [1,2,3,4]
-# 输出：21
-# 解释：nums 中共有 3 个特殊元素：nums[1] ，因为 4 被 1 整除；nums[2] ，因为 4 被 2 整除；以及 nums[4] ，因为 4 被 4 整除。
-# 因此，nums 中所有元素的平方和等于 nums[1] * nums[1] + nums[2] * nums[2] + nums[4] * nums[4] = 1 * 1 + 2 * 2 + 4 * 4 = 21 。
-# 示例 2：
-#
-# 输入：nums = [2,7,1,19,18,3]
-# 输出：63
-# 解释：nums 中共有 4 个特殊元素：nums[1] ，因为 6 被 1 整除；nums[2] ，因为 6 被 2 整除；nums[3] ，因为 6 被 3 整除；以及 nums[6] ，因为 6 被 6 整除。
-# 因此，nums 中所有元素的平方和等于 nums[1] * nums[1] + nums[2] * nums[2] + nums[3] * nums[3] + nums[6] * nums[6] = 2 * 2 + 7 * 7 + 1 * 1 + 3 * 3 = 63 。
-#
-#
-# 提示：
-#
-# 1 <= nums.length == n <= 50
-# 1 <= nums[i] <= 50
+
+
 from typing import List
 from typing import Optional
 from cmath import inf
@@ -77,7 +53,7 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
@@ -85,17 +61,6 @@ from heapq import *
 from functools import lru_cache, cache
 from typing import List, Tuple
 # @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()  数值的二进制的长度数
-# value = int(s, 2)
-# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
-# n>>k & 1	求n的第k位数字
-# x | (1 << k)	将x第k位 置为1
-# x ^ (1 << k)	将x第k位取反
-# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
-# x | (x + 1)	将x最右边的0置为1
-# x & 1	判断奇偶性 真为奇，假为偶
 
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
@@ -154,19 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def sumOfSquares(self, nums: List[int]) -> int:
-        n = len(nums)
-        ans = 0
-        for i in range(n):
-            if n % (i + 1) == 0:
-                ans += (nums[i] ** 2)
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.sumOfSquares([1,2,3,4]))
-print(so.sumOfSquares([2,7,1,19,18,3]))
-print(so.sumOfSquares([1,2,3,4]))
+print(so.removeDigit())
 
 
 
