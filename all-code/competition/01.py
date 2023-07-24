@@ -119,12 +119,21 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def splitWordsBySeparator(self, words: List[str], separator: str) -> List[str]:
+        ans = []
+        for w in words:
+            x = w.split(separator)
+            for y in x:
+                if len(y) > 0:
+                    ans.append(y)
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.splitWordsBySeparator(words = ["one.two.three","four.five","six"], separator = "."))
+print(so.splitWordsBySeparator(words = ["$easy$","$problem$"], separator = "$"))
+print(so.splitWordsBySeparator(words = ["|||"], separator = "|"))
 
 
 
