@@ -84,6 +84,54 @@ class RangeModule:
         self.update(1, 1, 10 ** 9, left, right - 1, 2)
 
 
+# 2569
+class Solution2:
+    def handleQuery(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
+        n = len(nums1)
+        todo = [False] * (4 * n)  # 特殊区间的lazy标记
+
+        # # 维护区间 1 的个数
+        # def maintain(o: int) -> None:
+        #     cnt1[o] = cnt1[o * 2] + cnt1[o * 2 + 1]
+        #
+        # # 执行区间反转
+        # def do(o: int, l: int, r: int) -> None:
+        #     cnt1[o] = r - l + 1 - cnt1[o]
+        #     todo[o] = not todo[o]
+
+        # 初始化线段树   o,l,r=1,1,n
+        def build(o: int, l: int, r: int) -> None:
+            if l == r:
+                # ...
+                return
+            m = (l + r) // 2
+            build(o * 2, l, m)
+            build(o * 2 + 1, m + 1, r)
+            # ... maintain(o)
+
+        # 反转区间 [L,R]   o,l,r=1,1,n
+        def update(o: int, l: int, r: int, L: int, R: int) -> None:
+            # 进入这个函数的前提是，[l,r] 与 [L,R]有交集
+            if L <= l and r <= R:
+                # ... do(o, l, r)
+                return
+            m = (l + r) // 2
+            # if todo[o]:
+            #     do(o * 2, l, m)
+            #     do(o * 2 + 1, m + 1, r)
+            #     todo[o] = False
+            if m >= L: update(o * 2, l, m, L, R)
+            if m < R: update(o * 2 + 1, m + 1, r, L, R)
+            # ... maintain(o)
+
+        # build(1, 1, n)
+        # ans, s = [], sum(nums2)
+        # for op, l, r in queries:
+        #     if op == 1: update(1, 1, n, l + 1, r + 1)
+        #     elif op == 2: s += l * cnt1[1]
+        #     else: ans.append(s)
+        # return ans
+
 
 
 
