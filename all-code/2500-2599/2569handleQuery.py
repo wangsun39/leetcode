@@ -138,10 +138,10 @@ class Solution:
         cnt = [0] * (4 * n)  # 记录每个特殊区间和
 
         def mt(o):
-            cnt[o] = cnt[o * 2], cnt[o * 2 + 1]
+            cnt[o] = cnt[o * 2] + cnt[o * 2 + 1]
 
         def do(o, l, r):
-            cnt[o] = (l + r - 1) - cnt[o]
+            cnt[o] = (r - l + 1) - cnt[o]
             todo[o] = not todo[o]
 
         # 初始化线段树   o,l,r=1,1,n
@@ -164,20 +164,31 @@ class Solution:
             m = (l + r) // 2
             if todo[o]:
                 # ...
-                do(o * 2, L, m)
-                do(o * 2 + 1, m + 1, R)
+                do(o * 2, l, m)
+                do(o * 2 + 1, m + 1, r)
                 todo[o] = False
             if m >= L: update(o * 2, l, m, L, R)
             if m < R: update(o * 2 + 1, m + 1, r, L, R)
             mt(o)
 
+        cur = 0
+        s2 = sum(nums2)
+        build(1, 1, n)
+        ans = []
+        for t, L, R in queries:
+            if t == 1: update(1, 1, n, L + 1, R + 1)
+            elif t == 2: cur += L * cnt[1]
+            else: ans.append(cur + s2)
+
+        return ans
 
 
 
 
 
 so = Solution()
-print(so.minimumScore("abecdebe","eaebceae"))
+print(so.handleQuery(nums1 = [1,0,1], nums2 = [0,0,0], queries = [[1,1,1],[2,1,0],[3,0,0]]))
+print(so.handleQuery(nums1 = [1], nums2 = [5], queries = [[2,0,0],[3,0,0]]))
 
 
 

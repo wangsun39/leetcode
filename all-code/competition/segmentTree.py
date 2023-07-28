@@ -116,7 +116,7 @@ class Solution2:
                 # ... do(o, l, r)
                 return
             m = (l + r) // 2
-            # if todo[o]:
+            # if todo[o]:  # 有 lazy tag的区间要被破坏开
             #     do(o * 2, l, m)
             #     do(o * 2 + 1, m + 1, r)
             #     todo[o] = False
@@ -126,7 +126,7 @@ class Solution2:
 
         # build(1, 1, n)
         # ans, s = [], sum(nums2)
-        # for op, l, r in queries:
+        # for op, l, r in queries:  # 注意定义的l 和 r 是从0还是1开始
         #     if op == 1: update(1, 1, n, l + 1, r + 1)
         #     elif op == 2: s += l * cnt1[1]
         #     else: ans.append(s)
