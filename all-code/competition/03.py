@@ -119,49 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maxIncreasingGroups(self, usageLimits: List[int]) -> int:
-        n = len(usageLimits)
-        usageLimits.sort()
-
-        def check(val):
-            lack = 0
-            s = 0
-            cur = val
-            for i in range(n - 1, -1, -1):
-                x = usageLimits[i]
-                if x >= cur:
-                    delta = min(lack, x - cur)
-                    lack = max(lack - delta, 0)
-                    s += (cur + delta)
-                else:
-                    lack += (cur - x)
-                    s += x
-                if s >= val * (val + 1) // 2:
-                    return True
-                if cur: cur -= 1
-            return False
-
-        lo, hi = 1, n + 1
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                lo = mid
-            else:
-                hi = mid
-        return lo
-
-
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxIncreasingGroups([1,2,1,10,9,1]))  # 4
-print(so.maxIncreasingGroups([2,2,2]))  # 3
-print(so.maxIncreasingGroups([1,7,7,1]))  # 3
-print(so.maxIncreasingGroups([1,1]))  # 1
-print(so.maxIncreasingGroups([1,6,8]))  # 3
-print(so.maxIncreasingGroups([1,2,5]))  # 3
-print(so.maxIncreasingGroups([2,1,2]))  # 2
+print(so.removeDigit())
 
 
 

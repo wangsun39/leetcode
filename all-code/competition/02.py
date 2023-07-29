@@ -119,22 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maxArrayValue(self, nums: List[int]) -> int:
-        ans = max(nums)
-        n = len(nums)
-        cur = n - 1
-        while cur > 0:
-            if nums[cur] >= nums[cur - 1]:
-                nums[cur - 1] += nums[cur]
-                if nums[cur - 1] > ans:
-                    ans = nums[cur - 1]
-            cur -= 1
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxArrayValue(nums = [2,3,7,9,3]))
-print(so.maxArrayValue(nums = [5,3,3]))
+print(so.removeDigit())
 
 
 

@@ -1,3 +1,49 @@
+# 给你一个下标从 0 开始、长度为 n 的数组 usageLimits 。
+#
+# 你的任务是使用从 0 到 n - 1 的数字创建若干组，并确保每个数字 i 在 所有组 中使用的次数总共不超过 usageLimits[i] 次。此外，还必须满足以下条件：
+#
+# 每个组必须由 不同 的数字组成，也就是说，单个组内不能存在重复的数字。
+# 每个组（除了第一个）的长度必须 严格大于 前一个组。
+# 在满足所有条件的情况下，以整数形式返回可以创建的最大组数。
+#
+#
+#
+# 示例 1：
+#
+# 输入：usageLimits = [1,2,5]
+# 输出：3
+# 解释：在这个示例中，我们可以使用 0 至多一次，使用 1 至多 2 次，使用 2 至多 5 次。
+# 一种既能满足所有条件，又能创建最多组的方式是：
+# 组 1 包含数字 [2] 。
+# 组 2 包含数字 [1,2] 。
+# 组 3 包含数字 [0,1,2] 。
+# 可以证明能够创建的最大组数是 3 。
+# 所以，输出是 3 。
+# 示例 2：
+#
+# 输入：usageLimits = [2,1,2]
+# 输出：2
+# 解释：在这个示例中，我们可以使用 0 至多 2 次，使用 1 至多 1 次，使用 2 至多 2 次。
+# 一种既能满足所有条件，又能创建最多组的方式是：
+# 组 1 包含数字 [0] 。
+# 组 2 包含数字 [1,2] 。
+# 可以证明能够创建的最大组数是 2 。
+# 所以，输出是 2 。
+# 示例 3：
+#
+# 输入：usageLimits = [1,1]
+# 输出：1
+# 解释：在这个示例中，我们可以使用 0 和 1 至多 1 次。
+# 一种既能满足所有条件，又能创建最多组的方式是：
+# 组 1 包含数字 [0] 。
+# 可以证明能够创建的最大组数是 1 。
+# 所以，输出是 1 。
+#
+#
+# 提示：
+#
+# 1 <= usageLimits.length <= 105
+# 1 <= usageLimits[i] <= 109
 
 from typing import List
 from typing import Optional
@@ -52,7 +98,7 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
@@ -60,17 +106,6 @@ from heapq import *
 from functools import lru_cache, cache
 from typing import List, Tuple
 # @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()  数值的二进制的长度数
-# value = int(s, 2)
-# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
-# n>>k & 1	求n的第k位数字
-# x | (1 << k)	将x第k位 置为1
-# x ^ (1 << k)	将x第k位取反
-# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
-# x | (x + 1)	将x最右边的0置为1
-# x & 1	判断奇偶性 真为奇，假为偶
 
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
@@ -105,6 +140,9 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # sl.count(value)
 # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
+# sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
+# skv = sd.keys()  这个是有序的
+
 # ss = SortedSet()
 # ss.add(value)
 # ss.pop()
@@ -125,68 +163,51 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-
-
 class Solution:
-    def handleQuery(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(nums1)
-        todo = [False] * (4 * n)  # 特殊区间的lazy标记
-        cnt = [0] * (4 * n)
+    def maxIncreasingGroups(self, usageLimits: List[int]) -> int:
+        n = len(usageLimits)
+        usageLimits.sort()
 
-        # # 维护区间 1 的个数
-        def maintain(o: int) -> None:
-            cnt[o] = cnt[o * 2] + cnt[o * 2 + 1]
-        #
-        # # 执行区间反转
-        def do(o: int, l: int, r: int) -> None:
-            cnt[o] = r - l + 1 - cnt[o]
-            todo[o] = not todo[o]
+        def check(val):
+            lack = 0
+            s = 0
+            cur = val
+            for i in range(n - 1, -1, -1):
+                x = usageLimits[i]
+                if x >= cur:
+                    delta = min(lack, x - cur)
+                    lack = max(lack - delta, 0)
+                    s += (cur + delta)
+                else:
+                    lack += (cur - x)
+                    s += x
+                if s >= val * (val + 1) // 2:
+                    return True
+                if cur: cur -= 1
+            return False
 
-        # 初始化线段树   o,l,r=1,1,n
-        def build(o: int, l: int, r: int) -> None:
-            if l == r:
-                cnt[o] = nums1[l - 1]
-                return
-            m = (l + r) // 2
-            build(o * 2, l, m)
-            build(o * 2 + 1, m + 1, r)
-            maintain(o)
-
-        # 反转区间 [L,R]   o,l,r=1,1,n
-        def update(o: int, l: int, r: int, L: int, R: int) -> None:
-            # 进入这个函数的前提是，[l,r] 与 [L,R]有交集
-            if L <= l and r <= R:
-                do(o, l, r)
-                return
-            m = (l + r) // 2
-            if todo[o]:  # 有 lazy tag的区间要被破坏开
-                do(o * 2, l, m)
-                do(o * 2 + 1, m + 1, r)
-                todo[o] = False
-            if m >= L: update(o * 2, l, m, L, R)
-            if m < R: update(o * 2 + 1, m + 1, r, L, R)
-            maintain(o)
-
-        build(1, 1, n)
-        s2 = sum(nums2)
-        ans = []
-        s1 = 0   # nums1 累积的和，没进行一次操作2进行一次累计
-        for t, L, R in queries:
-            if t == 1:
-                update(1, 1, n, L + 1, R + 1)
-            elif t == 2:
-                s1 += cnt[1] * L  # cnt[1] 是 nums1 当前的和
+        lo, hi = 1, n + 1
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
             else:
-                ans.append(s1 + s2)
-        return ans
-
+                hi = mid
+        return lo
 
 
 
 
 
 so = Solution()
-print(so.handleQuery(nums1 = [1,0,1], nums2 = [0,0,0], queries = [[1,1,1],[2,1,0],[3,0,0]]))
-print(so.handleQuery(nums1 = [1], nums2 = [5], queries = [[2,0,0],[3,0,0]]))
+print(so.maxIncreasingGroups([1,2,1,10,9,1]))  # 4
+print(so.maxIncreasingGroups([2,2,2]))  # 3
+print(so.maxIncreasingGroups([1,7,7,1]))  # 3
+print(so.maxIncreasingGroups([1,1]))  # 1
+print(so.maxIncreasingGroups([1,6,8]))  # 3
+print(so.maxIncreasingGroups([1,2,5]))  # 3
+print(so.maxIncreasingGroups([2,1,2]))  # 2
+
+
 
 
