@@ -119,12 +119,27 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countCompleteSubarrays(self, nums: List[int]) -> int:
+        n = len(nums)
+        m = len(set(nums))
+        ans = 0
+        for i, x in enumerate(nums):
+            s = {x}
+            if len(s) == m:
+                ans += (n - i)
+                continue
+            for j in range(i + 1, n):
+                s.add(nums[j])
+                if len(s) == m:
+                    ans += (n - j)
+                    break
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countCompleteSubarrays(nums = [1,3,1,2,2]))
+print(so.countCompleteSubarrays(nums = [5,5,5,5]))
 
 
 

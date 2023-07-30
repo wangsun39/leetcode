@@ -119,12 +119,13 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def numberOfEmployeesWhoMetTarget(self, hours: List[int], target: int) -> int:
+        return sum(1 if x >= target else 0 for x in hours)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.numberOfEmployeesWhoMetTarget(hours = [0,1,2,3,4], target = 2))
+print(so.numberOfEmployeesWhoMetTarget(hours = [5,1,4,2,2], target = 6))
 
 
 
