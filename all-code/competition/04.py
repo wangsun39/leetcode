@@ -119,117 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def countSteppingNumbers1(self, low: str, high: str) -> int:
-        MOD = 10 ** 9 + 7
-
-        def f(s: str):  # 数字 <= num 满足条件的所有数字
-            n = len(s)
-            @cache
-            def helper(i: int, is_limit: bool, pre: int) -> int:
-                if i == len(s):
-                    return 1
-                ans = 0
-                can = []
-                if pre > 0:
-                    if not is_limit or int(s[i]) >= pre - 1:
-                        can.append(pre - 1)
-                if pre < 9 and (not is_limit or int(s[i]) >= pre + 1):
-                    can.append(pre + 1)
-                for j in can:
-                    if not is_limit:
-                        ans += helper(i + 1, is_limit, j)
-                    else:
-                        if j == int(s[i]):
-                            ans += helper(i + 1, is_limit, j)
-                        else:
-                            ans += helper(i + 1, False, j)
-                    ans %= MOD
-                return ans
-            ans = 0
-            # 长度为n的数
-            for i in range(1, int(s[0]) + 1):
-                if i < int(s[0]):
-                    ans += helper(1, False, i)
-                else:
-                    ans += helper(1, True, i)
-                ans %= MOD
-
-            @cache
-            def helper2(i: int, pre: int, ll) -> int:
-                if i == ll:
-                    return 1
-                ans = 0
-                can = []
-                if pre > 0:
-                    can.append(pre - 1)
-                if pre < 9:
-                    can.append(pre + 1)
-                for j in can:
-                    ans += helper2(i + 1, j, ll)
-                    ans %= MOD
-                return ans
-            for length in range(1, n):
-                for i in range(1, 10):
-                    ans += helper2(1, i, length)
-                    ans %= MOD
-
-            return ans
-
-        low = str(int(low) - 1)
-        # print(f(high))
-        # print(f(low))
-        return (f(high) + MOD - f(low)) % MOD
-    def countSteppingNumbers(self, low: str, high: str) -> int:
-        MOD = 10 ** 9 + 7
-
-        def f(s: str):  # 数字 <= num 满足条件的所有数字
-            n = len(s)
-            @cache
-            def helper(i: int, is_limit: bool, pre: int) -> int:
-                if i == len(s):
-                    return 1
-                ans = 0
-                can = []
-                if pre > 0:
-                    if not is_limit or int(s[i]) >= pre - 1:
-                        can.append(pre - 1)
-                if pre < 9 and (not is_limit or int(s[i]) >= pre + 1):
-                    can.append(pre + 1)
-                for j in can:
-                    if not is_limit:
-                        ans += helper(i + 1, is_limit, j)
-                    else:
-                        if j == int(s[i]):
-                            ans += helper(i + 1, is_limit, j)
-                        else:
-                            ans += helper(i + 1, False, j)
-                    ans %= MOD
-                return ans
-            ans = 0
-            # 长度为n的数
-            for i in range(int(s[0]) + 1):
-                if i == 0:
-                    pass
-                elif i < int(s[0]):
-                    ans += helper(1, False, i)
-                else:
-                    ans += helper(1, True, i)
-                ans %= MOD
-
-
-            return ans
-
-        low = str(int(low) - 1)
-        # print(f(high))
-        # print(f(low))
-        return (f(high) + MOD - f(low)) % MOD
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.countSteppingNumbers(low = "90", high = "101"))
-print(so.countSteppingNumbers(low = "2", high = "40"))
-print(so.countSteppingNumbers(low = "1", high = "11"))
+print(so.removeDigit())
 
 
 

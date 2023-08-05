@@ -119,33 +119,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def minimumString(self, a: str, b: str, c: str) -> str:
-        a, b, c = sorted([a, b, c], key=lambda x:len(x))
-        if a in b or a in c:
-            a = ''
-        if b in c:
-            b = ''
-        def cat1(u: str, v: str):
-            nu, nv = len(u), len(v)
-            for i in range(nu):
-                if v.startswith(u[i:]):
-                    return u + v[nu - i:]
-            return u + v
-        def cat2(x: str, y: str, z: str):
-            t = cat1(x, y)
-            return cat1(t, z)
-
-        l = [cat2(a, b, c), cat2(a, c, b), cat2(b, a, c), cat2(b, c, a), cat2(c, b, a), cat2(c, a, b)]
-        mn = min(len(x) for x in l)
-        l = [x for x in l if len(x) == mn]
-        return min(l)
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.minimumString(a = "cab", b = "a", c = "b"))
-print(so.minimumString(a = "ca", b = "a", c = "a"))
-print(so.minimumString(a = "abc", b = "bca", c = "aaa"))
-print(so.minimumString(a = "ab", b = "ba", c = "aba"))
+print(so.removeDigit())
 
 
 

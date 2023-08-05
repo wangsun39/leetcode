@@ -36,13 +36,27 @@ class TreeNode:
 class Solution:
     def distributeCoins(self, root: Optional[TreeNode]) -> int:
         ans = 0
-        def dfs(node):
+        def dfs(node):  # 返回以 node 为根的子树 的节点上和硬币数之差，表示从经过这个节点，需拿走的硬币数
             nonlocal ans
             if node is None:
                 return 0
             l, r = dfs(node.left), dfs(node.right)
             ans += abs(l + r + node.val - 1)
             return l + r + node.val - 1
+        dfs(root)
+        return ans
+
+    def distributeCoins1(self, root: Optional[TreeNode]) -> int:
+        # 2023/8/5 另一种递归的思路
+        ans = 0
+        def dfs(node: TreeNode):  # 返回以 node 为根的子树的节点上和硬币数
+            nonlocal ans
+            if node is None: return 0, 0
+            l1, l2 = dfs(node.left)
+            r1, r2 = dfs(node.right)
+            ans += (abs(l1 - l2) + abs(r1 - r2))
+            return l1 + r1 + 1, l2 + r2 + node.val
+
         dfs(root)
         return ans
 

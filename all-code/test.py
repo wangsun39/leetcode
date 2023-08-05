@@ -126,67 +126,60 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class Solution:
-    def handleQuery(self, nums1: List[int], nums2: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(nums1)
-        todo = [False] * (4 * n)  # 特殊区间的lazy标记
-        cnt = [0] * (4 * n)
+    def distributeCoins(self, root: Optional[TreeNode]) -> int:
+        ans = 0
+        def dfs(node: TreeNode):  # 返回以 node 为根的子树的节点上和硬币数
+            nonlocal ans
+            if node is None: return 0, 0
+            l1, l2 = dfs(node.left)
+            r1, r2 = dfs(node.right)
+            ans += (abs(l1 - l2) + abs(r1 - r2))
+            return l1 + r1 + 1, l2 + r2 + node.val
 
-        # # 维护区间 1 的个数
-        def maintain(o: int) -> None:
-            cnt[o] = cnt[o * 2] + cnt[o * 2 + 1]
-        #
-        # # 执行区间反转
-        def do(o: int, l: int, r: int) -> None:
-            cnt[o] = r - l + 1 - cnt[o]
-            todo[o] = not todo[o]
-
-        # 初始化线段树   o,l,r=1,1,n
-        def build(o: int, l: int, r: int) -> None:
-            if l == r:
-                cnt[o] = nums1[l - 1]
-                return
-            m = (l + r) // 2
-            build(o * 2, l, m)
-            build(o * 2 + 1, m + 1, r)
-            maintain(o)
-
-        # 反转区间 [L,R]   o,l,r=1,1,n
-        def update(o: int, l: int, r: int, L: int, R: int) -> None:
-            # 进入这个函数的前提是，[l,r] 与 [L,R]有交集
-            if L <= l and r <= R:
-                do(o, l, r)
-                return
-            m = (l + r) // 2
-            if todo[o]:  # 有 lazy tag的区间要被破坏开
-                do(o * 2, l, m)
-                do(o * 2 + 1, m + 1, r)
-                todo[o] = False
-            if m >= L: update(o * 2, l, m, L, R)
-            if m < R: update(o * 2 + 1, m + 1, r, L, R)
-            maintain(o)
-
-        build(1, 1, n)
-        s2 = sum(nums2)
-        ans = []
-        s1 = 0   # nums1 累积的和，没进行一次操作2进行一次累计
-        for t, L, R in queries:
-            if t == 1:
-                update(1, 1, n, L + 1, R + 1)
-            elif t == 2:
-                s1 += cnt[1] * L  # cnt[1] 是 nums1 当前的和
-            else:
-                ans.append(s1 + s2)
+        dfs(root)
         return ans
 
+    def uniquePathsIII(self, grid: List[List[int]]) -> int:
+        r, c = len(grid), len(grid[0])
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        vis = 0
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 1:
+                    start = [i, j]
+                    vis |= (1 << (i * c + j))
+                elif grid[i][j] == 2:
+                    end = [i, j]
+                elif grid[i][j] == -1:
+                    vis |= (1 << (i * c + j))
 
+        @cache
+        def dfs(i, j, vis):
+            res = 0
+            if i == end[0] and j == end[1]:
+                return vis == (2 ** (r * c) - 1)
+            for u, v in dir:
+                x, y = i + u, j + v
+                if 0 <= x < r and 0 <= y < c:
+                    bit = x * c + y
+                    if (1 << bit) & vis == 0:
+                        res += dfs(x, y, vis | (1 << bit))
+            return res
+        return dfs(start[0], start[1], vis)
 
 
 
 
 so = Solution()
-print(so.handleQuery(nums1 = [1,0,1], nums2 = [0,0,0], queries = [[1,1,1],[2,1,0],[3,0,0]]))
-print(so.handleQuery(nums1 = [1], nums2 = [5], queries = [[2,0,0],[3,0,0]]))
+print(so.uniquePathsIII([[1,0,0,0],[0,0,0,0],[0,0,2,-1]]))
+print(so.uniquePathsIII([[1,0,0,0],[0,0,0,0],[0,0,0,2]]))
+print(so.uniquePathsIII([[0,1],[2,0]]))
 
 
