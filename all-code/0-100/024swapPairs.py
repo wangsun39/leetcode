@@ -21,6 +21,8 @@
 #
 # 链表中节点的数目在范围 [0, 100] 内
 # 0 <= Node.val <= 100
+from typing import Optional
+
 
 class ListNode:
     def __init__(self, x):
@@ -28,7 +30,7 @@ class ListNode:
         self.next = None
 
 class Solution:
-    def swapPairs(self, head: ListNode) -> ListNode:
+    def swapPairs1(self, head: ListNode) -> ListNode:
         if head is None or head.next is None:
             return head
         cur = head
@@ -43,7 +45,31 @@ class Solution:
             cur = nncur
         return head
 
-
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # update 2023/8/6
+        if head is None or head.next is None:
+            return head
+        i = 1
+        pre = None
+        cur = head
+        head = head.next
+        while cur:
+            nt = cur.next
+            if i & 1 == 0:
+                cur.next = pre
+            else:
+                if cur.next is None:
+                    cur.next = None
+                elif cur.next.next is None:
+                    cur.next = None
+                elif cur.next.next.next is None:
+                    cur.next = cur.next.next
+                else:
+                    cur.next = cur.next.next.next
+            pre = cur
+            cur = nt
+            i += 1
+        return head
 
 
 
