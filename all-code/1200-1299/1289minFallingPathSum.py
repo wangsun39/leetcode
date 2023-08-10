@@ -50,6 +50,16 @@ class Solution:
             F1 = F2
         return min(F2, key=lambda x:x[0])[0]
 
+    def minFallingPathSum2(self, grid: List[List[int]]) -> int:
+        # 2023/8/10 性能不高
+        n = len(grid)
+        dp1, dp2 = [x for x in grid[0]], [0] * n
+        for i in range(1, n):
+            for j in range(n):
+                dp2[j] = min(x for k, x in enumerate(dp1) if k != j) + grid[i][j]
+            dp1, dp2 = dp2, [0] * n
+        return min(dp1)
+
 obj = Solution()
 #print(obj.minFallingPathSum( [[1,2,3],[4,5,6],[7,8,9]]))
 
