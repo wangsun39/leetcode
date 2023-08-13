@@ -2,7 +2,7 @@
 
 from typing import List
 from typing import Optional
-from cmath import inf
+from cmath import *
 from collections import deque
 # de = deque([1, 2, 3])
 # de.append(4)
@@ -19,7 +19,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-from math import *
+# from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
