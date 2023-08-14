@@ -212,41 +212,39 @@ class Solution:
         MOD = 10 ** 9 + 7
 
         def f(s: str):  # 数字 <= num 满足条件的所有数字
-            n = len(s)
             @cache
-            def helper(i: int, is_limit: bool, pre: int) -> int:
+            def helper(i: int, is_limit: bool, pre: int, is_num: bool) -> int:
                 if i == len(s):
-                    return 1
+                    return is_num
                 ans = 0
-                can = []
-                if pre > 0:
-                    if not is_limit or int(s[i]) >= pre - 1:
+                if not is_num:
+                    ans = helper(i + 1, False, -1, False)
+
+                if pre == -1:
+                    if is_limit:
+                        can = list(range(1, int(s[i]) + 1))
+                    else:
+                        can = list(range(1, 10))
+                else:
+                    can = []
+                    if pre > 0:
                         can.append(pre - 1)
-                if pre < 9 and (not is_limit or int(s[i]) >= pre + 1):
-                    can.append(pre + 1)
+                    if pre < 9:
+                        can.append(pre + 1)
+                    if is_limit:
+                        can = [x for x in can if x <= int(s[i])]
+
                 for j in can:
                     if not is_limit:
-                        ans += helper(i + 1, is_limit, j)
+                        ans += helper(i + 1, False, j, True)
                     else:
                         if j == int(s[i]):
-                            ans += helper(i + 1, is_limit, j)
+                            ans += helper(i + 1, True, j, True)
                         else:
-                            ans += helper(i + 1, False, j)
+                            ans += helper(i + 1, False, j, True)
                     ans %= MOD
                 return ans
-            ans = 0
-            # 长度为n的数
-            for i in range(int(s[0]) + 1):
-                if i == 0:
-                    pass
-                elif i < int(s[0]):
-                    ans += helper(1, False, i)
-                else:
-                    ans += helper(1, True, i)
-                ans %= MOD
-
-
-            return ans
+            return helper(0, True, -1, False)
 
         low = str(int(low) - 1)
         # print(f(high))
