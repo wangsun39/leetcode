@@ -119,12 +119,21 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumSum(self, n: int, k: int) -> int:
+        i = 1
+        s = set()
+        while len(s) < n:
+            if i * 2 == k:
+                s.add(i)
+            elif k - i not in s:
+                s.add(i)
+            i += 1
+        return sum(s)
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumSum(n = 5, k = 4))
+print(so.minimumSum(n = 2, k = 6))
 
 
 

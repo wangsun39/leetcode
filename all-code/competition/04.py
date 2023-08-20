@@ -119,12 +119,33 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def longestEqualSubarray(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        def check(val):
+            size = val + k
+            counter = Counter(nums[: size])
+            for v in counter.values():
+                if v >= val:
+                    return True
+            for i in range(size, n):
+                counter[nums[i - size]] -= 1
+                counter[nums[i]] += 1
+                if counter[nums[i]] >= val:
+                    return True
+            return False
+        lo, hi = 0, n + 1
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
+            else:
+                hi = mid
+        return lo
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.longestEqualSubarray(nums = [1,3,2,3,1,3], k = 3))
+print(so.longestEqualSubarray(nums = [1,1,2,2,1,1], k = 2))
 
 
 

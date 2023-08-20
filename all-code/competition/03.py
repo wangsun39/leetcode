@@ -119,12 +119,32 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximizeTheProfit(self, n: int, offers: List[List[int]]) -> int:
+        dp = [0] * n  # 前 i 个房屋的最大总售价
+        offers.sort(key=lambda x: x[1])
+        idx = 0
+        ans = 0
+        for i in range(n):
+            if i > 0:
+                dp[i] = dp[i - 1]
+            while idx < len(offers) and offers[idx][1] <= i:
+                if offers[idx][0] > 0:
+                    dp[i] = max(dp[i], dp[offers[idx][0] - 1] + offers[idx][2])
+                else:
+                    dp[i] = max(dp[i], offers[idx][2])
+                idx += 1
+            ans = max(ans, dp[i])
+            if idx > len(offers):
+                break
+        # print(dp)
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maximizeTheProfit(8, [[0,6,5],[6,7,1],[0,0,10]]))
+print(so.maximizeTheProfit(10, [[0,6,5],[2,9,4],[0,9,2],[3,9,3],[1,6,10],[0,1,3],[3,8,9],[4,8,3],[2,6,5],[0,4,6]]))
+print(so.maximizeTheProfit(n = 5, offers = [[0,0,1],[0,2,2],[1,3,2]]))
+print(so.maximizeTheProfit(n = 5, offers = [[0,0,1],[0,2,10],[1,3,2]]))
 
 
 

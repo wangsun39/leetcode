@@ -119,12 +119,19 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def isAcronym(self, words: List[str], s: str) -> bool:
+        if len(words) != len(s):
+            return False
+        for i, x in enumerate(words):
+            if x[0] != s[i]:
+                return False
+        return True
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.isAcronym(words = ["alice","bob","charlie"], s = "abc"))
+print(so.isAcronym(words = ["an","apple"], s = "a"))
+print(so.isAcronym(words = ["never","gonna","give","up","on","you"], s = "ngguoy"))
 
 
 
