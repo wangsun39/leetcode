@@ -101,6 +101,29 @@ class Solution:
                 return False
         return True
 
+    def canChange(self, start: str, target: str) -> bool:
+        # 2023/8/21
+        lnum = rnum = 0
+        n = len(start)
+        for i in range(n):
+            if target[i] == 'L':
+                if rnum:
+                    return False
+                lnum += 1
+            if start[i] == 'L':
+                if lnum == 0:
+                    return False
+                lnum -= 1
+            if start[i] == 'R':
+                if lnum:
+                    return False
+                rnum += 1
+            if target[i] == 'R':
+                if rnum == 0:
+                    return False
+                rnum -= 1
+        return lnum == rnum == 0
+
 
 
 
