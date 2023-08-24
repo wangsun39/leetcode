@@ -39,17 +39,16 @@ from math import inf
 
 class Solution:
     def countPairs(self, n: int, edges: List[List[int]], queries: List[int]) -> List[int]:
-        d = defaultdict(int)
+        d = [0] * n
         cnt = Counter()
         for x, y in edges:
-            d[x] += 1
-            d[y] += 1
+            d[x - 1] += 1
+            d[y - 1] += 1
             if x < y:
-                cnt[(x, y)] += 1
+                cnt[(x - 1, y - 1)] += 1
             else:
-                cnt[(y, x)] += 1
-        deg = sorted(d.values())
-        deg = [0] * (n - len(deg)) + deg
+                cnt[(y - 1, x - 1)] += 1
+        deg = sorted(d)
         # print(sl)
         ans = [0] * len(queries)
         for i, q in enumerate(queries):
