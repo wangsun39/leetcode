@@ -117,14 +117,54 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
-
+import math
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minOperations(self, nums: List[int], target: int) -> int:
+        t = []
+        while target:
+            if target & 1:
+                t.append(1)
+            else:
+                t.append(0)
+            target >>= 1
+        nums = [int(math.log(x, 2)) for x in nums]
+        heapify(nums)
+        spop = set()
+        # print(nums, t)
+
+        ans = 0
+        for i, x in enumerate(t):
+            if x == 0: continue
+            while nums and nums[0] < i:
+                y = nums[0]
+                heappop(nums)
+                while y in spop:
+                    spop.remove(y)
+                    y += 1
+                if y >= i:
+                    heappush(nums, y)
+                else:
+                    spop.add(y)
+            while nums and nums[0] > i:
+                y = nums[0]
+                heappop(nums)
+                y -= 1
+                ans += 1
+                heappush(nums, y)
+                heappush(nums, y)
+            if len(nums) == 0:
+                return -1
+            heappop(nums)
+        return ans
+
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minOperations(nums = [1,32,1,2], target = 12))
+print(so.minOperations(nums = [1,2,8], target = 7))
+print(so.minOperations(nums = [1,32,1], target = 35))
 
 
 

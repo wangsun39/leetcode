@@ -119,12 +119,48 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def getMaxFunctionValue(self, receiver: List[int], k: int) -> int:
+        k += 1
+        vis = set()
+        d = {}  # 记录每个点开始的k步的f(x)值
+
+        def calc(v0):
+            v = v0
+            l = []
+            while v not in vis:
+                l.append(v)
+                vis.add(v)
+                v = receiver[v]
+            lstart = v  # 圈的开始位置
+            idx = l.index(v)
+            m = len(l)
+            lnum = m - idx  # 圈长度
+            snum = sum(l[idx:])  # 圈上和
+            l += l[idx:]
+            spre = list(accumulate(l, initial=0))
+            for i in range(m):
+                x = l[i]  # 开头元素的下标
+                if i < lstart:  # 圈外
+                    if lstart - i + lnum >= k:
+                        d[x] = spre[i + k] - spre[i]
+                    else:
+                        d1, d2 = divmod(k - (lstart - i + lnum), lnum)
+                        s_before = spre[lstart] - spre[i]
+                        d[x] = s_before + (d1 + 1) * snum + spre[lstart + d2] - spre[lstart]
+                else:
+                    d1, d2 = divmod(k, lnum)
+                    d[x] = d1 * snum + spre[i + d2] - spre[i]
+
+        for x in range(len(receiver)):
+            if x not in vis:
+                calc(x)
+        return max(d.values())
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.getMaxFunctionValue(receiver = [1,1,1,2,3], k = 3))
+print(so.getMaxFunctionValue(receiver = [2,0,1], k = 4))
 
 
 

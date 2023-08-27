@@ -1,4 +1,57 @@
-
+# 给你一个长度为 n 下标从 0 开始的整数数组 receiver 和一个整数 k 。
+#
+# 总共有 n 名玩家，玩家 编号 互不相同，且为 [0, n - 1] 中的整数。这些玩家玩一个传球游戏，receiver[i] 表示编号为 i 的玩家会传球给编号为 receiver[i] 的玩家。玩家可以传球给自己，也就是说 receiver[i] 可能等于 i 。
+#
+# 你需要从 n 名玩家中选择一名玩家作为游戏开始时唯一手中有球的玩家，球会被传 恰好 k 次。
+#
+# 如果选择编号为 x 的玩家作为开始玩家，定义函数 f(x) 表示从编号为 x 的玩家开始，k 次传球内所有接触过球玩家的编号之 和 ，如果有玩家多次触球，则 累加多次 。换句话说， f(x) = x + receiver[x] + receiver[receiver[x]] + ... + receiver(k)[x] 。
+#
+# 你的任务时选择开始玩家 x ，目的是 最大化 f(x) 。
+#
+# 请你返回函数的 最大值 。
+#
+# 注意：receiver 可能含有重复元素。
+#
+#
+#
+# 示例 1：
+#
+# 传递次数	传球者编号	接球者编号	x + 所有接球者编号
+#  	 	 	2
+# 1	2	1	3
+# 2	1	0	3
+# 3	0	2	5
+# 4	2	1	6
+#
+#
+# 输入：receiver = [2,0,1], k = 4
+# 输出：6
+# 解释：上表展示了从编号为 x = 2 开始的游戏过程。
+# 从表中可知，f(2) 等于 6 。
+# 6 是能得到最大的函数值。
+# 所以输出为 6 。
+# 示例 2：
+#
+# 传递次数	传球者编号	接球者编号	x + 所有接球者编号
+#  	 	 	4
+# 1	4	3	7
+# 2	3	2	9
+# 3	2	1	10
+#
+#
+# 输入：receiver = [1,1,1,2,3], k = 3
+# 输出：10
+# 解释：上表展示了从编号为 x = 4 开始的游戏过程。
+# 从表中可知，f(4) 等于 10 。
+# 10 是能得到最大的函数值。
+# 所以输出为 10 。
+#
+#
+# 提示：
+#
+# 1 <= receiver.length == n <= 105
+# 0 <= receiver[i] <= n - 1
+# 1 <= k <= 1010
 
 from typing import List
 from typing import Optional
@@ -119,15 +172,48 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def furthestDistanceFromOrigin(self, moves: str) -> int:
-        l, r, m = moves.count('L'), moves.count('R'), moves.count('_')
-        return max(l - r + m, r - l + m)
+    def getMaxFunctionValue(self, receiver: List[int], k: int) -> int:
+        k += 1
+        vis = set()
+        d = {}  # 记录每个点开始的k步的f(x)值
+
+        def calc(v0):
+            v = v0
+            l = []
+            while v not in vis:
+                l.append(v)
+                vis.add(v)
+                v = receiver[v]
+            lstart = v  # 圈的开始位置
+            idx = l.index(v)
+            m = len(l)
+            lnum = m - idx  # 圈长度
+            snum = sum(l[idx:])  # 圈上和
+            l += l[idx:]
+            spre = list(accumulate(l, initial=0))
+            for i in range(m):
+                x = l[i]  # 开头元素的下标
+                if i < lstart:  # 圈外
+                    if lstart - i + lnum >= k:
+                        d[x] = spre[i + k] - spre[i]
+                    else:
+                        d1, d2 = divmod(k - (lstart - i + lnum), lnum)
+                        s_before = spre[lstart] - spre[i]
+                        d[x] = s_before + (d1 + 1) * snum + spre[lstart + d2] - spre[lstart]
+                else:
+                    d1, d2 = divmod(k, lnum)
+                    d[x] = d1 * snum + spre[i + d2] - spre[i]
+
+        for x in range(len(receiver)):
+            if x not in vis:
+                calc(x)
+        return max(d.values())
+
 
 
 so = Solution()
-print(so.furthestDistanceFromOrigin(moves = "L_RL__R"))
-print(so.furthestDistanceFromOrigin(moves = "_R__LL_"))
-print(so.furthestDistanceFromOrigin(moves = "_______"))
+print(so.getMaxFunctionValue(receiver = [1,1,1,2,3], k = 3))
+print(so.getMaxFunctionValue(receiver = [2,0,1], k = 4))
 
 
 

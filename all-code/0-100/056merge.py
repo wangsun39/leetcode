@@ -19,7 +19,7 @@
 # 提示：
 #
 # intervals[i][0] <= intervals[i][1]
-
+from cmath import inf
 from typing import List
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
@@ -34,6 +34,20 @@ class Solution:
             else:
                 res.append(interval)
         return res
+
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        # 2023/8/27
+        intervals.sort()
+        intervals.append([inf, inf])
+        left, right = intervals[0]
+        ans = []
+        for x, y in intervals[1:]:
+            if x > right:
+                ans.append([left, right])
+                left, right = x, y
+                continue
+            right = max(right, y)
+        return ans
 
 so = Solution()
 print(so.merge([[1,4],[0,4]]))
