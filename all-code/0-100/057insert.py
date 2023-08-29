@@ -1,19 +1,42 @@
-# 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
+# 给你一个 无重叠的 ，按照区间起始端点排序的区间列表。
 #
 # 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
 #
-#  
 #
-# 示例 1：
+#
+# 示例 1：
 #
 # 输入：intervals = [[1,3],[6,9]], newInterval = [2,5]
 # 输出：[[1,5],[6,9]]
-# 示例 2：
+# 示例 2：
 #
 # 输入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
 # 输出：[[1,2],[3,10],[12,16]]
-# 解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。
-from bisect import bisect_left
+# 解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。
+# 示例 3：
+#
+# 输入：intervals = [], newInterval = [5,7]
+# 输出：[[5,7]]
+# 示例 4：
+#
+# 输入：intervals = [[1,5]], newInterval = [2,3]
+# 输出：[[1,5]]
+# 示例 5：
+#
+# 输入：intervals = [[1,5]], newInterval = [2,7]
+# 输出：[[1,7]]
+#
+#
+# 提示：
+#
+# 0 <= intervals.length <= 104
+# intervals[i].length == 2
+# 0 <= intervals[i][0] <= intervals[i][1] <= 105
+# intervals 根据 intervals[i][0] 按 升序 排列
+# newInterval.length == 2
+# 0 <= newInterval[0] <= newInterval[1] <= 105
+
+from bisect import bisect_left, bisect_right
 from typing import List
 class Solution:
     def insert1(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
@@ -88,7 +111,7 @@ class Solution:
         return ans
 
 
-    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+    def insert3(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         # 2023/8/28  直接模拟
         n = len(intervals)
         l, r = newInterval
@@ -109,15 +132,49 @@ class Solution:
         ans += intervals[p1:]
         return ans
 
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        # 2023/8/29  二分
+        n = len(intervals)
+        l, r = newInterval
+        if n == 0 or r < intervals[0][0]:
+            return [newInterval] + intervals
+        if l > intervals[-1][1]:
+            return intervals + [newInterval]
+
+        def find(x):  # 判断 x 是否落在某个区间上
+            p = bisect_right(intervals, x, key=lambda x:x[0])
+            if p == 0:
+                return False, 0
+            if intervals[p - 1][1] < x:
+                return False, p  # 找不到返回，x右边的区间id
+            return True, p - 1  # 找到，返回所属区间的id
+        ans = []
+        r1, p1 = find(l)
+        r2, p2 = find(r)
+        ans += intervals[: p1]
+        if r1:
+            left = intervals[p1][0]
+        else:
+            left = l
+        if r2:
+            right = intervals[p2][1]
+            p2 += 1
+        else:
+            right = r
+        ans.append([left, right])
+        ans += intervals[p2:]
+
+        return ans
+
 
 
 
 
 
 so = Solution()
+print(so.insert([[1,3],[6,9]], [2,5]))
 print(so.insert( [[1,2],[3,5],[6,7],[8,10],[12,16]],[4,8]))
 print(so.insert([[0,4],[7,12]], [0,5]))
 print(so.insert([[0,5],[8,9]], [3,4]))
-print(so.insert([[1,3],[6,9]], [2,5]))
 print(so.insert([[1,5]], [2,3]))
 print(so.insert([[1,5]], [0,0]))
