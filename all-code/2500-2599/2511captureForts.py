@@ -128,7 +128,7 @@ from sortedcontainers import SortedList
     # SortedList.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def captureForts(self, forts: List[int]) -> int:
+    def captureForts1(self, forts: List[int]) -> int:
         n = len(forts)
         ans = 0
         def f(l):
@@ -143,6 +143,25 @@ class Solution:
         f(forts)
         f(forts[::-1])
         return ans
+
+    def captureForts(self, forts: List[int]) -> int:
+        # update 2023/9/2
+        n = len(forts)
+        def f(l):  # 找 1,0,-1
+            ans = 0
+            i = 0
+            while i < n:
+                if l[i] != 1:
+                    i += 1
+                    continue
+                j = i + 1
+                while j < n and l[j] == 0:
+                    j += 1
+                if j < n and l[j] == -1:
+                    ans = max(ans, j - i - 1)
+                i = j
+            return ans
+        return max(f(forts), f(forts[::-1]))
 
 
 
