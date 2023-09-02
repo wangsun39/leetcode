@@ -173,45 +173,37 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 class Solution:
     def getMaxFunctionValue(self, receiver: List[int], k: int) -> int:
-        k += 1
-        vis = set()
-        d = {}  # 记录每个点开始的k步的f(x)值
-
-        def calc(v0):
-            v = v0
-            l = []
-            while v not in vis:
-                l.append(v)
-                vis.add(v)
-                v = receiver[v]
-            lstart = v  # 圈的开始位置
-            idx = l.index(v)
-            m = len(l)
-            lnum = m - idx  # 圈长度
-            snum = sum(l[idx:])  # 圈上和
-            l += l[idx:]
-            spre = list(accumulate(l, initial=0))
-            for i in range(m):
-                x = l[i]  # 开头元素的下标
-                if i < lstart:  # 圈外
-                    if lstart - i + lnum >= k:
-                        d[x] = spre[i + k] - spre[i]
-                    else:
-                        d1, d2 = divmod(k - (lstart - i + lnum), lnum)
-                        s_before = spre[lstart] - spre[i]
-                        d[x] = s_before + (d1 + 1) * snum + spre[lstart + d2] - spre[lstart]
-                else:
-                    d1, d2 = divmod(k, lnum)
-                    d[x] = d1 * snum + spre[i + d2] - spre[i]
-
-        for x in range(len(receiver)):
-            if x not in vis:
-                calc(x)
-        return max(d.values())
+        M = 36
+        n = len(receiver)
+        nt1 = [[0] * M for _ in range(n)]  # nt[i][j]  记录第 i 个玩家 传球 2 ** j 次后的玩家
+        nt2 = [[0] * M for _ in range(n)]  # nt[i][j]  记录第 i 个玩家 传球 2 ** j 次经过的玩家之和 （不包括起点）
+        for i in range(n):
+            nt1[i][0] = receiver[i]
+            nt2[i][0] = receiver[i]
+        for j in range(1, M):
+            for i in range(n):
+                v = nt1[i][j - 1]
+                nt1[i][j] = nt1[v][j - 1]
+                nt2[i][j] += (nt2[i][j - 1] + nt2[v][j - 1])
+        def f(start):
+            idx = 0
+            cur = start
+            kk = k
+            ans = start
+            while kk:
+                if kk & 1:
+                    ans += nt2[cur][idx]
+                    cur = nt1[cur][idx]
+                kk >>= 1
+                idx += 1
+            return ans
+        return max(f(x) for x in range(n))
 
 
 
 so = Solution()
+print(so.getMaxFunctionValue(receiver = [0], k = 10000000000))
+print(so.getMaxFunctionValue(receiver = [1,1,1,2,3], k = 4))
 print(so.getMaxFunctionValue(receiver = [1,1,1,2,3], k = 3))
 print(so.getMaxFunctionValue(receiver = [2,0,1], k = 4))
 
