@@ -119,15 +119,24 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def furthestDistanceFromOrigin(self, moves: str) -> int:
-        l, r, m = moves.count('L'), moves.count('R'), moves.count('_')
-        return max(l - r + m, r - l + m)
+    def countSymmetricIntegers(self, low: int, high: int) -> int:
+        def cnt(x):
+            s = list(str(x))
+            s = [int(x) for x in s]
+            n = len(s)
+            if n & 1: return 0
+            if sum(s[: n // 2]) == sum(s[n // 2:]):
+                return 1
+            return 0
+        ans = 0
+        for i in range(low, high + 1):
+            ans += cnt(i)
+        return ans
 
 
 so = Solution()
-print(so.furthestDistanceFromOrigin(moves = "L_RL__R"))
-print(so.furthestDistanceFromOrigin(moves = "_R__LL_"))
-print(so.furthestDistanceFromOrigin(moves = "_______"))
+print(so.countSymmetricIntegers(low = 1, high = 100))
+print(so.countSymmetricIntegers(low = 1200, high = 1230))
 
 
 
