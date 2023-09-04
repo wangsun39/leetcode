@@ -183,3 +183,61 @@ print(so.uniquePathsIII([[1,0,0,0],[0,0,0,0],[0,0,0,2]]))
 print(so.uniquePathsIII([[0,1],[2,0]]))
 
 
+class Codec:
+
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        """Encodes a tree to a single string.
+        """
+        ans = []
+
+        def dfs(node):
+            if node is None:
+                return
+            cur = str(node.val) + ';'
+            if node.left:
+                cur += str(node.left.val)
+            cur += ';'
+            if node.right:
+                cur += str(node.right.val)
+            ans.append(cur)
+            dfs(node.left)
+            dfs(node.right)
+
+        dfs(root)
+        print(ans)
+        return ','.join(ans)
+
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        """Decodes your encoded data to tree.
+        """
+        if len(data) == 0: return None
+        num = data.split(',')
+        print(num)
+
+        d = {}
+        for x in num:
+            print(x)
+            pp = x.split(';')
+            print(pp, len(pp), pp[0], pp[1])
+            d[int(pp[0])] = [pp[1], pp[2]]
+        n = len(num)
+        if n == 0: return None
+        print(123)
+
+        p, _, _ = num[0].split(';')
+        root = TreeNode(int(p))
+        def dfs(node):
+            v = node.val
+            if len(d[v][0]):
+                node.left = TreeNode(int(d[v][0]))
+                dfs(node.left)
+            if len(d[v][1]):
+                node.right = TreeNode(int(d[v][1]))
+                dfs(node.right)
+            return
+        dfs(root)
+        return root
+
+
+co = Codec()
+co.deserialize('')
