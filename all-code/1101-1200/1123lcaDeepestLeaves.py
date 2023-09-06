@@ -37,6 +37,9 @@
 # 注意：本题与力扣 865 重复：https://leetcode-cn.com/problems/smallest-subtree-with-all-the-deepest-nodes/
 
 import bisect
+from typing import Optional
+
+
 # Definition for a binary tree node.
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -44,7 +47,7 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
-    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def lcaDeepestLeaves1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # depth = {}  # 每个节点的深度
         sub_dep = {}  # 每个节点子树的深度
 
@@ -72,6 +75,59 @@ class Solution:
                     cur = cur.left
                 else:
                     cur = cur.right
+
+    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 2023/9/6  LCA的写法
+        n = 1001
+        order = n.bit_length() + 1
+        p = [[-1] * order for _ in range(n)]  # 记录每个节点的2 ^ i的祖
+        dep = [-1] * n
+        mx_dep = 0
+        node_map = {}
+        def dfs(node, lv):
+            nonlocal mx_dep
+            dep[node.val] = lv
+            node_map[node.val] = node
+            mx_dep = max(mx_dep, lv)
+            if node.left is not None:
+                p[node.left.val][0] = node.val
+                dfs(node.left, lv + 1)
+            if node.right is not None:
+                p[node.right.val][0] = node.val
+                dfs(node.right, lv + 1)
+        dfs(root, 0)
+
+        for j in range(order):
+            for i in range(n):
+                if p[i][j - 1] == -1: continue
+                p[i][j] = p[p[i][j - 1]][j - 1]
+
+        bottom = []
+        for i in range(n):
+            if dep[i] == mx_dep:
+                bottom.append(i)
+        def lca(x, y):
+            if dep[x] > dep[y]:
+                x, y = y, x
+            for i in range(dep[y] - dep[x]):
+                y = p[y][0]
+            # x, y 在同一层
+            if x == y: return x
+            for i in range(order - 1, -1, -1):
+                if p[x][i] == p[y][i]:
+                    continue
+                x, y = p[x][i], p[y][i]
+            return p[x][0]
+        ans = bottom[0]
+        for x in bottom[1:]:
+            ans = lca(ans, x)
+        return node_map[ans]
+
+
+
+
+
+
 
 
 root = TreeNode(3)
