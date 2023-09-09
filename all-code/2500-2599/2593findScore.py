@@ -1,4 +1,39 @@
-
+# 给你一个数组 nums ，它包含若干正整数。
+#
+# 一开始分数 score = 0 ，请你按照下面算法求出最后分数：
+#
+# 从数组中选择最小且没有被标记的整数。如果有相等元素，选择下标最小的一个。
+# 将选中的整数加到 score 中。
+# 标记 被选中元素，如果有相邻元素，则同时标记 与它相邻的两个元素 。
+# 重复此过程直到数组中所有元素都被标记。
+# 请你返回执行上述算法后最后的分数。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [2,1,3,4,5,2]
+# 输出：7
+# 解释：我们按照如下步骤标记元素：
+# - 1 是最小未标记元素，所以标记它和相邻两个元素：[2,1,3,4,5,2] 。
+# - 2 是最小未标记元素，所以标记它和左边相邻元素：[2,1,3,4,5,2] 。
+# - 4 是仅剩唯一未标记的元素，所以我们标记它：[2,1,3,4,5,2] 。
+# 总得分为 1 + 2 + 4 = 7 。
+# 示例 2：
+#
+# 输入：nums = [2,3,5,1,3,2]
+# 输出：5
+# 解释：我们按照如下步骤标记元素：
+# - 1 是最小未标记元素，所以标记它和相邻两个元素：[2,3,5,1,3,2] 。
+# - 2 是最小未标记元素，由于有两个 2 ，我们选择最左边的一个 2 ，也就是下标为 0 处的 2 ，以及它右边相邻的元素：[2,3,5,1,3,2] 。
+# - 2 是仅剩唯一未标记的元素，所以我们标记它：[2,3,5,1,3,2] 。
+# 总得分为 1 + 2 + 2 = 5 。
+#
+#
+# 提示：
+#
+# 1 <= nums.length <= 105
+# 1 <= nums[i] <= 106
 
 from typing import List
 from typing import Optional
@@ -107,11 +142,22 @@ from sortedcontainers import SortedList
 # s = list(accumulate(nums, initial=0))
 
 class Solution:
-    def repairCars(self, ranks: List[int], cars: int) -> int:
+    def findScore(self, nums: List[int]) -> int:
+        n = len(nums)
+        flag = [0] * n
+        ans = 0
+        for i, x in sorted(enumerate(nums), key=lambda x:[x[1], x[0]]):
+            if flag[i] == 1: continue
+            ans += x
+            flag[i] = 1
+            if i > 0: flag[i - 1] = 1
+            if i < n - 1: flag[i + 1] = 1
+        return ans
 
 
 so = Solution()
-print(so.repairCars(ranks = [5,1,8], cars = 6))
+print(so.findScore(nums = [2,1,3,4,5,2]))
+print(so.findScore(nums = [2,3,5,1,3,2]))
 
 
 

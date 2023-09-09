@@ -1,43 +1,30 @@
-# 给你一个整数数组 ranks ，表示一些机械工的 能力值 。ranksi 是第 i 位机械工的能力值。能力值为 r 的机械工可以在 r * n2 分钟内修好 n 辆车。
+# 给你两个正整数 low 和 high 。
 #
-# 同时给你一个整数 cars ，表示总共需要修理的汽车数目。
+# 对于一个由 2 * n 位数字组成的整数 x ，如果其前 n 位数字之和与后 n 位数字之和相等，则认为这个数字是一个对称整数。
 #
-# 请你返回修理所有汽车 最少 需要多少时间。
-#
-# 注意：所有机械工可以同时修理汽车。
+# 返回在 [low, high] 范围内的 对称整数的数目 。
 #
 #
 #
 # 示例 1：
 #
-# 输入：ranks = [4,2,3,1], cars = 10
-# 输出：16
-# 解释：
-# - 第一位机械工修 2 辆车，需要 4 * 2 * 2 = 16 分钟。
-# - 第二位机械工修 2 辆车，需要 2 * 2 * 2 = 8 分钟。
-# - 第三位机械工修 2 辆车，需要 3 * 2 * 2 = 12 分钟。
-# - 第四位机械工修 4 辆车，需要 1 * 4 * 4 = 16 分钟。
-# 16 分钟是修理完所有车需要的最少时间。
+# 输入：low = 1, high = 100
+# 输出：9
+# 解释：在 1 到 100 范围内共有 9 个对称整数：11、22、33、44、55、66、77、88 和 99 。
 # 示例 2：
 #
-# 输入：ranks = [5,1,8], cars = 6
-# 输出：16
-# 解释：
-# - 第一位机械工修 1 辆车，需要 5 * 1 * 1 = 5 分钟。
-# - 第二位机械工修 4 辆车，需要 1 * 4 * 4 = 16 分钟。
-# - 第三位机械工修 1 辆车，需要 8 * 1 * 1 = 8 分钟。
-# 16 分钟时修理完所有车需要的最少时间。
+# 输入：low = 1200, high = 1230
+# 输出：4
+# 解释：在 1200 到 1230 范围内共有 4 个对称整数：1203、1212、1221 和 1230 。
 #
 #
 # 提示：
 #
-# 1 <= ranks.length <= 105
-# 1 <= ranks[i] <= 100
-# 1 <= cars <= 106
+# 1 <= low <= high <= 104
 
 from typing import List
 from typing import Optional
-from cmath import inf
+from cmath import *
 from collections import deque
 # de = deque([1, 2, 3])
 # de.append(4)
@@ -54,7 +41,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-from math import *
+# from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -74,6 +61,11 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
+# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
+# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
+# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
+
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -83,7 +75,7 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
@@ -91,17 +83,6 @@ from heapq import *
 from functools import lru_cache, cache
 from typing import List, Tuple
 # @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()  数值的二进制的长度数
-# value = int(s, 2)
-# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
-# n>>k & 1	求n的第k位数字
-# x | (1 << k)	将x第k位 置为1
-# x ^ (1 << k)	将x第k位取反
-# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
-# x | (x + 1)	将x最右边的0置为1
-# x & 1	判断奇偶性 真为奇，假为偶
 
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
@@ -123,42 +104,61 @@ import string
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList
-    # sl = SortedList()
-    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-    # sl.clear() 移除所有元素。时间复杂度O(n).
-    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-    # sl.bisect_left(value)
-    # sl.bisect_right(value)
-    # sl.count(value)
-    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+from sortedcontainers import SortedList, SortedDict, SortedSet
+# sl = SortedList()
+# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+# sl.clear() 移除所有元素。时间复杂度O(n).
+# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+# sl.bisect_left(value)
+# sl.bisect_right(value)
+# sl.count(value)
+# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
+
+# sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
+# skv = sd.keys()  这个是有序的
+
+# ss = SortedSet()
+# ss.add(value)
+# ss.pop()
+# ss.pop(value)
+# ss.remove(value)
+# ss.remove(value)
+
 
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
 # 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
 # s = list(accumulate(nums, initial=0))
 
+# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
+# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
+# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
+# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
+
 class Solution:
-    def repairCars(self, ranks: List[int], cars: int) -> int:
-        def check(val): # 给定一个时间，计算是否能修完所有汽车
-            s = sum(int((val / x) ** 0.5) for x in ranks)
-            return s >= cars
-        lo, hi = 0, ranks[0] * cars * cars
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                hi = mid
-            else:
-                lo = mid
-        return hi
+    def countSymmetricIntegers(self, low: int, high: int) -> int:
+        def cnt(x):
+            s = list(str(x))
+            s = [int(x) for x in s]
+            n = len(s)
+            if n & 1: return 0
+            if sum(s[: n // 2]) == sum(s[n // 2:]):
+                return 1
+            return 0
+        ans = 0
+        for i in range(low, high + 1):
+            ans += cnt(i)
+        return ans
 
 
 so = Solution()
-print(so.repairCars(ranks = [4,2,3,1], cars = 10))
-print(so.repairCars(ranks = [5,1,8], cars = 6))
+print(so.countSymmetricIntegers(low = 1, high = 100))
+print(so.countSymmetricIntegers(low = 1200, high = 1230))
 
 
 

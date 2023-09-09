@@ -1,39 +1,35 @@
-# 给你一个整数数组 ranks ，表示一些机械工的 能力值 。ranksi 是第 i 位机械工的能力值。能力值为 r 的机械工可以在 r * n2 分钟内修好 n 辆车。
+# 给你一个整数 money ，表示你总共有的钱数（单位为美元）和另一个整数 children ，表示你要将钱分配给多少个儿童。
 #
-# 同时给你一个整数 cars ，表示总共需要修理的汽车数目。
+# 你需要按照如下规则分配：
 #
-# 请你返回修理所有汽车 最少 需要多少时间。
-#
-# 注意：所有机械工可以同时修理汽车。
+# 所有的钱都必须被分配。
+# 每个儿童至少获得 1 美元。
+# 没有人获得 4 美元。
+# 请你按照上述规则分配金钱，并返回 最多 有多少个儿童获得 恰好 8 美元。如果没有任何分配方案，返回 -1 。
 #
 #
 #
 # 示例 1：
 #
-# 输入：ranks = [4,2,3,1], cars = 10
-# 输出：16
+# 输入：money = 20, children = 3
+# 输出：1
 # 解释：
-# - 第一位机械工修 2 辆车，需要 4 * 2 * 2 = 16 分钟。
-# - 第二位机械工修 2 辆车，需要 2 * 2 * 2 = 8 分钟。
-# - 第三位机械工修 2 辆车，需要 3 * 2 * 2 = 12 分钟。
-# - 第四位机械工修 4 辆车，需要 1 * 4 * 4 = 16 分钟。
-# 16 分钟是修理完所有车需要的最少时间。
+# 最多获得 8 美元的儿童数为 1 。一种分配方案为：
+# - 给第一个儿童分配 8 美元。
+# - 给第二个儿童分配 9 美元。
+# - 给第三个儿童分配 3 美元。
+# 没有分配方案能让获得 8 美元的儿童数超过 1 。
 # 示例 2：
 #
-# 输入：ranks = [5,1,8], cars = 6
-# 输出：16
-# 解释：
-# - 第一位机械工修 1 辆车，需要 5 * 1 * 1 = 5 分钟。
-# - 第二位机械工修 4 辆车，需要 1 * 4 * 4 = 16 分钟。
-# - 第三位机械工修 1 辆车，需要 8 * 1 * 1 = 8 分钟。
-# 16 分钟时修理完所有车需要的最少时间。
+# 输入：money = 16, children = 2
+# 输出：2
+# 解释：每个儿童都可以获得 8 美元。
 #
 #
 # 提示：
 #
-# 1 <= ranks.length <= 105
-# 1 <= ranks[i] <= 100
-# 1 <= cars <= 106
+# 1 <= money <= 200
+# 2 <= children <= 30
 
 from typing import List
 from typing import Optional
@@ -142,40 +138,28 @@ from sortedcontainers import SortedList
 # s = list(accumulate(nums, initial=0))
 
 class Solution:
-    def repairCars1(self, ranks: List[int], cars: int) -> int:
-        def check(val): # 给定一个时间，计算是否能修完所有汽车
-            s = sum(int((val / x) ** 0.5) for x in ranks)
-            return s >= cars
-        lo, hi = 0, ranks[0] * cars * cars
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                hi = mid
-            else:
-                lo = mid
-        return hi
-
-    def repairCars(self, ranks: List[int], cars: int) -> int:
-        counter = Counter(ranks)
-        def check(val): # 给定一个时间，计算是否能修完所有汽车
-            ncar = 0
-            for r, k in counter.items():
-                ncar += int((val // r) ** 0.5) * k
-            return ncar >= cars
-        lo, hi = 0, ranks[0] * cars * cars
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                hi = mid
-            else:
-                lo = mid
-        return hi
-
+    def distMoney(self, money: int, children: int) -> int:
+        if money < children:
+            return -1
+        x = min(money // 8, children)
+        while True:
+            if money - 8 * x == 4 and children - x == 1:
+                x -= 1
+                continue
+            if money - 8 * x < children - x:
+                x -= 1
+                continue
+            if money - 8 * x > children - x and children - x == 0:
+                return x - 1
+            return x
 
 
 so = Solution()
-print(so.repairCars(ranks = [4,2,3,1], cars = 10))
-print(so.repairCars(ranks = [5,1,8], cars = 6))
+print(so.distMoney(money = 17, children = 2))
+print(so.distMoney(money = 9, children = 3))
+print(so.distMoney(money = 8, children = 2))
+print(so.distMoney(money = 20, children = 3))
+print(so.distMoney(money = 16, children = 2))
 
 
 
