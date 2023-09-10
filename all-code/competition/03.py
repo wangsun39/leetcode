@@ -119,31 +119,46 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def countInterestingSubarrays(self, nums: List[int], modulo: int, k: int) -> int:
-        nums = [int(x % modulo == k) for x in nums]
-        counter = Counter()  # counter[i]  模 module 余 i 的个数
-        counter[0] = 1
-        s = 0  # 前缀和
-        ans = 0
-        for x in nums:  # 遍历子数组右端点，计算有多少个左端点
-            s += x
-            n1 = s % modulo  # x为右端点的模数
-            if n1 >= k:
-                n2 = n1 - k   # 左端点左侧需要的模数
-            else:
-                n2 = modulo + n1 - k
-            ans += counter[n2]
-            counter[n1] += 1
+    def minimumMoves(self, grid: List[List[int]]) -> int:
+        l1, l2 = [], []
+        for i in range(3):
+            for j in range(3):
+                if grid[i][j] == 0:
+                    l1.append([i, j, 1])
+                elif grid[i][j] > 1:
+                    l2.append([i, j, grid[i][j]])
 
-        return ans
+        def dfs(l1, l2):
+            res = inf
+            x = y = -1
+            for i, [x, y, n2] in enumerate(l2):
+                if n2 == 1:
+                    continue
+                break
+            if x == -1: return 0
+            l2[i][2] -= 1
+            for j, [u, v, n1] in enumerate(l1):
+                if n1 == 0:
+                    continue
+                d = abs(x - u) + abs(y - v)
+                l1[j][2] -= 1
+                res = min(res, d + dfs(l1, l2))
+                l1[j][2] += 1
+            # l2[i][2] += 1
+            if res < inf:
+                return res
+            else:
+                return 0
+        return dfs(l1, l2)
 
 
 
 
 so = Solution()
-print(so.countInterestingSubarrays(nums = [3,2,4], modulo = 2, k = 1))
-print(so.countInterestingSubarrays(nums = [3,1,9,6], modulo = 3, k = 0))
-print(so.countInterestingSubarrays(nums = [11,12,21,31], modulo = 10, k = 1))
+print(so.minimumMoves(grid = [[2,2,0],[1,1,0],[0,3,0]]))
+print(so.minimumMoves(grid = [[3,2,0],[0,1,0],[0,3,0]]))
+print(so.minimumMoves(grid = [[1,1,0],[1,1,1],[1,2,1]]))
+print(so.minimumMoves(grid = [[1,3,0],[1,0,0],[1,0,3]]))
 
 
 

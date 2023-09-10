@@ -119,35 +119,19 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def minimumOperations(self, num: str) -> int:
-        n = len(num)
-        pre = set()
-        for i in range(n - 1, -1, -1):
-            if len(pre) == 0:
-                if num[i] in '05':
-                    pre.add(num[i])
-                continue
-            if num[i] == '0':
-                if '0' in pre:
-                    return n - i - 2
-                pre.add('0')
-                continue
-            if num[i] in '27':
-                if '5' in pre:
-                    return n - i - 2
-                continue
-            if num[i] in '5':
-                if '0' in pre:
-                    return n - i - 2
-                pre.add('5')
-                continue
-        return n - 1 if '0' in pre else n
+    def isReachableAtTime(self, sx: int, sy: int, fx: int, fy: int, t: int) -> bool:
+        dx = abs(sx - fx)
+        dy = abs(sy - fy)
+        if max(dx, dy) > t:
+            return False
+        if sx == fx and sy == fy and t == 1:
+            return False
+        return True
 
 
 so = Solution()
-print(so.minimumOperations(num = "2245047"))
-print(so.minimumOperations(num = "2908305"))
-print(so.minimumOperations(num = "10"))
+print(so.isReachableAtTime(sx = 2, sy = 4, fx = 7, fy = 7, t = 6))
+print(so.isReachableAtTime(sx = 3, sy = 1, fx = 7, fy = 3, t = 3))
 
 
 
