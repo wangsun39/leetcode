@@ -26,6 +26,28 @@ class Solution:
         if s & 1: return False
         return dfs(n - 1, s // 2)
 
+    def canPartition(self, nums: List[int]) -> bool:
+        # 2023/9/12 DP
+        s = sum(nums)
+        n = len(nums)
+        if s & 1: return False
+        dp = [[0] * (s // 2) for _ in range(n)]  # dp[i][j] 表示前i项，是否会出现和为j的子集
+        if nums[0] == s // 2:
+            return True
+        elif nums[0] < s // 2:
+            dp[0][nums[0]] = 1
+        for i, x in enumerate(nums[1:], 1):
+            if x == s // 2: return True
+            if x > s // 2: return False
+            dp[i][x] = 1
+            for j in range(s // 2):
+                if dp[i - 1][j]:
+                    dp[i][j] = 1
+                    if j + x == s // 2:
+                        return True
+                    elif j + x < s // 2:
+                        dp[i][j + x] = 1
+        return False
 
 
 

@@ -1,4 +1,8 @@
 import copy
+from collections import deque
+from typing import List
+
+
 class Solution:
     def minKBitFlips1(self, A, K: int):
         def reverse(AA, pos):
@@ -21,7 +25,7 @@ class Solution:
             return res + 1
         return recur_find(A)
 
-    def minKBitFlips(self, A, K: int):
+    def minKBitFlips2(self, A, K: int):
         N = len(A)
         flip = [0] * N
         i = 0
@@ -41,10 +45,28 @@ class Solution:
         return res
 
 
+    def minKBitFlips(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        ans = 0
+        dq = deque()  # 记录翻转的起点
+        for i, x in enumerate(nums):
+            while dq and dq[0] + k - 1 < i:
+                dq.popleft()
+            if (len(dq) & 1) ^ x:  # len(dq) & 1 表示 x 翻转的次数的奇偶性
+                continue
+            if i > n - k:
+                return -1
+            dq.append(i)
+            ans += 1
+
+        return ans
+
+
+
 so = Solution()
+print(so.minKBitFlips([0,0,0,1,0,1,1,0], 3))
 print(so.minKBitFlips([0,1,0], 1))
 print(so.minKBitFlips([1,1,0], 2))
-print(so.minKBitFlips([0,0,0,1,0,1,1,0], 3))
 print(so.minKBitFlips([1,1,1], 2))
 print(so.minKBitFlips([1,1,0,0,1,0,1], 4))
 
