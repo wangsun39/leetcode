@@ -5,7 +5,7 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def rob(self, nums) -> int:
+    def rob1(self, nums) -> int:
         num = len(nums)
         if 1 == num:
             return nums[0]
@@ -19,6 +19,16 @@ class Solution:
         for i in range(2, num):
             F[i] = max(F[i - 1], F[i - 2] + nums[i])
         return F[num-1]
+
+    def rob(self, nums: List[int]) -> int:
+        # 2023/9/16
+        dp1 = [0, 0]  # 偷i-2的最大金额，不偷i-2的最大金额
+        dp2 = [0, 0]  # 偷i-1的最大金额，不偷i-1的最大金额
+        for i, x in enumerate(nums):
+            u = max(max(dp1), dp2[1]) + x
+            v = max(dp2)
+            dp1, dp2 = dp2, [u, v]
+        return max(dp2)
 
 so = Solution()
 
