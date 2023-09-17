@@ -1,3 +1,6 @@
+from typing import List
+
+
 class TreeNode:
     def __init__(self, x):
         self.val = x
@@ -20,7 +23,7 @@ class Solution:
             F[i] = max(F[i - 1], F[i - 2] + nums[i])
         return F[num-1]
 
-    def rob(self, nums: List[int]) -> int:
+    def rob2(self, nums: List[int]) -> int:
         # 2023/9/16
         dp1 = [0, 0]  # 偷i-2的最大金额，不偷i-2的最大金额
         dp2 = [0, 0]  # 偷i-1的最大金额，不偷i-1的最大金额
@@ -30,7 +33,15 @@ class Solution:
             dp1, dp2 = dp2, [u, v]
         return max(dp2)
 
+    def rob(self, nums):
+        dp = [0, 0]  # 偷i-1的最大金额，不偷i-1的最大金额
+        for x in nums:
+            u = dp[1] + x
+            v = max(dp)
+            dp = [u, v]
+        return max(dp)
 so = Solution()
 
+print(so.rob([1,3,1,3,100]))
 print(so.rob([1,2,3,1]))
 print(so.rob([2,7,9,3,1]))

@@ -30,11 +30,12 @@
 #
 # 1 <= nums.length <= 105
 # 0 <= nums[i] < nums.length
-
+from bisect import bisect_left, insort_left
 from typing import List
+from sortedcontainers import SortedList
 
 class Solution:
-    def bestRotation(self, nums: List[int]) -> int:
+    def bestRotation1(self, nums: List[int]) -> int:
         N = len(nums)
         l = [0] * N
         for i, e in enumerate(nums):
@@ -68,8 +69,29 @@ class Solution:
                 maxV = s[i]
         return idx
 
+    def bestRotation(self, nums: List[int]) -> int:
+        # 二分法，可以通过，但性能不高
+        l, r = SortedList(), SortedList(i - x for i, x in enumerate(nums))  # 将 nums 分成左右两部分考虑，l 会移动到 r 右侧
+        n = len(nums)
+        mx = base = sum(x >= 0 for x in r)
+        ans = 0
+        for k in range(n):
+            # l 中的元素移动后，每项都会增加 n - k
+            # r 中的元素移动后，每项都会减少 k
+            pl1 = l.bisect_left(-(n - k))
+            pl2 = l.bisect_left(0)  # l[pl1: pl2] 中的元素都会增加1分
+            pr1 = r.bisect_left(0)
+            pr2 = r.bisect_left(k)  # l[pl1: pl2] 中的元素都会减少1分
+            if base + (pl2 - pl1) - (pr2 - pr1) > mx:
+                mx = base + (pl2 - pl1) - (pr2 - pr1)
+                ans = k
+            l.add(k - nums[k])
+            r.remove(k - nums[k])
+        return ans
+
+
 
 so = Solution()
-print(so.bestRotation([1,3,0,2,4]))
-print(so.bestRotation([2,3,1,4,0]))
+print(so.bestRotation([2,3,1,4,0]))   # 3
+print(so.bestRotation([1,3,0,2,4]))   # 0
 

@@ -1,5 +1,5 @@
 class Solution:
-    def rob(self, nums) -> int:
+    def rob1(self, nums) -> int:
         num = len(nums)
         if 1 == num:
             return nums[0]
@@ -25,6 +25,17 @@ class Solution:
             F[i] = max(F[i-1], F[i-2] + nums[i])
         return F
 
+    def rob(self, nums: List[int]) -> int:
+        # 2023/9/17  调用213题的函数
+        if len(nums) == 1: return nums[0]
+        def rob1(nums):
+            dp = [0, 0]  # 偷i-1的最大金额，不偷i-1的最大金额
+            for x in nums:
+                u = dp[1] + x
+                v = max(dp)
+                dp = [u, v]
+            return max(dp)
+        return max(rob1(nums[1:]), rob1(nums[:-1]))
 
 so = Solution()
 #print(so.findKthLargest([3,2,1,5,6,4], 2))
