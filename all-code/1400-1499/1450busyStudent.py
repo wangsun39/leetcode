@@ -47,8 +47,20 @@ from typing import List
 import math
 
 class Solution:
-    def busyStudent(self, startTime: List[int], endTime: List[int], queryTime: int) -> int:
+    def busyStudent1(self, startTime: List[int], endTime: List[int], queryTime: int) -> int:
         return sum(1 for i in range(len(startTime)) if startTime[i] <= queryTime <= endTime[i])
+
+    def busyStudent(self, startTime: List[int], endTime: List[int], queryTime: int) -> int:
+        # 2023/9/18  差分数组
+        diff = [0] * (max(endTime + [queryTime]) + 2)
+        n = len(startTime)
+        for i in range(n):
+            diff[startTime[i]] += 1
+            diff[endTime[i] + 1] -= 1
+        s = 0
+        for i in range(queryTime + 1):
+            s += diff[i]
+        return s
 
 
 

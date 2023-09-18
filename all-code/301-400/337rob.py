@@ -26,7 +26,7 @@
 #
 # 输出: 9
 # 解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
-
+from functools import cache
 from typing import List
 # Definition for a binary tree node.
 class TreeNode:
@@ -35,7 +35,7 @@ class TreeNode:
         self.left = None
         self.right = None
 class Solution:
-    def rob(self, root: TreeNode) -> int:
+    def rob1(self, root: TreeNode) -> int:
         def helper(node):  # return 以当前节点为根节点的子树的rob值，以当前节点左子树为根节点的子树的rob值，以当前节点右子树为根节点的子树的rob值，
             if node is None:
                 return 0, 0, 0
@@ -51,6 +51,20 @@ class Solution:
             # 否则，node.left/node.right都不在最终集合中，那么node肯定在最终集合中，那么rob = node.val + ll + lr + rl + rr
             return max(node.val + ll + lr + rl + rr, left + right), left, right
         return helper(root)[0]
+
+    def rob(self, root: Optional[TreeNode]) -> int:
+        # 2023/9/18 记忆化搜索
+        @cache
+        def dfs(node, flg):  # 从node向下选择，flg表示node这个点是否行窃
+            if not node: return 0
+            l = dfs(node.left, False)
+            r = dfs(node.right, False)
+            if not flg:
+                l = max(l, dfs(node.left, True))
+                r = max(r, dfs(node.right, True))
+                return l + r
+            return node.val + l + r
+        return max(dfs(root, True), dfs(root, False))
 
 
 so = Solution()
