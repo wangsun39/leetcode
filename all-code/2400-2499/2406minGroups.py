@@ -94,7 +94,7 @@ class Solution:
                 bisect.insort_right(group, iv[1])
         return len(group)
 
-    def minGroups(self, intervals: List[List[int]]) -> int:
+    def minGroups2(self, intervals: List[List[int]]) -> int:
         intervals.sort()
         heap = [intervals[0][1]]
         for it in intervals[1:]:
@@ -104,6 +104,21 @@ class Solution:
                 heapq.heappop(heap)
                 heapq.heappush(heap, it[1])
         return len(heap)
+
+
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        # 2023/9/19  差分数组
+        mx = max(x[1] for x in intervals) + 1
+        diff = [0] * mx
+        for a, b in intervals:
+            diff[a - 1] += 1
+            diff[b] -= 1
+        ans = cur = 0
+        for x in diff:
+            cur += x
+            if cur > ans:
+                ans = cur
+        return ans
 
 so = Solution()
 print(so.minGroups([[1,3],[5,6],[8,10],[11,13]]))

@@ -40,9 +40,7 @@
 # removeQueries 中所有数字 互不相同 。
 #
 # https://leetcode.cn/problems/maximum-segment-sum-after-removals
-
-
-
+from itertools import accumulate
 from typing import List
 from typing import Optional
 from collections import deque
@@ -86,8 +84,9 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
+from sortedcontainers import SortedList
 class Solution:
-    def maximumSegmentSum(self, nums: List[int], removeQueries: List[int]) -> List[int]:
+    def maximumSegmentSum1(self, nums: List[int], removeQueries: List[int]) -> List[int]:
         n = len(nums)
         fa = list(range(n))  # 存放每个点所在连通块的代表元（未必每个点的fa值都是最新的，调用find获取，不要直接fa[i]获取）
         def find(x):
@@ -112,12 +111,41 @@ class Solution:
             ans[i - 1] = max(ans[i], sumOf[fa[x]])
         return ans
 
+    def maximumSegmentSum(self, nums: List[int], removeQueries: List[int]) -> List[int]:
+        # 2023/9/19  有序数组，性能不如上面的
+        n = len(nums)
+        s = list(accumulate(nums, initial=0))
+        sl1 = SortedList([s[-1]])  # 剩余的区间和排序数组
+        sl2 = SortedList([[0, n - 1]])  # 剩余的区间排序数组
+        ans = []
+        for x in removeQueries:
+            if len(sl2) == 0:
+                ans.append(0)
+                continue
+            p = sl2.bisect_left([x, n])
+            a, b = sl2[p - 1]
+            lp = s[b + 1] - s[a]
+            sl2.pop(p - 1)
+            sl1.remove(lp)
+            if x - a >= 1:
+                sl1.add(s[x] - s[a])
+                sl2.add([a, x - 1])
+            if b - x >= 1:
+                sl1.add(s[b + 1] - s[x + 1])
+                sl2.add([x + 1, b])
+            if len(sl1):
+                ans.append(sl1[-1])
+            else:
+                ans.append(0)
+        return ans
+
+
 
 
 
 so = Solution()
-print(so.maximumSegmentSum(nums = [500,822,202,707,298,484,311,680,901,319,343,340], removeQueries = [6,4,0,5,2,3,10,8,7,9,1,11]))  # [3013,2583,2583,2583,2583,2583,1900,822,822,822,340,0]
 print(so.maximumSegmentSum(nums = [1,2,5,6,1], removeQueries = [0,3,2,4,1]))  # [14,7,2,2,0]
+print(so.maximumSegmentSum(nums = [500,822,202,707,298,484,311,680,901,319,343,340], removeQueries = [6,4,0,5,2,3,10,8,7,9,1,11]))  # [3013,2583,2583,2583,2583,2583,1900,822,822,822,340,0]
 print(so.maximumSegmentSum(nums = [3,2,11,1], removeQueries = [3,2,1,0]))  # [16,5,3,0]
 
 
