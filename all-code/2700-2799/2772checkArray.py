@@ -156,7 +156,7 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def checkArray(self, nums: List[int], k: int) -> bool:
+    def checkArray1(self, nums: List[int], k: int) -> bool:
         n = len(nums)
         diff = [0] * n
         acc = 0
@@ -173,6 +173,24 @@ class Solution:
                 diff[i] = cur
         return True
 
+    def checkArray(self, nums: List[int], k: int) -> bool:
+        # 2023/9/21 差分数组
+        n = len(nums)
+        diff = [0] * n
+        diff[0] = nums[0]
+        for i in range(n - 1):
+            diff[i + 1] = nums[i + 1] - nums[i]
+        cur = 0
+        for i in range(n):
+            cur += diff[i]
+            if cur < 0: return False
+            if i + k > n:
+                if cur != 0: return False
+                continue
+            if i + k < n:
+                diff[i + k] += cur
+            cur = 0
+        return True
 
 
 
