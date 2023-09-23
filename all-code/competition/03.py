@@ -69,11 +69,12 @@ from typing import List, Tuple
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串
+# string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
 # string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
+# c2i = {c: i for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -119,29 +120,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maxNumberOfAlloys(self, n: int, k: int, budget: int, composition: List[List[int]], stock: List[int], cost: List[int]) -> int:
-        def f(comp):
-            def check(val):
-                s = sum((max(0, val * comp[i] - stock[i])) * cost[i] for i in range(n))
-                return s <= budget
-            lo, hi = 0, 10 ** 9
-            while lo < hi - 1:
-                mid = (lo + hi) // 2
-                if check(mid):
-                    lo = mid
-                else:
-                    hi = mid
-            return lo
-        ans = 0
-        for i in range(k):
-            ans = max(ans, f(composition[i]))
-        return ans
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maxNumberOfAlloys(n = 3, k = 2, budget = 15, composition = [[1,1,1],[1,1,10]], stock = [0,0,100], cost = [1,2,3]))
-print(so.maxNumberOfAlloys(n = 3, k = 2, budget = 15, composition = [[1,1,1],[1,1,10]], stock = [0,0,0], cost = [1,2,3]))
-print(so.maxNumberOfAlloys(n = 2, k = 3, budget = 10, composition = [[2,1],[1,2],[1,1]], stock = [1,1], cost = [5,5]))
+print(so.removeDigit())
 
 
 

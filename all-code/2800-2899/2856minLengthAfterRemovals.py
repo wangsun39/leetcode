@@ -120,12 +120,23 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minLengthAfterRemovals(self, nums: List[int]) -> int:
+        counter = Counter(nums)
+        most = counter.most_common(1)
+        c = most[0][1]
+        n = len(nums)
+        if c <= n // 2:
+            return n & 1  # 奇数返回1，偶数返回0
+        return n - (n - c) * 2
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minLengthAfterRemovals([2,3,4]))
+print(so.minLengthAfterRemovals([1,1]))
+print(so.minLengthAfterRemovals([1,3,4,9]))
+print(so.minLengthAfterRemovals([2,3,6,9]))
+print(so.minLengthAfterRemovals([1,1,2]))
 
 
 

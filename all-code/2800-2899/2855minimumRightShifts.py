@@ -120,12 +120,22 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minimumRightShifts(self, nums: List[int]) -> int:
+        n = len(nums)
+        if all(nums[j] < nums[j + 1] for j in range(n - 1)):
+            return 0
+        for i in range(1, n):
+            nums = [nums[-1]] + nums[:-1]
+            if all(nums[j] < nums[j + 1] for j in range(n - 1)):
+                return i
+        return -1
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minimumRightShifts([72,13,21,35,52]))
+print(so.minimumRightShifts([3,4,5,1,2]))
+print(so.minimumRightShifts([2,1,4]))
+print(so.minimumRightShifts([1,3,5]))
 
 
 

@@ -120,12 +120,26 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countPairs(self, coordinates: List[List[int]], k: int) -> int:
+        counter = Counter(tuple(x) for x in coordinates)
+        n = len(coordinates)
+        ans = 0
+        for i in range(n):
+            x, y = coordinates[i]
+            for j in range(k + 1):
+                u, v = x ^ j, y ^ (k - j)
+                if x == u and y == v:
+                    ans += (counter[(u, v)] - 1)
+                else:
+                    ans += counter[(u, v)]
+
+        return ans // 2
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countPairs(coordinates = [[1,3],[1,3],[1,3],[1,3],[1,3]], k = 0))
+print(so.countPairs(coordinates = [[1,2],[4,2],[1,3],[5,2]], k = 5))
 
 
 

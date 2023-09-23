@@ -120,12 +120,34 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
-
+    def minEdgeReversals(self, n: int, edges: List[List[int]]) -> List[int]:
+        g = defaultdict(list)
+        for x, y in edges:
+            g[x].append((y, 0))  # 第二个参数表示方向
+            g[y].append((x, 1))
+        def dfs1(x, fa):  # 计算从x出发 最少边反转数
+            res = 0
+            for y, d in g[x]:
+                if y != fa:
+                    res += d
+                    res += dfs1(y, x)
+            return res
+        ans = [0] * n
+        ans[0] = dfs1(0, -1)
+        def dfs2(x, fa):  # 换根 DP
+            for y, d in g[x]:
+                if y != fa:
+                    if d == 0:
+                        ans[y] = ans[x] + 1
+                    else:
+                        ans[y] = ans[x] - 1
+                    dfs2(y, x)
+        dfs2(0, -1)
+        return ans
 
 so = Solution()
-print(so.removeDigit())
+print(so.minEdgeReversals(n = 4, edges = [[2,0],[2,1],[1,3]]))
+print(so.minEdgeReversals(n = 3, edges = [[1,2],[2,0]]))
 
 
 

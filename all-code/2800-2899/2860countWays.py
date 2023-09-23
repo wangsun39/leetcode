@@ -69,12 +69,11 @@ from typing import List, Tuple
 import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
+# string.ascii_lowercase：包含所有小写字母的字符串
 # string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
-# c2i = {c: i for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -120,12 +119,19 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countWays(self, nums: List[int]) -> int:
+        nums.sort()
+        n = len(nums)
+        ans = 0
+        for i in range(n + 1):
+            if (i < 1 or nums[i - 1] < i) and (i >= n or nums[i] > i):
+                ans += 1
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countWays(nums = [1,1]))
+print(so.countWays(nums = [6,0,3,3,6,7,2,7]))
 
 
 
