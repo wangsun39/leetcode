@@ -120,12 +120,61 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumSumOfHeights(self, maxHeights: List[int]) -> int:
+        n = len(maxHeights)
+        left, stack, right = [-1] * n, [], [-1] * n
+
+        for i in range(n):
+            while stack and maxHeights[stack[-1]] > maxHeights[i]:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]
+            stack.append(i)
+
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and maxHeights[stack[-1]] > maxHeights[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]
+            stack.append(i)
+
+        dp1 = [0] * n
+        for i, x in enumerate(maxHeights):
+            if i == 0:
+                dp1[i] = maxHeights[0]
+                continue
+            if maxHeights[i - 1] <= x:
+                dp1[i] = dp1[i - 1] + x
+            else:
+                if left[i] == -1:
+                    dp1[i] = x * (i + 1)
+                else:
+                    dp1[i] = dp1[left[i]] + x * (i - left[i])
+        dp2 = [0] * n
+        for i in range(n - 1, -1, -1):
+            x = maxHeights[i]
+            if i == n - 1:
+                dp2[i] = x
+                continue
+            if x >= maxHeights[i + 1]:
+                dp2[i] = dp2[i + 1] + x
+            else:
+                if right[i] == -1:
+                    dp2[i] = x * (n - i)
+                else:
+                    dp2[i] = dp2[right[i]] + x * (right[i] - i)
+        ans = 0
+        for i in range(n):
+            ans = max(ans, dp1[i] + dp2[i] - maxHeights[i])
+        return ans
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maximumSumOfHeights(maxHeights = [5,3,4,1,1]))
+print(so.maximumSumOfHeights(maxHeights = [6,5,3,9,2,7]))
+print(so.maximumSumOfHeights(maxHeights = [3,2,5,5,2,3]))
 
 
 

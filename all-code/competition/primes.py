@@ -1,4 +1,4 @@
-
+from math import isqrt
 from typing import List
 from typing import Optional
 from collections import deque
@@ -7,7 +7,7 @@ from collections import Counter
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)
-import math
+import cmath
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -72,6 +72,15 @@ def euler_all_primes(n):
             if i % j == 0: break
 
     return primes
+
+MX = 10 ** 5 + 1
+is_prime = [True] * MX
+is_prime[1] = False
+for i in range(2, isqrt(MX) + 1):
+    if is_prime[i]:
+        for j in range(i * i, MX, i):
+            is_prime[j] = False
+
 
 def is_prime(n: int) -> bool:
     i = 2

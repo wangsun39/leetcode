@@ -120,12 +120,14 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumOddBinaryNumber(self, s: str) -> str:
+        counter = Counter(s)
+        return '1' * (counter['1'] - 1) + '0' * counter['0'] + '1'
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maximumOddBinaryNumber("010"))
+print(so.maximumOddBinaryNumber("0101"))
 
 
 

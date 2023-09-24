@@ -20,6 +20,7 @@ from collections import defaultdict
 
 # d = defaultdict(int)
 # from math import *
+from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
