@@ -1,4 +1,50 @@
-
+# 给你一棵 n 个节点的无向树，节点编号为 1 到 n 。给你一个整数 n 和一个长度为 n - 1 的二维整数数组 edges ，其中 edges[i] = [ui, vi] 表示节点 ui 和 vi 在树中有一条边。
+#
+# 请你返回树中的 合法路径数目 。
+#
+# 如果在节点 a 到节点 b 之间 恰好有一个 节点的编号是质数，那么我们称路径 (a, b) 是 合法的 。
+#
+# 注意：
+#
+# 路径 (a, b) 指的是一条从节点 a 开始到节点 b 结束的一个节点序列，序列中的节点 互不相同 ，且相邻节点之间在树上有一条边。
+# 路径 (a, b) 和路径 (b, a) 视为 同一条 路径，且只计入答案 一次 。
+#
+#
+# 示例 1：
+#
+#
+#
+# 输入：n = 5, edges = [[1,2],[1,3],[2,4],[2,5]]
+# 输出：4
+# 解释：恰好有一个质数编号的节点路径有：
+# - (1, 2) 因为路径 1 到 2 只包含一个质数 2 。
+# - (1, 3) 因为路径 1 到 3 只包含一个质数 3 。
+# - (1, 4) 因为路径 1 到 4 只包含一个质数 2 。
+# - (2, 4) 因为路径 2 到 4 只包含一个质数 2 。
+# 只有 4 条合法路径。
+# 示例 2：
+#
+#
+#
+# 输入：n = 6, edges = [[1,2],[1,3],[2,4],[3,5],[3,6]]
+# 输出：6
+# 解释：恰好有一个质数编号的节点路径有：
+# - (1, 2) 因为路径 1 到 2 只包含一个质数 2 。
+# - (1, 3) 因为路径 1 到 3 只包含一个质数 3 。
+# - (1, 4) 因为路径 1 到 4 只包含一个质数 2 。
+# - (1, 6) 因为路径 1 到 6 只包含一个质数 3 。
+# - (2, 4) 因为路径 2 到 4 只包含一个质数 2 。
+# - (3, 6) 因为路径 3 到 6 只包含一个质数 3 。
+# 只有 6 条合法路径。
+#
+#
+# 提示：
+#
+# 1 <= n <= 105
+# edges.length == n - 1
+# edges[i].length == 2
+# 1 <= ui, vi <= n
+# 输入保证 edges 形成一棵合法的树。
 
 from typing import List
 from typing import Optional
@@ -20,7 +66,6 @@ from collections import defaultdict
 
 # d = defaultdict(int)
 # from math import *
-from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -76,7 +121,6 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
-# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -121,13 +165,77 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-class Solution:
-    def removeDigit(self) -> str:
-        pass
+def euler_all_primes(n):
+    is_prime = [False, False] + [True] * (n - 1)
+    primes = []
+    flg = False
+    for i in range(2, n + 1):
+        if is_prime[i]: primes.append(i)
+        if flg: continue
+        for j in primes:
+            if j * i > n: break
+            is_prime[j * i] = False
+            if i % j == 0: break
 
+    return primes
+
+primes = set(euler_all_primes(100009))
+
+class Solution:
+    def countPaths(self, n: int, edges: List[List[int]]) -> int:
+        g = defaultdict(list)
+        for x, y in edges:
+            g[x].append(y)
+            g[y].append(x)
+
+        ans = 0
+        def dfs(x, fa):  # 返回从x开始的没有质数的路径和有一个质数的路径数
+            nonlocal ans
+            r1 = r2 = 0
+            yl = []
+            if x not in primes:
+                for y in g[x]:
+                    if y != fa:
+                        ry1, ry2 = dfs(y, x)
+                        if y in primes:
+                            r1 += ry1
+                            r2 += (ry2 + 1)
+                            yl.append([ry1, ry2 + 1])
+                        else:
+                            r1 += (ry1 + 1)
+                            r2 += ry2
+                            yl.append([ry1 + 1, ry2])
+            else:
+                for y in g[x]:
+                    if y != fa:
+                        ry1, ry2 = dfs(y, x)
+                        if y not in primes:
+                            r2 += (ry1 + 1)
+                            yl.append([ry1 + 1, ry2 + 1])
+            s1, s2 = sum(e[0] for e in yl), sum(e[1] for e in yl)
+            if x not in primes:
+                for a, b in yl:
+                    ans += b * (s1 - a)
+            else:
+                ss = 0
+                for a, b in yl:
+                    ss += a * (s1 - a)
+                ss //= 2
+                ans += ss
+            ans += r2
+            return r1, r2
+
+        dfs(1, -1)
+        return ans
 
 so = Solution()
-print(so.removeDigit())
+ll = [[1, x] for x in range(2, 100001)]
+print(so.countPaths(100000, ll))
+print(so.countPaths(8, [[6,7],[4,7],[1,7],[3,4],[2,4],[5,2],[8,3]]))
+print(so.countPaths(9, [[7,4],[3,4],[5,4],[1,5],[6,4],[9,5],[8,7],[2,8]]))
+print(so.countPaths(n = 5, edges = [[1,2],[1,3],[2,4],[2,5]]))
+print(so.countPaths(n = 6, edges = [[1,2],[1,3],[2,4],[3,5],[3,6]]))
+
 
 
 

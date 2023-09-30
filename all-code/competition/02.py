@@ -20,6 +20,7 @@ from collections import defaultdict
 
 # d = defaultdict(int)
 # from math import *
+from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -75,6 +76,7 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -120,61 +122,12 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumSumOfHeights(self, maxHeights: List[int]) -> int:
-        n = len(maxHeights)
-        left, stack, right = [-1] * n, [], [-1] * n
-
-        for i in range(n):
-            while stack and maxHeights[stack[-1]] > maxHeights[i]:
-                stack.pop()
-            if stack:
-                left[i] = stack[-1]
-            stack.append(i)
-
-        stack = []
-        for i in range(n - 1, -1, -1):
-            while stack and maxHeights[stack[-1]] > maxHeights[i]:
-                stack.pop()
-            if stack:
-                right[i] = stack[-1]
-            stack.append(i)
-
-        dp1 = [0] * n
-        for i, x in enumerate(maxHeights):
-            if i == 0:
-                dp1[i] = maxHeights[0]
-                continue
-            if maxHeights[i - 1] <= x:
-                dp1[i] = dp1[i - 1] + x
-            else:
-                if left[i] == -1:
-                    dp1[i] = x * (i + 1)
-                else:
-                    dp1[i] = dp1[left[i]] + x * (i - left[i])
-        dp2 = [0] * n
-        for i in range(n - 1, -1, -1):
-            x = maxHeights[i]
-            if i == n - 1:
-                dp2[i] = x
-                continue
-            if x >= maxHeights[i + 1]:
-                dp2[i] = dp2[i + 1] + x
-            else:
-                if right[i] == -1:
-                    dp2[i] = x * (n - i)
-                else:
-                    dp2[i] = dp2[right[i]] + x * (right[i] - i)
-        ans = 0
-        for i in range(n):
-            ans = max(ans, dp1[i] + dp2[i] - maxHeights[i])
-        return ans
-
+    def removeDigit(self) -> str:
+        pass
 
 
 so = Solution()
-print(so.maximumSumOfHeights(maxHeights = [5,3,4,1,1]))
-print(so.maximumSumOfHeights(maxHeights = [6,5,3,9,2,7]))
-print(so.maximumSumOfHeights(maxHeights = [3,2,5,5,2,3]))
+print(so.removeDigit())
 
 
 

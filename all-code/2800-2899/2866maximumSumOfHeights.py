@@ -1,4 +1,50 @@
-
+# 给你一个长度为 n 下标从 0 开始的整数数组 maxHeights 。
+#
+# 你的任务是在坐标轴上建 n 座塔。第 i 座塔的下标为 i ，高度为 heights[i] 。
+#
+# 如果以下条件满足，我们称这些塔是 美丽 的：
+#
+# 1 <= heights[i] <= maxHeights[i]
+# heights 是一个 山状 数组。
+# 如果存在下标 i 满足以下条件，那么我们称数组 heights 是一个 山状 数组：
+#
+# 对于所有 0 < j <= i ，都有 heights[j - 1] <= heights[j]
+# 对于所有 i <= k < n - 1 ，都有 heights[k + 1] <= heights[k]
+# 请你返回满足 美丽塔 要求的方案中，高度和的最大值 。
+#
+#
+#
+# 示例 1：
+#
+# 输入：maxHeights = [5,3,4,1,1]
+# 输出：13
+# 解释：和最大的美丽塔方案为 heights = [5,3,3,1,1] ，这是一个美丽塔方案，因为：
+# - 1 <= heights[i] <= maxHeights[i]
+# - heights 是个山状数组，峰值在 i = 0 处。
+# 13 是所有美丽塔方案中的最大高度和。
+# 示例 2：
+#
+# 输入：maxHeights = [6,5,3,9,2,7]
+# 输出：22
+# 解释： 和最大的美丽塔方案为 heights = [3,3,3,9,2,2] ，这是一个美丽塔方案，因为：
+# - 1 <= heights[i] <= maxHeights[i]
+# - heights 是个山状数组，峰值在 i = 3 处。
+# 22 是所有美丽塔方案中的最大高度和。
+# 示例 3：
+#
+# 输入：maxHeights = [3,2,5,5,2,3]
+# 输出：18
+# 解释：和最大的美丽塔方案为 heights = [2,2,5,5,2,2] ，这是一个美丽塔方案，因为：
+# - 1 <= heights[i] <= maxHeights[i]
+# - heights 是个山状数组，最大值在 i = 2 处。
+# 注意，在这个方案中，i = 3 也是一个峰值。
+# 18 是所有美丽塔方案中的最大高度和。
+#
+#
+# 提示：
+#
+# 1 <= n == maxHeights <= 105
+# 1 <= maxHeights[i] <= 109
 
 from typing import List
 from typing import Optional
@@ -20,7 +66,6 @@ from collections import defaultdict
 
 # d = defaultdict(int)
 # from math import *
-from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -76,7 +121,6 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
-# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -122,12 +166,57 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumSumOfHeights(self, maxHeights: List[int]) -> int:
+        n = len(maxHeights)
+        left, stack, right = [-1] * n, [], [-1] * n
+
+        for i in range(n):
+            while stack and maxHeights[stack[-1]] > maxHeights[i]:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]
+            stack.append(i)
+
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and maxHeights[stack[-1]] > maxHeights[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]
+            stack.append(i)
+
+        dp1 = [0] * n
+        for i, x in enumerate(maxHeights):
+            if i == 0:
+                dp1[i] = maxHeights[0]
+                continue
+            if maxHeights[i - 1] <= x:
+                dp1[i] = dp1[i - 1] + x
+            else:
+                if left[i] == -1:
+                    dp1[i] = x * (i + 1)
+                else:
+                    dp1[i] = dp1[left[i]] + x * (i - left[i])
+        dp2 = [0] * n
+        for i in range(n - 1, -1, -1):
+            x = maxHeights[i]
+            if i == n - 1:
+                dp2[i] = x
+                continue
+            if x >= maxHeights[i + 1]:
+                dp2[i] = dp2[i + 1] + x
+            else:
+                if right[i] == -1:
+                    dp2[i] = x * (n - i)
+                else:
+                    dp2[i] = dp2[right[i]] + x * (right[i] - i)
+        ans = 0
+        for i in range(n):
+            ans = max(ans, dp1[i] + dp2[i] - maxHeights[i])
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
 
 
 

@@ -76,6 +76,7 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'

@@ -54,7 +54,7 @@ from collections import deque
 # Definition for a binary tree node.
 from collections import Counter
 class Solution:
-    def earliestFullBloom(self, plantTime: List[int], growTime: List[int]) -> int:
+    def earliestFullBloom1(self, plantTime: List[int], growTime: List[int]) -> int:
         n = len(plantTime)
         union = [[plantTime[i], growTime[i]] for i in range(n)]
         union.sort(key=lambda x: x[1], reverse=True)
@@ -64,6 +64,13 @@ class Solution:
         for i in range(n):
             plant_finish += union[i][0]
             ans = max(ans, plant_finish + union[i][1])
+        return ans
+
+    def earliestFullBloom(self, plantTime: List[int], growTime: List[int]) -> int:
+        # 2023/9/30  逆序思考 先同时生长，再贪心种植，先生长完的先种植
+        ans = 0
+        for i, t in sorted(enumerate(growTime), key=lambda x: x[1]):
+            ans = max(ans, t) + plantTime[i]
         return ans
 
 so = Solution()

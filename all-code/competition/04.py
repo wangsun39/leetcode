@@ -20,6 +20,7 @@ from collections import defaultdict
 
 # d = defaultdict(int)
 # from math import *
+from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -75,6 +76,7 @@ import string
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -119,77 +121,13 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-def euler_all_primes(n):
-    is_prime = [False, False] + [True] * (n - 1)
-    primes = []
-    flg = False
-    for i in range(2, n + 1):
-        if is_prime[i]: primes.append(i)
-        if flg: continue
-        for j in primes:
-            if j * i > n: break
-            is_prime[j * i] = False
-            if i % j == 0: break
-
-    return primes
-
-primes = set(euler_all_primes(100009))
-
 class Solution:
-    def countPaths(self, n: int, edges: List[List[int]]) -> int:
-        g = defaultdict(list)
-        for x, y in edges:
-            g[x].append(y)
-            g[y].append(x)
+    def removeDigit(self) -> str:
+        pass
 
-        ans = 0
-        def dfs(x, fa):  # 返回从x开始的没有质数的路径和有一个质数的路径数
-            nonlocal ans
-            r1 = r2 = 0
-            yl = []
-            if x not in primes:
-                for y in g[x]:
-                    if y != fa:
-                        ry1, ry2 = dfs(y, x)
-                        if y in primes:
-                            r1 += ry1
-                            r2 += (ry2 + 1)
-                            yl.append([ry1, ry2 + 1])
-                        else:
-                            r1 += (ry1 + 1)
-                            r2 += ry2
-                            yl.append([ry1 + 1, ry2])
-            else:
-                for y in g[x]:
-                    if y != fa:
-                        ry1, ry2 = dfs(y, x)
-                        if y not in primes:
-                            r2 += (ry1 + 1)
-                            yl.append([ry1 + 1, ry2 + 1])
-            s1, s2 = sum(e[0] for e in yl), sum(e[1] for e in yl)
-            if x not in primes:
-                for a, b in yl:
-                    ans += b * (s1 - a)
-            else:
-                ss = 0
-                for a, b in yl:
-                    ss += a * (s1 - a)
-                ss //= 2
-                ans += ss
-            ans += r2
-            return r1, r2
-
-        dfs(1, -1)
-        return ans
 
 so = Solution()
-ll = [[1, x] for x in range(2, 100001)]
-print(so.countPaths(100000, ll))
-print(so.countPaths(8, [[6,7],[4,7],[1,7],[3,4],[2,4],[5,2],[8,3]]))
-print(so.countPaths(9, [[7,4],[3,4],[5,4],[1,5],[6,4],[9,5],[8,7],[2,8]]))
-print(so.countPaths(n = 5, edges = [[1,2],[1,3],[2,4],[2,5]]))
-print(so.countPaths(n = 6, edges = [[1,2],[1,3],[2,4],[3,5],[3,6]]))
-
+print(so.removeDigit())
 
 
 
