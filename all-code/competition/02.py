@@ -122,12 +122,24 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumTripletValue(self, nums: List[int]) -> int:
+        mx = nums[0]
+        n = len(nums)
+        res = -inf
+        arr = [0] * n
+        for i, x in enumerate(nums[1:], 1):
+            if mx - x > res:
+                res = mx - x
+            mx = max(mx, x)
+            if i < n - 1:
+                arr[i + 1] = res
+        ans = 0
+        for i in range(n):
+            ans = max(ans, arr[i] * nums[i])
+        return ans
 
 
 so = Solution()
-print(so.removeDigit())
 
 
 

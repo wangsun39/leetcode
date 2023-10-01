@@ -67,7 +67,7 @@ from typing import List, Tuple
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-import string
+from string import *
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符

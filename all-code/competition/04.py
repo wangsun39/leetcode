@@ -122,12 +122,36 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def countVisitedNodes(self, edges: List[int]) -> List[int]:
+        n = len(edges)
+        ans = [-1] * n
+        def f(x):
+            i = 0
+            vis = {}
+            while x not in vis:
+                if ans[x] != -1:
+                    for y in vis.keys():
+                        ans[y] = i - vis[y] + ans[x]
+                    return
+                vis[x] = i
+                i += 1
+                x = edges[x]
+            for k, v in vis.items():
+                if v < vis[x]:
+                    ans[k] = i - v
+                else:
+                    ans[k] = i - vis[x]
+        for i in range(n):
+            if ans[i] == -1:
+                f(i)
+        return ans
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.countVisitedNodes([1,2,0,0]))
+print(so.countVisitedNodes(edges = [1,2,3,4,0]))
 
 
 

@@ -122,12 +122,32 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def minSizeSubarray(self, nums: List[int], target: int) -> int:
+        ss = sum(nums)
+        n = len(nums)
+        cnt = 0
+        if target > ss:
+            cnt = target // ss
+            target = target % ss
+        if target == 0: return cnt * n
+        d = {0: -1}
+        s = 0
+        ans = inf
+        nums = nums + nums
+        for i, x in enumerate(nums):
+            s += x
+            if s - target in d:
+                ans = min(ans, i - d[s - target])
+            d[s] = i
+        return ans + cnt * n if ans != inf else -1
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minSizeSubarray(nums = [1,2], target = 72))
+print(so.minSizeSubarray(nums = [1,1,1,2,3], target = 4))
+print(so.minSizeSubarray(nums = [1,2,3], target = 5))
+print(so.minSizeSubarray(nums = [2,4,6,8], target = 3))
 
 
 
