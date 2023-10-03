@@ -42,11 +42,12 @@
 # 1 <= jobDifficulty.length <= 300
 # 0 <= jobDifficulty[i] <= 1000
 # 1 <= d <= 10
+from functools import cache
 from math import inf
 from typing import List
 
 class Solution:
-    def minDifficulty(self, jobDifficulty: List[int], d: int) -> int:
+    def minDifficulty1(self, jobDifficulty: List[int], d: int) -> int:
         n = len(jobDifficulty)
         dp = [[inf] * n for _ in range(d)]   # dp[i][j] 表示前i天完成前j件工作的最小难度
 
@@ -66,6 +67,30 @@ class Solution:
         # print(dp)
         return dp[-1][-1] if dp[-1][-1] < inf else -1
 
+
+    def minDifficulty(self, jobDifficulty: List[int], d: int) -> int:
+        # 2023/9/29 记忆化搜索
+        n = len(jobDifficulty)
+        if n < d:
+            return -1
+
+        @cache
+        def dfs(start, left):  # 从start项任务开始，剩余d天，最小难度
+            if n - start < left:
+                return inf
+            if left == 0:
+                if n - start > 0:
+                    return inf
+                else:
+                    return 0
+            mx = 0
+            res = inf
+            for i in range(start, n):
+                mx = max(mx, jobDifficulty[i])
+                res = min(res, dfs(i + 1, left - 1) + mx)
+            # print(start, left, res)
+            return res
+        return dfs(0, d)
 
 
 so = Solution()

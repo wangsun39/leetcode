@@ -41,7 +41,7 @@ from typing import List
 
 
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit1(self, prices: List[int]) -> int:
         N = len(prices)
         x1, x2, x3, x4 = -prices[0], 0, -prices[0], 0
         for i in range(1, N):
@@ -52,12 +52,29 @@ class Solution:
 
         return max(x2, x4)
 
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        mi = prices[0]
+        dp1 = [0] * n   # dp1[i] 表示前i天，包括i，单次最大利润
+        for i, x in enumerate(prices[1:], 1):
+            dp1[i] = max(dp1[i - 1], x - mi)
+            mi = min(mi, x)
+        mx = prices[-1]
+        dp2 = [0] * n   # dp2[i] 表示从第i天开始向后，单次最大利润
+        for i in range(n - 2, -1, -1):
+            dp2[i] = max(dp2[i + 1], mx - prices[i])
+            mx = max(mx, prices[i])
+        ans = dp2[0]
+        for i in range(n - 1):
+            ans = max(ans, dp1[i] + dp2[i + 1])
+        return ans
+
 
 
 so = Solution()
+print(so.maxProfit([1,2,3,4,5]))
 print(so.maxProfit([2,1,4,5,2,9,7]))
 print(so.maxProfit([1,4,2]))
 print(so.maxProfit([3,3,5,0,0,3,1,4]))
-print(so.maxProfit([1,2,3,4,5]))
 print(so.maxProfit([7, 6, 4, 3, 1]))
 
