@@ -67,7 +67,7 @@ from typing import List, Tuple
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-import string
+from string import *
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
@@ -122,24 +122,20 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumTripletValue(self, nums: List[int]) -> int:
-        mx = nums[0]
-        n = len(nums)
-        res = -inf
-        arr = [0] * n
-        for i, x in enumerate(nums[1:], 1):
-            if mx - x > res:
-                res = mx - x
-            mx = max(mx, x)
-            if i < n - 1:
-                arr[i + 1] = res
+    def minOperations(self, nums: List[int]) -> int:
+        counter = Counter(nums)
         ans = 0
-        for i in range(n):
-            ans = max(ans, arr[i] * nums[i])
+        for v in counter.values():
+            if v == 1: return -1
+            if v % 3 == 0: ans += (v // 3)
+            else: ans += (v // 3 + 1)
         return ans
 
 
+
 so = Solution()
+print(so.minOperations([2,3,3,2,2,4,2,3,4]))
+print(so.minOperations([2,1,2,2,3,3]))
 
 
 

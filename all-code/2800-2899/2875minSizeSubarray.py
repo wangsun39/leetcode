@@ -67,7 +67,7 @@ from typing import List, Tuple
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-from string import *
+import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
@@ -122,39 +122,32 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
-        g = defaultdict(set)
-        for x, y in edges:
-            g[x].add(y)
-            g[y].add(x)
-        dq1 = deque(x for x in range(n) if len(g[x]) == 1)
-        ans = set()  # 删除边的集合
-        while dq1:
-            x = dq1.popleft()
-            if len(g[x]) == 0: continue
-            if values[x] % k == 0:
-                y = g[x].pop()
-                g[y].remove(x)
-                # 删除 (x, y)
-                if x < y: ans.add((x, y))
-                else: ans.add((y, x))
-                if len(g[y]) == 1:
-                    dq1.append(y)
-                continue
-            y = g[x].pop()
-            g[y].remove(x)
-            values[y] += values[x]  # 把x上的值累加到y上
-            if len(g[y]) == 1:
-                dq1.append(y)
-        return len(ans) + 1
-
+    def minSizeSubarray(self, nums: List[int], target: int) -> int:
+        ss = sum(nums)
+        n = len(nums)
+        cnt = 0
+        if target > ss:
+            cnt = target // ss
+            target = target % ss
+        if target == 0: return cnt * n
+        d = {0: -1}
+        s = 0
+        ans = inf
+        nums = nums + nums
+        for i, x in enumerate(nums):
+            s += x
+            if s - target in d:
+                ans = min(ans, i - d[s - target])
+            d[s] = i
+        return ans + cnt * n if ans != inf else -1
 
 
 
 so = Solution()
-print(so.maxKDivisibleComponents(n = 5, edges = [[0,2],[1,2],[1,3],[2,4]], values = [1,8,1,4,4], k = 6))
-print(so.maxKDivisibleComponents(n = 7, edges = [[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]], values = [3,0,6,1,5,2,1], k = 3))
-
+print(so.minSizeSubarray(nums = [1,2], target = 72))
+print(so.minSizeSubarray(nums = [1,1,1,2,3], target = 4))
+print(so.minSizeSubarray(nums = [1,2,3], target = 5))
+print(so.minSizeSubarray(nums = [2,4,6,8], target = 3))
 
 
 

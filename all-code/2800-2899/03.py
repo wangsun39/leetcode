@@ -67,7 +67,7 @@ from typing import List, Tuple
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-import string
+from string import *
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
 # string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
@@ -122,32 +122,25 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def minSizeSubarray(self, nums: List[int], target: int) -> int:
-        ss = sum(nums)
-        n = len(nums)
-        cnt = 0
-        if target > ss:
-            cnt = target // ss
-            target = target % ss
-        if target == 0: return cnt * n
-        d = {0: -1}
-        s = 0
-        ans = inf
-        nums = nums + nums
+    def maxSubarrays(self, nums: List[int]) -> int:
+        mi = (1 << 32) - 1
+        for x in nums:
+            mi &= x
+        if mi != 0: return 1
+        cur = (1 << 32) - 1
+        ans = 0
         for i, x in enumerate(nums):
-            s += x
-            if s - target in d:
-                ans = min(ans, i - d[s - target])
-            d[s] = i
-        return ans + cnt * n if ans != inf else -1
+            cur &= x
+            if cur == 0:
+                cur = (1 << 32) - 1
+                ans += 1
+        return ans
 
 
 
 so = Solution()
-print(so.minSizeSubarray(nums = [1,2], target = 72))
-print(so.minSizeSubarray(nums = [1,1,1,2,3], target = 4))
-print(so.minSizeSubarray(nums = [1,2,3], target = 5))
-print(so.minSizeSubarray(nums = [2,4,6,8], target = 3))
+print(so.maxSubarrays([1,0,2,0,1,2]))
+print(so.maxSubarrays(nums = [5,7,1,3]))
 
 
 

@@ -24,7 +24,7 @@
 # 0 <= k <= 100
 # 0 <= prices.length <= 1000
 # 0 <= prices[i] <= 1000
-
+from cmath import inf
 from typing import List
 
 class Solution:
@@ -45,6 +45,25 @@ class Solution:
                     x[j] = max(x[j], x[j-1] - prices[i])
 
         return max(x)
+
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        # 2023/10/4  DP
+        n = len(prices)
+        dp1 = [[-inf] * k for _ in range(n)]  # 前 <=i 天买 j + 1 次的最大收益
+        dp2 = [[0] * k for _ in range(n)]  # 前 <=i 天卖 j + 1 次的最大收益
+        dp1[0][0] = -prices[0]
+        for i in range(1, n):
+            for j in range(k):
+                if i < j:
+                    continue
+                if j == 0:
+                    dp1[i][j] = max(dp1[i - 1][j], dp1[i][j], -prices[i])
+                else:
+                    dp1[i][j] = max(dp1[i - 1][j], dp2[i - 1][j - 1] - prices[i])
+                dp2[i][j] = max(dp2[i - 1][j], dp1[i - 1][j] + prices[i])
+        # print(dp1, dp2)
+        return max(dp2[-1])
+
 
 so = Solution()
 
