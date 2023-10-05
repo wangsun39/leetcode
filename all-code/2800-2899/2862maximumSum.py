@@ -161,7 +161,7 @@ while i * i < 10001:
     sq.append(i * i)
     i += 1
 
-def f(x):  # 将 x 去除掉没有平方因子的数
+def f(x):  # 将 x 去除掉所有平方因子
     i = 1
     while x >= sq[i]:
         while x % sq[i] == 0:

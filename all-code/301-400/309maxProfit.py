@@ -1,3 +1,4 @@
+from cmath import inf
 from typing import List
 from collections import defaultdict
 
@@ -17,7 +18,7 @@ from collections import defaultdict
 
 class Solution:
 
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit1(self, prices: List[int]) -> int:
         N = len(prices)
         # dp[n] = [a, b, c] 表示第n天， a 表示当前持有股票的最大收益， b表示当前不持有股票但可以购买的最大收益，c表示在冷冻期的最大收益
         dp = [[0 for _ in range(3)] for _ in range(N)]
@@ -27,6 +28,22 @@ class Solution:
             dp[i][1] = max(dp[i-1][1], dp[i-1][2])
             dp[i][2] = dp[i-1][0] + prices[i]
         return max(dp[-1][1], dp[-1][2])
+
+    def maxProfit(self, prices: List[int]) -> int:
+        # 2023/10/05
+        n = len(prices)
+        dp1 = [-inf] * (n + 1)  # 当天买
+        dp2 = [-inf] * (n + 1)  # 当天卖
+        dp3 = [-inf] * (n + 1)  # 空窗期
+        dp4 = [-inf] * (n + 1)  # 手上有股票
+        dp5 = [0] * (n + 1)     # 手上无股票
+        for i in range(n):
+            dp1[i + 1] = max(dp3[i] - prices[i], dp5[i] - prices[i])
+            dp2[i + 1] = max(dp1[i] + prices[i], dp4[i] + prices[i])
+            dp3[i + 1] = dp2[i]
+            dp4[i + 1] = max(dp1[i], dp4[i])
+            dp5[i + 1] = max(dp2[i], dp3[i], dp5[i])
+        return max(dp1[-1], dp2[-1], dp3[-1], dp4[-1], dp5[-1])
 
 
 so = Solution()

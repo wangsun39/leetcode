@@ -75,10 +75,10 @@ class Solution:
                         if dp[u][v] != inf: continue
                         if d == grid[u][v]:
                             dp[u][v] = cur
-                            dq2.append([u, v])
+                            dq2.append([u, v])  # 不需要修改方向的格子
                         elif (u, v) not in tmp:
-                            dq3.append([u, v])
-                            tmp.add((u, v))
+                            dq3.append([u, v])  # 需要修改方向的格子
+                            tmp.add((u, v))  # 记录已经在dq3中的格子
             if dq2:
                 dq1 = dq2
             else:

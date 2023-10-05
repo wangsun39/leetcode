@@ -1,44 +1,51 @@
-# 给你一个下标从 0 开始长度为 n 的数组 nums 。
+# 给你一棵 n 个节点的无向树，节点编号为 0 到 n - 1 。给你整数 n 和一个长度为 n - 1 的二维整数数组 edges ，其中 edges[i] = [ai, bi] 表示树中节点 ai 和 bi 有一条边。
 #
-# 每一秒，你可以对数组执行以下操作：
+# 同时给你一个下标从 0 开始长度为 n 的整数数组 values ，其中 values[i] 是第 i 个节点的 值 。再给你一个整数 k 。
 #
-# 对于范围在 [0, n - 1] 内的每一个下标 i ，将 nums[i] 替换成 nums[i] ，nums[(i - 1 + n) % n] 或者 nums[(i + 1) % n] 三者之一。
-# 注意，所有元素会被同时替换。
+# 你可以从树中删除一些边，也可以一条边也不删，得到若干连通块。一个 连通块的值 定义为连通块中所有节点值之和。如果所有连通块的值都可以被 k 整除，那么我们说这是一个 合法分割 。
 #
-# 请你返回将数组 nums 中所有元素变成相等元素所需要的 最少 秒数。
+# 请你返回所有合法分割中，连通块数目的最大值 。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums = [1,2,1,2]
-# 输出：1
-# 解释：我们可以在 1 秒内将数组变成相等元素：
-# - 第 1 秒，将每个位置的元素分别变为 [nums[3],nums[1],nums[3],nums[3]] 。变化后，nums = [2,2,2,2] 。
-# 1 秒是将数组变成相等元素所需要的最少秒数。
+#
+#
+# 输入：n = 5, edges = [[0,2],[1,2],[1,3],[2,4]], values = [1,8,1,4,4], k = 6
+# 输出：2
+# 解释：我们删除节点 1 和 2 之间的边。这是一个合法分割，因为：
+# - 节点 1 和 3 所在连通块的值为 values[1] + values[3] = 12 。
+# - 节点 0 ，2 和 4 所在连通块的值为 values[0] + values[2] + values[4] = 6 。
+# 最多可以得到 2 个连通块的合法分割。
 # 示例 2：
 #
-# 输入：nums = [2,1,3,3,2]
-# 输出：2
-# 解释：我们可以在 2 秒内将数组变成相等元素：
-# - 第 1 秒，将每个位置的元素分别变为 [nums[0],nums[2],nums[2],nums[2],nums[3]] 。变化后，nums = [2,3,3,3,3] 。
-# - 第 2 秒，将每个位置的元素分别变为 [nums[1],nums[1],nums[2],nums[3],nums[4]] 。变化后，nums = [3,3,3,3,3] 。
-# 2 秒是将数组变成相等元素所需要的最少秒数。
-# 示例 3：
 #
-# 输入：nums = [5,5,5,5]
-# 输出：0
-# 解释：不需要执行任何操作，因为一开始数组中的元素已经全部相等。
+#
+# 输入：n = 7, edges = [[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]], values = [3,0,6,1,5,2,1], k = 3
+# 输出：3
+# 解释：我们删除节点 0 和 2 ，以及节点 0 和 1 之间的边。这是一个合法分割，因为：
+# - 节点 0 的连通块的值为 values[0] = 3 。
+# - 节点 2 ，5 和 6 所在连通块的值为 values[2] + values[5] + values[6] = 9 。
+# - 节点 1 ，3 和 4 的连通块的值为 values[1] + values[3] + values[4] = 6 。
+# 最多可以得到 3 个连通块的合法分割。
 #
 #
 # 提示：
 #
-# 1 <= n == nums.length <= 105
-# 1 <= nums[i] <= 109
+# 1 <= n <= 3 * 104
+# edges.length == n - 1
+# edges[i].length == 2
+# 0 <= ai, bi < n
+# values.length == n
+# 0 <= values[i] <= 109
+# 1 <= k <= 109
+# values 之和可以被 k 整除。
+# 输入保证 edges 是一棵无向树。
 
 from typing import List
 from typing import Optional
-from cmath import inf
+from cmath import *
 from collections import deque
 # de = deque([1, 2, 3])
 # de.append(4)
@@ -55,7 +62,8 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-from math import *
+# from math import *
+from math import isqrt
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -102,14 +110,16 @@ from typing import List, Tuple
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-import string
+from string import *
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串
+# string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
 # string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
+# c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -154,62 +164,40 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-
 class Solution:
-    def maximumSafenessFactor(self, grid: List[List[int]]) -> int:
-        n = len(grid)
-        s = set()
-        for i in range(n):
-            for j in range(n):
-                if grid[i][j]:
-                    s.add((i, j))
+    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+        g = defaultdict(set)
+        for x, y in edges:
+            g[x].add(y)
+            g[y].add(x)
+        dq1 = deque(x for x in range(n) if len(g[x]) == 1)
+        ans = set()  # 删除边的集合
+        while dq1:
+            x = dq1.popleft()
+            if len(g[x]) == 0: continue
+            if values[x] % k == 0:
+                y = g[x].pop()
+                g[y].remove(x)
+                # 删除 (x, y)
+                if x < y: ans.add((x, y))
+                else: ans.add((y, x))
+                if len(g[y]) == 1:
+                    dq1.append(y)
+                continue
+            y = g[x].pop()
+            g[y].remove(x)
+            values[y] += values[x]  # 把x上的值累加到y上
+            if len(g[y]) == 1:
+                dq1.append(y)
+        return len(ans) + 1
 
-        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-        def dis(a, b):
-            return abs(a[0] - b[0]) + abs(a[1] - b[1])
-        def getAll(val):  # 找到所有到小偷距离小于 val 的点
-            dq = deque(x for x in s)
-            res = deque(x for x in s)
-            while dq:
-                x, y = dq.popleft()
-                for dx, dy in dir:
-                    u, v = x + dx, y + dy
-                    if 0 <= u < n and 0 <= v < n and (u, v) not in res:
-                        if all(dis((u, v), node) >= val for node in s):
-                            dq.append([u, v])
-                            res.add((u, v))
 
-        def check(val):
-            if any(dis((0, 0), node) < val for node in s):
-                return False
-            ss =
 
-            dq = deque([[0, 0]])
-            vis = {(0, 0)}
-            while dq:
-                x, y = dq.popleft()
-                for dx, dy in dir:
-                    u, v = x + dx, y + dy
-                    if 0 <= u < n and 0 <= v < n and (u, v) not in vis:
-                        if all(dis((u, v), node) >= val for node in s):
-                            if u == v == n - 1:
-                                return True
-                            dq.append([u, v])
-                            vis.add((u, v))
-            return False
-        lo, hi = 0, n * 2
-        while lo < hi - 1:
-            mid = (lo + hi) // 2
-            if check(mid):
-                lo = mid
-            else:
-                hi = mid
-        return lo
 
 so = Solution()
-print(so.maximumSafenessFactor(grid = [[0,0,1],[0,0,0],[0,0,0]]))
-print(so.maximumSafenessFactor(grid = [[1,0,0],[0,0,0],[0,0,1]]))
-print(so.maximumSafenessFactor(grid = [[0,0,0,1],[0,0,0,0],[0,0,0,0],[1,0,0,0]]))
+print(so.maxKDivisibleComponents(n = 5, edges = [[0,2],[1,2],[1,3],[2,4]], values = [1,8,1,4,4], k = 6))
+print(so.maxKDivisibleComponents(n = 7, edges = [[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]], values = [3,0,6,1,5,2,1], k = 3))
+
 
 
 
