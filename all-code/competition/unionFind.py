@@ -72,6 +72,7 @@ class Solution:
     def func(self):
         n = 10
         fa = list(range(n))
+        # fa = {x: x for x in nums}  # 另一种写法，x不连续
         def find(x):
             if x != fa[x]:
                 fa[x] = find(fa[x])
