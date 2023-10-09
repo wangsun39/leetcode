@@ -50,7 +50,7 @@
 from typing import List
 import bisect
 # Definition for a binary tree node.
-class StockPrice:
+class StockPrice1:
 
     def __init__(self):
         self.d = {}
@@ -75,6 +75,34 @@ class StockPrice:
         return self.prices[0]
 
 
+from sortedcontainers import SortedList, SortedDict
 
+class StockPrice:
+    # 2023/10/8 using SortedList
+    def __init__(self):
+        self.d = {}
+        self.sl = SortedList()
+        self.curDate = 0
+
+
+    def update(self, timestamp: int, price: int) -> None:
+        if self.curDate < timestamp:
+            self.curDate = timestamp
+        if timestamp in self.d:
+            self.sl.remove(self.d[timestamp])
+        self.d[timestamp] = price
+        self.sl.add(price)
+
+
+    def current(self) -> int:
+        return self.d[self.curDate]
+
+
+    def maximum(self) -> int:
+        return self.sl[-1]
+
+
+    def minimum(self) -> int:
+        return self.sl[0]
 
 

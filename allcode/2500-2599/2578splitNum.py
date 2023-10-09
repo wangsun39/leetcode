@@ -1,8 +1,35 @@
-
+# 给你一个正整数 num ，请你将它分割成两个非负整数 num1 和 num2 ，满足：
+#
+# num1 和 num2 直接连起来，得到 num 各数位的一个排列。
+# 换句话说，num1 和 num2 中所有数字出现的次数之和等于 num 中所有数字出现的次数。
+# num1 和 num2 可以包含前导 0 。
+# 请你返回 num1 和 num2 可以得到的和的 最小 值。
+#
+# 注意：
+#
+# num 保证没有前导 0 。
+# num1 和 num2 中数位顺序可以与 num 中数位顺序不同。
+#
+#
+# 示例 1：
+#
+# 输入：num = 4325
+# 输出：59
+# 解释：我们可以将 4325 分割成 num1 = 24 和 num2 = 35 ，和为 59 ，59 是最小和。
+# 示例 2：
+#
+# 输入：num = 687
+# 输出：75
+# 解释：我们可以将 687 分割成 num1 = 68 和 num2 = 7 ，和为最优值 75 。
+#
+#
+# 提示：
+#
+# 10 <= num <= 109
 
 from typing import List
 from typing import Optional
-from cmath import *
+from cmath import inf
 from collections import deque
 # de = deque([1, 2, 3])
 # de.append(4)
@@ -19,8 +46,7 @@ from collections import defaultdict
 #  [('c', 3), ('b', 2)]
 
 # d = defaultdict(int)
-# from math import *
-from math import isqrt
+from math import *
 import random
 # random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
 # randint和randrange的区别：
@@ -40,11 +66,6 @@ from bisect import *
 # bisect_right：
 # 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
 # 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# k = bisect_left(a, x) - 1 # k 表示 < x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) - 1 # k 表示 <= x 的最大下标， 不存在: k == -1
-# k = bisect_right(a, x) # k 表示 > x 的最小下标， 不存在: k == n
-# k = bisect_left(a, x)  # k 表示 >= x 的最小下标， 不存在: k == n
-
 # pos = bisect.bisect_right(left, tail)
 # bisect_left：
 # 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
@@ -54,29 +75,38 @@ from heapq import *
 # heapq.heappop() 函数弹出堆中最小值
 # heapq.heappush(nums, 1)
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
+# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
 
 from functools import lru_cache, cache
-from typing import List, Tuple
+from typing import List
 # @lru_cache(None)
+
+# bit位 函数：
+# n.bit_length()  数值的二进制的长度数
+# value = int(s, 2)
+# lowbit(i) 即i&-i	表示这个数的二进制表示中最低位的1所对应的值
+# n>>k & 1	求n的第k位数字
+# x | (1 << k)	将x第k位 置为1
+# x ^ (1 << k)	将x第k位取反
+# x & (x - 1)	将x最右边的1置为0(去掉最右边的1)
+# x | (x + 1)	将x最右边的0置为1
+# x & 1	判断奇偶性 真为奇，假为偶
 
 # x / y 上取整 (x + y - 1) // y
 # x / y 下取整 x // y
 # x / y 四舍五入 int(x / y + 0.5)
 
-from string import *
+import string
 # string.digits  表示 0123456789
 # string.letters：包含所有字母(大写或小写字符串，在python3.0中，使用string.ascii-letters代替)
-# string.ascii_lowercase：包含所有小写字母的字符串  ascii_lowercase[x] 当0<=x<26可以得到一个字符
+# string.ascii_lowercase：包含所有小写字母的字符串
 # string.ascii_uppercase：包含所有大写字母的字符串
 # string.printable：包含所有可打印字符的字符串
 # string.punctuation：包含所有标点的字符串
 # string.uppercase：包含所有大写字母的字符串
-# c2i = {c: i for i, c in enumerate(ascii_lowercase)}
-# i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
 # f-string用法
 # name = 'sun'
@@ -85,49 +115,34 @@ from string import *
 from itertools import accumulate
 # s = list(accumulate(nums, initial=0))  # 计算前缀和
 
-from sortedcontainers import SortedList, SortedDict, SortedSet
-# sl = SortedList()
-# sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
-# sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
-# sl.clear() 移除所有元素。时间复杂度O(n).
-# sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
-# sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
-# sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
-# sl.bisect_left(value)
-# sl.bisect_right(value)
-# sl.count(value)
-# sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
-
-# sd = SortedDict({'a': 1, 'b': 2, 'c': 3})
-# skv = sd.keys()  这个是有序的
-
-# ss = SortedSet()
-# ss.add(value)
-# ss.pop()
-# ss.pop(value)
-# ss.remove(value)
-# ss.remove(value)
-
-
-# 前缀和
-# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
-# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
-# s = list(accumulate(nums, initial=0))
-
-# dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
-# dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
-
-# nums = [[7,2,1],[6,4,2],[6,5,3],[3,2,1]]
-# list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
-# list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
+from sortedcontainers import SortedList
+    # sl = SortedList()
+    # sl.add(value) 添加新元素，并排序。时间复杂度O(log(n)).
+    # sl.update(iterable) 对添加的可迭代的所有元素排序。时间复杂度O(k*log(n)).
+    # sl.clear() 移除所有元素。时间复杂度O(n).
+    # sl.discard(value) 移除一个值元素，如果元素不存在，不报错。时间复杂度O(log(n)).
+    # sl.remove(value) 移除一个值元素，如果元素不存在，报错ValueError。时间复杂度O(log(n)).
+    # sl.pop(index=-1) 移除一个指定下标元素，如果有序序列为空或者下标超限，报错IndexError.
+    # sl.bisect_left(value)
+    # sl.bisect_right(value)
+    # sl.count(value)
+    # sl.index(value, start=None, Stop=None) 查找索引范围[start,stop）内第一次出现value的索引，如果value不存在，报错ValueError.
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def splitNum(self, num: int) -> int:
+        digit = sorted(list(str(num)))
+        n = len(digit)
+        d1, d2 = [], []
+        for i in range(0, n, 2):
+            d1.append(digit[i])
+            if i + 1 < n:
+                d2.append(digit[i+1])
+        return int(''.join(d1)) + int(''.join(d2))
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.splitNum(4325))
+print(so.splitNum(687))
 
 
 
