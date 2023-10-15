@@ -49,12 +49,23 @@ class Solution:
                 return True
         return False
 
+    def canSplitArray(self, nums: List[int], m: int) -> bool:
+        n = len(nums)
+        # s = list(accumulate(nums, initial=0))
+        @cache
+        def dfs(i, j):
+            if i == j: return True
+            for k in range(i, j):
+                if dfs(i, k) and (k == i or sum(nums[i: k + 1]) >= m) and dfs(k + 1, j) and (k + 1 == j or sum(nums[k + 1: j + 1]) >= m):
+                    return True
+            return False
+        return dfs(0, n - 1)
 
 so = Solution()
+print(so.canSplitArray(nums = [2, 1, 3], m = 5))
 print(so.canSplitArray(nums = [2], m = 1))
 print(so.canSplitArray(nums = [1], m = 1))
 print(so.canSplitArray(nums = [2, 2, 1], m = 4))
-print(so.canSplitArray(nums = [2, 1, 3], m = 5))
 print(so.canSplitArray(nums = [2, 3, 3, 2, 3], m = 6))
 
 

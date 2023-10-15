@@ -165,7 +165,7 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+    def maxKDivisibleComponents1(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
         g = defaultdict(set)
         for x, y in edges:
             g[x].add(y)
@@ -191,6 +191,29 @@ class Solution:
                 dq1.append(y)
         return len(ans) + 1
 
+    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+        # 2023/10/15 DFS
+        g = defaultdict(set)
+        for x, y in edges:
+            g[x].add(y)
+            g[y].add(x)
+        ans = 0
+
+        def dfs(x, fa):
+            nonlocal ans
+            res = values[x]
+            for y in g[x]:
+                if y == fa: continue
+                s = dfs(y, x)  # 子树和
+                if s % k == 0:
+                    ans += 1
+                    continue
+                res += s
+            return res
+
+        if dfs(0, -1) % k == 0:
+            return ans + 1
+        return -1
 
 
 
