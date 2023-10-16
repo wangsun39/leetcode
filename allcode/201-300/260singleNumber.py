@@ -1,5 +1,9 @@
+from functools import reduce
+from typing import List
+
+
 class Solution:
-    def singleNumber(self, nums):
+    def singleNumber1(self, nums):
         d = {}
         r = []
         for i in nums:
@@ -12,6 +16,16 @@ class Solution:
                 r.append(k)
         return r
 
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        v = reduce(lambda x, y: x ^ y, nums)
+        l = v & -v
+        v1 = v2 = 0
+        for x in nums:
+            if x & l:
+                v1 ^= x
+            else:
+                v2 ^= x
+        return [v1, v2]
 
 
 

@@ -59,7 +59,7 @@ from heapq import *
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
 
-from functools import lru_cache, cache
+from functools import lru_cache, cache, reduce
 from typing import List, Tuple
 # @lru_cache(None)
 
