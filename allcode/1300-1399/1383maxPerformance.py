@@ -38,6 +38,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
+        MOD = 10 ** 9 + 7
         comb = sorted(zip(speed, efficiency), reverse=True)
         comb1, comb2 = comb[:k], comb[k:]
         ss = sum(x for x, _ in comb1)  # 当前速度之和
@@ -51,10 +52,10 @@ class Solution:
             # 替换当前效率最低的工程师 （替换后表现值未必提高）
             e1, s1 = heappop(hp)
             ss += (s - s1)
-            heappush(hp, [s, e])
+            heappush(hp, [e, s])
             cur = ss * hp[0][0]
             ans = max(ans, cur)
-        return ans
+        return ans % MOD
 
 
 
