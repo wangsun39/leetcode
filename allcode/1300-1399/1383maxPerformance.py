@@ -57,14 +57,33 @@ class Solution:
             ans = max(ans, cur)
         return ans % MOD
 
+    def maxPerformance1(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
+        MOD = 10 ** 9 + 7
+        comb = sorted(zip(speed, efficiency), reverse=True)
+        ss = comb[0][0]  # 当前速度之和
+        hp = [[comb[0][1], comb[0][0]]]
+        ans = comb[0][0] * comb[0][1]
+
+        for s, e in comb:
+            if e <= hp[0][0]:
+                continue
+            # 替换当前效率最低的工程师 （替换后表现值未必提高）
+            e1, s1 = heappop(hp)
+            ss += (s - s1)
+            heappush(hp, [e, s])
+
+            cur = ss * hp[0][0]
+            ans = max(ans, cur)
+        return ans % MOD
 
 
 
 
 so = Solution()
-print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 3))
-print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 2))
-print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 4))
+print(so.maxPerformance(n = 3, speed = [2,8,2], efficiency = [2,7,1], k = 2))  # 68
+print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 3))  # 68
+print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 2))  # 60
+print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 4))  # 72
 
 
 
