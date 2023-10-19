@@ -39,50 +39,29 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
         MOD = 10 ** 9 + 7
-        comb = sorted(zip(speed, efficiency), reverse=True)
-        comb1, comb2 = comb[:k], comb[k:]
-        ss = sum(x for x, _ in comb1)  # 当前速度之和
-        hp = [[y, x] for x, y in comb1]
-        heapify(hp)
-        ans = ss * hp[0][0]
-
-        for s, e in comb2:
-            if e <= hp[0][0]:
-                continue
-            # 替换当前效率最低的工程师 （替换后表现值未必提高）
-            e1, s1 = heappop(hp)
-            ss += (s - s1)
-            heappush(hp, [e, s])
-            cur = ss * hp[0][0]
-            ans = max(ans, cur)
-        return ans % MOD
-
-    def maxPerformance1(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
-        MOD = 10 ** 9 + 7
-        comb = sorted(zip(speed, efficiency), reverse=True)
-        ss = comb[0][0]  # 当前速度之和
-        hp = [[comb[0][1], comb[0][0]]]
-        ans = comb[0][0] * comb[0][1]
-
-        for s, e in comb:
-            if e <= hp[0][0]:
-                continue
-            # 替换当前效率最低的工程师 （替换后表现值未必提高）
-            e1, s1 = heappop(hp)
-            ss += (s - s1)
-            heappush(hp, [e, s])
-
-            cur = ss * hp[0][0]
-            ans = max(ans, cur)
+        comb = sorted(zip(efficiency, speed), reverse=True)  # 按 efficiency 降序排序
+        shp = 0
+        hp = []
+        ans = 0
+        for e, s in comb:
+            if len(hp) == k:
+                if hp[0] < s:
+                    x = heappop(hp)
+                    heappush(hp, s)
+                    shp += (s - x)
+            else:
+                heappush(hp, s)
+                shp += s
+            ans = max(ans, shp * e)
         return ans % MOD
 
 
 
 
 so = Solution()
-print(so.maxPerformance(n = 3, speed = [2,8,2], efficiency = [2,7,1], k = 2))  # 68
-print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 3))  # 68
 print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 2))  # 60
+print(so.maxPerformance(n = 3, speed = [2,8,2], efficiency = [2,7,1], k = 2))  # 56
+print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 3))  # 68
 print(so.maxPerformance(n = 6, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2], k = 4))  # 72
 
 
