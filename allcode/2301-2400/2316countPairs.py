@@ -87,7 +87,7 @@ class UnionFind:
         return self.ids[p]
 class Solution:
     #
-    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+    def countPairs1(self, n: int, edges: List[List[int]]) -> int:
         flag = [False] * n  # 表示是否计算过
         graph = defaultdict(set)
         for e in edges:
@@ -109,6 +109,27 @@ class Solution:
             ans += (size * (n - size))
         return ans // 2
 
+    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+        # 2023/10/21 并查集
+        fa = list(range(n))
+        # fa = {x: x for x in nums}  # 另一种写法，x不连续
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        for x, y in edges:
+            union(x, y)
+        d = defaultdict(int)
+        for i in range(n):
+            x = find(i)
+            d[x] += 1
+        ans = 0
+        for v in d.values():
+            ans += v * (n - v)
+        return ans // 2
 
 
 

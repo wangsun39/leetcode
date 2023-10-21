@@ -34,27 +34,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def stoneGameV1(self, stoneValue: List[int]) -> int:
-        n = len(stoneValue)
-        s = list(accumulate(stoneValue, initial=0))
-        @cache
-        def dfs(l, r):
-            if l == r: return 0
-            if r - l == 1: return min(stoneValue[l], stoneValue[r])
-            res = 0
-            m1 = (s[r + 1] + s[l]) // 2  # 中间值下取整
-            m2 = (s[r + 1] + s[l] + 1) // 2  # 中间值上取整
-            p1 = bisect_right(s, m1)
-            p2 = bisect_left(s, m2)
-            if l <= p1 - 2:
-                res = max(res, s[p1 - 1] - s[l] + dfs(l, p1 - 2))
-            if p2 <= r:
-                res = max(res, s[r + 1] - s[p2] + dfs(p2, r))
-
-            print(l, r, res)
-
-            return res
-        return dfs(0, n - 1)
-    def stoneGameV(self, stoneValue: List[int]) -> int:
+        # 此方法会超时 O(n^3)
         n = len(stoneValue)
         s = list(accumulate(stoneValue, initial=0))
         @cache
@@ -73,15 +53,85 @@ class Solution:
             return res
         return dfs(0, n - 1)
 
+    def stoneGameV(self, stoneValue: List[int]) -> int:
+        n = len(stoneValue)
+        s = list(accumulate(stoneValue, initial=0))
 
+        ml = [[0] * n for _ in range(n)]  # 记录区间[i, j]左侧区间一半的位置
+        mr = [[0] * n for _ in range(n)]  # 记录区间[i, j]右侧区间一半的位置
+        for i in range(n):
+            mid = i  # [i, mid) 区间和 < [i, j] 区间和一半
+            for j in range(i, n):
+                if i == j:
+                    continue
+                ml[i][j] = ml[i][j - 1]
+                while mid < n and (s[mid + 1] - s[i]) * 2 <= (s[j + 1] - s[i]):
+                    mid += 1
+                    ml[i][j] = mid
+        for j in range(n - 1, -1, -1):
+            mid = j  # (mid, j] 区间和 < [i, j] 区间和一半
+            for i in range(j, -1, -1):
+                mr[i][j] = j
+                if i + 1 <= j:
+                    mr[i][j] = mr[i + 1][j]
+                while mid >= 0 and (s[j + 1] - s[mid]) * 2 <= (s[j + 1] - s[i]):
+                    mid -= 1
+                    mr[i][j] = mid
+
+        @cache
+        def f2(i, j):
+            if i == j: return 0
+            res = 0
+            if i < j:
+                res = f2(i, j - 1)
+            r1 = ml[i][j - 1]
+            r2 = ml[i][j]
+            while r1 < r2:
+                res = max(res, f1(i, r1) + s[r1 + 1] - s[i])
+                r1 += 1
+            return res
+
+        @cache
+        def f3(i, j):
+            if i == j: return 0
+            res = 0
+            if i < j:
+                res = f3(i + 1, j)
+            l1 = mr[i + 1][j]
+            l2 = mr[i][j]
+            while l1 > l2:
+                res = max(res, f1(l1, j) + s[j + 1] - s[l1])
+                l1 -= 1
+            return res
+
+        # f1(i, j) 区间[i,j]上的目标值
+        # f1(i,j)=max(f2(i,j),f3(i,j))
+        # 设m1为满足区间[i,m)之和2倍不超过区间和[i,j]的最大m
+        # 设m2为满足区间(m,j]之和2倍不超过区间和[i,j]的最小m
+        # f2(i,j)=max(f1(i,k)+s([i,k]))  其中i<=k<m1
+        # f3(i,j)=max(f1(k,j)+s([k,j]))  其中m2<k<=j
+        # 转换后
+        # f2(i,j)=max(f2(i,j-1),剩余未计算的f1(i,k)+s([i,k]))
+        # f3(i,j)=max(f3(i+1,j),剩余未计算的f1(k,j)+s([k,j]))
+        @cache
+        def f1(i, j):
+            if i == j: return 0
+            return max(f2(i, j), f3(i, j))
+
+        return f1(0, n - 1)
+
+        # print(f)
+        return f[0][n - 1]
 
 
 so = Solution()
-print(so.stoneGameV([98,77,24,49,6,12,2,44,51,96]))
-print(so.stoneGameV([6,2,3,4,5,5]))
-print(so.stoneGameV([7,7,7,7,7,7,7]))
-print(so.stoneGameV([7,7,7]))
-print(so.stoneGameV([4]))
+print(so.stoneGameV([6,12,2,44,51,96]))  # 96
+print(so.stoneGameV([6,2,3,4,5,5]))  # 18
+print(so.stoneGameV([44,51,96]))  # 139
+print(so.stoneGameV([98,77,24,49,6,12,2,44,51,96]))   # 330
+print(so.stoneGameV([7,7,7,7,7,7,7]))  # 28
+print(so.stoneGameV([7,7,7]))  # 7
+print(so.stoneGameV([4]))  # 0
 
 
 
