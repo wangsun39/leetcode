@@ -42,6 +42,7 @@ class Solution:
     def countSubMultisets1(self, nums: List[int], l: int, r: int) -> int:
         # 性能不够 O(N^3)
         MOD = 10 ** 9 + 7
+        # MOD = 10**20
         counter = Counter(nums)
         counter = [[k, v] for k, v in counter.items()]
         n = len(counter)
@@ -64,32 +65,48 @@ class Solution:
     def countSubMultisets(self, nums: List[int], l: int, r: int) -> int:
         MOD = 10 ** 9 + 7
         counter = Counter(nums)
+        zero = 0
+        if 0 in counter:  # 0 元素先处理，放在后面会出错
+            zero = counter[0]
+            counter.pop(0)
         counter = [[k, v] for k, v in counter.items()]
+        counter.insert(0, [0, zero])
         n = len(counter)
+        s = sum(nums) + 1
+        start = 0
 
-        @cache
-        def dfs(i, j):  # 前i个数，组成j的各种组合数
-            # dp[i][j] = dp[i-1][j]+dp[i-1][j-k]+dp[i-1][j-2k]+...+dp[i-1][j-vk]
-            # dp[i][j-k] =          dp[i-1][j-k]+dp[i-1][j-2k]+...+dp[i-1][j-vk]+dp[i-1][j-(v+1)k]
-            if j < 0 or i < 0: return 0
-            k, v = counter[i]
-            if j == 0: return v + 1 if k == 0 else 1
-            if k == 0: return dfs(i - 1, j)
-            if i == 0: return j % k <= v
-            if j < k:
-                return dfs(i - 1, j) + 1
-            if (v + 1) * k <= j:
-                return (dfs(i, j - k) + dfs(i - 1, j) - dfs(i - 1, j - (v + 1) * k)) % MOD
-            return (dfs(i, j - k) + dfs(i - 1, j)) % MOD
+        dp = [[0] * s for _ in range(n)]  # 前i个数，组成j的各种组合数
+        if counter[0][0] == 0:
+            dp[0][0] = zero + 1
+            start = 1
 
-        return sum(dfs(n - 1, i) for i in range(l, r + 1)) % MOD
+        for i in range(start, n):
+            v, t = counter[i]
+            if i == 0:
+                for j in range(0, v * t + 1, v):
+                    dp[i][j] = 1
+                continue
+            for j in range(s):
+                if j - v < 0:
+                    dp[i][j] = dp[i - 1][j]
+                elif j - (t + 1) * v < 0:
+                    dp[i][j] = dp[i][j - v] + dp[i - 1][j]
+                else:
+                    dp[i][j] = dp[i][j - v] + dp[i - 1][j] - dp[i - 1][j - (t + 1) * v]
+                dp[i][j] %= MOD
+        return sum(dp[-1][i] for i in range(l, r + 1)) % MOD
+
 
 
 so = Solution()
-print(so.countSubMultisets(nums = [1,2], l = 3, r = 3))
-print(so.countSubMultisets(nums = [0,0,0,0], l = 0, r = 0))
-print(so.countSubMultisets(nums = [2,1,4,2,7], l = 1, r = 5))
-print(so.countSubMultisets(nums = [1,2,1,3,5,2], l = 3, r = 5))
+print(so.countSubMultisets(nums = [0,0,0,0], l = 0, r = 0))   # 5
+print(so.countSubMultisets(nums = [1,0,2], l = 3, r = 3))  # 2
+print(so.countSubMultisets1(nums = [1,0,2], l = 3, r = 3))  # 1
+print(so.countSubMultisets(nums = [10,7,2,1,1,16,2,8,0,8,4,12,2,0,6,5,9,1,2,15,1,0,11,1,5,24,3,10,31,3], l = 107, r = 109))  # 398180
+print(so.countSubMultisets1(nums = [10,7,2,1,1,16,2,8,0,8,4,12,2,0,6,5,9,1,2,15,1,0,11,1,5,24,3,10,31,3], l = 107, r = 109))  # 398180
+print(so.countSubMultisets(nums = [1,2], l = 3, r = 3))  # 1
+print(so.countSubMultisets(nums = [2,1,4,2,7], l = 1, r = 5))   # 7
+print(so.countSubMultisets(nums = [1,2,1,3,5,2], l = 3, r = 5))   # 9
 
 
 
