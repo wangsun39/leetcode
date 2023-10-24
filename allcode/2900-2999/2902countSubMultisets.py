@@ -74,8 +74,13 @@ class Solution:
         n = len(counter)
         s = sum(nums) + 1
         start = 0
+        r = min(r, s)
 
         dp = [[0] * s for _ in range(n)]  # 前i个数，组成j的各种组合数
+        # 令c,t=counter[i]
+        # dp[i][j]=dp[i-1][j]+dp[i-1][j-c]+dp[i-1][j-2c]+...+dp[i-1][j-ct]
+        # dp[i][j-c]=         dp[i-1][j-c]+dp[i-1][j-2c]+...+dp[i-1][j-ct]+dp[i-1][j-ct-c]
+        # 得到O(1)的递推公式dp[i][j]=dp[i][j-c]+dp[i-1][j]-dp[i-1][j-ct-c]
         if counter[0][0] == 0:
             dp[0][0] = zero + 1
             start = 1
