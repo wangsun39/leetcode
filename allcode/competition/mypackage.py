@@ -121,7 +121,9 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(nums))  # [([7, 2, 1],), ([6, 4, 2],), ([6, 5, 3],), ([3, 2, 1],)]   合并
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
-
+# 公式
+# (a+b) mod m=((a mod m)+(b mod m))mod m
+# (a*b) mod m=((a mod m)*(b mod m))mod m
 
 
 

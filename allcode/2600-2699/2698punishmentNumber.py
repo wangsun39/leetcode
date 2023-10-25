@@ -33,7 +33,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 
-class Solution:
+class Solution1:
     def punishmentNumber(self, n: int) -> int:
         def check(x):  # 检查 x * x 是否满足条件
             y = str(x * x)
@@ -55,10 +55,37 @@ class Solution:
         return ans
 
 
+# 2023/10/25  预处理 + 记忆化搜索
+@cache
+def find(s, t): # 字符串s是否能分割成几段，他们之和为t
+    if t < 0 or len(s) == 0: return False
+    if int(s) == t:
+        return True
+    if len(s) == 1:
+        return int(s) == t
+    for i in range(len(s)):
+        if find(s[i + 1:], t - int(s[:i + 1])):
+            return True
+    return False
+
+def check(x):
+    s = str(x * x)
+    return find(s, x)
+
+s = set()
+for i in range(1, 1001):
+    if check(i):
+        s.add(i)
+# print(s)
+
+class Solution:
+    def punishmentNumber(self, n: int) -> int:
+        return sum(x * x for x in range(1, n + 1) if x in s)
 
 so = Solution()
 print(so.punishmentNumber(10))
 print(so.punishmentNumber(37))
+print(so.punishmentNumber(45))
 
 
 
