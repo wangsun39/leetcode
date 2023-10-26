@@ -49,13 +49,13 @@ class Solution:
     def stoneGameVIII(self, stones: List[int]) -> int:
         s = list(accumulate(stones))
         n = len(stones)
-        dp = s[-1]  #  从后向前，dp表示当前遍历到的所有stones后缀的，先手的最大差值 的最大值
+        dp = s[-1]  #  从后向前，dp表示当前遍历到的所有stones后缀的，先手-后手的最大差值 的最大值
         # dp[-1] = 0
         # dp[-2] = s[n-1]
         # dp[-3] = max(s[n-1],s[n-2]-dp[-2]) = max(dp[-2],s[n-2]-dp[-2])
         # dp[-4] = max(s[n-1],s[n-2]-dp[-2],s[n-3]-dp[-3]) = max(dp[-3],s[n-3]-dp[-3])
         # ...
-        # dp[-2] = s[n-1], 从dp[-3] 开始推
+        # 因为dp[-2] = s[n-1], 从dp[-3] 开始推
         for i in range(n - 3, -1, -1):
             dp = max(dp, s[i + 1] - dp)
         return dp
