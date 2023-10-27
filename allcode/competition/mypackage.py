@@ -126,4 +126,6 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # (a*b) mod m=((a mod m)*(b mod m))mod m
 
 
+# max_h = max(q - p for p, q in pairwise(horizontalCuts))
+# v = reduce(lambda x, y: x ^ y, nums)
 
