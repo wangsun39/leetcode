@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Node:
     def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
         self.val = val
@@ -7,7 +10,7 @@ class Node:
 
 
 class Solution:
-    def connect(self, root):
+    def connect1(self, root):
         if root is None:
             return None
         queue = [root, None]
@@ -21,6 +24,23 @@ class Solution:
                 queue.append(cur.left)
             if cur.right is not None:
                 queue.append(cur.right)
+        return root
+
+    def connect(self, root: 'Node') -> 'Node':
+        # 2023/10/3 update BFS
+        q1, q2 = deque(), deque()
+        if root:
+            q1.append(root)
+        while q1:
+            while q1:
+                x = q1.popleft()
+                if q1:
+                    x.next = q1[0]
+                if x.left:
+                    q2.append(x.left)
+                if x.right:
+                    q2.append(x.right)
+            q1, q2 = q2, deque()
         return root
 
 
