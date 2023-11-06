@@ -2,6 +2,19 @@
 from leetcode.allcode.competition.mypackage import *
 
 
+
+while True:
+    line = input()
+    if 'SMF_EC_ITEM' in line:
+        start, end = line.find('('), line.find(')')
+        inner = line[start + 1: end].split(',')
+        fail_enum = inner[0]
+        inner[-1] = ('"' + ' '.join(fail_enum.split('_')) + '"').lower()
+        new_line = line[:start + 1] + ','.join(inner) + line[end:]
+        print(new_line)
+    else:
+        print(line)
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
