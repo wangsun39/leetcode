@@ -2,18 +2,23 @@
 from leetcode.allcode.competition.mypackage import *
 
 
+infile = open('smf_tbl.h', 'r')
+outfile = open('output.h', 'w', newline='\n')
 
 while True:
-    line = input()
-    if 'SMF_EC_ITEM' in line:
+    line = infile.readline()
+    if len(line) == 0:break
+    if 'SMF_EC_ITEM(' in line:
         start, end = line.find('('), line.find(')')
         inner = line[start + 1: end].split(',')
         fail_enum = inner[0]
-        inner[-1] = ('"' + ' '.join(fail_enum.split('_')) + '"').lower()
+        inner[-1] = '"' + fail_enum.replace('_', ' ').lower() + '"'
         new_line = line[:start + 1] + ','.join(inner) + line[end:]
-        print(new_line)
+        outfile.write(new_line)
     else:
-        print(line)
+        outfile.write(line)
+outfile.close()
+infile.close()
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
