@@ -32,23 +32,22 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
+
     def maxResult(self, nums: List[int], k: int) -> int:
         n = len(nums)
-
-        @cache
-        def dfs(x):
-            if x == n - 1: return nums[x]
-            res = -inf
-            for i in range(1, k + 1):
-                if x + i >= n: break
-                res = max(res, dfs(x + i))
-            return res + nums[x]
-        return dfs(0)
-
+        dp = [0] * n
+        sl = SortedList([nums[n - 1]])
+        dp[n - 1] = nums[n - 1]
+        for i in range(n - 2, -1, -1):
+            if len(sl) > k:
+                sl.remove(dp[i + k + 1])
+            dp[i] = nums[i] + sl[-1]
+            sl.add(dp[i])
+        return dp[0]
 
 so = Solution()
-print(so.maxResult(nums = [1,-5,-20,4,-1,3,-6,-3], k = 2))
 print(so.maxResult(nums = [1,-1,-2,4,-7,3], k = 2))
+print(so.maxResult(nums = [1,-5,-20,4,-1,3,-6,-3], k = 2))
 print(so.maxResult(nums = [10,-5,-2,4,0,3], k = 3))
 
 
