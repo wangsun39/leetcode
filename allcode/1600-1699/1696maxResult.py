@@ -33,11 +33,11 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
 
-    def maxResult(self, nums: List[int], k: int) -> int:
+    def maxResult1(self, nums: List[int], k: int) -> int:
         n = len(nums)
         dp = [0] * n
         sl = SortedList([nums[n - 1]])
-        dp[n - 1] = nums[n - 1]
+        dp[n - 1] = nums[n - 1]  # 从 i 到 n - 1的最大得分
         for i in range(n - 2, -1, -1):
             if len(sl) > k:
                 sl.remove(dp[i + k + 1])
@@ -45,10 +45,40 @@ class Solution:
             sl.add(dp[i])
         return dp[0]
 
+
+    def maxResult2(self, nums: List[int], k: int) -> int:
+        # 优先队列
+        n = len(nums)
+        hp = [[-nums[0], 0]]  # 堆
+        dp = nums[0]
+        for i in range(1, n):
+            while len(hp) > 0 and i - hp[0][1] > k:
+                heappop(hp)
+            x, j = hp[0]
+            dp = -x + nums[i]   # 到达 nums[i] 的最大得分
+            heappush(hp, [-dp, i])
+        return dp
+
+    def maxResult(self, nums: List[int], k: int) -> int:
+        # 单调队列
+        n = len(nums)
+        q = deque([[nums[0], 0]])  # 单调队列
+        dp = nums[0]
+        for i in range(1, n):
+            while i - q[0][1] > k:
+                q.popleft()
+            x, j = q[0]
+            dp = x + nums[i]   # 到达 nums[i] 的最大得分
+            while q and q[-1][0] < dp:
+                q.pop()
+            q.append([dp, i])
+        return dp
+
 so = Solution()
+print(so.maxResult(nums = [100,-1,-100,-1,100], k = 2))
+print(so.maxResult(nums = [10,-5,-2,4,0,3], k = 3))
 print(so.maxResult(nums = [1,-1,-2,4,-7,3], k = 2))
 print(so.maxResult(nums = [1,-5,-20,4,-1,3,-6,-3], k = 2))
-print(so.maxResult(nums = [10,-5,-2,4,0,3], k = 3))
 
 
 
