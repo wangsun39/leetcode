@@ -63,7 +63,7 @@ class NumArray1:
     def sumRange(self, left: int, right: int) -> int:
         pass
 
-class NumArray:
+class NumArray1:
 
     def __init__(self, nums: List[int]):
         self.tree = defaultdict(int)
@@ -125,6 +125,41 @@ class NumArray:
 # obj = NumArray(nums)
 # obj.update(index,val)
 # param_2 = obj.sumRange(left,right)
+
+
+class NumArray:
+    # 树状数组
+
+    def lowbit(self, i):
+        return i & -i
+
+    def __init__(self, nums: List[int]):
+        self.n = len(nums)
+        self.nums = [0] * self.n
+        self.tree = [0] * (self.n + 1)   # tree[i] 保存右端点为i的关键区间对应值
+        for i, x in enumerate(nums):
+            self.update(i, x)
+
+
+    def update(self, index: int, val: int) -> None:
+        delta = val - self.nums[index]
+        i = index + 1
+        while i <= self.n:
+            self.tree[i] += delta
+            i = i + self.lowbit(i)
+        self.nums[index] = val
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.sumPrefix(right + 1) - self.sumPrefix(left)
+
+    def sumPrefix(self, val):
+        s = 0
+        i = val
+        while i:
+            s += self.tree[i]
+            i = i - self.lowbit(i)
+        return s
+
 
 
 so = NumArray([1, 3, 5])
