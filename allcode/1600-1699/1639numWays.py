@@ -63,7 +63,7 @@ class Solution:
     def numWays(self, words: List[str], target: str) -> int:
         MOD = 10 ** 9 + 7
         n, m = len(target), len(words[0])
-        count = [[0] * 26 for _ in range(m)]  # count[i][j] 统计每个单词第i个字母的ord是j的数目
+        count = [[0] * 26 for _ in range(m)]  # count[i][j] 统计所有单词第i个字母的ord是j的数目
         for i in range(m):
             for w in words:
                 count[i][ord(w[i]) - ord('a')] += 1
@@ -73,7 +73,7 @@ class Solution:
             for j in range(i, m):  # i <= j
                 if j == 0 == i: continue
                 if i == 0:
-                    dp[i][j] = dp[i][j - 1] + count[0][ord(target[0]) - ord('a')]
+                    dp[i][j] = dp[i][j - 1] + count[j][ord(target[0]) - ord('a')]
                 else:
                     dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1] * count[j][ord(target[i]) - ord('a')]
                 dp[i][j] %= MOD
@@ -81,11 +81,9 @@ class Solution:
         # print(dp)
         return dp[-1][-1]
 
-
-
-
 so = Solution()
 
+print(so.numWays(words =["bbd","daa","dbd"], target = "da"))
 print(so.numWays(words = ["acca","bbbb","caca"], target = "aba"))
 print(so.numWays(words = ["abba","baab"], target = "bab"))
 print(so.numWays(words = ["abcd"], target = "abcd"))
