@@ -3,7 +3,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 infile = open('smf_tbl.h', 'r')
-outfile = open('output.h', 'w', newline='\n')
+outfile = open('output.h', 'w', newline='\n')  # 防止windows下自动改变换行符
 
 while True:
     line = infile.readline()
@@ -12,7 +12,7 @@ while True:
         start, end = line.find('('), line.find(')')
         inner = line[start + 1: end].split(',')
         fail_enum = inner[0]
-        inner[-1] = '"' + fail_enum.replace('_', ' ').lower() + '"'
+        inner[-1] = '"' + fail_enum.replace('_', ' ').lower() + '."'
         new_line = line[:start + 1] + ','.join(inner) + line[end:]
         outfile.write(new_line)
     else:
