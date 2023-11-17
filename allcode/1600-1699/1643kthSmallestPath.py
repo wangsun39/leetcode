@@ -53,16 +53,18 @@ class Solution:
             if c == 0:
                 return 'V' * r
             v = math.comb(r + c, r)
-            if v < pos * 2:
-                return 'V' + dfs(r - 1, c, pos - v // 2)
+            v2 = math.comb(r + c - 1, r - 1)
+            if v - v2 < pos:
+                return 'V' + dfs(r - 1, c, pos - (v - v2))
             else:
                 return 'H' + dfs(r, c - 1, pos)
         return dfs(destination[0], destination[1], k)
 
 
 so = Solution()
-print(so.kthSmallestPath(destination = [2,3], k = 3))
 print(so.kthSmallestPath(destination = [2,3], k = 2))
+print(so.kthSmallestPath(destination = [15,2], k = 136))
+print(so.kthSmallestPath(destination = [2,3], k = 3))
 print(so.kthSmallestPath(destination = [2,3], k = 1))
 
 

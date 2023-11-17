@@ -34,7 +34,7 @@ class Solution:
         @cache
         def dfs(i, mask1, mask2):  # 从右向左第 i 位开始，mask1: 用掉的数字掩码，mask2: 占用的位置掩码
             if i == 0:
-                return [0] * (n * 2 - 1)
+                return [1] * (n * 2 - 1)
             if (1 << i) & mask2:
                 return dfs(i - 1, mask1, mask2)
             for j in range(n - 1, -1, -1):
@@ -59,6 +59,7 @@ class Solution:
         return dfs(n * 2 - 2, 0, 0)
 
 so = Solution()
+print(so.constructDistancedSequence(4))
 print(so.constructDistancedSequence(3))
 print(so.constructDistancedSequence(5))
 
