@@ -34,7 +34,10 @@ class Solution:
         @cache
         def dfs(i, mask1, mask2):  # 从右向左第 i 位开始，mask1: 用掉的数字掩码，mask2: 占用的位置掩码
             if i == 0:
-                return [1] * (n * 2 - 1)
+                # 走到这，两种情况，1) 1没有在mask1中，那么最后一位就是1
+                #                2) 1已经在mask1中，那么回溯到前面的时候，还是会填最后一位的
+                # 因此这里把最后一位填成1总是对的，其实直接初始化为全1也可以
+                return [0] * (n * 2 - 2) + [1]
             if (1 << i) & mask2:
                 return dfs(i - 1, mask1, mask2)
             for j in range(n - 1, -1, -1):
