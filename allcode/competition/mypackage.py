@@ -85,7 +85,10 @@ from string import *
 # f"Hello, my name is {name}"
 
 from itertools import accumulate
-# s = list(accumulate(nums, initial=0))  # 计算前缀和
+# 前缀和
+# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
+# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
+# s = list(accumulate(nums, initial=0))
 
 from sortedcontainers import SortedList, SortedDict, SortedSet
 # sl = SortedList()
@@ -110,11 +113,6 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # ss.remove(value)
 # ss.remove(value)
 
-
-# 前缀和
-# 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
-# 此时子数组的和为 s[right]−s[left]，子数组的长度为 right−left。
-# s = list(accumulate(nums, initial=0))
 
 # dir = [[-1, 0], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [0, -1], [0, 1]]
 # dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
