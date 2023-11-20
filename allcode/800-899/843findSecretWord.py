@@ -71,10 +71,10 @@ class Solution:
                     H[i][j] = sum(possible[i][k] == possible[j][k] for k in range(6))
                 counter = Counter(H[i])
                 mx = max(counter.values())
-                if mx < maxval:
+                if mx < maxval:  # 最小化最大值
                     maxarg = i
                     maxval = mx
-            print(maxval)
+            # print(maxval)
             return possible[maxarg]
 
         while True:
