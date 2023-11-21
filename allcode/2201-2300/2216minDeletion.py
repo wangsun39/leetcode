@@ -34,7 +34,7 @@ from collections import deque
 # Definition for a binary tree node.
 from collections import Counter
 class Solution:
-    def minDeletion(self, nums: List[int]) -> int:
+    def minDeletion1(self, nums: List[int]) -> int:
         N = len(nums)
         if N == 0:
             return 0
@@ -59,6 +59,18 @@ class Solution:
             ans += 1
         return ans
 
+    def minDeletion(self, nums: List[int]) -> int:
+        # 2023/11/21 贪心，从前往后，取出数字放入新的一个数组中，能取就取，否则跳过
+        t = [nums[0]]
+        for x in nums[1:]:
+            if len(t) & 1:
+                if x != t[-1]:
+                    t.append(x)
+            else:
+                t.append(x)
+        if len(t) & 1:
+            t.pop()
+        return len(nums) - len(t)
 
 
 
