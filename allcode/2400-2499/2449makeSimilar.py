@@ -96,7 +96,7 @@ import string
 # f"Hello, my name is {name}"
 
 class Solution:
-    def makeSimilar(self, nums: List[int], target: List[int]) -> int:
+    def makeSimilar1(self, nums: List[int], target: List[int]) -> int:
         n = len(nums)
         def proc(l):
             for i in range(n):
@@ -106,6 +106,15 @@ class Solution:
         proc(target)
         print(nums, target)
         return sum(abs(nums[i] - target[i]) for i in range(n)) // 4
+
+    def makeSimilar(self, nums: List[int], target: List[int]) -> int:
+        # 2023/11/22 贪心
+        n1 = sorted(x for x in nums if x & 1) + sorted(x for x in nums if x & 1 == 0)
+        t1 = sorted(x for x in target if x & 1) + sorted(x for x in target if x & 1 == 0)
+        ans = 0
+        for i, x in enumerate(n1):
+            ans += abs(x - t1[i])
+        return ans // 4
 
 so = Solution()
 print(so.makeSimilar(nums = [8,12,6], target = [2,14,10]))
