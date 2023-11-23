@@ -35,6 +35,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def waysToSplit(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
         s = list(accumulate(nums, initial=0))
         n = len(nums)
         ans = 0
@@ -46,13 +47,16 @@ class Solution:
             # s1 的范围 [max(0, s12-s3), s12 // 2]
             p1 = max(bisect_left(s, max(0, s12 - s3)), 1)  # p1不能取0，否则第一段的长度为0
             p2 = bisect_right(s, s12 // 2)
+            p2 = min(p2, i3)
             ans += (p2 - p1)
+            ans %= MOD
             # print(i3, p1, p2)
         return ans
 
 
 
 so = Solution()
+print(so.waysToSplit(nums = [0,0,0]))
 print(so.waysToSplit(nums = [1,2,2,2,5,0]))
 print(so.waysToSplit(nums = [1,1,1]))
 print(so.waysToSplit(nums = [3,2,1]))
