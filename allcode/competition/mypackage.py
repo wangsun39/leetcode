@@ -129,3 +129,9 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # max_h = max(q - p for p, q in pairwise(horizontalCuts))
 # v = reduce(lambda x, y: x ^ y, nums)
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
