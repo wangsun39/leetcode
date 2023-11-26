@@ -35,7 +35,7 @@
 from typing import List
 from collections import defaultdict
 class Solution:
-    def uniqueLetterString(self, s: str) -> int:
+    def uniqueLetterString1(self, s: str) -> int:
         dp1, dp2 = defaultdict(int), defaultdict(int)
         dp3, dp4 = defaultdict(int), defaultdict(int)
         n = len(s)
@@ -54,6 +54,27 @@ class Solution:
             dp1, dp2 = dp3, dp4
         return ans
 
+    def uniqueLetterString(self, s: str) -> int:
+        # 2023/11/26 考虑某一个数字前一次出现的位置p1，和前前一次出现的位置p2
+        # dp[i] = dp[i - 1] + (i - p1) - (p1 - p2)
+        pre = [-1] * 26
+        ppre = [-1] * 26
+        n = len(s)
+        dp = [0] * n  # 以第i个字符结尾的字符串的countUniqueChars总和
+        dp[0] = 1
+        pre[ord(s[0]) - ord('A')] = 0
+        for i, x in enumerate(s[1:], 1):
+            dp[i] = dp[i - 1]
+            p1 = pre[ord(x) - ord('A')]
+            p2 = ppre[ord(x) - ord('A')]
+            dp[i] += (i - p1) - (p1 - p2)
+            if p1 == -1:
+                pre[ord(x) - ord('A')] = i
+            else:
+                ppre[ord(x) - ord('A')] = p1
+                pre[ord(x) - ord('A')] = i
+
+        return sum(dp)
 
 
 so = Solution()
