@@ -47,6 +47,34 @@ class Solution:
             # print(stack)
         return ans
 
+    def sumSubarrayMins(self, arr: List[int]) -> int:
+        # 2023/11/27 左右两边的分别单调栈 + 贡献法
+        # 注意要考虑相等的值的处理
+        MOD = 10 ** 9 + 7
+        n = len(arr)
+        left = [-1] * n  # 左侧第一个小于arr[i]的下标
+        right = [n] * n  # 右侧第一个小于等于arr[i]的下标
+        stack = []
+        for i in range(n):
+            while stack and arr[stack[-1]] >= arr[i]:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]
+            stack.append(i)
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and arr[stack[-1]] > arr[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]
+            stack.append(i)
+        ans = 0
+        for i in range(n):
+            ans += (i - left[i]) * (right[i] - i) * arr[i]
+            ans %= MOD
+        return ans
+
+
 
 so = Solution()
 print(so.sumSubarrayMins([3,1,2,4]))

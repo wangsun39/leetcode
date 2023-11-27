@@ -38,7 +38,7 @@ class Solution:
         p1, p2 = [nums1[0], nums2[0]], [nums2[0], nums1[0]]
         dp1, dp2 = 0, 1
         if nums1[0] == nums2[0]:
-            dp1, dp2 = 0, 0
+            dp1, dp2 = 0, 0  # 分别表示不交换第i个，和交换第i个的最少交换次数
         n = len(nums1)
         for i in range(1, n):
             dp11, dp22 = n, n

@@ -29,11 +29,26 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxNiceDivisors(self, primeFactors: int) -> int:
-        
+        MOD = 10 ** 9 + 7
+        if primeFactors <= 3:
+            return 1
+        q, r = divmod(primeFactors, 3)
+        three = q  # 分解成3的个数
+        if r == 1:
+            three -= 1
+            two = 2  # 分解成2的个数
+        else:
+            two = (r == 2)
+        r1 = pow(2, two, MOD)
+        r2 = pow(3, three, MOD)
+        return (r1 * r2) % MOD
+
+
 
 
 so = Solution()
-print(so.maxNiceDivisors())
+print(so.maxNiceDivisors(5))
+print(so.maxNiceDivisors(8))
 
 
 
