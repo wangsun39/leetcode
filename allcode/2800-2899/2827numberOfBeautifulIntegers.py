@@ -65,10 +65,13 @@ class Solution:
                 return ans
             return digitDp(0, 0, 0, 0, True, False)
 
+        print(f(47))
+        print(f(100))
         return f(high) - f(low - 1)
 
 
 so = Solution()
+print(so.numberOfBeautifulIntegers(low = 47, high = 100, k = 18))  # 2
 print(so.numberOfBeautifulIntegers(low = 10, high = 20, k = 3))  # 2
 print(so.numberOfBeautifulIntegers(low = 1, high = 10, k = 1))  # 1
 print(so.numberOfBeautifulIntegers(low = 5, high = 5, k = 2))  # 0
