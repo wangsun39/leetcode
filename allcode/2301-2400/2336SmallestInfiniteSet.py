@@ -71,7 +71,7 @@ from typing import List
 # n.bit_length()
 # value = int(s, 2)
 
-class SmallestInfiniteSet:
+class SmallestInfiniteSet1:
 
     def __init__(self):
         self.s = set([i for i in range(1, 1200)])
@@ -88,9 +88,23 @@ class SmallestInfiniteSet:
         self.s.add(num)
 
 
+from sortedcontainers import SortedList
+class SmallestInfiniteSet:
+    # 2023/11/29 优先队列
 
-so = Solution()
-print(so.removeDigit(123456))
+    def __init__(self):
+        self.sl = SortedList(range(1, 1001))
+
+
+    def popSmallest(self) -> int:
+        return self.sl.pop(0)
+
+
+    def addBack(self, num: int) -> None:
+        if num not in self.sl:
+            self.sl.add(num)
+
+
 
 
 
