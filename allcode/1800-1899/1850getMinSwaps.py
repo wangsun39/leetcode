@@ -70,7 +70,7 @@ class Solution:
             if origin_num[i] == lnum[i]: continue
             for j in range(i + 1, n):
                 if origin_num[j] == lnum[i]:
-                    origin_num[i], origin_num[j] = origin_num[j], origin_num[i]
+                    origin_num[i: j + 1] = [origin_num[j]] + origin_num[i: j]
                     break
             ans += (j - i)
         return ans
@@ -81,6 +81,7 @@ class Solution:
 
 so = Solution()
 print(so.getMinSwaps(num = "5489355142", k = 4))
+print(so.getMinSwaps(num = "059", k = 5))
 print(so.getMinSwaps(num = "11112", k = 4))
 print(so.getMinSwaps(num = "00123", k = 1))
 

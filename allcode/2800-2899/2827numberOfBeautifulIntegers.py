@@ -53,8 +53,6 @@ class Solution:
                 ans = 0
                 if not is_num:
                     ans = digitDp(i + 1, 0, 0, 0, False, False)
-                    if (len(s) - i - 1) & 1 == 0:  # 长度为奇数，不进行递归
-                        return 0
                 upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
                 lower = 0 if is_num else 1
                 for j in range(lower, upper + 1):
@@ -65,13 +63,13 @@ class Solution:
                 return ans
             return digitDp(0, 0, 0, 0, True, False)
 
-        print(f(47))
-        print(f(100))
+        # print(f(47))
+        # print(f(100))
         return f(high) - f(low - 1)
 
 
 so = Solution()
-print(so.numberOfBeautifulIntegers(low = 47, high = 100, k = 18))  # 2
+print(so.numberOfBeautifulIntegers(low = 47, high = 100, k = 18))  # 3
 print(so.numberOfBeautifulIntegers(low = 10, high = 20, k = 3))  # 2
 print(so.numberOfBeautifulIntegers(low = 1, high = 10, k = 1))  # 1
 print(so.numberOfBeautifulIntegers(low = 5, high = 5, k = 2))  # 0
