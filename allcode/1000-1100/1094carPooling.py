@@ -29,7 +29,7 @@ from typing import List
 from bisect import *
 
 class Solution:
-    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+    def carPooling1(self, trips: List[List[int]], capacity: int) -> bool:
         trips.sort(key=lambda x:x[1])
         cc = 0  # 当前乘客数
         ci = 0  # 当前的位置
@@ -44,6 +44,17 @@ class Solution:
             cc += cnt
         return True
 
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        # 2023/12/2 换个写法
+        x1, x2 = [[y, x] for x, y, _ in trips], [[y, -x] for x, _, y in trips]
+        x = x1 + x2
+        x.sort()
+        s = 0  # 当前乘客数
+        for a, b in x:
+            s += b
+            if s > capacity:
+                return False
+        return True
 
 
 

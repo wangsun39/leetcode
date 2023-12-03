@@ -47,6 +47,7 @@ class Solution:
 
 
 so = Solution()
+print(so.maxNiceDivisors(3))
 print(so.maxNiceDivisors(5))
 print(so.maxNiceDivisors(8))
 
