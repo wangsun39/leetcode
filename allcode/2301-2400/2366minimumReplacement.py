@@ -29,6 +29,18 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumReplacement(self, nums: List[int]) -> int:
+        nums.reverse()  # 考虑目标非递增
+        n = len(nums)
+        ans = 0
+        for i in range(1, n):
+            if nums[i - 1] >= nums[i]:
+                continue
+            x = (nums[i] + nums[i - 1] - 1) // nums[i - 1]  # 上取整，只要要分的份数
+            ans += (x - 1)
+            nums[i] = nums[i] // x  # 下取整
+        return ans
+
+
 
 
 so = Solution()
