@@ -3,7 +3,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def minimumTotalPrice(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
+    def minimumTotalPrice1(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
         g = defaultdict(list)
         for x, y in edges:
             g[x].append(y)
@@ -61,7 +61,51 @@ class Solution:
 
         return ans
 
+    def minimumTotalPrice(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
+        # 2023/12/6 用打家劫舍的方法
+        g = defaultdict(list)
+        for x, y in edges:
+            g[x].append(y)
+            g[y].append(x)
 
+        cnt = [0] * n  # 记录每个节点在trips中经过的次数
+
+        for start, end in trips:
+            def dfs(x, fa):
+                for y in g[x]:
+                    if y == fa: continue
+                    if y == end:
+                        cnt[y] += 1
+                        cnt[x] += 1
+                        return True
+                    if dfs(y, x):
+                        cnt[x] += 1
+                        return True
+                return False
+
+            if start == end:
+                cnt[start] += 1
+                continue
+            dfs(start, -1)
+
+        for i in range(n):  # 重复经过的点，相当于该点price翻倍
+            price[i] *= cnt[i]
+
+        # print(price)
+
+        # 剩余就是打家劫舍III
+        def dfs(x, fa):  # 返回：减半x的价格的子树节点值的最小和，不减半x的价格的子树节点值的最小和
+            ch, noch = price[x] // 2, price[x]
+            sa = sb = 0  # 减半子树半根节点最小和，不减半子树半根节点最小和
+            for y in g[x]:
+                if y == fa: continue
+                a, b = dfs(y, x)
+                ch += b
+                noch += min(a, b)
+            return ch, noch
+
+        ans = dfs(0, -1)
+        return min(ans)
 
 
 
