@@ -39,10 +39,27 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumAddedCoins(self, coins: List[int], target: int) -> int:
+        coins.sort()
+        coins.append(target + 1)  # 增加一个哨兵，实际用不到
+        i = cur = 0
+        ans = 0
+        n = len(coins)
+        while i < n:
+            x = coins[i]
+            if x <= cur + 1:
+                cur += x
+                i += 1
+            else:
+                ans += 1  # 需要添加 cur + 1
+                cur += (cur + 1)
+            if cur >= target:
+                return ans
 
 
 so = Solution()
-print(so.minimumAddedCoins())
+print(so.minimumAddedCoins(coins = [1,4,10], target = 19))
+print(so.minimumAddedCoins(coins = [1,4,10,5,7,19], target = 19))
+print(so.minimumAddedCoins(coins = [1,1,1], target = 20))
 
 
 
