@@ -12,11 +12,58 @@ while True:
         start, end = line.find('('), line.find(')')
         inner = line[start + 1: end].split(',')
         fail_enum = inner[0]
-        inner[-1] = '"' + fail_enum.replace('_', ' ').lower() + '."'
+        # inner[-1] = '"' + fail_enum.replace('_', ' ').lower() + '."'
+        inner.append(' "' + fail_enum.replace('_', ' ').lower() + '."')
         new_line = line[:start + 1] + ','.join(inner) + line[end:]
         outfile.write(new_line)
     else:
         outfile.write(line)
+outfile.close()
+infile.close()
+
+infile = open('SMF_MSG_ITEM.h', 'r', encoding='UTF-8')
+outfile = open('outputSMF_MSG_ITEM.h', 'w', newline='\n')  # 防止windows下自动改变换行符
+
+desc = {}
+trace = {}
+
+while True:
+    line = infile.readline()
+    if len(line) == 0:break
+    line = line.strip()
+    if line.startswith('TRACE'):
+        inner = line.split(',')
+        trace[inner[1].strip()] = inner[0].strip()
+        continue
+    if 'SMF_MSG_ITEM' in line:
+        start, end = line.find('('), line.find(')')
+        inner = line[start + 1: end].split(',')
+        desc[inner[0].strip()] = inner[1].strip()
+        continue
+
+    p = line.find('//')
+    if p != -1:
+        line = line[:p]
+
+    p = line.find('/*')
+    if p != -1:
+        line = line[:p]
+    line = line.strip()
+    if len(line) == 0: continue
+    p = line.find(',')
+    if p == -1: continue
+    line = line[:p]
+    line = line.strip()
+    variables = line.split('=')
+    v = variables[0]
+    v = v.strip()
+    # dv = desc.get(v, '\"' + v + '\"')
+    dv = desc.get(v, '\"\"')
+    tv = trace.get(v, 0)
+    new_line = f"SMF_MSG_ITEM({v:<35}, \"{v}\"{' ' * (35 - len(v))}, {tv:<42}, {dv:<50})\n"
+    # new_line = f"SMF_MSG_ITEM({v:<35}, {tv:<42}, {dv:<50})\n"
+    outfile.write(new_line)
+
 outfile.close()
 infile.close()
 
