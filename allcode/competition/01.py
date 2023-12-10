@@ -1,44 +1,62 @@
-# 给你一个下标从 0 开始的字符串数组 words 和一个字符 x 。
+# 给你一个长度为 n 、下标从 0 开始的整数数组 batteryPercentages ，表示 n 个设备的电池百分比。
 #
-# 请你返回一个 下标数组 ，表示下标在数组中对应的单词包含字符 x 。
+# 你的任务是按照顺序测试每个设备 i，执行以下测试操作：
 #
-# 注意 ，返回的数组可以是 任意 顺序。
+# 如果 batteryPercentages[i] 大于 0：
+# 增加 已测试设备的计数。
+# 将下标在 [i + 1, n - 1] 的所有设备的电池百分比减少 1，确保它们的电池百分比 不会低于 0 ，即 batteryPercentages[j] = max(0, batteryPercentages[j] - 1)。
+# 移动到下一个设备。
+# 否则，移动到下一个设备而不执行任何测试。
+# 返回一个整数，表示按顺序执行测试操作后 已测试设备 的数量。
 #
 #
 #
 # 示例 1：
 #
-# 输入：words = ["leet","code"], x = "e"
-# 输出：[0,1]
-# 解释："e" 在两个单词中都出现了："leet" 和 "code" 。所以我们返回下标 0 和 1 。
+# 输入：batteryPercentages = [1,1,2,1,3]
+# 输出：3
+# 解释：按顺序从设备 0 开始执行测试操作：
+# 在设备 0 上，batteryPercentages[0] > 0 ，现在有 1 个已测试设备，batteryPercentages 变为 [1,0,1,0,2] 。
+# 在设备 1 上，batteryPercentages[1] == 0 ，移动到下一个设备而不进行测试。
+# 在设备 2 上，batteryPercentages[2] > 0 ，现在有 2 个已测试设备，batteryPercentages 变为 [1,0,1,0,1] 。
+# 在设备 3 上，batteryPercentages[3] == 0 ，移动到下一个设备而不进行测试。
+# 在设备 4 上，batteryPercentages[4] > 0 ，现在有 3 个已测试设备，batteryPercentages 保持不变。
+# 因此，答案是 3 。
 # 示例 2：
 #
-# 输入：words = ["abc","bcd","aaaa","cbc"], x = "a"
-# 输出：[0,2]
-# 解释："a" 在 "abc" 和 "aaaa" 中出现了，所以我们返回下标 0 和 2 。
-# 示例 3：
-#
-# 输入：words = ["abc","bcd","aaaa","cbc"], x = "z"
-# 输出：[]
-# 解释："z" 没有在任何单词中出现。所以我们返回空数组。
+# 输入：batteryPercentages = [0,1,2]
+# 输出：2
+# 解释：按顺序从设备 0 开始执行测试操作：
+# 在设备 0 上，batteryPercentages[0] == 0 ，移动到下一个设备而不进行测试。
+# 在设备 1 上，batteryPercentages[1] > 0 ，现在有 1 个已测试设备，batteryPercentages 变为 [0,1,1] 。
+# 在设备 2 上，batteryPercentages[2] > 0 ，现在有 2 个已测试设备，batteryPercentages 保持不变。
+# 因此，答案是 2 。
 #
 #
 # 提示：
 #
-# 1 <= words.length <= 50
-# 1 <= words[i].length <= 50
-# x 是一个小写英文字母。
-# words[i] 只包含小写英文字母。
+# 1 <= n == batteryPercentages.length <= 100
+# 0 <= batteryPercentages[i] <= 100
 
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def findWordsContaining(self, words: List[str], x: str) -> List[int]:
-        return [i for i, y in enumerate(words) if x in y]
+    def countTestedDevices(self, batteryPercentages: List[int]) -> int:
+        ans = 0
+        n = len(batteryPercentages)
+        for i in range(n):
+            if batteryPercentages[i]:
+                ans += 1
+                for j in range(i + 1, n):
+                    batteryPercentages[j] -= 1
+                    batteryPercentages[j] = max(batteryPercentages[j], 0)
+        return ans
 
 
 so = Solution()
-print(so.findWordsContaining(words = ["leet","code"], x = "e"))
+print(so.countTestedDevices(batteryPercentages = [1,1,2,1,3]))
+print(so.countTestedDevices(batteryPercentages = [0,1,2]))
+print(so.countTestedDevices(batteryPercentages = [1,1,2,1,3]))
 
 
 

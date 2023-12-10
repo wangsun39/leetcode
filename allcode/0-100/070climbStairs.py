@@ -20,9 +20,10 @@
 # 2.  1 阶 + 2 阶
 # 3.  2 阶 + 1 阶
 
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def climbStairs(self, n: int) -> int:
+    def climbStairs1(self, n: int) -> int:
         if n < 3:
             return n
         i = 3
@@ -33,6 +34,14 @@ class Solution:
             i += 1
         return c
 
+    def climbStairs(self, n: int) -> int:
+        # 2023/12/10 记忆化搜素
+        @cache
+        def dfs(n):
+            if n <= 2:
+                return n
+            return dfs(n - 1) + dfs(n - 2)
+        return dfs(n)
 
 so = Solution()
 print(so.climbStairs(2))
