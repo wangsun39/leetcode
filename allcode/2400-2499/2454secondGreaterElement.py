@@ -146,7 +146,25 @@ class Solution:
                     del(count[j])
         return ans
 
+    def secondGreaterElement2(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        ans = [-1] * n
+        stack = []
+        queue = []
+        for idx, num in enumerate(nums):
+            while len(queue) and queue[-1][1] < num:
+                ans[queue.pop()[0]] = num
+            pos = len(stack) - 1
+            while pos >= 0 and stack[pos][1] < num:
+                pos -= 1
+            queue += stack[pos + 1:]
+            del(stack[pos + 1:])
+            stack.append([idx, num])
+            # print(queue)
+        return ans
+
     def secondGreaterElement(self, nums: List[int]) -> List[int]:
+        # 2023/12/12 优先队列，性能不如上面的方法
         n = len(nums)
         ans = [-1] * n
         stack = []
