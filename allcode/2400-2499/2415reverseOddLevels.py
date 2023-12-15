@@ -97,7 +97,7 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
-    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def reverseOddLevels1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         lev = 0
         # cur = root
         queue = [root]
@@ -123,6 +123,17 @@ class Solution:
             lev += 1
             queue = que
 
+        return root
+
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 2023/12/15 DFS写法
+        def dfs(r1, r2, isOdd):
+            if r1 is None: return
+            if isOdd:
+                r1.val, r2.val = r2.val, r1.val
+            dfs(r1.left, r2.right, not isOdd)
+            dfs(r1.right, r2.left, not isOdd)
+        dfs(root.left, root.right, True)
         return root
 
 root = TreeNode(2)
