@@ -44,7 +44,7 @@ class Solution:
         n = len(events)
         events.sort(key=lambda x: x[1])
         ends = [x for _, x, _ in events]
-        dp = [[0] * n for _ in range(k)]  # dp[i][j] 完成至多i+1个事件，在前j个events的endDay为结束时间，的最大值
+        dp = [[0] * n for _ in range(k)]  # dp[i][j] 在前j个events的endDay为结束时间之前，完成至多i+1个事件的最大值
         dp[0][0] = events[0][2]
         for i in range(1, n):
             dp[0][i] = max(dp[0][i - 1], events[i][2])
@@ -52,6 +52,8 @@ class Solution:
         for i in range(1, k):
             for j in range(n):
                 dp[i][j] = dp[i - 1][j]
+                if j > 0:
+                    dp[i][j] = max(dp[i][j], dp[i][j - 1])
                 p = bisect_left(ends, events[j][0])
                 if p > 0 and dp[i - 1][p - 1] + events[j][2] > dp[i][j]:
                     dp[i][j] = dp[i - 1][p - 1] + events[j][2]
@@ -59,6 +61,7 @@ class Solution:
         return dp[-1][-1]
 
 so = Solution()
+print(so.maxValue(events = [[11,17,56],[24,40,53],[5,62,67],[66,69,84],[56,89,15]], k = 2))
 print(so.maxValue(events = [[1,2,4],[3,4,3],[2,3,1]], k = 2))
 print(so.maxValue(events = [[1,2,4],[3,4,3],[2,3,10]], k = 2))
 print(so.maxValue(events = [[1,1,1],[2,2,2],[3,3,3],[4,4,4]], k = 3))
