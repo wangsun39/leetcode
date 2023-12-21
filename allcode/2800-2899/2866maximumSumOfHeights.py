@@ -166,7 +166,7 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 # list(zip(*nums))  # [(7, 6, 6, 3), (2, 4, 5, 2), (1, 2, 3, 1)]    转置
 
 class Solution:
-    def maximumSumOfHeights(self, maxHeights: List[int]) -> int:
+    def maximumSumOfHeights1(self, maxHeights: List[int]) -> int:
         n = len(maxHeights)
         left, stack, right = [-1] * n, [], [-1] * n
 
@@ -215,6 +215,30 @@ class Solution:
             ans = max(ans, dp1[i] + dp2[i] - maxHeights[i])
         return ans
 
+    def maximumSumOfHeights(self, maxHeights: List[int]) -> int:
+        # 2023/12/21 单调栈重写
+        n = len(maxHeights)
+
+        def proc(l):  # 返回一个列表ll,其中ll[i]表示以l[i]为最高点，左侧之和的最大值
+            res = [0] * n
+            stack = []  # stack[i] = [a,b,c] a表示高度，b表示被a顶掉的多少项,c表示a的下标
+            for i, x in enumerate(l):
+                cnt = 0
+                while stack and stack[-1][0] > x:
+                    a, b, c = stack.pop()
+                    cnt += (b + 1)
+                res[i] = cnt * x
+                if stack:
+                    res[i] += (res[stack[-1][2]] + stack[-1][0])
+                stack.append([x, cnt, i])
+            return res
+        left = proc(maxHeights)
+        right = proc(maxHeights[::-1])[::-1]
+        ans = -inf
+        for i in range(n):
+            cur = maxHeights[i] + left[i] + right[i]
+            ans = max(ans, cur)
+        return ans
 
 so = Solution()
 

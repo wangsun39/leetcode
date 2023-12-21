@@ -46,6 +46,39 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxTrailingZeros(self, grid: List[List[int]]) -> int:
+        r, c = len(grid), len(grid[0])
+        dir = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
+
+        @cache
+        def count(x):
+            n0 = n2 = n5 = 0
+            while x % 10 == 0:
+                n0 += 1
+                x //= 10
+            y = x
+            while y % 2 == 0:
+                n2 += 1
+                y //= 2
+            y = x
+            while y % 5 == 0:
+                n5 += 1
+                y //= 5
+            return n0, n2, n5
+
+
+        def dfs(x, y, d, turned):
+            x0, y0 = dir[d]
+            res = 0
+            for i in range(max(r, c)):
+                u, v = x + x0, y + y0
+                if 0 <= u < r and 0 <= v < c:
+                    u0, u5, u2 = dfs(u, v, d, turned)
+                    x0, x5, x2 = count(grid[x][y])
+                    c0, c5, c2 = u0 + x0, u5 + x5, u2 + x2
+                    res = max(res, c0 + min(c5, c2))
+
+
+
 
 
 so = Solution()
