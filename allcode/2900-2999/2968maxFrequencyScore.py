@@ -39,13 +39,25 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxFrequencyScore(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        counter = Counter(nums)
-
-
-
+        nums.sort()
+        s = list(accumulate(nums, initial=0))
+        l = 0
+        ans = 0
+        for r in range(n):
+            mid = (l + r) // 2  # [l, mid-1]  mid  [mid+1, r]
+            op_num1 = (mid - l) * nums[mid] - (s[mid] - s[l])  # [l, mid-1] 操作数
+            op_num2 = (s[r + 1] - s[mid + 1]) - (r - mid) * nums[mid]  # [mid+1, r] 操作数
+            while op_num1 + op_num2 > k:
+                l += 1
+                mid = (l + r) // 2
+                op_num1 = (mid - l) * nums[mid] - (s[mid] - s[l])  # [l, mid-1] 操作数
+                op_num2 = (s[r + 1] - s[mid + 1]) - (r - mid) * nums[mid]  # [mid+1, r] 操作数
+            ans = max(ans, r - l + 1)
+        return ans
 
 so = Solution()
-print(so.maxFrequencyScore())
+print(so.maxFrequencyScore(nums = [1,2,6,4], k = 3))
+print(so.maxFrequencyScore(nums = [1,4,4,2,4], k = 0))
 
 
 

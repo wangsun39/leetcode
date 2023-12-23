@@ -47,7 +47,6 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxTrailingZeros(self, grid: List[List[int]]) -> int:
         r, c = len(grid), len(grid[0])
-        dir = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
 
         @cache
         def count(x):
@@ -56,33 +55,60 @@ class Solution:
                 n0 += 1
                 x //= 10
             y = x
-            while y % 2 == 0:
+            while y % 2 == 0:  # 除去末尾0之和，有多少个2的因子
                 n2 += 1
                 y //= 2
             y = x
-            while y % 5 == 0:
+            while y % 5 == 0:  # 除去末尾0之和，有多少个5的因子
                 n5 += 1
                 y //= 5
             return n0, n2, n5
 
-
-        def dfs(x, y, d, turned):
-            x0, y0 = dir[d]
-            res = 0
-            for i in range(max(r, c)):
-                u, v = x + x0, y + y0
-                if 0 <= u < r and 0 <= v < c:
-                    u0, u5, u2 = dfs(u, v, d, turned)
-                    x0, x5, x2 = count(grid[x][y])
-                    c0, c5, c2 = u0 + x0, u5 + x5, u2 + x2
-                    res = max(res, c0 + min(c5, c2))
-
-
-
+        # down[i][j] 从grid边缘向下走，走到grid[i][j]之前有多少个0，2，5
+        down, up = [[[0] * 3 for _ in range(c)] for _ in range(r)], [[[0] * 3 for _ in range(c)] for _ in range(r)]
+        right, left = [[[0] * 3 for _ in range(c)] for _ in range(r)], [[[0] * 3 for _ in range(c)] for _ in range(r)]
+        for i in range(1, r):
+            for j in range(c):
+                n0, n2, n5 = count(grid[i - 1][j])
+                down[i][j][0] = down[i - 1][j][0] + n0
+                down[i][j][1] = down[i - 1][j][1] + n2
+                down[i][j][2] = down[i - 1][j][2] + n5
+        for i in range(r - 2, -1, -1):
+            for j in range(c):
+                n0, n2, n5 = count(grid[i + 1][j])
+                up[i][j][0] = up[i + 1][j][0] + n0
+                up[i][j][1] = up[i + 1][j][1] + n2
+                up[i][j][2] = up[i + 1][j][2] + n5
+        for i in range(1, c):
+            for j in range(r):
+                n0, n2, n5 = count(grid[j][i - 1])
+                right[j][i][0] = right[j][i - 1][0] + n0
+                right[j][i][1] = right[j][i - 1][1] + n2
+                right[j][i][2] = right[j][i - 1][2] + n5
+        for i in range(c - 2, -1, -1):
+            for j in range(r):
+                n0, n2, n5 = count(grid[j][i + 1])
+                left[j][i][0] = left[j][i + 1][0] + n0
+                left[j][i][1] = left[j][i + 1][1] + n2
+                left[j][i][2] = left[j][i + 1][2] + n5
+        ans = 0
+        for i in range(r):
+            for j in range(c):
+                n0, n2, n5 = count(grid[i][j])
+                x, y, z = n0 + down[i][j][0] + right[i][j][0], n2 + down[i][j][1] + right[i][j][1], n5 + down[i][j][2] + right[i][j][2]
+                ans = max(ans, x + min(y, z))
+                x, y, z = n0 + down[i][j][0] + left[i][j][0], n2 + down[i][j][1] + left[i][j][1], n5 + down[i][j][2] + left[i][j][2]
+                ans = max(ans, x + min(y, z))
+                x, y, z = n0 + up[i][j][0] + left[i][j][0], n2 + up[i][j][1] + left[i][j][1], n5 + up[i][j][2] + left[i][j][2]
+                ans = max(ans, x + min(y, z))
+                x, y, z = n0 + up[i][j][0] + right[i][j][0], n2 + up[i][j][1] + right[i][j][1], n5 + up[i][j][2] + right[i][j][2]
+                ans = max(ans, x + min(y, z))
+        return ans
 
 
 so = Solution()
-print(so.maxTrailingZeros())
+print(so.maxTrailingZeros(grid = [[23,17,15,3,20],[8,1,20,27,11],[9,4,6,2,21],[40,9,1,10,6],[22,7,4,5,3]]))
+print(so.maxTrailingZeros(grid = [[4,3,2],[7,6,1],[8,8,8]]))
 
 
 
