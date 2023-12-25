@@ -69,14 +69,14 @@ class Solution:
     def numberOfSets(self, n: int, maxDistance: int, roads: List[List[int]]) -> int:
         g = [[inf] * n for _ in range(n)]
         for x, y, wt in roads:
-            g[x][y] = g[y][x] = wt
+            g[x][y] = g[y][x] = min(wt, g[x][y])
 
         def floyd(bits):
             @cache
             def dfs(k: int, i: int, j: int) -> int:
                 if k < 0:  # 递归边界
                     return g[i][j]
-                if (bits >> k) & 1:
+                if (bits >> k) & 1 == 0:
                     return dfs(k - 1, i, j)
                 return min(dfs(k - 1, i, j), dfs(k - 1, i, k) + dfs(k - 1, k, j))
 
@@ -112,6 +112,8 @@ class Solution:
 
 
 so = Solution()
+print(so.numberOfSets(n = 4, maxDistance = 29, roads = [[2,1,3],[3,0,19],[2,0,17],[3,1,4],[2,0,16]]))
+print(so.numberOfSets(n = 3, maxDistance = 12, roads = [[1,0,11],[1,0,16],[0,2,13]]))
 print(so.numberOfSets(n = 3, maxDistance = 5, roads = [[0,1,2],[1,2,10],[0,2,10]]))
 print(so.numberOfSets(n = 3, maxDistance = 5, roads = [[0,1,20],[0,1,10],[1,2,2],[0,2,2]]))
 print(so.numberOfSets(n = 1, maxDistance = 10, roads = []))
