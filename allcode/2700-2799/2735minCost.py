@@ -30,7 +30,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minCost(self, nums: List[int], x: int) -> int:
+    def minCost1(self, nums: List[int], x: int) -> int:
         n = len(nums)
         mn = [[inf] * n for _ in range(n)]  # [i, j] 上的最小值
         for i in range(n):
@@ -48,6 +48,16 @@ class Solution:
             ans = min(ans, x * mx_time + sum(cost))
         return ans
 
+    def minCost(self, nums: List[int], x: int) -> int:
+        # 2023/12/28 换个写法
+        n = len(nums)
+        cur = nums[:]  # 操作 i 次之后，位于每个位置可以取到的最小值
+        ans = inf
+        for i in range(n):
+            for j in range(n):
+                cur[j] = min(cur[j], nums[(j + i) % n])
+            ans = min(ans, sum(cur) + x * i)
+        return ans
 
 so = Solution()
 print(so.minCost(nums = [20,1,15], x = 5))
