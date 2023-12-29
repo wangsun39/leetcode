@@ -61,13 +61,32 @@ class Solution:
         for j in range(26):
             dp[0][j][c2i[word[0]]] = 0
             dp[0][c2i[word[0]]][j] = 0
+        for i in range(26):
+            for j in range(26):
+                dp[0][i][j] = 0
+                dp[1][i][j]
+        last = c2i[word[0]]
         for i in range(1, n):
+            cur = c2i[word[i]]
+            # dp[i][:] = dp[i - 1][:]
+            for j in range(26):
+                dp[i][j][cur] = min(dp[i][j][cur], dp[i - 1][j][last] + abs(last - cur))
+                dp[i][cur][j] = min(dp[i][cur][j], dp[i - 1][last][j] + abs(last - cur))
+            last = cur
+            print(dp[i])
+
+        ans = inf
+        for i in range(26):
+            for j in range(26):
+                ans = min(ans, dp[-1][i][j])
+        return ans
+
 
 
 
 
 so = Solution()
-print(so.minimumDistance())
+print(so.minimumDistance('CAKE'))
 
 
 
