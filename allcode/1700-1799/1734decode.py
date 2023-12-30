@@ -34,7 +34,7 @@ class Solution:
             sup[i] = sup[i - 1] ^ encoded[i]
         s = set(sup)
         nums = [0] * (n + 1)
-        for i in range(1, 10 ** 5):
+        for i in range(1, 10 ** 5):  # a[0]不能与任何sup的元素相同，否则某个a[i]将会是0
             if i not in s:
                 nums[0] = i
                 break

@@ -49,8 +49,8 @@ class Solution:
     def minimumDistance(self, word: str) -> int:
         c2i = {c: i for i, c in enumerate(ascii_uppercase)}
 
-        def dist(x, y):
-            a, b = c2i[x], c2i[y]
+        def dist(a, b):
+            # a, b = c2i[x], c2i[y]
             xa, ya = divmod(a, 6)
             xb, yb = divmod(b, 6)
             return abs(xa - xb) + abs(ya - yb)
@@ -58,22 +58,18 @@ class Solution:
         n = len(word)
         dp = [[[inf] * 26 for _ in range(26)] for _ in range(n)]
         # dp[i][j][k] 表示i步后，左手在j，右手在k的最小移动步数， j和k表示字母的c2i值
+        w0, w1 = c2i[word[0]], c2i[word[1]]
         for j in range(26):
-            dp[0][j][c2i[word[0]]] = 0
-            dp[0][c2i[word[0]]][j] = 0
-        for i in range(26):
-            for j in range(26):
-                dp[0][i][j] = 0
-                dp[1][i][j]
-        last = c2i[word[0]]
-        for i in range(1, n):
+            dp[1][j][c2i[word[1]]] = dist(w0, w1)
+            dp[1][c2i[word[1]]][j] = dist(w0, w1)
+        dp[1][w1][w0] = dp[1][w0][w1] = 0
+        last = w1
+        for i in range(2, n):
             cur = c2i[word[i]]
-            # dp[i][:] = dp[i - 1][:]
             for j in range(26):
-                dp[i][j][cur] = min(dp[i][j][cur], dp[i - 1][j][last] + abs(last - cur))
-                dp[i][cur][j] = min(dp[i][cur][j], dp[i - 1][last][j] + abs(last - cur))
+                dp[i][j][cur] = min(dp[i - 1][j][last] + dist(last, cur), dp[i - 1][last][cur] + dist(last, j))
+                dp[i][cur][j] = min(dp[i - 1][cur][last] + dist(last, j), dp[i - 1][last][j] + dist(last, cur))
             last = cur
-            print(dp[i])
 
         ans = inf
         for i in range(26):
@@ -87,6 +83,7 @@ class Solution:
 
 so = Solution()
 print(so.minimumDistance('CAKE'))
+print(so.minimumDistance(word = "HAPPY"))
 
 
 
