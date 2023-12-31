@@ -1,78 +1,46 @@
-# 你会得到一个字符串 text 。你应该把它分成 k 个子字符串 (subtext1, subtext2，…， subtextk) ，要求满足:
-#
-# subtexti 是 非空 字符串
-# 所有子字符串的连接等于 text ( 即subtext1 + subtext2 + ... + subtextk == text )
-# 对于所有 i 的有效值( 即 1 <= i <= k ) ，subtexti == subtextk - i + 1 均成立
-# 返回k可能最大值。
+# 给你一个字符串 date ，按 YYYY-MM-DD 格式表示一个 现行公元纪年法 日期。返回该日期是当年的第几天。
 #
 #
 #
 # 示例 1：
 #
-# 输入：text = "ghiabcdefhelloadamhelloabcdefghi"
-# 输出：7
-# 解释：我们可以把字符串拆分成 "(ghi)(abcdef)(hello)(adam)(hello)(abcdef)(ghi)"。
+# 输入：date = "2019-01-09"
+# 输出：9
+# 解释：给定日期是2019年的第九天。
 # 示例 2：
 #
-# 输入：text = "merchant"
-# 输出：1
-# 解释：我们可以把字符串拆分成 "(merchant)"。
-# 示例 3：
-#
-# 输入：text = "antaprezatepzapreanta"
-# 输出：11
-# 解释：我们可以把字符串拆分成 "(a)(nt)(a)(pre)(za)(tpe)(za)(pre)(a)(nt)(a)"。
+# 输入：date = "2019-02-10"
+# 输出：41
 #
 #
 # 提示：
 #
-# 1 <= text.length <= 1000
-# text 仅由小写英文字符组成
+# date.length == 10
+# date[4] == date[7] == '-'，其他的 date[i] 都是数字
+# date 表示的范围从 1900 年 1 月 1 日至 2019 年 12 月 31 日
 
-from typing import List, Optional
-from collections import deque, defaultdict
-from functools import cache
-
-
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def longestDecomposition1(self, text: str) -> int:
+    def dayOfYear(self, date: str) -> int:
+        [year, month, day] = date.split('-')
+        year, month, day = int(year), int(month), int(day)
+        months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        days = 0
+        if (0 == year % 4 and year % 100 != 0) or (0 == year % 400):
+            if month > 2:
+                days += sum(months[:month - 1]) + 1
+            else:
+                days += sum(months[:month - 1])
+            days += day
+        else:
+            days += sum(months[:month - 1])
+            days += day
+        return days
 
-        @cache
-        def dfs(i, j):  # 计算 text[i: j + 1] 子问题
-            if i > j: return 0
-            if i == j:
-                return 1
-            m = j - i + 1
-            k = 1
-            res = 1
-            while k <= m // 2:
-                if text[i: i + k] == text[j - k + 1 : j + 1]:
-                    res = max(res, dfs(i + k, j - k) + 2)
-                k += 1
-            return res
-        return dfs(0, len(text) - 1)
 
-    def longestDecomposition(self, text: str) -> int:
-        # 贪心的做法
-        def dfs(i, j):  # 计算 text[i: j + 1] 子问题
-            if i > j: return 0
-            if i == j:
-                return 1
-            m = j - i + 1
-            k = 1
-            while k <= m // 2:
-                if text[i: i + k] == text[j - k + 1 : j + 1]:
-                    return dfs(i + k, j - k) + 2
-                k += 1
-            return 1
-        return dfs(0, len(text) - 1)
+so = Solution()
 
 
 
-obj = Solution()
-print(obj.longestDecomposition("elvtoelvto"))
-print(obj.longestDecomposition("ghiabcdefhelloadamhelloabcdefghi"))
-print(obj.longestDecomposition("merchant"))
-print(obj.longestDecomposition("antaprezatepzapreanta"))
 
