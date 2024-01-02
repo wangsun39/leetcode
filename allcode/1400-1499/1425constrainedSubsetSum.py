@@ -36,7 +36,7 @@ class Solution:
             while q and i - q[0][1] > k:
                 q.popleft()
             if q:
-                cur = q[0][0] + x
+                cur = max(q[0][0] + x, x)
             else:
                 cur = x
             ans = max(ans, cur)
@@ -48,6 +48,7 @@ class Solution:
 
 
 so = Solution()
+print(so.constrainedSubsetSum(nums = [-5266,4019,7336,-3681,-5767], k = 2))
 print(so.constrainedSubsetSum(nums = [10,-2,-10,-5,20], k = 2))
 print(so.constrainedSubsetSum(nums = [10,2,-10,5,20], k = 2))
 print(so.constrainedSubsetSum(nums = [-1,-2,-3], k = 1))
