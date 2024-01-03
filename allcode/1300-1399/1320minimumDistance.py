@@ -60,15 +60,20 @@ class Solution:
         # dp[i][j][k] 表示i步后，左手在j，右手在k的最小移动步数， j和k表示字母的c2i值
         w0, w1 = c2i[word[0]], c2i[word[1]]
         for j in range(26):
-            dp[1][j][c2i[word[1]]] = dist(w0, w1)
-            dp[1][c2i[word[1]]][j] = dist(w0, w1)
+            dp[1][j][w1] = dist(w0, w1)
+            dp[1][w1][j] = dist(w0, w1)
         dp[1][w1][w0] = dp[1][w0][w1] = 0
         last = w1
         for i in range(2, n):
             cur = c2i[word[i]]
             for j in range(26):
-                dp[i][j][cur] = min(dp[i - 1][j][last] + dist(last, cur), dp[i - 1][last][cur] + dist(last, j))
-                dp[i][cur][j] = min(dp[i - 1][cur][last] + dist(last, j), dp[i - 1][last][j] + dist(last, cur))
+                if j != last:
+                    dp[i][j][cur] = min(dp[i - 1][j][last] + dist(last, cur), dp[i - 1][last][cur] + dist(last, j))
+                    dp[i][cur][j] = dp[i][j][cur]
+                else:
+                    for k in range(26):
+                        dp[i][j][cur] = min(dp[i][j][cur], dp[i - 1][j][k] + dist(k, cur))
+                    dp[i][cur][j] = dp[i][j][cur]
             last = cur
 
         ans = inf
@@ -82,6 +87,7 @@ class Solution:
 
 
 so = Solution()
+print(so.minimumDistance('YEAR'))
 print(so.minimumDistance('CAKE'))
 print(so.minimumDistance(word = "HAPPY"))
 

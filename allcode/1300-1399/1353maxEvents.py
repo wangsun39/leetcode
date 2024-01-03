@@ -34,16 +34,27 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxEvents(self, events: List[List[int]]) -> int:
         events.sort()
-        cur = -1
+        n = len(events)
+        mx = max(x for _, x in events)  # 最后一天
+        cur = 0
         ans = 0
-        for i, [x, y] in enumerate(events):
-            if cur < y:
-                cur = max(x, cur + 1)
+        hp = []
+        for i in range(mx + 1):
+            while cur < n and events[cur][0] <= i:
+                heappush(hp, events[cur][::-1])  # [end, start] 放入hp，按end从小到大
+                cur += 1
+            while hp and hp[0][0] < i:
+                heappop(hp)
+            if hp:
+                heappop(hp)
                 ans += 1
+
         return ans
 
 
 so = Solution()
+print(so.maxEvents([[1,2],[1,2],[1,6],[1,2],[1,2]]))  # 3
+print(so.maxEvents([[1,2],[1,2],[3,3],[1,5],[1,5]]))  # 5
 print(so.maxEvents([[1,2],[2,3],[3,4]]))
 print(so.maxEvents([[1,2],[2,3],[3,4],[1,2]]))
 

@@ -28,23 +28,25 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def decode(self, encoded: List[int]) -> List[int]:
         n = len(encoded)
-        sup = [0] * n  # 设元素数组为a，sup依次记录a[0]^a[1],a[0]^a[2],...,a[0]^a[n]
+        sup = [0] * n  # 设原数组为a，sup依次记录a[0]^a[1],a[0]^a[2],...,a[0]^a[n]
         sup[0] = encoded[0]
         for i in range(1, n):
             sup[i] = sup[i - 1] ^ encoded[i]
-        s = set(sup)
+
+        v1 = reduce(lambda x, y: x ^ y, range(1, n + 2))  # 1^2^3...^(n+1) = a[0]^a[1]^a[2]^...^a[n]
+        v2 = reduce(lambda x, y: x ^ y, sup)  # a[0]^a[1]^a[0]^a[2]^...^a[0]^a[n] = a[1]^a[2]^...^a[n]
+
         nums = [0] * (n + 1)
-        for i in range(1, 10 ** 5):  # a[0]不能与任何sup的元素相同，否则某个a[i]将会是0
-            if i not in s:
-                nums[0] = i
-                break
+        nums[0] = v1 ^ v2
         for i in range(n):
             nums[i + 1] = nums[0] ^ sup[i]
         return nums
 
 
 
+
 so = Solution()
+print(so.decode(encoded = [12,6,11,10,5,3,4,6]))
 print(so.decode(encoded = [3,1]))
 print(so.decode(encoded = [6,5,4,6]))
 
