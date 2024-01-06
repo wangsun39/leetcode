@@ -41,17 +41,26 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minSumSquareDiff(self, nums1: List[int], nums2: List[int], k1: int, k2: int) -> int:
         n = len(nums1)
-        d = [-abs(nums1[i] - nums2[i]) for i in range(n)]
-        heapify(d)
-        k = k1 + k2
-        while k:
-            x = -heappop(d)
-            if x == 0:
+        d = [abs(nums1[i] - nums2[i]) for i in range(n)]
+        counter = Counter(d)
+        counter = deque(sorted([[c, v] for c, v in counter.items() if c > 0], reverse=True))
+        counter.append([0, 0])  # 增加一个哨兵
+        k = k1 + k2  # k1和k2合并起来看
+        while counter:
+            if counter[0][0] == 0 or k == 0:
                 break
-            x -= 1
-            k -= 1
-            heappush(d, -x)
-        return sum(x * x for x in d)
+            c0, v0 = counter[0]
+            c1, v1 = counter[1]
+            counter.popleft()
+            if (c0 - c1) * v0 <= k:
+                counter[0] = [c1, v0 + v1]  # 把差值最大的都变成差值次大的
+                k -= (c0 - c1) * v0
+            else:
+                q, r = divmod(k, v0)  # 剩下的k不足以把差值最大的全部变成差值次大的，只能平均变化
+                counter.appendleft([c0 - q - 1, r])
+                counter.appendleft([c0 - q, v0 - r])
+                break
+        return sum(c * c * v for c, v in counter)
 
 
 
@@ -59,6 +68,7 @@ class Solution:
 
 so = Solution()
 print(so.minSumSquareDiff(nums1 = [1,4,10,12], nums2 = [5,8,6,9], k1 = 1, k2 = 1))
+print(so.minSumSquareDiff(nums1 = [1,4,10,12], nums2 = [5,8,6,9], k1 = 10, k2 = 5))
 print(so.minSumSquareDiff(nums1 = [1,2,3,4], nums2 = [2,10,20,19], k1 = 0, k2 = 0))
 
 
