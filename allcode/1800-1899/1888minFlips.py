@@ -44,7 +44,7 @@ class Solution:
             for i, x in enumerate(ss):
                 if (i & 1 and x == '0') or (i & 1 == 0 and x == '1'):
                     m += 1
-            if ss[0] != ss[-1] or m == 0:  # 头尾不同，第二种操作执行次数不会变化
+            if m == 0 or n & 1 == 0:  # 长度为偶数，答案就是m
                 return m
             x1 = 0
             res = m
@@ -57,7 +57,7 @@ class Solution:
                 # s[:i + 1] 和 s[i + 1:] 对调，可能的第二种操作次数有两种
                 res = min(res, x2 + n1 - x1, x1 + n2 - x2)
             return res
-        s2 = list(s)
+        s2 = list(s)  # 把s的0和1互相调换，这样函数f只需要考虑，转成0101...的形式
         s2 = ['0' if x == '1' else '1' for x in s2]
         s2 = ''.join(s2)
         return min(f(s), f(s2))
@@ -66,6 +66,9 @@ class Solution:
 
 
 so = Solution()
+print(so.minFlips(s = "10100101011001111110"))
+print(so.minFlips(s = "01001001101"))
+print(so.minFlips(s = "001000000010"))
 print(so.minFlips(s = "010"))
 print(so.minFlips(s = "111000"))
 print(so.minFlips(s = "1110"))
