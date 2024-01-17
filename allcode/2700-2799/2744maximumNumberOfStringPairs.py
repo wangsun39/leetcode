@@ -77,6 +77,19 @@ class Solution:
                 ans += 1
         return ans // 2
 
+    def maximumNumberOfStringPairs(self, words: List[str]) -> int:
+        # 2024/1/17 另一种写法
+        s = set()
+        ans = 0
+        for x in words:
+            y = x[::-1]
+            if y in s:
+                s.remove(y)
+                ans += 1
+            else:
+                s.add(x)
+        return ans
+
 
 
 
