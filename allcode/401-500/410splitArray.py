@@ -79,3 +79,29 @@ class Solution:
 
         # print(D)
         return D[(N - 1, m)]
+
+    def splitArray2(self, nums: List[int], k: int) -> int:
+        # 2024/1/21  二分
+        def check(val):
+            cnt = 0  # 当前子数组个数
+            s = 0 # 当前子数组和
+            for i, x in enumerate(nums):
+                if s + x > val:
+                    cnt += 1
+                    if cnt > k:
+                        return False
+                    s = x
+                else:
+                    s += x
+            if s > 0:
+                cnt += 1
+            return cnt <= k
+
+        lo, hi = max(nums) - 1, sum(nums)
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
