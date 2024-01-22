@@ -52,13 +52,17 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def friendRequests(self, n: int, restrictions: List[List[int]], requests: List[List[int]]) -> List[bool]:
+
+    def friendRequests1(self, n: int, restrictions: List[List[int]], requests: List[List[int]]) -> List[bool]:
+        # 探测 + 回退的写法
         fa = list(range(n))
+
         # fa = {x: x for x in nums}  # 另一种写法，x不连续
         def find(x):
             if x != fa[x]:
                 fa[x] = find(fa[x])
             return fa[x]
+
         def union(x, y):
             fa[find(y)] = find(x)
 
@@ -77,6 +81,30 @@ class Solution:
                 ans[i] = True
             else:
                 fa = fa2[:]  # 请求失败要恢复之前的并查集
+        return ans
+
+    def friendRequests(self, n: int, restrictions: List[List[int]], requests: List[List[int]]) -> List[bool]:
+        # 不探测的写法
+        fa = list(range(n))
+        # fa = {x: x for x in nums}  # 另一种写法，x不连续
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        def check(x, y):  # 检查x,y能否成为好友
+            for u, v in restrictions:
+                if (find(x) == find(u) and find(y) == find(v)) or (find(x) == find(v) and find(y) == find(u)):
+                    return False
+            return True
+
+        ans = [False] * len(requests)
+        for i, [x, y] in enumerate(requests):
+            if check(x, y):
+                union(x, y)
+                ans[i] = True
         return ans
 
 so = Solution()
