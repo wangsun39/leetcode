@@ -54,19 +54,20 @@ class Solution:
                 up, right, down, left = x * 4, x * 4 + 1, x * 4 + 2, x * 4 + 3  # 细分的4个子节点
 
                 # 与相邻节点连起来
-                if i > 0:
-                    y = (i - 1) * c + j
-                    union(y * 4 + 2, up)
-                if i < r - 1:
-                    y = (i + 1) * c + j
-                    union(y * 4, down)
-                if j > 0:
-                    y = i * c + j - 1
-                    union(y * 4 + 1, left)
-                if j < c - 1:
-                    y = i * c + j + 1
-                    union(y * 4 + 3, right)
-                # 内部连接
+                if i & 1 == j & 1:  # 为了减少重复union，可以隔一个位置处理一个节点与其周围节点的关系
+                    if i > 0:
+                        y = (i - 1) * c + j
+                        union(y * 4 + 2, up)
+                    if i < r - 1:
+                        y = (i + 1) * c + j
+                        union(y * 4, down)
+                    if j > 0:
+                        y = i * c + j - 1
+                        union(y * 4 + 1, left)
+                    if j < c - 1:
+                        y = i * c + j + 1
+                        union(y * 4 + 3, right)
+                # 内部连接，都需要处理
                 if grid[i][j] == ' ':
                     union(up, right)
                     union(right, down)
