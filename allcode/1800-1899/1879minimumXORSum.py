@@ -34,10 +34,50 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumXORSum(self, nums1: List[int], nums2: List[int]) -> int:
+        n = len(nums1)
+        nums1.sort(reverse=True)
+        nums2.sort(reverse=True)
+
+        @cache
+        def dfs(tu1, tu2):
+            if len(tu1) == 0:
+                return 0
+            if tu1[0] == 0 or tu2[0] == 0:
+                return sum(tu1[i] ^ tu2[i] for i in range(len(tu1)))
+            if len(tu1) == 1:
+                return tu1[0] ^ tu2[0]
+            bl1, bl2 = tu1[0].bit_length(), tu2[0].bit_length()
+            len1 = sum(x.bit_length() == bl1 for x in tu1)
+            len2 = sum(x.bit_length() == bl2 for x in tu2)
+            res = inf
+            if bl1 == bl2:   # 长度相同的可以任意组合进行枚举
+                for i in range(len1):
+                    for j in range(len2):
+                        li1, li2 = list(tu1), list(tu2)
+                        li1[0], li1[i] = li1[i], li1[0]
+                        li2[0], li2[j] = li2[j], li2[0]
+                        li1[0] &= ~(1 << (bl1 - 1))  # 同时去掉最高位
+                        li2[0] &= ~(1 << (bl2 - 1))
+                        li1.sort(reverse=True)
+                        li2.sort(reverse=True)
+                        res = min(res, li1[0] ^ li2[0] + dfs(tuple(li1[1:]), tuple(li2[1:])))
+            else:
+                if bl1 < bl2:
+                    bl1, bl2 = bl2, bl1
+                    tu1, tu2 = tu2, tu1
+                    len1, len2 = len2, len1
+                base = (1 << (bl1 - 1)) * len1  # 这些高位都会保留在最终的和中
+                tu1 = tuple(sorted([tu1[i] & ~(1 << (bl1 - 1)) for i in range(len(tu1))], reverse=True))  # 剩下只要考虑最高位是len1-1的情况
+                return dfs(tu1, tu2) + base
+            return res
+        return dfs(tuple(nums1), tuple(nums2))
+
+
 
 
 so = Solution()
-print(so.minimumXORSum())
+print(so.minimumXORSum(nums1 = [1,0,3], nums2 = [5,3,4]))  # 8
+print(so.minimumXORSum(nums1 = [1,2], nums2 = [2,3]))
 
 
 
