@@ -3,29 +3,26 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countOfPairs(self, n: int, x: int, y: int) -> List[int]:
-        if x > y:
-            x, y = y, x
-        ans = [0] * (n + 1)
-        if x == y or x + 1 == y:
-            for k in range(1, n + 1):
-                ans[k] = (n - k) * 2
-        else:
-            for k in range(1, n + 1):
-                p1 = max(0, n - k - x)
-                p2 = min(x, n - (y - x + 1) - k)
-                p2 = max(0, p2)
-                ans[k] = (p1 + p2) * 2
+    def minOrAfterOperations(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        result = 0
 
-        ans.pop(0)
-        return ans
+        for bit in range(30, -1, -1):
+            count = 0
+            for i in range(n):
+                if (nums[i] >> bit) & 1:
+                    count += 1
+            if count >= k:
+                result |= (1 << bit)
+                k -= 1
+            if k == 0:
+                break
+
+        return result
 
 
 so = Solution()
-print(so.countOfPairs(n = 5, x = 1, y = 5))
-print(so.countOfPairs(n = 3, x = 1, y = 3))
-print(so.countOfPairs(n = 5, x = 2, y = 4))
-print(so.countOfPairs(n = 4, x = 1, y = 1))
+print(so.minOrAfterOperations(nums = [3,5,3,2,7], k = 2))
 
 
 

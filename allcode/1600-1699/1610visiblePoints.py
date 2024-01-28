@@ -38,24 +38,38 @@
 # location.length == 2
 # 0 <= angle < 360
 # 0 <= posx, posy, xi, yi <= 100
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -> int:
-        def calculate_angle(x, y):
-            if [x, y] == location:
-                return [-1, 0]  # 排在最前面，一定能看见
-            dx, dy = x - location[0], y - location[1]
-            if dy == 0 < dx:
-                return [0, 0]
-            if dx > 0 and dy > 0:
-                return [1, dy / dx]  # 第一象限
-        points
+        def calculate_angle(p):
+            x, y = p
+            arg = math.degrees(math.atan2(y - location[1], x - location[0]))
+            if arg < 0:
+                arg = 360 + arg
+            return arg
+        selfv = points.count(location)
+        if selfv:
+            points = [p for p in points if p != location]
+        arg = [calculate_angle(p) for p in points]
+        arg.sort()
+        n = len(arg)
+        arg += [x + 360 for x in arg]
+        r = 0
+        ans = 0
+        for l in range(n):
+            while r < n * 2 and arg[r] - arg[l] <= angle:
+                r += 1
+            ans = max(ans, r - l)
 
+        return ans + selfv
 
 so = Solution()
-print(so.visiblePoints())
+print(so.visiblePoints(points = [[2,1],[2,2],[3,4],[1,1],[1,1],[1,1]], angle = 90, location = [1,1]))
+print(so.visiblePoints(points = [[2,1],[2,2],[3,3]], angle = 90, location = [1,1]))
+print(so.visiblePoints(points = [[1,0],[2,1]], angle = 13, location = [1,1]))
 
 
 
