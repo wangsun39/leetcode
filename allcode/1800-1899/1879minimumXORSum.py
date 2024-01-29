@@ -34,7 +34,6 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumXORSum(self, nums1: List[int], nums2: List[int]) -> int:
-        n = len(nums1)
         nums1.sort(reverse=True)
         nums2.sort(reverse=True)
 
@@ -56,11 +55,8 @@ class Solution:
                         li1, li2 = list(tu1), list(tu2)
                         li1[0], li1[i] = li1[i], li1[0]
                         li2[0], li2[j] = li2[j], li2[0]
-                        li1[0] &= ~(1 << (bl1 - 1))  # 同时去掉最高位
-                        li2[0] &= ~(1 << (bl2 - 1))
-                        li1.sort(reverse=True)
-                        li2.sort(reverse=True)
-                        res = min(res, li1[0] ^ li2[0] + dfs(tuple(li1[1:]), tuple(li2[1:])))
+
+                        res = min(res, (li1[0] ^ li2[0]) + dfs(tuple(sorted(li1[1:], reverse=True)), tuple(sorted(li2[1:], reverse=True))))
             else:
                 if bl1 < bl2:
                     bl1, bl2 = bl2, bl1
@@ -76,6 +72,10 @@ class Solution:
 
 
 so = Solution()
+print(so.minimumXORSum(nums1 = [15,8], nums2 = [12,9]))  # 36
+print(so.minimumXORSum(nums1 = [15,8], nums2 = [60,57]))  # 100
+print(so.minimumXORSum(nums1 = [32,15,8], nums2 = [63,60,57]))  # 125
+print(so.minimumXORSum(nums1 = [72,97,8,32,15], nums2 = [63,97,57,60,83]))  # 152
 print(so.minimumXORSum(nums1 = [1,0,3], nums2 = [5,3,4]))  # 8
 print(so.minimumXORSum(nums1 = [1,2], nums2 = [2,3]))
 
