@@ -55,14 +55,13 @@ class Solution:
                         li1, li2 = list(tu1), list(tu2)
                         li1[0], li1[i] = li1[i], li1[0]
                         li2[0], li2[j] = li2[j], li2[0]
-
                         res = min(res, (li1[0] ^ li2[0]) + dfs(tuple(sorted(li1[1:], reverse=True)), tuple(sorted(li2[1:], reverse=True))))
             else:
                 if bl1 < bl2:
                     bl1, bl2 = bl2, bl1
                     tu1, tu2 = tu2, tu1
                     len1, len2 = len2, len1
-                base = (1 << (bl1 - 1)) * len1  # 这些高位都会保留在最终的和中
+                base = (1 << (bl1 - 1)) * len1  # 多出来的这些高位都会保留在最终的和中
                 tu1 = tuple(sorted([tu1[i] & ~(1 << (bl1 - 1)) for i in range(len(tu1))], reverse=True))  # 剩下只要考虑最高位是len1-1的情况
                 return dfs(tu1, tu2) + base
             return res
