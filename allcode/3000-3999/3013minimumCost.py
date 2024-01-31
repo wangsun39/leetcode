@@ -42,16 +42,28 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minimumCost(self, nums: List[int], k: int, dist: int) -> int:
         n = len(nums)
-        start = 1
-        sl = SortedList(nums[start: start + k - 2])  # 至少有k-2个元素，至多dist个元素
-        end = start + k - 2  # 最后一段的开头元素下标
-        ans = sum(sl) + nums[end]
-        while start + k - 2 < n:
-
+        sl = SortedList(nums[1: 2 + dist])  # 至少有k-1个元素，至多dist个元素
+        ans = s = sum(sl[:k - 1])
+        for r in range(2 + dist, n):
+            l = r - dist - 1
+            if nums[l] <= sl[k - 2]:
+                s -= nums[l]
+                sl.remove(nums[l])
+                if k - 2 >= len(sl) or nums[r] < sl[k - 2]:
+                    s += nums[r]
+            else:
+                sl.remove(nums[l])
+                if nums[r] < sl[k - 2]:
+                    s += (nums[r] - sl[k - 2])
+            sl.add(nums[r])
+            ans = min(ans, s)
+        return ans + nums[0]
 
 
 so = Solution()
-print(so.minimumCost())
+print(so.minimumCost(nums = [10,8,18,9], k = 3, dist = 1))
+print(so.minimumCost(nums = [1,3,2,6,4,2], k = 3, dist = 3))
+print(so.minimumCost(nums = [10,1,2,2,2,1], k = 4, dist = 3))
 
 
 

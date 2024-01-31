@@ -40,7 +40,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def minimumSeconds(self, nums: List[int]) -> int:
+    def minimumSeconds1(self, nums: List[int]) -> int:
         pre = {}  # pre[i] 表示前一次出现i的位置
         # 先找到每个数最后一次出现的位置
         n = len(nums)
@@ -59,6 +59,22 @@ class Solution:
         ans = min(dis.values())
         return (ans + 1) // 2
 
+    def minimumSeconds(self, nums: List[int]) -> int:
+        # 2024/1/30  与上面的类似
+        nums += nums  # 循环数组
+        pos = {}
+        mx_dis = {}  # 相同元素间的最大距离
+        for i, x in enumerate(nums):
+            if x not in pos:
+                pos[x] = i
+                mx_dis[x] = 0
+            else:
+                mx_dis[x] = max(mx_dis[x], i - pos[x] - 1)
+                pos[x] = i
+        if len(pos) == 1:
+            return 0
+        mn_dis = min(mx_dis.values())   # mx_dis[x] 不会为0
+        return (mn_dis + 1) // 2
 
 so = Solution()
 print(so.minimumSeconds([8,13,3,3]))
