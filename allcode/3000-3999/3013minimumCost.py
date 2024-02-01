@@ -51,6 +51,8 @@ class Solution:
                 sl.remove(nums[l])
                 if k - 2 >= len(sl) or nums[r] < sl[k - 2]:
                     s += nums[r]
+                else:
+                    s += sl[k - 2]
             else:
                 sl.remove(nums[l])
                 if nums[r] < sl[k - 2]:
@@ -61,6 +63,7 @@ class Solution:
 
 
 so = Solution()
+print(so.minimumCost(nums = [1,6,4,6,2,9,11], k = 4, dist = 3))
 print(so.minimumCost(nums = [10,8,18,9], k = 3, dist = 1))
 print(so.minimumCost(nums = [1,3,2,6,4,2], k = 3, dist = 3))
 print(so.minimumCost(nums = [10,1,2,2,2,1], k = 4, dist = 3))
