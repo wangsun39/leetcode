@@ -34,13 +34,25 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxValueOfCoins(self, piles: List[List[int]], k: int) -> int:
-
-        def
+        n = len(piles)
+        @cache
+        def dfs(idx, left):
+            if idx >= n:
+                if left > 0:
+                    return -inf
+                else:
+                    return 0
+            s = 0
+            res = dfs(idx + 1, left)
+            for i in range(min(len(piles[idx]), left)):
+                s += piles[idx][i]
+                res = max(res, s + dfs(idx + 1, left - i - 1))
+            return res
+        return dfs(0, k)
 
 
 
 so = Solution()
-print(so.maxValueOfCoins())
 
 
 

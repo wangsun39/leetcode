@@ -37,17 +37,37 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def getMinDistSum(self, positions: List[List[int]]) -> float:
         n = len(positions)
-        ans = inf
-        left, right = min(positions[i][1] for i in range(n)), max(positions[i][1] for i in range(n))
-        down, up = min(positions[i][0] for i in range(n)), max(positions[i][0] for i in range(n))
-        for i in range(down, up + 1):
-            for j in range(left, right + 1):
-                ans = min(ans, sum(((x - i) ** 2 + (y - j) ** 2) ** 0.5 for x, y in positions))
-        return ans
+        def dist(x0, y0):
+            return sum(((x - x0) ** 2 + (y - y0) ** 2) ** 0.5 for x, y in positions)
+        left, right = min(positions[i][0] for i in range(n)), max(positions[i][0] for i in range(n))
+        down, up = min(positions[i][1] for i in range(n)), max(positions[i][1] for i in range(n))
+        d1 = d2 = dist(positions[0][0], positions[0][1])
+
+        def calc(x0):  # 在 x = x0上找到最小值对应的y坐标
+            hi, lo = up, down
+            while hi - lo > 10 ** (-7):
+                y1, y2 = (2 * lo + hi) / 3, (lo + 2 * hi) / 3
+                d1, d2 = dist(x0, y1), dist(x0, y2)
+                if d1 < d2:
+                    hi = y2
+                else:
+                    lo = y1
+            return min(d1, d2)
+
+        while right - left > 10 ** (-7):
+            x1, x2 = (2 * left + right) / 3, (left + 2 * right) / 3
+            d1, d2 = calc(x1), calc(x2)
+            if d1 < d2:
+                right = x2
+            else:
+                left = x1
+        return min(d1, d2)
 
 
 
 so = Solution()
+print(so.getMinDistSum([[58,32],[41,21]]))
+print(so.getMinDistSum([[1,1],[0,0],[2,0]]))
 print(so.getMinDistSum([[0,1],[1,0],[1,2],[2,1]]))
 print(so.getMinDistSum([[1,1],[3,3]]))
 
