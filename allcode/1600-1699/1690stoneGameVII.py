@@ -48,6 +48,10 @@ class Solution:
                 return 0
             return max(s[j + 1] - s[i + 1] - dfs(i + 1, j), s[j] - s[i] - dfs(i, j - 1))
         return dfs(0, n - 1)
+        # 改成下面的方法可以通过
+        # ans = dfs(0, n - 1)
+        # dfs.cache_clear()  # 防止爆内存
+        # return ans
 
     def stoneGameVII(self, stones: List[int]) -> int:
         s = list(accumulate(stones, initial=0))
