@@ -41,7 +41,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def replaceValueInTree1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         def copy(old):
             if old is None:
                 return None
@@ -80,6 +80,36 @@ class Solution:
         print(lev)
         dfs2(ans, root, None, 0)
         return ans
+
+    def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 2024/2/7  BFS + DFS
+        dq1 = deque([root])
+        s_lv = []
+        while dq1:
+            dq2 = deque()
+            s = 0
+            while dq1:
+                x = dq1.popleft()
+                s += x.val
+                if x.left:
+                    dq2.append(x.left)
+                if x.right:
+                    dq2.append(x.right)
+            s_lv.append(s)
+            dq1 = dq2
+        def dfs(x, lv, s):
+            x.val = s_lv[lv] - s
+            cur_s = 0
+            if x.left:
+                cur_s += x.left.val
+            if x.right:
+                cur_s += x.right.val
+            if x.left:
+                dfs(x.left, lv + 1, cur_s)
+            if x.right:
+                dfs(x.right, lv + 1, cur_s)
+        dfs(root, 0, root.val)
+        return root
 
 
 root = TreeNode(5)
