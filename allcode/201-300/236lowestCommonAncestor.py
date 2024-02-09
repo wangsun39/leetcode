@@ -1,66 +1,68 @@
-# 序列化是将一个数据结构或者对象转换为连续的比特位的操作，进而可以将转换后的数据存储在一个文件或者内存中，同时也可以通过网络传输到另一个计算机环境，采取相反方式重构得到原数据。
+# 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 #
-# 请设计一个算法来实现二叉树的序列化与反序列化。这里不限定你的序列 / 反序列化算法执行逻辑，你只需要保证一个二叉树可以被序列化为一个字符串并且将这个字符串反序列化为原始的树结构。
+# 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
 #
-# 示例: 
 #
-# 你可以将以下二叉树：
 #
-#     1
-#    / \
-#   2   3
-#      / \
-#     4   5
+# 示例 1：
 #
-# 序列化为 "[1,2,3,null,null,4,5]"
-# 提示: 这与 LeetCode 目前使用的方式一致，详情请参阅 LeetCode 序列化二叉树的格式。你并非必须采取这种方式，你也可以采用其他的方法解决这个问题。
 #
-# 说明: 不要使用类的成员 / 全局 / 静态变量来存储状态，你的序列化和反序列化算法应该是无状态的。
+# 输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+# 输出：3
+# 解释：节点 5 和节点 1 的最近公共祖先是节点 3 。
+# 示例 2：
+#
+#
+# 输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+# 输出：5
+# 解释：节点 5 和节点 4 的最近公共祖先是节点 5 。因为根据定义最近公共祖先节点可以为节点本身。
+# 示例 3：
+#
+# 输入：root = [1,2], p = 1, q = 2
+# 输出：1
+#
+#
+# 提示：
+#
+# 树中节点数目在范围 [2, 105] 内。
+# -109 <= Node.val <= 109
+# 所有 Node.val 互不相同 。
+# p != q
+# p 和 q 均存在于给定的二叉树中。
+
+from leetcode.allcode.competition.mypackage import *
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        dfa = {}
+
+        def dfs(x, fa):
+            if x is None:
+                return
+            dfa[x] = fa
+            dfs(x.left, x)
+            dfs(x.right, x)
+
+        dfs(root, None)
+        fap = [p]
+        while fap[-1] != root:
+            fap.append(dfa[fap[-1]])
+        faq = [q]
+        while faq[-1] != root:
+            faq.append(dfa[faq[-1]])
+        if len(fap) > len(faq):
+            fap, faq = faq, fap
+        idp, idq = 0, len(faq) - len(fap)
+        while True:
+            if fap[idp] == faq[idq]:
+                return fap[idp]
+            idp += 1
+            idq += 1
+
+
+so = Solution()
+print(so.lowestCommonAncestor())
 
 
 
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
 
-class Codec:
-
-    def serialize(self, root):
-        """Encodes a tree to a single string.
-
-        :type root: TreeNode
-        :rtype: str
-        """
-        stack = []
-
-
-    def deserialize(self, data):
-        """Decodes your encoded data to tree.
-
-        :type data: str
-        :rtype: TreeNode
-        """
-
-
-so = Codec()
-
-root = TreeNode(3)
-root.left = TreeNode(5)
-root.right = TreeNode(1)
-root.left.left = TreeNode(6)
-root.left.right = TreeNode(2)
-root.right.left = TreeNode(0)
-root.right.right = TreeNode(8)
-root.left.right.left = TreeNode(7)
-root.left.right.right = TreeNode(4)
-print(so.lowestCommonAncestor(root, TreeNode(5), TreeNode(4)).val)
-
-root = TreeNode(1)
-root.left = TreeNode(2)
-root.left.left = TreeNode(4)
-root.left.right = TreeNode(5)
-root.right = TreeNode(3)
-root.right.left = TreeNode(6)
-print(so.lowestCommonAncestor(root, TreeNode(4), TreeNode(6)).val)
