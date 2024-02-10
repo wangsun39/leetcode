@@ -54,10 +54,24 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numberOfPairs(self, points: List[List[int]]) -> int:
+        points.sort(key=lambda x: [x[0], -x[1]])
+        ans = 0
+        for i, [_, y] in enumerate(points):
+            q = []
+            for j, [u, v] in enumerate(points[i + 1:], i + 1):
+                if v > y: continue
+                if q and (q[-1][0] == u or q[-1][1] >= v): continue
+                q.append([u, v])
+            ans += len(q)
+        return ans
+
+
 
 
 so = Solution()
-print(so.numberOfPairs())
+print(so.numberOfPairs([[6,2],[4,4],[2,6]]))
+print(so.numberOfPairs([[1,1],[2,2],[3,3]]))
+print(so.numberOfPairs([[3,1],[1,3],[1,1]]))
 
 
 
