@@ -3,18 +3,20 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countKeyChanges(self, s: str) -> int:
+    def countPrefixSuffixPairs(self, words: List[str]) -> int:
+        n = len(words)
         ans = 0
-        n = len(s)
-        for i in range(1, n):
-            if s[i].upper() != s[i - 1].upper():
-                ans += 1
+        for i in range(n):
+            for j in range(i + 1, n):
+                if words[j].startswith(words[i]) and words[j].endswith(words[i]):
+                    ans += 1
         return ans
 
 
 so = Solution()
-print(so.countKeyChanges("aAbBcC"))
-print(so.countKeyChanges("AaAaAaaA"))
+print(so.countPrefixSuffixPairs(words = ["a","aba","ababa","aa"]))
+print(so.countPrefixSuffixPairs(words = ["pa","papa","ma","mama"]))
+print(so.countPrefixSuffixPairs(words = ["abab","ab"]))
 
 
 

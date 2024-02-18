@@ -19,7 +19,7 @@ class Node:
         self.val = val
         self.children = children
 class Solution:
-    def preorder(self, root: 'Node') -> List[int]:
+    def preorder1(self, root: 'Node') -> List[int]:
         if root is None:
             return []
         stack, res = collections.deque([root]), []
@@ -29,6 +29,17 @@ class Solution:
             if cur.children is not None:
                 stack.extendleft(cur.children[::-1])
         return res
+
+    def preorder(self, root: 'Node') -> List[int]:
+        # 2024/2/18 递归写法
+        def dfs(x):
+            if not x:
+                return []
+            res = [x.val]
+            for y in x.children:
+                res += dfs(y)
+            return res
+        return dfs(root)
 
 
 so = Solution()

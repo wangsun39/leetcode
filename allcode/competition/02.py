@@ -2,32 +2,46 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Solution:
-    def maximumLength(self, nums: List[int]) -> int:
-        counter = Counter(nums)
-        nums = list(set(nums))
-        nums.sort()
-        ans = 1
-        if counter[1]:
-            ans = max(ans, counter[1] if counter[1] & 1 else counter[1] - 1)
-        for x in nums:
-            if x == 1: continue
-            s = set()
-            y = x
-            while y in counter and counter[y] >= 2:
-                s.add(y)
-                y = y * y
-            if counter[y] == 1:
-                ans = max(ans, len(s) * 2 + 1)
+class Trie:
+
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {}
+            cur = cur[e]
+        cur['end'] = True
+
+    def startsWith(self, prefix: str) -> bool:
+        cur = self.root
+        cnt = 0
+        for e in prefix:
+            if e in cur:
+                cur = cur[e]
+                cnt += 1
             else:
-                ans = max(ans, len(s) * 2 - 1)
+                break
+        return cnt
+
+class Solution:
+    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
+        arr1 = sorted(str(x) for x in arr1)
+        arr2 = sorted(str(x) for x in arr2)
+        tr = Trie()
+        for w in arr1:
+            tr.insert(w)
+        ans = 0
+        for w in arr2:
+            ans = max(ans, tr.startsWith(w))
         return ans
 
+
 so = Solution()
-print(so.maximumLength([14,14,196,196,38416,38416]))
-print(so.maximumLength([1,1]))
-print(so.maximumLength([5,4,1,2,2]))
-print(so.maximumLength([1,3,2,4]))
+print(so.longestCommonPrefix(arr1 = [1,10,100], arr2 = [1000]))
+print(so.longestCommonPrefix(arr1 = [1,2,3], arr2 = [4,4,4]))
 
 
 
