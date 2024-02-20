@@ -6,7 +6,7 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+    def buildTree1(self, preorder: List[int], inorder: List[int]) -> TreeNode:
         def recur(preorder, inorder):
             if 0 == len(preorder):
                 return None
@@ -20,6 +20,22 @@ class Solution:
 
         return recur(preorder, inorder)
 
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        # 2024/2/20  DFS 传递下标
+        d = {x: i for i, x in enumerate(inorder)}
+        n = len(preorder)
+
+        def dfs(pi, pj, ii, ij):
+            if pi > pj:
+                return None
+            root = TreeNode(preorder[pi])
+            idx = d[preorder[pi]]
+            left = idx - ii
+            right = ij - idx
+            root.left = dfs(pi + 1, pi + left, ii, idx - 1)
+            root.right = dfs(pi + left + 1, pj, idx + 1, ij)
+            return root
+        return dfs(0, n - 1, 0, n - 1)
 
 
 so = Solution()

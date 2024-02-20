@@ -64,6 +64,7 @@ class Solution:
 
 
 so = Solution()
+print(so.smallestSubsequence(s = "ojmgznybdllqahkblcickrmsfrppubzjkjxkcszeqprtnrmtpnqislrcxekuuuzbtsipvtujjulzkxaudxdhegzojdqzsyfuecfrpvqdhyyvxskpicqfyomeogckoagnzowhuogpqgueqgmtddtjepyhiphwkhlvjibnfpelhtffearwjusxnusrlabbgewycildblnepauwwpuhdxcdbbhhohadutuvkhoaafjohrvxeerfxknivvkavznkgvwfacojnkjcuqxzazeudtykpymeyiggujcithaczexffuzuxhkaqtjxbavxsmrgaektyfgtiaqjjkmegmkumiivlihlbhplybhrqmkoeohaflnbpsfaseuupyuumdgfckebamqxfamgaidrbkja"))
 print(so.smallestSubsequence(s = "bcabc"))
 print(so.smallestSubsequence(s = "cbacdcbc"))
 
