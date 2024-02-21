@@ -59,6 +59,9 @@ class Solution:
                     if x in mand:
                         mand2.add(x)
             r2 = dfs(l2, mand2)
+            # print(ss, mand, r1, mn, r2)
+            if len(r2) == 0 and mn not in mand:  # 这步很关键
+                return r1
             return r1 + mn + r2
         return dfs(l, set(l))
 
