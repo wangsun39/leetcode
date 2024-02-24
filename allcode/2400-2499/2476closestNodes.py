@@ -44,7 +44,7 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
-    def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
+    def closestNodes1(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
         nums = []
         def dfs(node):
             if node is None:
@@ -67,30 +67,37 @@ class Solution:
                 else:
                     ans.append([nums[pos - 1], nums[pos]])
         return ans
-    # def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
-    #     def find(q):
-    #         cur = root
-    #         if cur.val == q:
-    #             return [q, q]
-    #         mi = ma = -1
-    #         if cur.val < q:
-    #             mi = cur.val
-    #         else:
-    #             ma = cur.val
-    #         while cur:
-    #             if cur.val == q:
-    #                 return [q, q]
-    #             if cur.val < q:
-    #                 mi = cur.val
-    #                 cur = cur.right
-    #             else:
-    #                 ma = cur.val
-    #                 cur = cur.left
-    #         return [mi, ma]
-    #     ans = []
-    #     for q in queries:
-    #         ans.append(find(q))
-    #     return ans
+
+    def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:
+        # 2024/2/24 替换二分的写法
+        l = []
+        def dfs(node):
+            if node is None: return []
+            l.append(node.val)
+            dfs(node.left)
+            dfs(node.right)
+
+        dfs(root)
+        l.sort()
+        n = len(l)
+        m = len(queries)
+        ans = [[0] * 2 for _ in range(m)]
+        cur = 0
+
+        for i, x in sorted(enumerate(queries), key=lambda x:[x[1], x[0]]):
+            while cur < n and l[cur] < x:
+                cur += 1
+            if cur >= n:
+                ans[i] = [l[-1], -1]
+                continue
+            if l[cur] == x:
+                ans[i] = [l[cur], l[cur]]
+                continue
+            if cur:
+                ans[i] = [l[cur - 1], l[cur]]
+            else:
+                ans[i] = [-1, l[cur]]
+        return ans
 
 
 root = TreeNode(6)

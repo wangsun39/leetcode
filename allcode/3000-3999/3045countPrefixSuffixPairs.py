@@ -16,19 +16,18 @@ class Trie:
         cur['end'] = True
         cur['cnt'] += 1
 
-
-    def search(self, word: str) -> bool:
+    def search(self, word: str) -> int:
         cur = self.root
         for e in word:
             if e in cur:
                 cur = cur[e]
             else:
-                return False
-        return 'end' in cur
+                return 0
+        if 'end' in cur:
+            return cur['cnt']
+        return 0
 
-
-
-    def startsWith(self, prefix: str) -> bool:
+    def startsWith(self, prefix: str) -> int:
         cur = self.root
         for e in prefix:
             if e in cur:
@@ -37,13 +36,13 @@ class Trie:
                 return 0
         return cur['cnt']
 
-
 class Solution:
     def countPrefixSuffixPairs(self, words: List[str]) -> int:
         def z_function(s):
             n = len(s)
             z = [0] * n
             l, r = 0, 0
+            z[0] = n
             for i in range(1, n):
                 if i <= r and z[i - l] < r - i + 1:
                     z[i] = z[i - l]
@@ -57,20 +56,25 @@ class Solution:
             return z
         tr = Trie()
         ans = 0
-        for word in words[::-1]:
-            ans += tr.startsWith(word)
+        for word in words:
             z = z_function(word)
-            n = len(word)
-            z[0] = n
-            for i, x in enumerate(z):
-                if x == n - i:
-                    tr.insert(word[i:])
+            cur = tr.root
+            m = len(word)
+            for i, x in enumerate(word):   # 这里不能用每一个满足前后缀相等的前缀调用search，这样性能不够
+                if x not in cur: break
+                cur = cur[x]
+                if 'cnt' in cur:
+                    if z[m - 1 - i] == i + 1:
+                        ans += cur['cnt']
+            tr.insert(word)
+
         return ans
 
 so = Solution()
+print(so.countPrefixSuffixPairs(words = ["pa","papa","ma","mama"]))
+print(so.countPrefixSuffixPairs(words = ["a","a"]))
 print(so.countPrefixSuffixPairs(words = ["bb","bb"]))
 print(so.countPrefixSuffixPairs(words = ["a","aba","ababa","aa"]))
-print(so.countPrefixSuffixPairs(words = ["pa","papa","ma","mama"]))
 print(so.countPrefixSuffixPairs(words = ["abab","ab"]))
 
 

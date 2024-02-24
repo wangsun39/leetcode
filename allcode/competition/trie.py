@@ -78,7 +78,41 @@ class Trie:
                 return False
         return True
 
-# print(so.removeDigit(123456))
+
+# 计数的Trie树
+class Trie:
+
+    def __init__(self):
+        self.root = {'cnt': 0}
+
+    def insert(self, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {'cnt': 0}
+            cur = cur[e]
+        cur['end'] = True
+        cur['cnt'] += 1
+
+    def search(self, word: str) -> int:
+        cur = self.root
+        for e in word:
+            if e in cur:
+                cur = cur[e]
+            else:
+                return 0
+        if 'end' in cur:
+            return cur['cnt']
+        return 0
+
+    def startsWith(self, prefix: str) -> int:
+        cur = self.root
+        for e in prefix:
+            if e in cur:
+                cur = cur[e]
+            else:
+                return 0
+        return cur['cnt']
 
 
 
