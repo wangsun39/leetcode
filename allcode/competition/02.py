@@ -2,46 +2,28 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Trie:
-
-    def __init__(self):
-        self.root = {}
-
-    def insert(self, word: str) -> None:  # O(log(len(word)))
-        cur = self.root
-        for e in word:
-            if e not in cur:
-                cur[e] = {}
-            cur = cur[e]
-        cur['end'] = True
-
-    def startsWith(self, prefix: str) -> bool:
-        cur = self.root
-        cnt = 0
-        for e in prefix:
-            if e in cur:
-                cur = cur[e]
-                cnt += 1
-            else:
-                break
-        return cnt
-
 class Solution:
-    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
-        arr1 = sorted(str(x) for x in arr1)
-        arr2 = sorted(str(x) for x in arr2)
-        tr = Trie()
-        for w in arr1:
-            tr.insert(w)
+    def largestSquareArea(self, bottomLeft: List[List[int]], topRight: List[List[int]]) -> int:
+        n = len(bottomLeft)
         ans = 0
-        for w in arr2:
-            ans = max(ans, tr.startsWith(w))
+        for i in range(n):
+            x1, y1 = bottomLeft[i]
+            x2, y2 = topRight[i]
+            for j in range(i + 1, n):
+                u1, v1 = bottomLeft[j]
+                u2, v2 = topRight[j]
+                if x1 >= u2 or u1 >= x2 or y1 >= v2 or v1 >= y2:
+                    continue
+                a = sorted([x1, x2, u1, u2])
+                b = sorted([y1, y2, v1, v2])
+                ans = max(ans, min(a[2] - a[1], b[2] - b[1]))
         return ans
 
 
 so = Solution()
-print(so.longestCommonPrefix(arr1 = [1,10,100], arr2 = [1000]))
-print(so.longestCommonPrefix(arr1 = [1,2,3], arr2 = [4,4,4]))
+print(so.largestSquareArea(bottomLeft = [[1,1],[2,2],[3,1]], topRight = [[3,3],[4,4],[6,6]]))
+print(so.largestSquareArea(bottomLeft = [[1,1],[2,2],[1,2]], topRight = [[3,3],[4,4],[3,4]]))
+print(so.largestSquareArea(bottomLeft = [[1,1],[3,3],[3,1]], topRight = [[2,2],[4,4],[4,2]]))
 
 
 
