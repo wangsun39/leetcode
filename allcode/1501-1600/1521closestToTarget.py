@@ -69,6 +69,7 @@ class Solution:
                 ans = min(ans, s - target)
                 if ans == 0: return 0
                 continue
+            ans = min(ans, target - s)
             while s <= target:
                 counter -= bits(arr[l])
                 s = calc(counter, r - l)
@@ -82,6 +83,7 @@ class Solution:
 
 
 so = Solution()
+print(so.closestToTarget([2,70,41,63,60,55,51,85,60,77,56,24,66,13,91,28,31,92,79,85], 33))  # 1
 print(so.closestToTarget([10,15,7], 2))  # 0
 print(so.closestToTarget([10,9,11,22,32], 4))  # 2
 print(so.closestToTarget([4095,31,262143,8191,63,2047,31,63,4095,131071,524287,32767], 33))  # 2
