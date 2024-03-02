@@ -80,7 +80,7 @@ from typing import List
 # value = int(s, 2)
 
 class Solution:
-    def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
+    def reachableNodes1(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
         d = defaultdict(set)
         restricted = set(restricted)
         for e in edges:
@@ -97,6 +97,22 @@ class Solution:
                 ans.add(node)
         return len(ans)
 
+    def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
+        # 2024/3/2 DFS写法
+        g = defaultdict(list)
+        restricted = set(restricted)
+        for x, y  in edges:
+            g[x].append(y)
+            g[y].append(x)
+        def dfs(x, fa):
+            if x in restricted:
+                return 0
+            res = 1
+            for y in g[x]:
+                if y != fa:
+                    res += dfs(y, x)
+            return res
+        return dfs(0, -1)
 
 
 so = Solution()
