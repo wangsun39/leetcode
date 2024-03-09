@@ -43,7 +43,8 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minimumPossibleSum(self, n: int, target: int) -> int:
+    def minimumPossibleSum1(self, n: int, target: int) -> int:
+        # 数据范围改了，这个做法不能通过
         s = set()
         cnt = 0
         ans = 0
@@ -56,9 +57,25 @@ class Solution:
             i += 1
         return ans
 
+    def minimumPossibleSum(self, n: int, target: int) -> int:
+        MOD = 10 ** 9 + 7
+        if n < target // 2:
+            return (1 + n) * n // 2 % MOD
+        t = target // 2  # 比target小的能放入nums种的最大数
+        if t <= 0:
+            s1 = 0
+            left = n
+        else:
+            s1 = (1 + t) * t // 2 % MOD
+            left = n - t
+        # 剩下的从target开始，依次递增1的数都可以
+        s2 = target * left + left * (left - 1) // 2
+        ans = s1 + s2
+        return ans % MOD
 
 
 so = Solution()
+print(so.minimumPossibleSum(n = 16, target = 6))
 print(so.minimumPossibleSum(n = 2, target = 3))
 print(so.minimumPossibleSum(n = 3, target = 3))
 print(so.minimumPossibleSum(n = 1, target = 1))
