@@ -27,6 +27,10 @@ import random
 # randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
 # 而 randrange 产生的随机数区间只包含左极限，也就是左闭右开的[1, n)，1能取到，而n取不到。
 
+# f-string用法
+# name = 'sun'
+# f"Hello, my name is {name}"
+
 # 浮点数： price = "{:.02f}".format(price)
 # newword = float(word[1:]) * (100 - discount) / 100
 # newword = "%.2f" % newword
@@ -80,10 +84,6 @@ from string import *
 # string.uppercase：包含所有大写字母的字符串
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
 # i2c = {i: c for i, c in enumerate(ascii_lowercase)}
-
-# f-string用法
-# name = 'sun'
-# f"Hello, my name is {name}"
 
 from itertools import accumulate
 # 前缀和
