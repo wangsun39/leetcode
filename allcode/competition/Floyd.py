@@ -4,7 +4,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
 
-    def floyd1(self, n: int, edges: List[List[int]]) -> List[int]:  # 无向图
+    def floyd1(n: int, edges: List[List[int]]) -> List[int]:  # 无向图
         w = [[inf] * n for _ in range(n)]
         for x, y, wt in edges:
             w[x][y] = w[y][x] = wt
@@ -25,7 +25,7 @@ class Solution:
 
 
 
-    def floyd2(self, n: int, edges: List[List[int]]) -> List[int]:  # 有向图
+    def floyd2(n: int, edges: List[List[int]]) -> List[int]:  # 有向图
         w = [[inf] * n for _ in range(n)]
         for x, y, wt in edges:
             w[x][y] = wt

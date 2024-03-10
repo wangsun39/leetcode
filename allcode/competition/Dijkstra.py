@@ -5,8 +5,9 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
 
     # Dijkstra 算法模板
+    # g[x] = [y, w]
     # 返回从 start 到每个点的最短路
-    def dijkstra(self, g: List[List[Tuple[int]]], start: int) -> List[int]:
+    def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
         dist = [inf] * len(g)
         dist[start] = 0
         h = [(0, start)]
