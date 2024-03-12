@@ -4,11 +4,11 @@
 #
 # 返回数组的 第 k 大和 。
 #
-# 子序列是一个可以由其他数组删除某些或不删除元素排生而来的数组，且派生过程不改变剩余元素的顺序。
+# 子序列是一个可以由其他数组删除某些或不删除元素派生而来的数组，且派生过程不改变剩余元素的顺序。
 #
 # 注意：空子序列的和视作 0 。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -22,7 +22,7 @@
 # 输入：nums = [1,-2,3,4,-10,12], k = 16
 # 输出：10
 # 解释：数组的第 16 大和是 10 。
-#  
+#
 #
 # 提示：
 #
@@ -32,56 +32,40 @@
 # 1 <= k <= min(2000, 2n)
 
 
-from typing import List
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
-from collections import defaultdict
-# d = Counter(list1)
-# d = defaultdict(int)
-import math
-import random
-# random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
-# randint和randrange的区别：
-# randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
-# 而 randrange 产生的随机数区间只包含左极限，也就是左闭右开的[1, n)，1能取到，而n取不到。
-
-# 浮点数： price = "{:.02f}".format(price)
-# newword = float(word[1:]) * (100 - discount) / 100
-# newword = "%.2f" % newword
-
-import bisect
-# bisect_right：
-# 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
-# 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# pos = bisect.bisect_right(left, tail)
-# bisect_left：
-# 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
-# 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-import heapq
-# heap.heapify(nums)
-# heapq.heappop() 函数弹出堆中最小值
-# heapq.heappush(nums, 1)
-# 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数
-
-# Map = [['U' for _ in range(n)] for _ in range(m)]
-
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
-
-# bit位 函数：
-# n.bit_length()
-# value = int(s, 2)
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self, number) -> str:
-        pass
+    def kSum(self, nums: List[int], k: int) -> int:
+        nums = [-x for x in nums]   # 改成求第k小，最后求相反数
+        s1 = sum(x for x in nums if x < 0)  # 所有负数之和就是最小值
+        nums = [x * (-1) if x < 0 else x for x in nums]  # 将负数变成正数
+        nums.sort()
+
+        n = len(nums)
+        hp = [[s1, -1]]   # [子序列和，子序列最后一项下标]
+        v = 0
+        for _ in range(k):
+            v, idx = heappop(hp)
+            if idx + 1 < n:
+                if v + nums[idx + 1] == 0:  # 追加一个元素
+                    heappush(hp, [v + nums[idx + 1], idx + 1])
+                else:
+                    heappush(hp, [v + nums[idx + 1], idx + 1])
+                if idx == -1: continue
+                if v - nums[idx] + nums[idx + 1] == 0:  # 替换最后一个元素
+                    heappush(hp, [v - nums[idx] + nums[idx + 1], idx + 1])
+                else:
+                    heappush(hp, [v - nums[idx] + nums[idx + 1], idx + 1])
+            # print(v)
+        return -v
+
+
 
 
 so = Solution()
-print(so.removeDigit(123456))
+print(so.kSum(nums = [-530219056,353285209,493533664], k = 6))
+print(so.kSum(nums = [2,4,-2], k = 5))
+print(so.kSum(nums = [1,-2,3,4,-10,12], k = 16))
 
 
 
