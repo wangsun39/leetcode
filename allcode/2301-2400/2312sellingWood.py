@@ -48,40 +48,10 @@
 # 1 <= pricei <= 106
 # 所有 (hi, wi) 互不相同 。
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
-from collections import defaultdict
-# d = Counter(list1)
-# d = defaultdict(int)
-#import random
-# random.uniform(a, b)，用于生成一个指定范围内的随机浮点数，闭区间
-# randint和randrange的区别：
-# randint 产生的随机数区间是包含左右极限的，也就是说左右都是闭区间的[1, n]，能取到1和n。
-# 而 randrange 产生的随机数区间只包含左极限，也就是左闭右开的[1, n)，1能取到，而n取不到。
-
-# 浮点数： price = "{:.02f}".format(price)
-# newword = float(word[1:]) * (100 - discount) / 100
-# newword = "%.2f" % newword
-
-import bisect
-# bisect_right：
-# 若序列a中存在与x相同的元素，则返回x相等元素右侧插入点的索引位置
-# 若序列a中不存在与x相同的元素，则返回与x左侧距离最近元素插入点的索引位置
-# pos = bisect.bisect_right(left, tail)
-# bisect_left：
-# 若序列a中存在与x相同的元素，则返回x相等元素左侧插入点的索引位置
-# 若序列a中不存在与x相同的元素，则返回与x右侧距离最近元素插入点的索引位置
-
-# Map = [['U' for _ in range(n)] for _ in range(m)]
-
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def sellingWood(self, m: int, n: int, prices: List[List[int]]) -> int:
+    def sellingWood1(self, m: int, n: int, prices: List[List[int]]) -> int:
         @lru_cache(None)
         def dfs(length, width):
             if length < ls[0] or width < ws[0]:
@@ -99,6 +69,26 @@ class Solution:
         ls, ws = [e[0] for e in prices], [e[1] for e in prices]
         ls.sort()
         ws.sort()
+        return dfs(m, n)
+
+
+    def sellingWood(self, m: int, n: int, prices: List[List[int]]) -> int:
+        # 2024/3/15 稍作一些简化
+        d = {}
+        for h, w, p in prices:
+            d[(h, w)] = p
+
+        @cache
+        def dfs(r, c):
+            res = 0
+            if (r, c) in d:
+                res = d[(r, c)]
+            for i in range(r // 2):
+                res = max(res, dfs(i + 1, c) + dfs(r - i - 1, c))
+            for i in range(c // 2):
+                res = max(res, dfs(r, i + 1) + dfs(r, c - i - 1))
+            return res
+
         return dfs(m, n)
 
 
