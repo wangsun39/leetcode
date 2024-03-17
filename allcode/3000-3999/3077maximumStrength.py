@@ -38,50 +38,70 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maximumStrength(self, nums: List[int], k: int) -> int:
+    def maximumStrength1(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        dp1 = [[-inf] * k for _ in range(n)]
-        dp2 = [[0] * k for _ in range(n)]
-        dp1[0][0] = dp2[0][0] = nums[0]
+        s = list(accumulate(nums, initial=0))
+        dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
+        # i < j 时 dp[i][j] 都为0
+        dp[0][0] = nums[0] * k
         for i in range(1, n):
             for j in range(min(i + 1, k)):
-                dp1[i][j] = dp1[i - 1][j]
-                dp2[i][j] = dp2[i - 1][j]
-                if j == 0 and dp1[i][j] < 0 and dp1[i][j] < nums[i]:
-                    dp2[i][j] = dp1[i][j] = nums[i]
+                sign = -1 if j & 1 else 1
+                dp[i][j] = dp[i - 1][j]
+                if j == 0:
+                    for L in range(j - 1, i):
+                        dp[i][j] = max(dp[i][j], (s[i + 1] - s[L + 1]) * sign * (k - j))
                     continue
-                if j == 0 and dp1[i][j] < nums[i]:
-                    dp2[i][j] = dp1[i][j] = nums[i]
+                for L in range(j - 1, i):
+                    dp[i][j] = max(dp[i][j], dp[L][j - 1] + (s[i + 1] - s[L + 1]) * sign * (k - j))
 
-                if j & 1 == 0:
-                    if dp1[i][j] < dp1[i - 1][j] + nums[i]:
-                        dp1[i][j] = dp1[i - 1][j] + nums[i]
-                        dp2[i][j] = dp2[i - 1][j] + nums[i]
-                    if j > 0 and dp1[i][j] < dp1[i - 1][j - 1] + dp2[i - 1][j - 1] + nums[i]:
-                        dp1[i][j] = dp1[i - 1][j - 1] + dp2[i - 1][j - 1] + nums[i]
-                        dp2[i][j] = dp2[i - 1][j - 1] + nums[i]
-                else:
-                    if dp1[i][j] < dp1[i - 1][j] - nums[i]:
-                        dp1[i][j] = dp1[i - 1][j] - nums[i]
-                        dp2[i][j] = dp2[i - 1][j] - nums[i]
-                    if j > 0 and dp1[i][j] < dp1[i - 1][j - 1] + dp2[i - 1][j - 1] - nums[i]:
-                        dp1[i][j] = dp1[i - 1][j - 1] + dp2[i - 1][j - 1] - nums[i]
-                        dp2[i][j] = dp2[i - 1][j - 1] - nums[i]
-        # print(dp1)
-        # print(dp2)
-        return dp1[-1][-1]
+        print(dp)
+        return dp[-1][-1]
+
+    def maximumStrength(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        s = list(accumulate(nums, initial=0))
+        dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
+        # i < j 时 dp[i][j] 都为0
+        dp[0][0] = nums[0] * k
+        for i in range(1, n):
+            mx = -inf
+            for j in range(min(i + 1, k)):
+                sign = -1 if j & 1 else 1
+                dp[i][j] = dp[i - 1][j]
+                if j == 0:
+                    for L in range(j - 1, i):
+                        dp[i][j] = max(dp[i][j], (s[i + 1] - s[L + 1]) * sign * (k - j))
+                    continue
+                if j == 1:
+                    for L in range(j - 1, i):
+                        # t = dp[L][j - 1] + (s[i + 1] - s[L + 1]) * sign * (k - j)
+                        mx = max(mx, dp[L][j - 1] - s[L + 1] * sign * (k - j))
+                    t = mx + s[i + 1] * sign * (k - j)
+                    if t > dp[i][j]:
+                        dp[i][j] = t
+                    continue
+
+                # j > 1:
+                L = j - 2
+                mx -= dp[L][j - 1] - s[L + 1] * (-sign) * (k - j)
+                t = s[i + 1] * sign * (k - j) * (i - j + 1) + mx
+                if t > dp[i][j]:
+                    dp[i][j] = t
+
+        print(dp)
+        return dp[-1][-1]
 
 
 
 
 so = Solution()
-print(so.maximumStrength([-50,-24], 1))
-print(so.maximumStrength([-50,-24], 1))
-print(so.maximumStrength([-1,-2,-3], 1))
-print(so.maximumStrength([-99,85], 1))
-print(so.maximumStrength(nums = [-1,-2,-3], k = 1))
-print(so.maximumStrength(nums = [1,2,3,-1,2], k = 3))
-print(so.maximumStrength(nums = [12,-2,-2,-2,-2], k = 5))
+print(so.maximumStrength(nums = [1,2,3,-1,2], k = 3))  # 22
+print(so.maximumStrength([7,-70,75], 1))   # 75
+print(so.maximumStrength(nums = [12,-2,-2,-2,-2], k = 5))  # 64
+print(so.maximumStrength([-50,-24], 1))   # -24
+print(so.maximumStrength([-99,85], 1))  # 85
+print(so.maximumStrength(nums = [-1,-2,-3], k = 1))  # -1
 
 
 

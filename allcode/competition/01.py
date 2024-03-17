@@ -3,22 +3,21 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minimumBoxes(self, apple: List[int], capacity: List[int]) -> int:
-        capacity.sort(reverse=True)
-        s = sum(apple)
-        ss = 0
-        for i, x in enumerate(capacity):
-            ss += x
-            if ss >= s:
-                return i + 1
-
-
-
+    def isSubstringPresent(self, s: str) -> bool:
+        n = len(s)
+        ss = set()
+        for i in range(n - 1):
+            t = s[i: i + 2]
+            ss.add(t)
+            if t[::-1] in s:
+                return True
+        return False
 
 
 so = Solution()
-print(so.minimumBoxes(apple = [1,3,2], capacity = [4,3,1,5,2]))
-print(so.minimumBoxes(apple = [5,5,5], capacity = [2,4,2,7]))
+print(so.isSubstringPresent("leetcode"))
+print(so.isSubstringPresent("abcba"))
+print(so.isSubstringPresent("abcd"))
 
 
 
