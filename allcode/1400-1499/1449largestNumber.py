@@ -48,12 +48,10 @@
 
 
 
-from typing import List
-from math import *
-import copy
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def largestNumber(self, cost: List[int], target: int) -> str:
+    def largestNumber1(self, cost: List[int], target: int) -> str:
         def MAX(a, b):
             sa, sb = sum(a), sum(b)
             if sa == sb:
@@ -87,6 +85,39 @@ class Solution:
             ans += str(9 - i) * x
         return ans
 
+    def largestNumber(self, cost: List[int], target: int) -> str:
+        s = set()
+        for i in range(8, -1, -1):
+            if cost[i] not in s:
+                s.add(cost[i])
+            else:
+                cost[i] = 10000  # 相同cost元素，只保留大的数
+        def MAX(a, b):
+            if len(a) > len(b):
+                return a
+            elif len(a) < len(b):
+                return b
+            return max(a, b)
+
+        @cache
+        def dfs(start, t):
+            if t == 0: return ''
+            if start == 0:
+                if t % cost[start] == 0:
+                    return '1' * (t // cost[start])
+                else:
+                    return None
+            res = ''
+            i = 0
+            while cost[start] * i <= t:
+                ret = dfs(start - 1, t - cost[start] * i)
+                if ret is not None:
+                    res = MAX(res, str(start + 1) * i + ret)
+                i += 1
+            return None if res == '' else res
+
+        ans = dfs(8, target)
+        return '0' if ans is None else ans
 
 
 
@@ -94,9 +125,10 @@ class Solution:
 
 so = Solution()
 print(so.largestNumber(cost = [1,1,1,1,1,1,1,1,1], target = 5000))
-print(so.largestNumber(cost = [2,4,6,2,4,6,4,4,4], target = 5))
-print(so.largestNumber(cost = [4,3,2,5,6,7,2,5,5], target = 9))
-print(so.largestNumber(cost = [7,6,5,5,5,6,8,7,8], target = 12))
+print(so.largestNumber(cost = [4,3,2,5,6,7,2,5,5], target = 9))  # 7772
+print(so.largestNumber(cost = [2,4,6,2,4,6,4,4,4], target = 5))  # 0
+print(so.largestNumber(cost = [7,6,5,5,5,6,8,7,8], target = 12))   # 85
+print(so.largestNumber(cost = [6,10,15,40,40,40,40,40,40], target = 47))  # "32211"
 
 
 

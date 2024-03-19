@@ -55,7 +55,7 @@ class Solution:
                 for L in range(j - 1, i):
                     dp[i][j] = max(dp[i][j], dp[L][j - 1] + (s[i + 1] - s[L + 1]) * sign * (k - j))
 
-        print(dp)
+        # print(dp)
         return dp[-1][-1]
 
     def maximumStrength(self, nums: List[int], k: int) -> int:
@@ -64,30 +64,16 @@ class Solution:
         dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
         # i < j 时 dp[i][j] 都为0
         dp[0][0] = nums[0] * k
-        for i in range(1, n):
-            mx = -inf
-            for j in range(min(i + 1, k)):
-                sign = -1 if j & 1 else 1
+        for j in range(k):
+            sign = -1 if j & 1 else 1
+            for i in range(max(1, j), n):
                 dp[i][j] = dp[i - 1][j]
                 if j == 0:
                     for L in range(j - 1, i):
                         dp[i][j] = max(dp[i][j], (s[i + 1] - s[L + 1]) * sign * (k - j))
                     continue
-                if j == 1:
-                    for L in range(j - 1, i):
-                        # t = dp[L][j - 1] + (s[i + 1] - s[L + 1]) * sign * (k - j)
-                        mx = max(mx, dp[L][j - 1] - s[L + 1] * sign * (k - j))
-                    t = mx + s[i + 1] * sign * (k - j)
-                    if t > dp[i][j]:
-                        dp[i][j] = t
-                    continue
-
-                # j > 1:
-                L = j - 2
-                mx -= dp[L][j - 1] - s[L + 1] * (-sign) * (k - j)
-                t = s[i + 1] * sign * (k - j) * (i - j + 1) + mx
-                if t > dp[i][j]:
-                    dp[i][j] = t
+                for L in range(j - 1, i):
+                    dp[i][j] = max(dp[i][j], dp[L][j - 1] + (s[i + 1] - s[L + 1]) * sign * (k - j))
 
         print(dp)
         return dp[-1][-1]
