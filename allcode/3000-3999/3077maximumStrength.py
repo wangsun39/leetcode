@@ -58,7 +58,7 @@ class Solution:
         # print(dp)
         return dp[-1][-1]
 
-    def maximumStrength(self, nums: List[int], k: int) -> int:
+    def maximumStrength2(self, nums: List[int], k: int) -> int:
         n = len(nums)
         s = list(accumulate(nums, initial=0))
         dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
@@ -77,17 +77,46 @@ class Solution:
 
         print(dp)
         return dp[-1][-1]
+    def maximumStrength(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        s = list(accumulate(nums, initial=0))
+        dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
+        # i < j 时 dp[i][j] 都为0
+        dp[0][0] = nums[0] * k
+        for j in range(k):
+            sign = -1 if j & 1 else 1
+            vl = -inf
+            for i in range(max(1, j), n):
+                dp[i][j] = dp[i - 1][j]
+                if j == 0:
+                    if i == 1:
+                        vl0 = -s[0] * sign * (k - j)
+                        dp[1][0] = max(dp[1][0], s[i + 1] * sign * (k - j) + vl0)
+                    if vl0 < -s[i] * sign * (k - j):
+                        vl0 = -s[i] * sign * (k - j)
+                    if dp[i][j] < s[i + 1] * sign * (k - j) + vl0:
+                        dp[i][j] = s[i + 1] * sign * (k - j) + vl0
+                    continue
+                if vl < dp[i - 1][j - 1] - s[i] * sign * (k - j):
+                    vl = dp[i - 1][j - 1] - s[i] * sign * (k - j)
+                if dp[i][j] < vl + s[i + 1] * sign * (k - j):
+                    dp[i][j] = vl + s[i + 1] * sign * (k - j)
+
+        # print(dp)
+        return dp[-1][-1]
 
 
 
 
 so = Solution()
+print(so.maximumStrength(nums = [-1,-2,-3], k = 1))  # -1
+# print(so.maximumStrength2(nums = [1,2,3,-1,2], k = 3))  # 22
 print(so.maximumStrength(nums = [1,2,3,-1,2], k = 3))  # 22
+print(so.maximumStrength(nums = [-100000000,-10000000,123,234], k = 3))  # -30000012
 print(so.maximumStrength([7,-70,75], 1))   # 75
 print(so.maximumStrength(nums = [12,-2,-2,-2,-2], k = 5))  # 64
 print(so.maximumStrength([-50,-24], 1))   # -24
 print(so.maximumStrength([-99,85], 1))  # 85
-print(so.maximumStrength(nums = [-1,-2,-3], k = 1))  # -1
 
 
 
