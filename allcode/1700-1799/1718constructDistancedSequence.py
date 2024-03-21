@@ -29,7 +29,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def constructDistancedSequence(self, n: int) -> List[int]:
+    def constructDistancedSequence1(self, n: int) -> List[int]:
 
         @cache
         def dfs(i, mask1, mask2):  # 从右向左第 i 位开始，mask1: 用掉的数字掩码，mask2: 占用的位置掩码
@@ -61,7 +61,42 @@ class Solution:
             return None
         return dfs(n * 2 - 2, 0, 0)
 
+    def constructDistancedSequence(self, n: int) -> List[int]:
+        m = n * 2 - 1
+        ans = [0] * m  # 使用外层的数组
+
+        @cache
+        def dfs(mask, vis):
+            left = []
+            for i in range(n - 1, -1, -1):
+                if (1 << i) & vis == 0:
+                    left.append(i + 1)
+            if len(left) == 0:
+                return ans
+            for i, x in enumerate(ans):
+                if x != 0: continue
+                for y in left:
+                    if y == 1 or (i + y < m and ans[i + y] == 0):
+                        ans[i] = y
+                        mask |= (1 << (y - 1))
+                        if y > 1:
+                            ans[i + y] = y
+                            mask |= (1 << (i + y - 1))
+                        ret = dfs(mask, vis | 1 << (y - 1))
+                        if ret is not None:
+                            return ret
+                        ans[i] = 0
+                        mask &= ~(1 << (y - 1))
+                        if y > 1:
+                            ans[i + y] = 0
+                            mask &= ~(1 << (i + y - 1))
+                break  # 这个break很关键，这层循环只需要走一步，剩余的由递归完成
+            return None
+        return dfs(0, 0)
+
 so = Solution()
+print(so.constructDistancedSequence(20))
+print(so.constructDistancedSequence(8))
 print(so.constructDistancedSequence(4))
 print(so.constructDistancedSequence(3))
 print(so.constructDistancedSequence(5))
