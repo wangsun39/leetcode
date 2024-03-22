@@ -39,6 +39,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maximumStrength1(self, nums: List[int], k: int) -> int:
+        # 三重循环，性能不够
         n = len(nums)
         s = list(accumulate(nums, initial=0))
         dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
@@ -59,6 +60,7 @@ class Solution:
         return dp[-1][-1]
 
     def maximumStrength2(self, nums: List[int], k: int) -> int:
+        # 为了把最内层的循环缩减掉，需要调换一二两层的循环次序（或者修改dp[i][j]两个下标的含义），否则在进行的时候不能递推内层的dp[i][j]
         n = len(nums)
         s = list(accumulate(nums, initial=0))
         dp = [[-inf] * k for _ in range(n)]  # dp[i][j]  前i个数，分成j段对应的最大能量值（注意公式中的x恒等于k）
