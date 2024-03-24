@@ -3,21 +3,24 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def isSubstringPresent(self, s: str) -> bool:
+    def maximumLengthSubstring(self, s: str) -> int:
         n = len(s)
-        ss = set()
-        for i in range(n - 1):
-            t = s[i: i + 2]
-            ss.add(t)
-            if t[::-1] in s:
-                return True
-        return False
+        ans = 0
+        for i in range(n):
+            counter = Counter()
+            for j in range(i, n + 1):
+                ans = max(ans, j - i)
+                if j > n - 1: break
+                counter[s[j]] += 1
+                if counter[s[j]] > 2:
+                    break
+
+        return ans
 
 
 so = Solution()
-print(so.isSubstringPresent("leetcode"))
-print(so.isSubstringPresent("abcba"))
-print(so.isSubstringPresent("abcd"))
+print(so.maximumLengthSubstring("bcbbbcba"))
+print(so.maximumLengthSubstring("aaaa"))
 
 
 

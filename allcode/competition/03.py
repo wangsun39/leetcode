@@ -3,26 +3,25 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minimumDeletions(self, word: str, k: int) -> int:
-        counter = Counter(word)
-        values = list(counter.values())
-        mn, mx = min(values), max(values)
-        ans = inf
-        for i in range(mn, mx + 1):  # 枚举最终最小频率值
-            cur = 0
-            for x in values:
-                if x < i:
-                    cur += x
-                elif x > i + k:
-                    cur += (x - (i + k))
-            ans = min(ans, cur)
+    def mostFrequentIDs(self, nums: List[int], freq: List[int]) -> List[int]:
+        counter = Counter()
+        sl = SortedList()
+        n = len(nums)
+        ans = [0] * n
+        for i in range(n):
+            x, f = nums[i], freq[i]
+            if x in counter:
+                sl.remove(counter[x])
+            counter[x] += f
+            sl.add(counter[x])
+            ans[i] = sl[-1]
         return ans
 
 
+
 so = Solution()
-print(so.minimumDeletions(word = "aabcaba", k = 0))
-print(so.minimumDeletions(word = "dabdcbdcdcd", k = 2))
-print(so.minimumDeletions(word = "aaabaaa", k = 2))
+print(so.mostFrequentIDs(nums = [2,3,2,1], freq = [3,2,-3,1]))
+print(so.mostFrequentIDs(nums = [5,5,3], freq = [2,-2,1]))
 
 
 

@@ -3,18 +3,21 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countSubstrings(self, s: str, c: str) -> int:
-        pos = []
-        for i, x in enumerate(s):
-            if x == c:
-                pos.append(i)
-        m = len(pos)
-        return m * (m + 1) // 2
+    def minOperations(self, k: int) -> int:
+        ans = inf
+        if k == 1: return 0
+        for i in range(2, k + 1):
+            ans = min(ans, i - 1 + (k - 1) // i)
+
+        return ans
+
 
 
 so = Solution()
-print(so.countSubstrings(s = "abada", c = "a"))
-print(so.countSubstrings(s = "zzz", c = "z"))
+print(so.minOperations(7))
+print(so.minOperations(122))
+print(so.minOperations(11))
+print(so.minOperations(1))
 
 
 
