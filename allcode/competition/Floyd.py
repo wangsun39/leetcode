@@ -4,7 +4,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
 
-    def floyd1(n: int, edges: List[List[int]]) -> List[int]:  # 无向图
+    def floyd1(n: int, edges: List[List[int]]) -> List[List[int]]:  # 无向图
         w = [[inf] * n for _ in range(n)]
         for x, y, wt in edges:
             w[x][y] = w[y][x] = wt
@@ -25,7 +25,7 @@ class Solution:
 
 
 
-    def floyd2(n: int, edges: List[List[int]]) -> List[int]:  # 有向图
+    def floyd2(n: int, edges: List[List[int]]) -> List[List[int]]:  # 有向图
         w = [[inf] * n for _ in range(n)]
         for x, y, wt in edges:
             w[x][y] = wt
@@ -44,6 +44,39 @@ class Solution:
                 f[j][i] = dfs(n - 1, j, i)
 
         return f
+
+
+    def floyd3(n: int, edges: List[List[int]]) -> List[List[int]]:  # 无向图，递推
+        # f[k][i][j] 表示从 i 到 j 的最短路长度，并且这条最短路的中间节点编号都 ≤k
+
+        w = [[inf] * n for _ in range(n)]
+        for x, y, wt in edges:
+            w[x][y] = w[y][x] = wt
+
+        f = [[[0] * n for _ in range(n)] for _ in range(n + 1)]
+        f[0] = w
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    f[k + 1][i][j] = min(f[k][i][j], f[k][i][k] + f[k][k][j])
+        return f[n]
+
+
+
+    def floyd4(n: int, edges: List[List[int]]) -> List[List[int]]:  # 有向图，递推
+        f = [[inf] * n for _ in range(n)]
+        for i in range(n):
+            f[i][i] = 0
+        for x, y, w in edges:
+            f[x][y] = w  # 添加一条边（题目保证没有重边和自环）
+        for k in range(n):
+            for i in range(n):
+                if f[i][k] == inf: continue
+                for j in range(n):
+                    f[i][j] = min(f[i][j], f[i][k] + f[k][j])
+        return f
+
+
 
 
 
