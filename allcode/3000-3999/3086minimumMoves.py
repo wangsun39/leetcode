@@ -49,6 +49,12 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minimumMoves(self, nums: List[int], k: int, maxChanges: int) -> int:
         if k <= maxChanges:
+            if len(nums) == 2:
+                if nums.count(1) == 2:
+                    return max((k - 2) * 2 + 1, 0)
+                elif nums.count(1) == 1:
+                    return (k - 1) * 2
+                return k * 2
             one = two = False
             for i, x in enumerate(nums[:-2]):
                 if x == nums[i + 1] == nums[i + 2] == 1:
@@ -83,6 +89,9 @@ class Solution:
 
 
 so = Solution()
+print(so.minimumMoves(nums = [1,1], k = 3, maxChanges = 2))
+print(so.minimumMoves(nums = [1,1], k = 1, maxChanges = 2))
+print(so.minimumMoves(nums = [0,1], k = 1, maxChanges = 2))
 print(so.minimumMoves(nums = [0,0,0,0], k = 2, maxChanges = 3))
 print(so.minimumMoves(nums = [1,1,0,0,0,1,1,0,0,1], k = 3, maxChanges = 1))
 

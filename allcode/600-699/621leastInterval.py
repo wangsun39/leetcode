@@ -43,7 +43,8 @@ class Solution:
         mx = max(counter.values())  # 最大的出现次数
         n_key = list(counter.values()).count(mx)  # 出现最大次数的字母个数
 
-        if m - mx >= n * (mx - 1):
+        # if m - mx >= n * mx:
+        if m - mx * n_key >= (mx - 1) * (n + 1 - n_key):
             # 考虑这样的执行顺序
             # 宽度就是 n + 1
             # A B C D
@@ -56,15 +57,18 @@ class Solution:
             # 宽度就是 n + 1，除了最后一行，其他空位就是要待命的时间
             # A B C D
             # A B C D
-            # A B
-            # A B
-            return (mx - 1) * (n + 1) + n_key
+            # A B E F
+            # A B G
+            # 不足格子的各填充 1 个待命的时间
+            return m + ((mx - 1) * (n + 1 - n_key) - (m - mx * n_key))
 
 
 so = Solution()
-print(so.leastInterval(tasks = ["A","A","A","B","B","B"], n = 2))
-print(so.leastInterval(tasks = ["A","A","A","B","B","B"], n = 0))
-print(so.leastInterval(tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2))
+print(so.leastInterval(tasks = ["A","A","A","B","B","B"], n = 2))  # 8
+print(so.leastInterval(tasks = ["A","B","C","D","A","B","V"], n = 3))
+print(so.leastInterval(tasks = ["A","B","A","B"], n = 2))   # 5
+print(so.leastInterval(tasks = ["A","A","A","B","B","B"], n = 0))  # 6
+print(so.leastInterval(tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2))  # 16
 
 
 
