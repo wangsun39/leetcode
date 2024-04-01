@@ -40,7 +40,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def finalString(self, s: str) -> str:
+    def finalString1(self, s: str) -> str:
         ans = []
         for x in s:
             if x != 'i':
@@ -48,6 +48,22 @@ class Solution:
             else:
                 ans = ans[::-1]
         return ''.join(ans)
+
+    def finalString(self, s: str) -> str:
+        # 2024/4/1 双向队列
+        ans = deque()
+        head = True
+        for x in s:
+            if x == 'i':
+                head = not head
+                continue
+            if head:
+                ans.append(x)
+            else:
+                ans.appendleft(x)
+        if head:
+            return ''.join(ans)
+        return ''.join(list(ans)[::-1])
 
 
 so = Solution()
