@@ -57,10 +57,24 @@ print(euler_all_primes(100))
 
 # 质因数分解
 MX = 10 ** 5 + 1
-omega = [0] * MX
+omega = [0] * MX  # omega[i]  表示i的质因子个数
 for i in range(2, MX):  # 预处理 omega
     if omega[i] == 0:  # i 是质数
         for j in range(i, MX, i):
             omega[j] += 1  # i 是 j 的一个质因子
+# print(omega)
 
 
+# 因子分解
+def factors(x):
+    res = []
+    i = 1
+    while i * i <= x:
+        if x % i == 0:
+            res.append(i)
+            if i * i != x:
+                res.append(x // i)
+        i += 1
+    return res
+
+print(factors(12))
