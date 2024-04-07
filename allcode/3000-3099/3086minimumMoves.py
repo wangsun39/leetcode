@@ -48,52 +48,60 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumMoves(self, nums: List[int], k: int, maxChanges: int) -> int:
-        if k <= maxChanges:
-            if len(nums) == 2:
-                if nums.count(1) == 2:
-                    return max((k - 2) * 2 + 1, 0)
-                elif nums.count(1) == 1:
-                    return (k - 1) * 2
-                return k * 2
-            one = two = False
-            for i, x in enumerate(nums[:-2]):
-                if x == nums[i + 1] == nums[i + 2] == 1:
-                    return (k - 3) * 2 + 2
-                if x == nums[i + 1] == 1:
-                    two = True
-                if x == 1:
-                    one = True
-            if two:
-                return (k - 2) * 2 + 1
-            if one:
-                return (k - 1) * 2
-            return k * 2
+        c = 0  # 对于连续的3个位置，最多有几个连续1
+        n = len(nums)
+        for i in range(n):
+            s = sum(nums[i: min(n, i + 3)])
+            if s == 3:
+                c = 3
+                break
+            if s == 2:
+                if nums[i + 1] != 0:
+                    c = max(c, 2)
+                else:
+                    c = max(c, 1)
+            elif s == 1:
+                c = max(c, 1)
+        if c >= k:
+            return k - 1
+        if maxChanges + c >= k:
+            return max(0, c - 1) + (k - c) * 2
+
+        # 剩下的又要用到第二种操作
+        # 优先用的是maxChange，剩下的就变成货仓选址问题，计算过程自然会对连续的3个位置进行不超过2次拾起全部1的操作
+        # 因此不需要先进行连续3个位置的计算
         idx = [i for i, x in enumerate(nums) if x]
         s = list(accumulate(idx, initial=0))
-        left = k - maxChanges
+        m = len(idx)
         ans = inf
-        for i in range(len(idx) - left + 1):
-            if left & 1:
-                half = left // 2
-                s1 = s[i + half] - s[i]
-                s2 = s[i + left] - s[i + half + 1]
-                ans = min(ans, s2 - s1)
+        # 在idx中选连续 k - maxChange 个 1，将其都移到中位数处
+        for i in range(m - (k - maxChanges) + 1):
+            # 子数组 idx[i: i + k - maxChanges]
+            if (k - maxChanges) & 1:  # 长度为奇数
+                mid = i + (k - maxChanges) // 2
+                s1 = s[mid] - s[0]
+                s2 = s[i + k - maxChanges] - s[mid + 1]
             else:
-                half = left // 2
-                s1 = s[i + half] - s[i]
-                s2 = s[i + left] - s[i + half]
-                ans = min(ans, s2 - s1)
+                mid = i + (k - maxChanges) // 2
+                s1 = s[mid] - s[0]
+                s2 = s[i + k - maxChanges] - s[mid]
+            ans = min(ans, s2 - s1)
         return ans + maxChanges * 2
 
 
 
 
+
 so = Solution()
-print(so.minimumMoves(nums = [1,1], k = 3, maxChanges = 2))
-print(so.minimumMoves(nums = [1,1], k = 1, maxChanges = 2))
-print(so.minimumMoves(nums = [0,1], k = 1, maxChanges = 2))
-print(so.minimumMoves(nums = [0,0,0,0], k = 2, maxChanges = 3))
-print(so.minimumMoves(nums = [1,1,0,0,0,1,1,0,0,1], k = 3, maxChanges = 1))
+print(so.minimumMoves(nums = [0,1,1,0,1,0,1,0,1], k = 8, maxChanges = 5))  # 13
+print(so.minimumMoves(nums = [0,0,1,1], k = 2, maxChanges = 6))  # 1
+print(so.minimumMoves(nums = [1,1], k = 3, maxChanges = 2))  # 3
+print(so.minimumMoves(nums = [1,0,1], k = 2, maxChanges = 0))   # 2
+print(so.minimumMoves(nums = [1,0,1,0,1], k = 3, maxChanges = 0))   # 4
+print(so.minimumMoves(nums = [1,1], k = 1, maxChanges = 2))   # 0
+print(so.minimumMoves(nums = [0,1], k = 1, maxChanges = 2))  # 0
+print(so.minimumMoves(nums = [0,0,0,0], k = 2, maxChanges = 3))  # 4
+print(so.minimumMoves(nums = [1,1,0,0,0,1,1,0,0,1], k = 3, maxChanges = 1))  # 3
 
 
 

@@ -31,7 +31,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def largestMultipleOfThree(self, digits: List[int]) -> str:
-        dp0, dp1, dp2 = [0] * 10, [0] * 10, [0] * 10  # 前i-1个数构成的模3余数的最大数字
+        dp0, dp1, dp2 = [0] * 10, [0] * 10, [0] * 10  # dpi表示前j-1个数构成的模3余数为i的最大数字(以Counter的形式记录)
 
         def trans(c):
             ans = []
@@ -49,6 +49,8 @@ class Solution:
             if a < b:
                 return c2
             return c1
+        # 三个标记，记录三个dp数组是否有效
+        # 其中v0是一定有效的，因为一个数字都没有处理时，就是0，是3的倍数
         v0 = True
         v1 = v2 = False
         for x in digits:
@@ -68,7 +70,7 @@ class Solution:
                 if v1:
                     dp2 = MAX(dp2, ndp1)
                     v2 = True
-                v1 = True
+                v1 = True  # v0一定是有效的
             elif x % 3 == 2:
                 if v1:
                     dp0 = MAX(dp0, ndp1)
@@ -76,7 +78,7 @@ class Solution:
                     dp1 = MAX(dp1, ndp2)
                     v1 = True
                 dp2 = MAX(dp2, ndp0)
-                v2 = True
+                v2 = True  # v0一定是有效的
 
         return trans(dp0)
 
