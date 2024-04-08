@@ -65,11 +65,12 @@ class Solution:
         if c >= k:
             return k - 1
         if maxChanges + c >= k:
+            # 利用maxChange可以解决
             return max(0, c - 1) + (k - c) * 2
 
         # 剩下的又要用到第二种操作
         # 优先用的是maxChange，剩下的就变成货仓选址问题，计算过程自然会对连续的3个位置进行不超过2次拾起全部1的操作
-        # 因此不需要先进行连续3个位置的计算
+        # 因此不需要先进行连续3个位置的计算，选k-maxChanges个货仓选址就可以了，剩下的按maxChange处理
         idx = [i for i, x in enumerate(nums) if x]
         s = list(accumulate(idx, initial=0))
         m = len(idx)
@@ -79,11 +80,11 @@ class Solution:
             # 子数组 idx[i: i + k - maxChanges]
             if (k - maxChanges) & 1:  # 长度为奇数
                 mid = i + (k - maxChanges) // 2
-                s1 = s[mid] - s[0]
+                s1 = s[mid] - s[i]
                 s2 = s[i + k - maxChanges] - s[mid + 1]
             else:
                 mid = i + (k - maxChanges) // 2
-                s1 = s[mid] - s[0]
+                s1 = s[mid] - s[i]
                 s2 = s[i + k - maxChanges] - s[mid]
             ans = min(ans, s2 - s1)
         return ans + maxChanges * 2
