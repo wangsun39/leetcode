@@ -37,17 +37,25 @@ class Solution:
             ans = []
             for i in range(9, -1, -1):
                 ans += [str(i)] * c[i]
-            if len(ans) == 0 or ans[0] == '0':
+            if len(ans) and ans[0] == '0':
                 return '0'
             return ''.join(ans)
         def MAX(c1, c2):
-            a, b = trans(c1), trans(c2)
-            if len(a) < len(b):
+            l1, l2 = list(c1[i] for i in range(9, 0, -1)), list(c2[i] for i in range(9, 0, -1))
+            if sum(l1) == 0:
                 return c2
-            if len(a) > len(b):
+            if sum(l2) == 0:
                 return c1
-            if a < b:
+            len1, len2 = sum(l1) + c1[0], sum(l2) + c2[0]
+            if len1 < len2:
                 return c2
+            if len1 > len2:
+                return c1
+            for i in range(9, -1, -1):
+                if c1[i] < c2[i]:
+                    return c2
+                elif c1[i] > c2[i]:
+                    return c1
             return c1
         # 三个标记，记录三个dp数组是否有效
         # 其中v0是一定有效的，因为一个数字都没有处理时，就是0，是3的倍数
@@ -85,6 +93,7 @@ class Solution:
 
 
 so = Solution()
+print(so.largestMultipleOfThree([1,1,1,2]))
 print(so.largestMultipleOfThree([1]))
 print(so.largestMultipleOfThree([8,1,9]))
 print(so.largestMultipleOfThree([8,6,7,1,0]))
