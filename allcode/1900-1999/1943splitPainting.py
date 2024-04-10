@@ -70,13 +70,15 @@ class Solution:
         pre = diff[0][0]
         cur = sum(x for _, x in diff[0][1])
         for pos, li in diff[1:]:
-            ans.append([pre, pos, cur])
+            if cur > 0:
+                ans.append([pre, pos, cur])
             for sign, val in li:
                 cur += sign * val
             pre = pos
         return ans
 
 so = Solution()
+print(so.splitPainting(segments = [[4,16,12],[9,10,15],[18,19,13],[3,13,20],[12,16,3],[2,10,10],[3,11,4],[13,16,6]]))
 print(so.splitPainting(segments = [[1,4,5],[4,7,7],[1,7,9]]))
 print(so.splitPainting(segments = [[1,7,9],[6,8,15],[8,10,7]]))
 print(so.splitPainting(segments = [[1,4,5],[1,4,7],[4,7,1],[4,7,11]]))
