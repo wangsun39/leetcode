@@ -3,32 +3,51 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def sumOfPowers(self, nums: List[int], k: int) -> int:
-        MOD = 10 ** 9 + 7
-        nums.sort()
-        delta = set()
-        n = len(nums)
+    def minimumValueSum(self, nums: List[int], andValues: List[int]) -> int:
+        n, m = len(nums), len(andValues)
+
+        dd = [{} for _ in range(n)]
+        counter = [[0] * 16 for _ in range(n)]
         for i in range(n):
-            for j in range(i + 1, n):
-                delta.add(nums[j] - nums[i])
-        delta = list(delta)
-        delta.sort()
-        dp = [[Counter() for _ in range(k)] for _ in range(n)]
-        print(dp)
-        for i in range(n):
-            for j in range(k):
-                for t in range(i - 1):
-                    d = nums[i] - nums[t]  # 子序列最后两项之差
-                    for u in delta:
-                        if d >= u:
-                            dp[i][j][u] += dp[i - 1][j - 1][u]
-                        else:
-                            dp[i][j][d] += dp[i - 1][j - 1][u]
+            x = nums[i]
+            # dd[i][x] = i
+            bit = 0
+            if i > 0:
+                counter[i] = counter[i - 1][:]
+            while x:
+                if x & 1:
+                    counter[i][bit] += 1
+                x >>= 1
+                bit += 1
+        print(counter)
+
+
+        @cache
+        def dfs(a, b):  # 从第a个数开始，划分b个子数组，得到的最小子数组值之和
+            if a == n:
+                if b > 0:
+                    return inf
+                else:
+                    return 0
+            res = inf
+            AND = nums[a]
+            for i in range(a, n):
+                AND &= nums[i]
+                if AND == andValues[m - b]:
+                    res = min(res, nums[i] + dfs(i + 1, b - 1))
+            return res
+
+        ans = dfs(0, m)
+        return ans if ans < inf else -1
+
+
 
 
 
 so = Solution()
-print(so.sumOfPowers(nums = [1,2,3,4], k = 3))
+print(so.minimumValueSum(nums = [1,4,3,3,2], andValues = [0,3,3,2]))
+print(so.minimumValueSum(nums = [2,3,5,7,7,7,5], andValues = [0,7,5]))
+print(so.minimumValueSum(nums = [1,2,3,4], andValues = [2]))
 
 
 

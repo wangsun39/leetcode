@@ -3,12 +3,13 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def findKthSmallest(self, coins: List[int], k: int) -> int:
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.findKthSmallest())
 
 
 

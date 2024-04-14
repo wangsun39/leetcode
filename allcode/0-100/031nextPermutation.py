@@ -1,21 +1,29 @@
 from collections import defaultdict
 from typing import List
 class Solution:
-    def longestValidParentheses(self, s: str) -> int:
-        eInfo = {}  # idx -> [isValid, maxLen]
-        stack = []
-        min_valid_idx = 0
-        for idx, e in enumerate(s):
-            if '(' == e:
-                stack.append(idx)
-                eInfo[idx] = [1, 0]
-            else:
-                if len(stack) == 0:
-                    for i in range(min_valid_idx, idx):
-                        if i in eInfo:
-                            eInfo[i][0] = 0  # 前面的isValid置为无效
-                    min_valid_idx = idx
-                pre = stack.p
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        k = -1
+        for i in range(n - 1, 0, -1):
+            if nums[i - 1] < nums[i]:
+                k = i
+                break
+        if k == -1:
+            for i in range(n // 2):
+                nums[i], nums[n - 1 - i] = nums[n - 1 - i], nums[i]
+            return
+        for i in range(k, n):
+            if i == n - 1:
+                nums[k - 1], nums[i] = nums[i], nums[k - 1]
+                break
+            if nums[k - 1] >= nums[i + 1]:
+                nums[k - 1], nums[i] = nums[i], nums[k - 1]
+                break
+        for i in range((n - k) // 2):
+            nums[k + i], nums[n - 1 - i] = nums[n - 1 - i], nums[k + i]
 
 
 
