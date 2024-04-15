@@ -64,22 +64,29 @@ class Solution:
         def check(val):
             # 是否能完成val个任务
             if val > m: return False
-            cnt = 0
-            hp = workers[-val:]
-            hp = [[x, 0] for x in hp]   # 0 表示这个x是没有使用药丸
-            heapify(hp)
+            cnt = 0  # 使用的药数量
+            hp1 = workers[-val:]
+            # hp1 = [[x, 0] for x in hp]   # 0 表示这个x是没有使用药丸
+            heapify(hp1)  # 表示没有使用药丸
+            hp2 = []
             for i in range(val):
-                x, flg = heappop(hp)
-                if (flg and tasks[i] > x) or tasks[i] > x + strength:
-                    return False
-                while tasks[i] > x:
-                    if not flg:
-                        heappush(hp, [x + strength, 1])
-                        x, flg = heappop(hp)
-                    cnt += 1
-                    if cnt > pills:
-                        return False
+                if hp1 and hp2:
+                    if hp1[0] < hp2[0]:
 
+                if hp1 and hp1[0] >= tasks[i]:
+                    x = heappop(hp1)
+                    continue
+                if hp1 and hp1[0]
+                    heappush(hp2, x + strength)
+
+                if hp2 and hp2[0] >= tasks[i]:
+                    heappop(hp2)
+                    continue
+                if cnt < pills and hp1 and hp1[0] + strength >= tasks[i]:
+                    heappop(hp1)
+                    cnt += 1
+                else:
+                    return False
             return True
         lo, hi = 0, n + 1
         while lo < hi - 1:
@@ -92,8 +99,8 @@ class Solution:
 
 
 so = Solution()
-print(so.maxTaskAssign(tasks = [10,15,30], workers = [0,10,10,10,10], pills = 3, strength = 10))  # 2
 print(so.maxTaskAssign(tasks = [5,9,8,5,9], workers = [1,6,4,2,6], pills = 1, strength = 5))  # 3
+print(so.maxTaskAssign(tasks = [10,15,30], workers = [0,10,10,10,10], pills = 3, strength = 10))  # 2
 print(so.maxTaskAssign(tasks = [3,2,1], workers = [0,3,3], pills = 1, strength = 1))  # 3
 print(so.maxTaskAssign(tasks = [5,4], workers = [0,0,0], pills = 1, strength = 5))  # 1
 
