@@ -48,11 +48,20 @@ class Solution:
                 cnt += 1
             return stack
         def merge(l1, l2):
-            if len(l1) == 0: return l2
-            if len(l2) == 0: return l1
-            if l1[0] > l2[0]: return [l1[0]] + merge(l1[1:], l2)
-            if l1[0] < l2[0]: return [l2[0]] + merge(l1, l2[1:])
-            return max([l1[0]] + merge(l1[1:], l2), [l2[0]] + merge(l1, l2[1:]))
+            @cache
+            def dfs(i, j):
+                if i == len(l1):
+                    return l2[j:]
+                if j == len(l2):
+                    return l1[i:]
+                if l1[i] > l2[j]:
+                    return [l1[i]] + dfs(i + 1, j)
+                if l1[i] < l2[j]:
+                    return [l2[j]] + dfs(i, j + 1)
+                return [l1[i]] + max(dfs(i + 1, j), dfs(i, j + 1))
+            res = dfs(0, 0)
+            # dfs.cache_clear()
+            return res
         ans = []
         for i in range(min(k + 1, len1 + 1)):
             # 从nums1中选i个数字，从nums2中选j个数字
@@ -68,8 +77,8 @@ class Solution:
 
 
 so = Solution()
-print(so.maxNumber(nums1 = [6,7], nums2 = [6,0,4], k = 5))
 print(so.maxNumber(nums1 = [3,4,6,5], nums2 = [9,1,2,5,8,3], k = 5))
+print(so.maxNumber(nums1 = [6,7], nums2 = [6,0,4], k = 5))
 print(so.maxNumber(nums1 = [3,9], nums2 = [8,9], k = 3))
 
 
