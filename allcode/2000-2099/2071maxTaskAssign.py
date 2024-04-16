@@ -65,28 +65,18 @@ class Solution:
             # 是否能完成val个任务
             if val > m: return False
             cnt = 0  # 使用的药数量
-            hp1 = workers[-val:]
-            # hp1 = [[x, 0] for x in hp]   # 0 表示这个x是没有使用药丸
-            heapify(hp1)  # 表示没有使用药丸
-            hp2 = []
+            sl = SortedList(tasks[:val])
             for i in range(val):
-                if hp1 and hp2:
-                    if hp1[0] < hp2[0]:
-
-                if hp1 and hp1[0] >= tasks[i]:
-                    x = heappop(hp1)
+                t = sl[0]
+                wk = workers[m - val + i]
+                if wk >= t:
+                    sl.pop(0)
                     continue
-                if hp1 and hp1[0]
-                    heappush(hp2, x + strength)
-
-                if hp2 and hp2[0] >= tasks[i]:
-                    heappop(hp2)
-                    continue
-                if cnt < pills and hp1 and hp1[0] + strength >= tasks[i]:
-                    heappop(hp1)
-                    cnt += 1
-                else:
+                if wk + strength < t or cnt >= pills:
                     return False
+                pos = sl.bisect_right(wk + strength)
+                cnt += 1
+                sl.pop(pos - 1)
             return True
         lo, hi = 0, n + 1
         while lo < hi - 1:
