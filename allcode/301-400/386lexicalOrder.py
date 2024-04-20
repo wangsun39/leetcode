@@ -20,15 +20,10 @@
 
 
 
-from collections import defaultdict
-# """
-# This is the interface that allows for creating nested lists.
-# You should not implement it, or speculate about its implementation
-# """
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def lexicalOrder(self, n: int) -> List[int]:
+    def lexicalOrder1(self, n: int) -> List[int]:
         cur = 1
         ans = [cur]
         while True:
@@ -58,10 +53,23 @@ class Solution:
             continue
         return ans
 
+    def lexicalOrder(self, n: int) -> List[int]:
+        # 2024/4/20 递归写法
+        ans = []
+        def dfs(x):
+            ans.append(x)
+            for i in range(10):
+                if x * 10 + i > n: break
+                dfs(x * 10 + i)
+        for i in range(1, 10):
+            if i <= n:
+                dfs(i)
+        return ans
+
 
 
 so = Solution()
-print(so.lexicalOrder(99))
 print(so.lexicalOrder(13))
 print(so.lexicalOrder(2))
+print(so.lexicalOrder(99))
 

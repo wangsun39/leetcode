@@ -3,7 +3,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    # z[i] 表示 s[i] 和 s[i:]的最长公共前缀
+    # z[i] 表示 s 和 s[i:]的最长公共前缀
     def z_function(s):
         n = len(s)
         z = [0] * n

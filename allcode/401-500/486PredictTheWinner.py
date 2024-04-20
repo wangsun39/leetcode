@@ -27,11 +27,10 @@
 # 1 <= nums.length <= 20
 # 0 <= nums[i] <= 107
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def PredictTheWinner(self, nums: List[int]) -> bool:
+    def PredictTheWinner1(self, nums: List[int]) -> bool:
         @lru_cache(None)
         def helper(nums):
             nums = list(nums)
@@ -49,10 +48,23 @@ class Solution:
         print(x, y)
         return x >= y
 
+    def PredictTheWinner(self, nums: List[int]) -> bool:
+        # 2024/4/20 记忆化搜索
+        s = list(accumulate(nums, initial=0))
+        n = len(nums)
+
+        @cache
+        def dfs(start, end):
+            if start == end: return nums[start]
+            v1 = nums[start] + (s[end + 1] - s[start + 1] - dfs(start + 1, end))
+            v2 = nums[end] + (s[end] - s[start] - dfs(start, end - 1))
+            return max(v1, v2)
+        return dfs(0, n - 1) * 2 >= s[-1]
 
 
 
 so = Solution()
+print(so.PredictTheWinner([1,5,2,4,6]))
 print(so.PredictTheWinner([1,5,2]))
 print(so.PredictTheWinner([1,5,233,7]))
 
