@@ -8,7 +8,7 @@ class Solution:
     # g[x] = [y, w]
     # 返回从 start 到每个点的最短路
     def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
-        dist = [inf] * len(g)
+        dist = [inf] * len(g)   # 注意这个地方可能要替换成 n
         dist[start] = 0
         h = [(0, start)]
         while h:

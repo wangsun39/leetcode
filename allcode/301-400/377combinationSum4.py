@@ -33,8 +33,7 @@
 
 
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def combinationSum4(self, nums: List[int], target: int) -> int:
@@ -54,8 +53,6 @@ class Solution:
             return ret
 
         return helper(target)
-
-
 
 so = Solution()
 print(so.combinationSum4(nums = [1,2,3], target = 4))
