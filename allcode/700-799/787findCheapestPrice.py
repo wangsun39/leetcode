@@ -44,11 +44,35 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
-        
+        g = defaultdict(list)
+        for x, y, p in flights:
+            g[x].append([y, p])
+
+        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[List[int]]:
+            dist = [[inf] * (k + 2) for _ in range(n)]  # dist[i][j] 表示到节点i经过j次中转的最低价格
+            dist[start][0] = 0
+            h = [(0, start, 0)]  # (最低价格, 达到节点, 中转次数)
+            while h:
+                d, x, t = heappop(h)
+                if d > dist[x][t] or t >= k + 1:
+                    continue
+                for y, wt in g[x]:
+                    new_d = dist[x][t] + wt
+                    if new_d < dist[y][t + 1]:
+                        dist[y][t + 1] = new_d
+                        heappush(h, (new_d, y, t + 1))
+            return dist
+
+        dist = dijkstra(g, src)
+        ans = min(dist[dst])
+        return ans if ans < inf else -1
+
 
 
 so = Solution()
-print(so.findCheapestPrice(arr = [1,2,3,5], k = 3))
+print(so.findCheapestPrice(n = 5, flights = [[4,1,1],[1,2,3],[0,3,2],[0,4,10],[3,1,1],[1,4,3]], src = 2, dst = 1, k = 1))  # -1
+print(so.findCheapestPrice(n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0))  # 500
+print(so.findCheapestPrice(n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1))  # 200
 
 
 
