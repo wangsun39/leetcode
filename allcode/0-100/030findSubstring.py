@@ -51,7 +51,7 @@ class Solution:
         return self.res
 
 
-    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+    def findSubstring2(self, s: str, words: List[str]) -> List[int]:
         lw = len(words[0])
         expect = Counter(words)
         def helper(s, offset):
@@ -100,6 +100,28 @@ class Solution:
             ans += helper(s[i:], i)
         return ans
 
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        lw = len(words[0])
+        words = set(words)
+        n = len(s)
+        ans = []
+        def proc(start):
+            counter = Counter()
+            l = start
+            r = start
+            while l < n:
+                while (r - l) // lw < len(words):
+                    if s[r: r + lw] not in words:
+                        l = r = r + lw
+                        break
+                    while counter[s[r: r + lw]] > 1:
+                        counter[s[l: l + lw]] -= 1
+                        l += lw
+
+                    counter[s[r: r + lw]] += 1
+        for i in range(lw):
+            proc(i)
+        return ans
 
 so = Solution()
 print(so.findSubstring("barfoothefoobarman", ["foo","bar"]))
