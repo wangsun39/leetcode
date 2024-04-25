@@ -44,6 +44,29 @@ class Solution:
                 mainTank += 1
         return ans
 
+    def distanceTraveled(self, mainTank: int, additionalTank: int) -> int:
+        # 2024/4/25 数学的方法
+        # 解方程 设x为additionalTank中最多可以放到mainTank中的数量
+        # (mainTank + x) // 5 == x  其中 0 <= x <= additionalTank ,带取整的方程
+        # 设 mainTank + x = 5x + r (0<=r<5，为余数)
+        # x = (mainTank - r) // 4
+        # 枚举 r ，得到x后，需要验证 0 <= x <= additionalTank 条件
+        # 为了保证能够用mainTank兑换additionalTank x次，还需要满足
+        # 兑换1次需要满足 mainTank >= 5， 之后变成 mainTank - 4
+        # 兑换2次需要满足 mainTank - 4 >= 5， 之后变成 mainTank - 4*2
+        # 兑换3次需要满足 mainTank - 4*2 >= 5， 之后变成 mainTank - 4*3
+        # 兑换x次需要满足 mainTank - 4*(x-1) >= 5， 之后变成 mainTank - 4*x
+        # 因此要满足 mainTank - 4*(x-1) >= 5 就能换出x个additionalTank
+
+        # additionalTank 可以全换走
+        if mainTank - 4*(additionalTank-1) >= 5:
+            return (mainTank + additionalTank) * 10
+        # 剩下的情况，是不可能换出所有 additionalTank 的
+        # 也就不用再判断 0 <= x <= additionalTank 条件
+        for r in range(5):
+            x = (mainTank - r) // 4
+            if mainTank - (x - 1) * 4 >= 5:
+                return (mainTank + x) * 10
 
 
 so = Solution()
