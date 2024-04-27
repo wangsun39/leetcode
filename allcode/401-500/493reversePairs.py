@@ -16,18 +16,18 @@
 # 输入数组中的所有数字都在32位整数的表示范围内。
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
     def reversePairs(self, nums: List[int]) -> int:
         sortList = []
         res = 0
         for n, e in enumerate(nums): # n 代表sortList个数
-            pos = bisect.bisect_right(sortList, e * 2)
+            pos = bisect_right(sortList, e * 2)
             res += (n - pos)
             # pos = bisect.bisect_right(sortList, e)
             # sortList = sortList[:pos] + [e] + sortList[pos:]
-            bisect.insort_right(sortList, e)
+            insort_right(sortList, e)
         return res
 
 # 归并排序的方法
@@ -68,10 +68,20 @@ class Solution:
         return helper(nums)[0]
 
 
+    def reversePairs2(self, nums: List[int]) -> int:
+        # 2024/4/27 SortedList
+        sl = SortedList()
+        n = len(nums)
+        ans = 0
+        for i in range(n - 1, -1, -1):
+            p = sl.bisect_left(nums[i])
+            ans += p
+            sl.add(nums[i] * 2)
+        return ans
 
 
 
 so = Solution()
-print(so.reversePairs([1,3,2,3,1]))   # 2
-print(so.reversePairs1([1,3,2,3,1]))  # 2
+print(so.reversePairs2([1,3,2,3,1]))   # 2
+print(so.reversePairs2([1,3,2,3,1]))  # 2
 

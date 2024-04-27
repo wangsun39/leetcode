@@ -25,7 +25,7 @@
 # 进阶：你能用 O(n) 时间复杂度和 / 或原地 O(1) 额外空间来实现吗？
 
 
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def wiggleSort(self, nums: List[int]) -> None:
         """
@@ -51,6 +51,38 @@ class Solution:
             nums[N - 1] = tmp
         print(nums)
         return
+
+    def wiggleSort1(self, nums: List[int]) -> None:
+        # 2024/4/27 排序，性能略低
+        counter = Counter(nums)
+
+        n = len(nums)
+        v, c = counter.most_common(1)[0]  # 众数
+        # c 必然<= n/2
+        if c * 2 < n or n & 1:
+            # 按排序交叉保存即可
+            s_nums = sorted(nums)
+            for i in range((n + 1) // 2):
+                nums[i * 2] = s_nums[i]
+            for i in range(n // 2):
+                nums[i * 2 + 1] = s_nums[(n + 1) // 2 + i]
+            return
+
+        # 剩下就是c == n//2的情况
+        less = [x for x in nums if x < v]
+        more = [x for x in nums if x > v]
+        if len(more) == 0:
+            # 众数是最大值，把众数放在偶数位置
+            for i in range(n // 2):
+                nums[i * 2] = less[i]
+                nums[i * 2 + 1] = v
+            return
+        for i in range(len(more)):
+            nums[i * 2] = v
+            nums[i * 2 + 1] = more[i]
+        for i in range(len(more), n // 2):
+            nums[i * 2] = less[i - len(more)]
+            nums[i * 2 + 1] = v
 
 
 so = Solution()
