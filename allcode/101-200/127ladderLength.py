@@ -31,9 +31,7 @@
 
 
 
-from typing import List
-import time
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
@@ -55,7 +53,7 @@ class Solution:
         N = len(wordList)
         if endWord not in wordList:
             return 0
-        start = time.clock()
+        start = time()
         word2Index = {}
         i = 0
         for x in wordList:
@@ -67,7 +65,7 @@ class Solution:
         pos = wordList.index(endWord)
         buildTree(wordList + [beginWord])
         print(tree, pos)
-        end = time.clock()
+        end = time()
         print("ladderLength 2= ", end - start)
         start = end
 
@@ -77,7 +75,7 @@ class Solution:
         while len(queue) > 1:
             v = queue.pop(0)
             if v == pos:
-                end = time.clock()
+                end = time()
                 print("ladderLength = 3", end - start)
                 start = end
                 return step
@@ -99,7 +97,7 @@ class Solution:
         if len(word_set) == 0 or endWord not in word_set:
             return 0
 
-        start = time.clock()
+        start = time()
         if beginWord in word_set:
             word_set.remove(beginWord)
 
@@ -124,7 +122,7 @@ class Solution:
                         next_word = ''.join(word_list)
                         if next_word in word_set:
                             if next_word == endWord:
-                                end = time.clock()
+                                end = time()
                                 print("ladderLength1 = ", end - start)
                                 start = end
                                 return step + 1
@@ -135,13 +133,55 @@ class Solution:
             step += 1
         return 0
 
+    def ladderLength2(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        # 2024/4/29  最短路径
+        g = defaultdict(list)
+        m = len(beginWord)
+        if endWord not in wordList:
+            return 0
+        end = wordList.index(endWord)
+        if beginWord in wordList:
+            start = wordList.index(beginWord)
+        else:
+            wordList.append(beginWord)
+            start = len(wordList) - 1
+        for i, w1 in enumerate(wordList):
+            for j, w2 in enumerate(wordList):
+                if j == i: continue
+                cnt = 0
+                for k in range(m):
+                    if w1[k] != w2[k]:
+                        cnt += 1
+                        if cnt > 1:
+                            break
+                if cnt == 1:
+                    g[i].append([j, 1])
+                    g[j].append([i, 1])
+        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
+            dist = [inf] * len(g)  # 注意这个地方可能要替换成 n
+            dist[start] = 0
+            h = [(0, start)]
+            while h:
+                d, x = heappop(h)
+                if d > dist[x]:
+                    continue
+                for y, wt in g[x]:
+                    new_d = dist[x] + wt
+                    if new_d < dist[y]:
+                        dist[y] = new_d
+                        heappush(h, (new_d, y))
+            return dist
+        dist = dijkstra(g, start)
+        return dist[end] + 1
+
+
 
 
 
 so = Solution()
 
-print(so.ladderLength("hit", "cog", ['hit', "hot","dot","dog","lot","log", "cog"]))
-print(so.ladderLength("hit", "cog", ["hot","dot","dog","lot","log", "cog"]))
+print(so.ladderLength2("hit", "cog", ['hit', "hot","dot","dog","lot","log", "cog"]))
+print(so.ladderLength2("hit", "cog", ["hot","dot","dog","lot","log", "cog"]))
 print(so.ladderLength("aaaaaaaaaa",
 "cccccccccc",
 ["aaaaaaaaaa","caaaaaaaaa","cbaaaaaaaa","daaaaaaaaa","dbaaaaaaaa","eaaaaaaaaa","ebaaaaaaaa","faaaaaaaaa","fbaaaaaaaa","gaaaaaaaaa","gbaaaaaaaa","haaaaaaaaa","hbaaaaaaaa","iaaaaaaaaa","ibaaaaaaaa","jaaaaaaaaa","jbaaaaaaaa","kaaaaaaaaa","kbaaaaaaaa","laaaaaaaaa","lbaaaaaaaa","maaaaaaaaa","mbaaaaaaaa","naaaaaaaaa","nbaaaaaaaa","oaaaaaaaaa","obaaaaaaaa","paaaaaaaaa","pbaaaaaaaa","qaaaaaaaaa","qbaaaaaaaa","raaaaaaaaa","rbaaaaaaaa","saaaaaaaaa","sbaaaaaaaa","taaaaaaaaa","tbaaaaaaaa","uaaaaaaaaa","ubaaaaaaaa","vaaaaaaaaa","vbaaaaaaaa","waaaaaaaaa","wbaaaaaaaa","xaaaaaaaaa","xbaaaaaaaa","yaaaaaaaaa","ybaaaaaaaa","zaaaaaaaaa","zbaaaaaaaa","bbaaaaaaaa","bbcaaaaaaa","bbcbaaaaaa","bbdaaaaaaa","bbdbaaaaaa","bbeaaaaaaa","bbebaaaaaa","bbfaaaaaaa","bbfbaaaaaa","bbgaaaaaaa","bbgbaaaaaa","bbhaaaaaaa","bbhbaaaaaa","bbiaaaaaaa","bbibaaaaaa","bbjaaaaaaa","bbjbaaaaaa","bbkaaaaaaa","bbkbaaaaaa","bblaaaaaaa","bblbaaaaaa","bbmaaaaaaa","bbmbaaaaaa","bbnaaaaaaa","bbnbaaaaaa","bboaaaaaaa","bbobaaaaaa","bbpaaaaaaa","bbpbaaaaaa","bbqaaaaaaa","bbqbaaaaaa","bbraaaaaaa","bbrbaaaaaa","bbsaaaaaaa","bbsbaaaaaa","bbtaaaaaaa","bbtbaaaaaa","bbuaaaaaaa","bbubaaaaaa","bbvaaaaaaa","bbvbaaaaaa","bbwaaaaaaa","bbwbaaaaaa","bbxaaaaaaa","bbxbaaaaaa","bbyaaaaaaa","bbybaaaaaa","bbzaaaaaaa","bbzbaaaaaa","bbbbaaaaaa","bbbbcaaaaa","bbbbcbaaaa","bbbbdaaaaa","bbbbdbaaaa","bbbbeaaaaa","bbbbebaaaa","bbbbfaaaaa","bbbbfbaaaa","bbbbgaaaaa","bbbbgbaaaa","bbbbhaaaaa","bbbbhbaaaa","bbbbiaaaaa","bbbbibaaaa","bbbbjaaaaa","bbbbjbaaaa","bbbbkaaaaa","bbbbkbaaaa","bbbblaaaaa","bbbblbaaaa","bbbbmaaaaa","bbbbmbaaaa","bbbbnaaaaa","bbbbnbaaaa","bbbboaaaaa","bbbbobaaaa","bbbbpaaaaa","bbbbpbaaaa","bbbbqaaaaa","bbbbqbaaaa","bbbbraaaaa","bbbbrbaaaa","bbbbsaaaaa","bbbbsbaaaa","bbbbtaaaaa","bbbbtbaaaa","bbbbuaaaaa","bbbbubaaaa","bbbbvaaaaa","bbbbvbaaaa","bbbbwaaaaa","bbbbwbaaaa","bbbbxaaaaa","bbbbxbaaaa","bbbbyaaaaa","bbbbybaaaa","bbbbzaaaaa","bbbbzbaaaa","bbbbbbaaaa","bbbbbbcaaa","bbbbbbcbaa","bbbbbbdaaa","bbbbbbdbaa","bbbbbbeaaa","bbbbbbebaa","bbbbbbfaaa","bbbbbbfbaa","bbbbbbgaaa","bbbbbbgbaa","bbbbbbhaaa","bbbbbbhbaa","bbbbbbiaaa","bbbbbbibaa","bbbbbbjaaa","bbbbbbjbaa","bbbbbbkaaa","bbbbbbkbaa","bbbbbblaaa","bbbbbblbaa","bbbbbbmaaa","bbbbbbmbaa","bbbbbbnaaa","bbbbbbnbaa","bbbbbboaaa","bbbbbbobaa","bbbbbbpaaa","bbbbbbpbaa","bbbbbbqaaa","bbbbbbqbaa","bbbbbbraaa","bbbbbbrbaa","bbbbbbsaaa","bbbbbbsbaa","bbbbbbtaaa","bbbbbbtbaa","bbbbbbuaaa","bbbbbbubaa","bbbbbbvaaa","bbbbbbvbaa","bbbbbbwaaa","bbbbbbwbaa","bbbbbbxaaa","bbbbbbxbaa","bbbbbbyaaa","bbbbbbybaa","bbbbbbzaaa","bbbbbbzbaa","bbbbbbbbaa","bbbbbbbbca","bbbbbbbbcb","bbbbbbbbda","bbbbbbbbdb","bbbbbbbbea","bbbbbbbbeb","bbbbbbbbfa","bbbbbbbbfb","bbbbbbbbga","bbbbbbbbgb","bbbbbbbbha","bbbbbbbbhb","bbbbbbbbia","bbbbbbbbib","bbbbbbbbja","bbbbbbbbjb","bbbbbbbbka","bbbbbbbbkb","bbbbbbbbla","bbbbbbbblb","bbbbbbbbma","bbbbbbbbmb","bbbbbbbbna","bbbbbbbbnb","bbbbbbbboa","bbbbbbbbob","bbbbbbbbpa","bbbbbbbbpb","bbbbbbbbqa","bbbbbbbbqb","bbbbbbbbra","bbbbbbbbrb","bbbbbbbbsa","bbbbbbbbsb","bbbbbbbbta","bbbbbbbbtb","bbbbbbbbua","bbbbbbbbub","bbbbbbbbva","bbbbbbbbvb","bbbbbbbbwa","bbbbbbbbwb","bbbbbbbbxa","bbbbbbbbxb","bbbbbbbbya","bbbbbbbbyb","bbbbbbbbza","bbbbbbbbzb","bbbbbbbbbb","aaaaaaaaac","aaaaaaaacc","aaaaaaaccc","aaaaaacccc","aaaaaccccc","aaaacccccc","aaaccccccc","aacccccccc","accccccccc","cccccccccc"]))
