@@ -31,11 +31,11 @@
 # 0 <= prices[i] <= 104
 
 
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit1(self, prices: List[int]) -> int:
         curMin = prices[0]
         res = 0
         for e in prices[1:]:
@@ -44,6 +44,16 @@ class Solution:
             curMin = e
 
         return res
+
+    def maxProfit(self, prices: List[int]) -> int:
+        # 2024/4/30 DP
+        dp1, dp2 = -inf, 0
+        for x in prices:
+            dp11 = max(dp2 - x, dp1)
+            dp22 = max(dp1 + x, dp2)
+            dp1, dp2 = dp11, dp22
+            # print(dp1, dp2)
+        return dp22
 
 
 so = Solution()
