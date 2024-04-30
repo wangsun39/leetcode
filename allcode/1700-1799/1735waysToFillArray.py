@@ -45,16 +45,32 @@ def euler_all_primes(n):
 primes = euler_all_primes(MX)
 # print(len(primes))
 
-factors = []  # factors[i] 表示i每个质因子的个数
+factors = []  # factors[i][j] 表示i的质因子j的个数
 factors.append(None)
 factors.append(defaultdict(int))
+# 以下处理是预处理所有质数的做法
+# for x in range(2, MX):
+#     factors.append(defaultdict(int))
+#     for y in primes:
+#         if y * y > x:
+#             if x > 1:
+#                 factors[-1][x] += 1  # 剩余的一个质数
+#             break
+#         while x % y == 0:
+#             factors[-1][y] += 1
+#             x //= y
+
+# 这个做法不依赖与计算所有质数
 for x in range(2, MX):
     factors.append(defaultdict(int))
-    for y in primes:
-        if y > x: break
+    y = 2
+    while y * y <= x:
         while x % y == 0:
             factors[-1][y] += 1
             x //= y
+        y += 1
+    if x > 1:
+        factors[-1][x] += 1  # 剩余的一个质数
 # print(factors)
 
 class Solution:
@@ -72,6 +88,7 @@ class Solution:
         return [calc(a, b) for a, b in queries]
 
 so = Solution()
+print(so.waysToFillArray(queries = [[1,1],[2,2],[3,3],[4,4],[5,5]]))
 print(so.waysToFillArray(queries = [[2,6],[5,1],[73,660]]))
 
 
