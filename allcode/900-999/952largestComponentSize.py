@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import sqrt
 import time
-class Solution:
+class Solution1:
     def largestComponentSize1(self, A):
         N = len(A)
         print(N)
@@ -202,6 +202,53 @@ class Solution:
             rootNumList[root] += 1
             res = max(res, rootNumList[root])
         return res
+
+# 2024/5/2 预处理所有质因子+并查集
+from leetcode.allcode.competition.mypackage import *
+
+def factors(x):
+    res = []
+    i = 2
+    while i * i <= x:
+        if x % i != 0:
+            i += 1
+            continue
+        res.append(i)
+        while x % i == 0:
+            x //= i
+        i += 1
+    if x > 1:
+        res.append(x)
+    return res
+
+primes = defaultdict(list)
+for i in range(10 ** 5 + 1):
+    primes[i] = factors(i)
+
+
+class Solution:
+    def largestComponentSize(self, nums: List[int]) -> int:
+        n = len(nums)
+        # fa = list(range(n))
+        fa = {x: x for x in nums}  # 另一种写法，x不连续
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        fs = defaultdict(int)  # fs[x] 表示质因子为x的一个代码元素
+        for x in nums:
+            for y in primes[x]:
+                if y not in fs:
+                    fs[y] = x
+                else:
+                    union(fs[y], x)
+        for x in nums:
+            find(x)
+        # print(Counter(fa.values()).most_common(1))
+        return Counter(fa.values()).most_common(1)[0][1]
 
 
 so = Solution()

@@ -27,11 +27,11 @@
 # stones[0] == 0
 
 
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def canCross(self, stones: List[int]) -> bool:
+    def canCross1(self, stones: List[int]) -> bool:
         d = {i: set() for i in stones}  # 记录在第 i 个石头时，能走的的步数集合
         d[stones[0]] = {1}
         for i in stones:
@@ -42,6 +42,32 @@ class Solution:
                     if i + j == stones[-1]:
                         return True
         print(d)
+        return False
+
+    def canCross(self, stones: List[int]) -> bool:
+        # 2024/5/3 DP
+        pos = {x: i for i, x in enumerate(stones)}
+        n = len(stones)
+        dp = [[0] * (n + 1) for _ in range(n)]  # dp[i][j] 表示能否用前一次步长为j到达stones[i]， 步长是不会很大的，最多是n
+        if 1 not in pos:
+            return False
+        dp[pos[1]][1] = 1
+        for i in range(1, n):
+            for j in range(1, n):
+                if dp[i][j]:
+                    if 0 <= stones[i] + j <= stones[-1] and stones[i] + j in pos:
+                        idx = pos[stones[i] + j]  # 石头的编号
+                        if idx == n - 1: return True
+                        dp[idx][j] = 1
+                    if 0 <= stones[i] + j + 1 <= stones[-1] and stones[i] + j + 1 in pos:
+                        idx = pos[stones[i] + j + 1]  # 石头的编号
+                        dp[idx][j + 1] = 1
+                        if idx == n - 1: return True
+                    if 0 <= stones[i] + j - 1 <= stones[-1] and stones[i] + j - 1 in pos:
+                        idx = pos[stones[i] + j - 1]  # 石头的编号
+                        dp[idx][j - 1] = 1
+                        if idx == n - 1: return True
+
         return False
 
 

@@ -64,6 +64,12 @@ for i in range(2, MX):  # 预处理 omega
             omega[j] += 1  # i 是 j 的一个质因子
 # print(omega)
 
+# MX = 100001
+divisors = [[] for _ in range(MX)]  # divisors[i] 表示 i 的所有因子
+for i in range(1, MX):  # 预处理每个数的所有因子，时间复杂度 O(MlogM)，M=1e5
+    for j in range(i, MX, i):
+        divisors[j].append(i)
+
 
 # 因子分解
 def factors(x):
@@ -78,3 +84,36 @@ def factors(x):
     return res
 
 print(factors(12))
+
+#质因子分解
+def prime_factors(x):
+    res = []
+    i = 2
+    while i * i <= x:
+        if x % i != 0:
+            i += 1
+            continue
+        res.append(i)
+        while x % i == 0:
+            x //= i
+        i += 1
+    if x > 1:
+        res.append(x)
+    return res
+
+print(prime_factors(12))
+
+factors = []  # factors[i][j] 表示i的质因子j的个数
+factors.append(None)
+factors.append(defaultdict(int))
+
+for x in range(2, MX):
+    factors.append(defaultdict(int))
+    y = 2
+    while y * y <= x:
+        while x % y == 0:
+            factors[-1][y] += 1
+            x //= y
+        y += 1
+    if x > 1:
+        factors[-1][x] += 1  # 剩余的一个质数
