@@ -139,24 +139,25 @@ class Solution:
         m = len(beginWord)
         if endWord not in wordList:
             return 0
-        end = wordList.index(endWord)
-        if beginWord in wordList:
-            start = wordList.index(beginWord)
-        else:
+        if beginWord not in wordList:
             wordList.append(beginWord)
-            start = len(wordList) - 1
-        for i, w1 in enumerate(wordList):
-            for j, w2 in enumerate(wordList):
-                if j == i: continue
-                cnt = 0
-                for k in range(m):
-                    if w1[k] != w2[k]:
-                        cnt += 1
-                        if cnt > 1:
-                            break
-                if cnt == 1:
-                    g[i].append([j, 1])
-                    g[j].append([i, 1])
+        # 建图
+        gid = {}  # 每个单次的编号
+        mx_id = 0
+        for word in wordList:
+            gid[word] = mx_id
+            mx_id += 1
+            for i in range(m):
+                word1 = word[:i] + '*' + word[i + 1:]  # 插入一个通配虚拟节点
+                if word1 not in gid:
+                    gid[word1] = mx_id
+                    mx_id += 1
+                g[gid[word]].append([gid[word1], 1])
+                g[gid[word1]].append([gid[word], 1])
+
+        start = gid[beginWord]
+        end = gid[endWord]
+
         def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
             dist = [inf] * len(g)  # 注意这个地方可能要替换成 n
             dist[start] = 0
@@ -172,7 +173,9 @@ class Solution:
                         heappush(h, (new_d, y))
             return dist
         dist = dijkstra(g, start)
-        return dist[end] + 1
+        if dist[end] == inf:
+            return 0
+        return dist[end] // 2 + 1
 
 
 
