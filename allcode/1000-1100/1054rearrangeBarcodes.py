@@ -18,9 +18,7 @@
 #
 # 1 <= barcodes.length <= 10000
 # 1 <= barcodes[i] <= 10000
-from collections import Counter
-from typing import List
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def rearrangeBarcodes(self, barcodes: List[int]) -> List[int]:

@@ -26,10 +26,7 @@
 
 
 
-from typing import List
-from functools import lru_cache
-import time
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxEnvelopes1(self, envelopes: List[List[int]]) -> int:

@@ -9,10 +9,7 @@
 
 
 
-from typing import List
-from functools import lru_cache
-import time
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countNumbersWithUniqueDigits(self, n: int) -> int:

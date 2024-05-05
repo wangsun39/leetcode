@@ -26,11 +26,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 class Solution:
 
     def minimumCardPickup(self, cards: List[int]) -> int:

@@ -32,12 +32,8 @@
 
 
 
-from sortedcontainers import SortedDict
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
-from functools import lru_cache
+
+from leetcode.allcode.competition.mypackage import *
 class Solution:
 
     def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
