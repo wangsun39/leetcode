@@ -26,13 +26,89 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Solution:
-    def wordsAbbreviation(self, words: List[str]) -> List[str]:
+class Trie:
 
+    def __init__(self):
+        self.root = {'cnt': 0}
+
+    def insert(self, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {'cnt': 1}
+            else:
+                cur[e]['cnt'] += 1
+            cur = cur[e]
+        if 'end' not in cur:
+            cur['end'] = 1
+        else:
+            cur['end'] += 1
+        # cur['cnt'] += 1
+
+    def startWith(self, word: str) -> int:
+        # 返回word的一个唯一前缀长度
+        cur = self.root
+        res = 0
+        for e in word:
+            res += 1
+            if cur[e]['cnt'] == 1:
+                return res
+            cur = cur[e]
+        return res
+
+class Solution:
+    def wordsAbbreviation1(self, words: List[str]) -> List[str]:
+        tr = Trie()
+        ans = []
+        for w in words:
+            if len(w) < 4:
+                ans.append(w)
+            else:
+                ans.append('')
+                tr.insert(w[-1] + w[:-1])  # 把最后一个字母放在最前面
+
+        for i, w in enumerate(words):
+            if len(ans[i]) == 0:
+                v = max(tr.startWith(w[-1] + w[:-1]), 2)  # 匹配后，至少得有首尾两个字母
+                if len(w) - v <= 1:
+                    ans[i] = w
+                else:
+                    ans[i] = w[:v - 1] + str(len(w) - v) + w[-1]
+        return ans
+
+    def wordsAbbreviation(self, words: List[str]) -> List[str]:
+        n = len(words)
+
+        ans = [''] * n
+        idx1 = list(range(n))
+        remain = 2  # 保留几个字母
+        # 从小到大枚举剩余的字母，每次循环排除掉唯一的元素，下次循环增加一个保留字母
+        while len(idx1):
+            pair = []
+            for i in idx1:
+                w = words[i]
+                if len(w) - remain <= 1:
+                    ans[i] = w
+                else:
+                    pair.append([w[:remain - 1] + str(len(w) - remain) + w[-1], i])
+            counter = defaultdict(list)
+            for w, i in pair:
+                counter[w].append(i)
+            idx2 = []
+            for abbr, v in counter.items():
+                if len(v) == 1:
+                    ans[v[0]] = abbr
+                else:
+                    idx2 += v
+            idx1 = idx2
+            remain += 1
+        return ans
 
 
 
 
 so = Solution()
-print(so.wordsAbbreviation("bab", ["ba","ab","a","b"]))
+print(so.wordsAbbreviation(words = ["abcdefg","abccefg","abcckkg","abccekg"]))  # Trie 树 这个用了没有通过
+print(so.wordsAbbreviation(words = ["aa","aaa","aaaa","aaaaa"]))
+print(so.wordsAbbreviation(words = ["like", "god", "internal", "me", "internet", "interval", "intension", "face", "intrusion"]))
 
