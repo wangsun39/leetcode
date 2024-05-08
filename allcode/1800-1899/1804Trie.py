@@ -42,7 +42,7 @@ from leetcode.allcode.competition.mypackage import *
 class Trie:
 
     def __init__(self):
-        self.root = {'cnt': 0}
+        self.root = {'cnt': 0}   # cnt 表示以当前节点为前缀的单词有多少个，'end' 表示以当前前缀作为单词的有多少个
 
     def insert(self, word: str) -> None:  # O(log(len(word)))
         cur = self.root

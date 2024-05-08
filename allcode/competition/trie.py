@@ -83,18 +83,23 @@ class Trie:
 class Trie:
 
     def __init__(self):
-        self.root = {'cnt': 0}
+        self.root = {'cnt': 0}   # cnt 表示以当前节点为前缀的单词有多少个，'end' 表示以当前前缀作为单词的有多少个
 
     def insert(self, word: str) -> None:  # O(log(len(word)))
         cur = self.root
         for e in word:
             if e not in cur:
-                cur[e] = {'cnt': 0}
+                cur[e] = {'cnt': 1}
+            else:
+                cur[e]['cnt'] += 1
             cur = cur[e]
-        cur['end'] = True
-        cur['cnt'] += 1
+        if 'end' not in cur:
+            cur['end'] = 1
+        else:
+            cur['end'] += 1
+        # cur['cnt'] += 1
 
-    def search(self, word: str) -> int:
+    def countWordsEqualTo(self, word: str) -> int:
         cur = self.root
         for e in word:
             if e in cur:
@@ -102,10 +107,10 @@ class Trie:
             else:
                 return 0
         if 'end' in cur:
-            return cur['cnt']
+            return cur['end']
         return 0
 
-    def startsWith(self, prefix: str) -> int:
+    def countWordsStartingWith(self, prefix: str) -> int:
         cur = self.root
         for e in prefix:
             if e in cur:
@@ -113,6 +118,19 @@ class Trie:
             else:
                 return 0
         return cur['cnt']
+
+    def erase(self, word: str) -> None:
+        cur = self.root
+        for i, e in enumerate(word):
+            if cur[e]['cnt'] == 1:
+                del(cur[e])
+                return
+            else:
+                cur[e]['cnt'] -= 1
+                if i == len(word) - 1:
+                    break
+            cur = cur[e]
+        cur[e]['end'] -= 1
 
 
 
