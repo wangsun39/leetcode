@@ -132,6 +132,26 @@ class Trie:
             cur = cur[e]
         cur[e]['end'] -= 1
 
+    def startsWith(self, prefix: str) -> [str]:
+        # 返回以前缀开头的所有词
+        cur = self.root
+        for e in prefix:
+            if e in cur:
+                cur = cur[e]
+                if 'end' in cur:
+                    return [x for x in cur if x != 'end']
+            else:
+                return []
 
+        def dfs(node):
+            if 'end' in node:
+                return ['']
+            res = []
+            for x in node:
+                l = dfs(node[x])
+                res += [x + st for st in l]
+            return res
+        res = dfs(cur)
+        return [prefix + x for x in res]
 
 
