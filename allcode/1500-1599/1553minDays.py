@@ -2,7 +2,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minDays(self, n: int) -> int:
+    def minDays1(self, n: int) -> int:
         dq1, dq2 = deque([n]), deque()
         vis = {n}
         t = 0
@@ -23,6 +23,14 @@ class Solution:
             dq1, dq2 = dq2, deque()
             t += 1
 
+    def minDays(self, n: int) -> int:
+        # 2024/5/12 记忆化搜索
+        @cache
+        def dfs(x):
+            if x <= 1:
+                return x
+            return min(dfs(x // 2) + x % 2, dfs(x // 3) + x % 3) + 1
+        return dfs(n)
 
 so = Solution()
 print(so.minDays(10))

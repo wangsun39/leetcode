@@ -39,24 +39,6 @@ class Solution:
             return ans
         return dfs(len(counter) - 1)
 
-    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
-        counter = Counter(nums)
-        counter = [[k, v] for k, v in counter.items()]
-
-        def dfs(i):
-            # 前i种数的所以子集
-            if i < 0:
-                return [[]]
-            k, v = counter[i]
-            if v == 0:
-            ans = []
-            for j in range(v + 1):
-                res = dfs(i - 1)
-                for l in res:
-                    ans.append([k] * j + l)
-            return ans
-        return dfs(len(counter) - 1)
-
 
 
 so = Solution()
