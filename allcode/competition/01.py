@@ -3,26 +3,15 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def isValid(self, word: str) -> bool:
-        if len(word) < 3:
-            return False
-        for i in '@#$':
-            if i in word:
-                return False
-        flg = 0
-        for i in word:
-            if i in 'aeiouAEIOU':
-                flg |= 1
-            elif i.isalpha() and i not in 'aeiouAEIOU':
-                flg |= 2
-        return flg == 3
+    def findPermutationDifference(self, s: str, t: str) -> int:
+        d1 = {v: k for k, v in enumerate(s)}
+        d2 = {v: k for k, v in enumerate(t)}
+        return sum(abs(d1[k] - d2[k]) for k in d1.keys())
 
 
 so = Solution()
-print(so.isValid("234Adas"))
-print(so.isValid("b3"))
-print(so.isValid("a3$e"))
-print(so.isValid("234Adas"))
+print(so.findPermutationDifference(s = "abc", t = "bac"))
+print(so.findPermutationDifference(s = "abcde", t = "edbac"))
 
 
 

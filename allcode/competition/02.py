@@ -3,19 +3,24 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minimumOperationsToMakeKPeriodic(self, word: str, k: int) -> int:
-        l = []
-        n = len(word)
-        for i in range(0, n, k):
-            l.append(word[i: i + k])
-        counter = Counter(l)
-        mx = counter.most_common(1)[0][1]
-        return n // k - mx
+    def maximumEnergy(self, energy: List[int], k: int) -> int:
+        ans = -inf
+        n = len(energy)
+        @cache
+        def dfs(idx):
+            nonlocal ans
+            if idx >= n: return 0
+            res = dfs(idx + k) + energy[idx]
+            ans = max(ans, res)
+            return res
+        for i in range(k):
+            max(ans, dfs(i))
+        return ans
 
 
 so = Solution()
-print(so.minimumOperationsToMakeKPeriodic(word = "leetcodeleet", k = 4))
-print(so.minimumOperationsToMakeKPeriodic(word = "leetcoleet", k = 2))
+print(so.maximumEnergy(energy = [5,2,-10,-5,1], k = 3))
+print(so.maximumEnergy(energy = [-2,-3,-1], k = 2))
 
 
 
