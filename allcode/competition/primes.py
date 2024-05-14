@@ -1,3 +1,5 @@
+# https://leetcode.cn/circle/discuss/mDfnkW/
+
 from leetcode.allcode.competition.mypackage import *
 
 # 计算所有 <= n 的质数
@@ -117,3 +119,26 @@ for x in range(2, MX):
         y += 1
     if x > 1:
         factors[-1][x] += 1  # 剩余的一个质数
+
+# MOD = 1_000_000_007
+#
+# // 加
+# (a + b) % MOD
+#
+# // 减
+# (a - b + MOD) % MOD
+#
+# // 乘
+# a * b % MOD
+#
+# // 多个数相乘，要步步取模，防止溢出
+# a * b % MOD * c % MOD
+#
+# // 除（MOD 是质数且 b 不是 MOD 的倍数）
+# a * qpow(b, MOD - 2, MOD) % MOD
+# 其中 qpow 为快速幂。
+#
+# 注：Python 内置快速幂函数 pow(x, y, m) 用于计算
+# 特别地，除法也可以写成 a * pow(b, -1, MOD) % MOD。
+
+
