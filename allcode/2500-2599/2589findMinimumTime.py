@@ -36,7 +36,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def findMinimumTime(self, tasks: List[List[int]]) -> int:
+    def findMinimumTime1(self, tasks: List[List[int]]) -> int:
         tasks.sort(key=lambda x: x[1])
         vis = set()
         # print(tasks)
@@ -52,9 +52,28 @@ class Solution:
         return len(vis)
 
 
+    def findMinimumTime(self, tasks: List[List[int]]) -> int:
+        # 2024/5/15 扫描线，这个性能不如上面的
+        ans = []
+        n = len(tasks)
+        mn, mx = min(x for x, _, _ in tasks), max(x for _, x, _ in tasks)
+        for i in range(mn, mx + 1):
+            for t1, t2, d in tasks:
+                if d == 0 or i < t1 or i > t2: continue
+                if d <= t2 - i: continue
+                ans.append(i)
+                for j in range(n):
+                    if tasks[j][0] <= i <= tasks[j][1]:
+                        if tasks[j][2]:
+                            tasks[j][2] -= 1
+                break
+        return len(ans)
+
+
+
 so = Solution()
-print(so.findMinimumTime([[1,3,2],[2,5,3],[5,6,2]]))
-print(so.findMinimumTime([[2,3,1],[4,5,1],[1,5,2]]))
+print(so.findMinimumTime([[2,3,1],[4,5,1],[1,5,2]]))   # 4
+print(so.findMinimumTime([[1,3,2],[2,5,3],[5,6,2]]))   # 2
 
 
 
