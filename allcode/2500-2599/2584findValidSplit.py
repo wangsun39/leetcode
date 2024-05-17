@@ -32,12 +32,13 @@
 # n == nums.length
 # 1 <= n <= 104
 # 1 <= nums[i] <= 106
+from math import gcd
 
 from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def findValidSplit(self, nums: List[int]) -> int:
+    def findValidSplit1(self, nums: List[int]) -> int:
         n = len(nums)
         if n < 2: return -1
         if n == 2:
@@ -56,12 +57,44 @@ class Solution:
         return -1 if left < ans else ans
 
 
+    def findValidSplit(self, nums: List[int]) -> int:
+        # 2024/5/17 质因子分解
+        def prime_factors(x):
+            res = []
+            i = 2
+            while i * i <= x:
+                if x % i != 0:
+                    i += 1
+                    continue
+                res.append(i)
+                while x % i == 0:
+                    x //= i
+                i += 1
+            if x > 1:
+                res.append(x)
+            return res
+        n = len(nums)
+        if n == 1: return -1
+        mid = 0
+        for i in range(n):
+            x = nums[i]
+            p = prime_factors(x)
+            for y in p:
+                for j in range(i + 1, n):
+                    if nums[j] % y == 0:
+                        mid = max(mid, j)
+                        if mid == n - 1:
+                            return -1
+                        while nums[j] % y == 0:
+                            nums[j] //= y
+            if mid == i:
+                return mid
 
 
 
 so = Solution()
-print(so.countSubarrays(nums = [3,2,1,4,5], k = 4))  # 3
-print(so.countSubarrays(nums = [2,3,1], k = 3))  # 1
+print(so.findValidSplit([4,7,8,15,3,5]))  # 2
+print(so.findValidSplit([4,7,15,8,3,5]))  # -1
 
 
 
