@@ -35,12 +35,13 @@
 #
 # 1 <= k <= arr.length <= 105
 # 1 <= arr[i] <= 109
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def makeSubKSumEqual(self, arr: List[int], k: int) -> int:
+    def makeSubKSumEqual1(self, arr: List[int], k: int) -> int:
         n = len(arr)
         vis = [0] * n
         ans = 0
@@ -60,6 +61,18 @@ class Solution:
                 ans += abs(x - mid)
         return ans
 
+    def makeSubKSumEqual(self, arr: List[int], k: int) -> int:
+        # 2024/5/18  裴蜀定理
+        n = len(arr)
+        p = math.gcd(n, k)  # 最小的循环周期
+        ans = 0
+        for i in range(p):
+            group = [arr[i] for i in range(i, n, p)]
+            group.sort()
+            mid = group[len(group) // 2]
+            for x in group:
+                ans += abs(x - mid)
+        return ans
 
 
 

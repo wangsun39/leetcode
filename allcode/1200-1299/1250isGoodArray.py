@@ -35,14 +35,17 @@
 
 from typing import List
 from math import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def isGoodArray(self, nums: List[int]) -> bool:
+    def isGoodArray1(self, nums: List[int]) -> bool:
         g = nums[0]
         for x in nums[1:]:
             g = gcd(g, x)
         return g == 1
 
+    def isGoodArray(self, nums: List[int]) -> bool:
+        return reduce(gcd, nums) == 1
 
 
 
