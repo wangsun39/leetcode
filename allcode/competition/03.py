@@ -3,28 +3,25 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maxScore(self, grid: List[List[int]]) -> int:
-        r, c = len(grid), len(grid[0])
-        ans = -inf
-        @cache
-        def dfs(row, col):
-            nonlocal ans
-            if row >= r or col >= c:
-                return -inf
-            if row == r - 1 and col == c - 1:
-                return grid[row][col]
-            res1 = dfs(row + 1, col)
-            res2 = dfs(row, col + 1)
-            res = max(res1, res2)
-            ans = max(ans, res - grid[row][col])
-            return max(res, grid[row][col])
-        dfs(0, 0)
-        return ans
+    def sumDigitDifferences(self, nums: List[int]) -> int:
+        n = len(nums)
+        nums = [str(x) for x in nums]
+        m = len(nums[0])
+        counter = [[0] * 10 for _ in range(m)]  # counter[i][j] 第i个数位是j的个数
+        for x in nums:
+            for j in range(m):
+                counter[j][int(x[j])] += 1
+        ans = 0
+        for i in range(m):
+            s = sum(counter[i])
+            for j in range(10):
+                ans += counter[i][j] * (s - counter[i][j])
+        return ans // 2
 
 
 so = Solution()
-print(so.maxScore(grid = [[4,3,2],[3,2,1]]))
-print(so.maxScore(grid = [[9,5,7,3],[8,9,6,1],[6,7,14,3],[2,5,3,1]]))
+print(so.sumDigitDifferences(nums = [13,23,12]))
+print(so.sumDigitDifferences(nums = [10,10,10,10]))
 
 
 
