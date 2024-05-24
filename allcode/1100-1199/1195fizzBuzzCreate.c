@@ -30,111 +30,92 @@
 typedef struct {
     int n;
     int cur;
-    pthread_mutex_t lock;
-    pthread_cond_t  cond;
+    sem_t num3;
+    sem_t num5;
+    sem_t num15;
+    sem_t other;
 } FizzBuzz;
 
 FizzBuzz* fizzBuzzCreate(int n) {
     FizzBuzz* obj = (FizzBuzz*) malloc(sizeof(FizzBuzz));
-    memset(obj, 0, sizeof(FizzBuzz));
     obj->n = n;
     obj->cur = 1;
+    sem_init(&obj->other, 0, 1);
+    sem_init(&obj->num3, 0, 0);
+    sem_init(&obj->num5, 0, 0);
+    sem_init(&obj->num15, 0, 0);
     return obj;
+}
+
+void putNext(FizzBuzz* obj) {
+    printf("post:%u\n",obj->cur);
+    if (obj->cur % 15 == 0)
+        sem_post(&obj->num15);
+    else if (obj->cur % 3 == 0)
+        sem_post(&obj->num3);
+    else if (obj->cur % 5 == 0)
+        sem_post(&obj->num5);
+    else
+        sem_post(&obj->other);
 }
 
 // printFizz() outputs "fizz".
 void fizz(FizzBuzz* obj) {
-    while (true) {
-        pthread_mutex_lock(&obj->lock);
-        int next = obj->cur;
-        while (next % 3 != 0 || 0 == next % 5) {
-            next++;
+    while (1) {
+        int next = (obj->cur + 2) / 3 * 3;
+        while (next % 15 == 0) {
+            next += 3;
         }
-        if (obj->cur > obj->n || next > obj->n) {
-            pthread_mutex_unlock(&obj->lock);
-            return;
-        }
-
-        while (obj->cur % 3 != 0 || 0 == obj->cur % 5) {
-            pthread_cond_wait(&obj->cond, &obj->lock);
-        }
+        if (next > obj->n) break;
+        sem_wait(&obj->num3);
         printFizz();
         obj->cur++;
-
-        pthread_cond_signal(&obj->cond);
-        pthread_mutex_unlock(&obj->lock);
+        putNext(obj);
     }
 }
 
 // printBuzz() outputs "buzz".
 void buzz(FizzBuzz* obj) {
-    while (true) {
-        pthread_mutex_lock(&obj->lock);
-        int next = obj->cur;
-        while (next % 5 != 0 || 0 == next % 3) {
-            next++;
+    while (1) {
+        int next = (obj->cur + 4) / 5 * 5;
+        while (next % 15 == 0) {
+            next += 5;
         }
-        if (obj->cur > obj->n || next > obj->n) {
-            pthread_mutex_unlock(&obj->lock);
-            return;
-        }
-        while (obj->cur % 5 != 0 || 0 == obj->cur % 3) {
-            pthread_cond_wait(&obj->cond, &obj->lock);
-        }
+        if (next > obj->n) break;
+        sem_wait(&obj->num5);
         printBuzz();
         obj->cur++;
-
-        pthread_cond_signal(&obj->cond);
-        pthread_mutex_unlock(&obj->lock);
+        putNext(obj);
     }
-
 }
 
 // printFizzBuzz() outputs "fizzbuzz".
 void fizzbuzz(FizzBuzz* obj) {
-    while(true) {
-        pthread_mutex_lock(&obj->lock);
-        int next = obj->cur;
-        while (next % 15 != 0) {
-            next++;
-        }
-        if (obj->cur > obj->n || next > obj->n) {
-            pthread_mutex_unlock(&obj->lock);
-            return;
-        }
-        while (obj->cur % 15 != 0) {
-            pthread_cond_wait(&obj->cond, &obj->lock);
-        }
+    while (1) {
+        int next = (obj->cur + 14) / 15 * 15;
+        if (next > obj->n) break;
+        sem_wait(&obj->num15);
         printFizzBuzz();
         obj->cur++;
-
-        pthread_cond_signal(&obj->cond);
-        pthread_mutex_unlock(&obj->lock);
+        putNext(obj);
     }
 }
 
 // You may call global function `void printNumber(int x)`
 // to output "x", where x is an integer.
 void number(FizzBuzz* obj) {
-    while(true) {
-        pthread_mutex_lock(&obj->lock);
+    while (1) {
         int next = obj->cur;
-        while (next % 5 == 0 || 0 == next % 3) {
-            next++;
+        while (next % 3 == 0 || next % 5 == 0) {
+            next += 1;
         }
-        if (obj->cur > obj->n || next > obj->n) {
-            pthread_mutex_unlock(&obj->lock);
-            return;
-        }
-        while (obj->cur % 5 == 0 || 0 == obj->cur % 3) {
-            pthread_cond_wait(&obj->cond, &obj->lock);
-        }
+        if (next > obj->n) break;
+        sem_wait(&obj->other);
         printNumber(obj->cur);
         obj->cur++;
-
-        pthread_cond_signal(&obj->cond);
-        pthread_mutex_unlock(&obj->lock);
+        putNext(obj);
     }
+
 }
 
 void fizzBuzzFree(FizzBuzz* obj) {
