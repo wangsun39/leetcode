@@ -29,21 +29,16 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def mostCompetitive(self, nums: List[int], k: int) -> List[int]:
         n = len(nums)
-        dq = [deque() for _ in range(10)]
+        stack = []
         for i, x in enumerate(nums):
-            dq[x].append(i)
-        ans = []
-        for i in range(k):
-            for j in range(10):
-                if len(dq[j]) == 0: continue
-                if n - dq[j][0] >= k - i:
-                    ans.append(j)
-                    idx = dq[j].popleft()
-                    break
-            for j in range(10):
-                while dq[j] and dq[j][0] < idx:
-                    dq[j].popleft()
-        return ans
+            if stack and x >= stack[-1]:
+                if len(stack) < k:
+                    stack.append(x)
+            else:
+                while stack and stack[-1] > x and n - i >= k - (len(stack) - 1):
+                    stack.pop()
+                stack.append(x)
+        return stack
 
 
 so = Solution()

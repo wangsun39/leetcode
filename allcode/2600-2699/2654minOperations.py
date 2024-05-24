@@ -34,6 +34,8 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minOperations(self, nums: List[int]) -> int:
         n = len(nums)
+        if min(nums) == 1:
+            return sum(1 for x in nums if x != 1)
         ans = inf
         for i in range(n):
             j = i
@@ -49,7 +51,8 @@ class Solution:
 
 
 so = Solution()
-print(so.minOperations([2,6,3,4]))
+print(so.minOperations([1,1]))
+print(so.minOperations([2,6,3,4]))   # 4
 print(so.minOperations([2,10,6,14]))
 
 
