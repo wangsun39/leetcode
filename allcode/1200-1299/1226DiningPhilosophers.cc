@@ -42,22 +42,6 @@
 //    1 <= n <= 60
 
 
-typedef struct {
-    int n;
-    sem_t zero;
-    sem_t even;
-    sem_t odd;
-} ZeroEvenOdd;
-
-ZeroEvenOdd* zeroEvenOddCreate(int n) {
-    ZeroEvenOdd* obj = (ZeroEvenOdd*) malloc(sizeof(ZeroEvenOdd));
-    obj->n = n;
-    sem_init(&obj->zero, 0, 1);
-    sem_init(&obj->even, 0, 0);
-    sem_init(&obj->odd, 0, 0);
-    return obj;
-}
-
 // You may call global function `void printNumber(int x)`
 // to output "x", where x is an integer.
 
@@ -76,18 +60,19 @@ public:
                     function<void()> putLeftFork,
                     function<void()> putRightFork) {
         sem_wait(&table);
+
         int l = philosopher;
         int r = (philosopher + 1) % N;
         sem_wait(&fork[l]);
+        sem_wait(&fork[r]);  // 需要先调2次wait，再调两次pick，要把中间两个调换顺序就不能通过了，不知道为啥
         pickLeftFork();
-        sem_wait(&fork[r]);
         pickRightFork();
 
         eat();
 
         putRightFork();
-        sem_post(&fork[r]);
         putLeftFork();
+        sem_post(&fork[r]);
         sem_post(&fork[l]);
 
         sem_post(&table);

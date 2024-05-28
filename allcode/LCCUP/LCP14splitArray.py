@@ -23,24 +23,29 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+
 class Solution:
     def splitArray(self, nums: List[int]) -> int:
-        def factors(x):
+        def prime_factors(x):
             res = []
-            i = 1
+            i = 2
             while i * i <= x:
-                if x % i == 0:
-                    res.append(i)
-                    if i * i != x:
-                        res.append(x // i)
+                if x % i != 0:
+                    i += 1
+                    continue
+                res.append(i)
+                while x % i == 0:
+                    x //= i
                 i += 1
+            if x > 1:
+                res.append(x)
             return res
 
         n = len(nums)
         dp = list(range(1, n + 1, 1))  # dp[i] 统计前i个数的最小切分
         d = {}   # d[y]  # 含有因子y的位置的前一个位置的最小切分
         for i, x in enumerate(nums):
-            fs = factors(x)
+            fs = prime_factors(x)
             if i > 0:
                 dp[i] = dp[i - 1] + 1  # x不与前面的数在一个切分
             for y in fs:
