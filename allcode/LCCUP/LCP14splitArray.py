@@ -38,25 +38,24 @@ class Solution:
 
         n = len(nums)
         dp = list(range(1, n + 1, 1))  # dp[i] 统计前i个数的最小切分
-        # d = {}  # d[y]  # 表示所有含因子y的位置i中，具有最小切分的num[:i]的一个i
-        d = {}   # d[y]  # 最近的一个含有因子y的位置
+        d = {}   # d[y]  # 含有因子y的位置的前一个位置的最小切分
         for i, x in enumerate(nums):
             fs = factors(x)
+            if i > 0:
+                dp[i] = dp[i - 1] + 1  # x不与前面的数在一个切分
             for y in fs:
+                if y == 1: continue
                 if y in d:
-                    dp[i] = dp[d[y]]
+                    dp[i] = min(dp[i], d[y] + 1)  # x与前面某个数具有公因子y，且他们在一个切分中
+                    d[y] = min(d[y], dp[i - 1])
                 else:
-                    if i > 0:
-                        dp[i] = dp[i - 1] + 1
-                    else:
-                        dp[i] = 1
-                d[y] = i
+                    d[y] = dp[i - 1] if i else 0
         return dp[-1]
 
 
 so = Solution()
-print(so.splitArray([2,3,3,2,3,3]))
-print(so.splitArray([2,3,5,7]))
+print(so.splitArray([2,3,5,7]))  # 4
+print(so.splitArray([2,3,3,2,3,3]))  # 2
 
 
 

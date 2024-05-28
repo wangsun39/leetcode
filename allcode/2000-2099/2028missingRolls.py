@@ -45,7 +45,7 @@ from typing import List
 from collections import deque
 # Definition for a binary tree node.
 class Solution:
-    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+    def missingRolls1(self, rolls: List[int], mean: int, n: int) -> List[int]:
         def helper(left, total, target):  # total 剩下可选的数字个数，target 数字之和
             if target == 0:
                 return True, [0 for _ in range(len(left))]
@@ -69,6 +69,19 @@ class Solution:
         for i, num in enumerate(ans[1]):
             res += ([i + 1] * num)
         return res
+
+    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+        # 2024/5/27  数学
+        m = len(rolls)
+        total = (m + n) * mean
+        left = total - sum(rolls)
+        if n <= left <= n * 6:
+            q, r = divmod(left, n)
+            ans = [q] * (n - r) + [q + 1] * r
+            return ans
+        return []
+
+
 
 so = Solution()
 print(so.missingRolls([3,2,4,3], mean = 4, n = 2))
