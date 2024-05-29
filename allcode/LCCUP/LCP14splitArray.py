@@ -24,37 +24,47 @@
 from leetcode.allcode.competition.mypackage import *
 
 
+# 预处理计算所有数的最小质因子
+max_num = 1000000
+min_factor = [1] * (max_num + 1)  # 记录每个数x的最小质因子 min_factor[x]
+p = 2
+min_factor[2] = 2
+# O(M loglog M)
+while p <= max_num:
+    i = p
+    while i * p <= max_num:
+        if min_factor[i * p] == 1:
+            min_factor[i * p] = p
+        i += 1
+
+    p += 1
+    while p <= max_num:
+        if min_factor[p] == 1:
+            min_factor[p] = p
+            break
+        p += 1
+
+
+
 class Solution:
     def splitArray(self, nums: List[int]) -> int:
-        def prime_factors(x):
-            res = []
-            i = 2
-            while i * i <= x:
-                if x % i != 0:
-                    i += 1
-                    continue
-                res.append(i)
-                while x % i == 0:
-                    x //= i
-                i += 1
-            if x > 1:
-                res.append(x)
-            return res
-
         n = len(nums)
         dp = list(range(1, n + 1, 1))  # dp[i] 统计前i个数的最小切分
         d = {}   # d[y]  # 含有因子y的位置的前一个位置的最小切分
         for i, x in enumerate(nums):
-            fs = prime_factors(x)
             if i > 0:
                 dp[i] = dp[i - 1] + 1  # x不与前面的数在一个切分
-            for y in fs:
-                if y == 1: continue
+            # 下面就是x与前面的某个数具有相同因子，就要遍历所有x的质因子，将其放入一个切分之中
+            while min_factor[x] > 1:
+                y = min_factor[x]
                 if y in d:
                     dp[i] = min(dp[i], d[y] + 1)  # x与前面某个数具有公因子y，且他们在一个切分中
                     d[y] = min(d[y], dp[i - 1])
                 else:
                     d[y] = dp[i - 1] if i else 0
+                while x % y == 0:
+                    x //= y
+
         return dp[-1]
 
 

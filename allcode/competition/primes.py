@@ -66,6 +66,26 @@ for i in range(2, MX):  # 预处理 omega
             omega[j] += 1  # i 是 j 的一个质因子
 # print(omega)
 
+# MX = 1000000
+min_factor = [1] * (MX + 1)  # 记录每个数x的最小质因子 min_factor[x]，对于质数x来说，最小质因子就是x
+p = 2
+min_factor[2] = 2
+# O(M loglog M)
+while p <= MX:
+    i = p
+    while i * p <= MX:
+        if min_factor[i * p] == 1:
+            min_factor[i * p] = p
+        i += 1
+
+    p += 1
+    while p <= MX:
+        if min_factor[p] == 1:
+            min_factor[p] = p
+            break
+        p += 1
+
+
 # MX = 100001
 divisors = [[] for _ in range(MX)]  # divisors[i] 表示 i 的所有因子
 for i in range(1, MX):  # 预处理每个数的所有因子，时间复杂度 O(MlogM)，M=1e5

@@ -48,7 +48,7 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def replaceNonCoprimes(self, nums: List[int]) -> List[int]:
+    def replaceNonCoprimes1(self, nums: List[int]) -> List[int]:
 
         def dfs(arr):
             n = len(arr)
@@ -77,6 +77,19 @@ class Solution:
             return res
         return dfs(nums)
 
+    def replaceNonCoprimes(self, nums: List[int]) -> List[int]:
+        # 2024/5/29  栈
+        stack = [nums[0]]
+        for x in nums[1:]:
+            stack.append(x)
+            while len(stack) > 1:
+                v = gcd(stack[-1], stack[-2])
+                if v > 1:
+                    stack[-2] = stack[-1] * stack[-2] // v
+                    stack.pop()
+                else:
+                    break
+        return stack
 
 
 
