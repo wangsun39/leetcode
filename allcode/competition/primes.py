@@ -66,7 +66,7 @@ for i in range(2, MX):  # 预处理 omega
             omega[j] += 1  # i 是 j 的一个质因子
 # print(omega)
 
-# MX = 1000000
+# MX = 1000000  # 可以用于10^5个最多10^6的数
 min_factor = [1] * (MX + 1)  # 记录每个数x的最小质因子 min_factor[x]，对于质数x来说，最小质因子就是x
 p = 2
 min_factor[2] = 2
