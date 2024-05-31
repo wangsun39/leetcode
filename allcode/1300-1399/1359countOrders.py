@@ -31,7 +31,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countOrders(self, n: int) -> int:
+    def countOrders1(self, n: int) -> int:
         MOD = 10 ** 9 + 7
 
         @cache
@@ -47,6 +47,15 @@ class Solution:
             return res
         return dfs(n, n)
 
+    def countOrders(self, n: int) -> int:
+        # 2024/5/30 排列组合
+        # C(2n,2)*C(2n-2,2)*C(2n-4,2)*...
+        MOD = 10 ** 9 + 7
+        ans = 1
+        for i in range(n, 0, -1):
+            ans *= i * (i * 2 - 1)
+            ans %= MOD
+        return ans
 
 so = Solution()
 print(so.countOrders(2))
