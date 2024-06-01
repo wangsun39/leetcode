@@ -30,9 +30,9 @@
 #
 # 提示：
 #
-# 1 <= n, m <= 105
-# 1 <= nums1[i], nums2[j] <= 106
-# 1 <= k <= 103
+# 1 <= n, m <= 50
+# 1 <= nums1[i], nums2[j] <= 50
+# 1 <= k <= 50
 
 from leetcode.allcode.competition.mypackage import *
 
