@@ -30,22 +30,21 @@ class Solution:
         MOD = 10 ** 9 + 7
 
         @cache
-        def dfs(mask, nn):  # 从 idx 个字母开始，剩下 nn 个数时，总数是多少
-            if (26 - mask.bit_count()) * k < nn: return 0
-            if mask.bit_count() == 26 or nn == 0: return 1
+        def dfs(left, nn):  # 剩余字母个数，剩下 nn 个数时，总数是多少
+            if left * k < nn:
+                return 0
+            if nn == 0: return 1
             res = 0
-            for i in range(26):
-                if (1 << i) & mask == 0:
-                    for j in range(1, k + 1):
-                        if j > nn: break
-                        res += dfs(mask | (1 << i), nn - j)
-                        res %= MOD
+            for i in range(1, k + 1):
+                if i > nn: break
+                res += dfs(left - 1, nn - i) * left
+                res %= MOD
             return res
-        return dfs(0, n)
+        return dfs(26, n)
 
 so = Solution()
-print(so.keyboard(k = 5, n = 130))
 print(so.keyboard(k = 1, n = 1))
+print(so.keyboard(k = 5, n = 130))
 print(so.keyboard(k = 1, n = 2))
 
 
