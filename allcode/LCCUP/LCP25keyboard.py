@@ -30,20 +30,40 @@ class Solution:
         MOD = 10 ** 9 + 7
 
         @cache
-        def dfs(left, nn):  # 剩余字母个数，剩下 nn 个数时，总数是多少
-            if left * k < nn:
-                return 0
-            if nn == 0: return 1
+        def dfs(left, x1, x2, x3, x4, x5):  # 剩余字母个数，剩下 nn 个数时，总数是多少
             res = 0
-            for i in range(1, k + 1):
-                if i > nn: break
-                res += dfs(left - 1, nn - i) * left
+            if left == 0: return 1
+            if x1:
+                res += dfs(left - 1, x1 - 1, x2, x3, x4, x5) * x1
                 res %= MOD
+            if x2:
+                res += dfs(left - 1, x1 + 1, x2 - 1, x3, x4, x5) * x2
+                res %= MOD
+            if x3:
+                res += dfs(left - 1, x1, x2 + 1, x3 - 1, x4, x5) * x3
+                res %= MOD
+            if x4:
+                res += dfs(left - 1, x1, x2, x3 + 1, x4 - 1, x5) * x4
+                res %= MOD
+            if x5:
+                res += dfs(left - 1, x1, x2, x3, x4 + 1, x5 - 1) * x5
+                res %= MOD
+            # print(left, x1, x2, x3, x4, x5, res)
             return res
-        return dfs(26, n)
+        if k == 5:
+            return dfs(n, 0,0,0,0,26)
+        elif k == 4:
+            return dfs(n, 0,0,0,26,0)
+        elif k == 3:
+            return dfs(n, 0,0,26,0,0)
+        elif k == 2:
+            return dfs(n, 0,26,0,0,0)
+        elif k == 1:
+            return dfs(n, 26,0,0,0,0)
 
 so = Solution()
 print(so.keyboard(k = 1, n = 1))
+print(so.keyboard(k = 2, n = 3))  # 17550
 print(so.keyboard(k = 5, n = 130))
 print(so.keyboard(k = 1, n = 2))
 
