@@ -30,7 +30,7 @@ class Solution:
         MOD = 10 ** 9 + 7
 
         @cache
-        def dfs(left, x1, x2, x3, x4, x5):  # 剩余字母个数，剩下 nn 个数时，总数是多少
+        def dfs(left, x1, x2, x3, x4, x5):  # 剩余字母个数left，xi表示剩余i个字符的字母个数
             res = 0
             if left == 0: return 1
             if x1:
