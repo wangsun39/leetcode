@@ -3,25 +3,19 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countDays(self, days: int, meetings: List[List[int]]) -> int:
-        meetings.sort()
-        stack = [meetings[0]]
-        for x, y in meetings[1:]:
-            if stack[-1][1] >= x:
-                stack[-1][1] = max(stack[-1][1], y)
-            else:
-                stack.append([x, y])
-        s = sum(y - x + 1 for x, y in stack)
-        return days - s
-
-
-
+    def valueAfterKSeconds(self, n: int, k: int) -> int:
+        MOD = 10 ** 9 + 7
+        nums = [1] * n
+        for i in range(k):
+            for j in range(1, n):
+                nums[j] += nums[j - 1]
+                nums[j] %= MOD
+        return nums[-1]
 
 
 so = Solution()
-print(so.countDays(days = 10, meetings = [[5,7],[1,3],[9,10]]))
-print(so.countDays(days = 5, meetings = [[2,4],[1,3]]))
-print(so.countDays(days = 6, meetings = [[1,6]]))
+print(so.valueAfterKSeconds(n = 4, k = 5))
+print(so.valueAfterKSeconds(n = 5, k = 3))
 
 
 

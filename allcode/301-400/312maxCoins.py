@@ -1,10 +1,10 @@
-# 有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+# 有 n 个气球，编号为0 到 n - 1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
 #
-# 现在要求你戳破所有的气球。戳破第 i 个气球，你可以获得 nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。 这里的 i - 1 和 i + 1 代表和 i 相邻的两个气球的序号。如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。
+# 现在要求你戳破所有的气球。戳破第 i 个气球，你可以获得 nums[i - 1] * nums[i] * nums[i + 1] 枚硬币。 这里的 i - 1 和 i + 1 代表和 i 相邻的两个气球的序号。如果 i - 1或 i + 1 超出了数组的边界，那么就当它是一个数字为 1 的气球。
 #
 # 求所能获得硬币的最大数量。
 #
-#  
+#
 #
 # 示例 1：
 # 输入：nums = [3,1,5,8]
@@ -16,12 +16,12 @@
 #
 # 输入：nums = [1,5]
 # 输出：10
-#  
+#
 #
 # 提示：
 #
 # n == nums.length
-# 1 <= n <= 500
+# 1 <= n <= 300
 # 0 <= nums[i] <= 100
 
 from typing import List
@@ -46,8 +46,11 @@ class Solution:
         nums.append(1)
         return helper(tuple(nums))
     def maxCoins2(self, nums: List[int]) -> int:  # 可以通过
+        # 把操作流程返回来思考，改成放气球
         @lru_cache(None)
         def helper(start, end):
+            # 返回在开区间 (start, end) 中填满气球的最大收益
+            # 对于两侧的值，就用nums[start],nums[end]，要想清楚这点是关键
             if start + 1 == end:
                 return 0
             res = 0

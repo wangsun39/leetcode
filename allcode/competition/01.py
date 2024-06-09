@@ -3,22 +3,21 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minimumChairs(self, s: str) -> int:
-        ans = 0
-        cur = 0
-        for x in s:
-            if x == 'E':
-                cur += 1
-            else:
-                cur -= 1
-            ans = max(ans, cur)
-        return ans
+    def numberOfChild(self, n: int, k: int) -> int:
+        q = (k + 1 + (n - 2)) // (n - 1)
+        r = (k + 1) % (n - 1)
+        if q & 1 == 1:
+            if r:
+                return r - 1
+            return n - 2
+        return n - r
+
 
 
 so = Solution()
-print(so.minimumChairs("EEEEEEE"))
-print(so.minimumChairs("ELELEEL"))
-print(so.minimumChairs("ELEELEELLL"))
+print(so.numberOfChild(n = 3, k = 5))
+print(so.numberOfChild(n = 5, k = 6))
+print(so.numberOfChild(n = 4, k = 2))
 
 
 
