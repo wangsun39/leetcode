@@ -48,8 +48,36 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    __slots__ = 'nums', 'tree'
+
+    def __init__(self, n: int):
+        tree = [0] * (n + 1)
+        self.nums = [0] * n
+        self.tree = tree
+
+    def update(self, index: int, val: int) -> None:
+        # delta = val - self.nums[index]
+        delta = val
+        self.nums[index] = val
+        i = index + 1
+        while i < len(self.tree):
+            self.tree[i] += delta
+            i += i & -i  # lowbit
+
+    def prefixSum(self, i: int) -> int:
+        s = 0
+        while i:
+            s += self.tree[i]
+            i &= i - 1  # i -= i & -i 的另一种写法
+        return s
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.prefixSum(right + 1) - self.prefixSum(left)
+
+
 class Solution:
-    def resultArray(self, nums: List[int]) -> List[int]:
+    def resultArray1(self, nums: List[int]) -> List[int]:
         arr1, arr2 = [nums[0]], [nums[1]]
         sa1, sa2 = SortedList([nums[0]]), SortedList([nums[1]])
         for x in nums[2:]:
@@ -71,10 +99,38 @@ class Solution:
                     sa2.add(x)
         return arr1 + arr2
 
+    def resultArray(self, nums: List[int]) -> List[int]:
+        sub = sorted(list(set(nums)))
+        x2i = {x: i for i, x in enumerate(sub)}
+        n = len(nums)
+        arr1, arr2 = [nums[0]], [nums[1]]
+        for i, x in enumerate(nums):
+            nums[i] = x2i[x]
+        f1, f2 = Fenwick(n), Fenwick(n)
+        f1.update(nums[0], 1)
+        f2.update(nums[1], 1)
+        for x in nums[2:]:
+            v1, v2 = f1.prefixSum(n) - f1.prefixSum(x+1), f2.prefixSum(n) - f2.prefixSum(x+1)
+            if v1 > v2:
+                arr1.append(sub[x])
+                f1.update(x, 1)
+            elif v1 < v2:
+                arr2.append(sub[x])
+                f2.update(x, 1)
+            elif len(arr1) > len(arr2):
+                arr2.append(sub[x])
+                f2.update(x, 1)
+            else:
+                arr1.append(sub[x])
+                f1.update(x, 1)
+        return arr1 + arr2
+
+
 
 so = Solution()
 print(so.resultArray([2,38,2]))
 print(so.resultArray([2,1,3,3]))
+print(so.resultArray([2,38,2]))
 print(so.resultArray([5,14,3,1,2]))
 print(so.resultArray([3,3,3,3]))
 
