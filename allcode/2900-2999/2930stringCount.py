@@ -32,7 +32,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def stringCount(self, n: int) -> int:
+    def stringCount1(self, n: int) -> int:
         MOD = 10 ** 9 + 7
         if n < 4: return 0
         dp2 = [0] * 12  # 枚举12种可能。递推
@@ -55,12 +55,35 @@ class Solution:
             dp1, dp2 = dp2, [0] * 12
         return dp1[-2]
 
+    def stringCount(self, n: int) -> int:
+        # 2024/6/9  容斥原理
+        if n < 4: return 0
+        MOD = 10 ** 9 + 7
+        s1 = pow(25, n, MOD)  # 0个l
+        s2 = pow(25, n, MOD)  # 0个e
+        s3 = pow(25, n, MOD)  # 0个t
+        s4 = (n * pow(25, n - 1, MOD)) % MOD  # 1个l
+        # 要求s1|s2|s3|s4 = s1+s2+s3+s4 - (s12+s13+s14+s23+s24+s34) + (s123+s124+s134+s234) - s1234
+        s12 = pow(24, n, MOD)
+        s13 = pow(24, n, MOD)
+        s14 = (n * pow(24, n - 1, MOD)) % MOD
+        s23 = pow(24, n, MOD)
+        s24 = 0
+        s34 = (n * pow(24, n - 1, MOD)) % MOD
+        s123 = pow(23, n, MOD)
+        s124 = 0
+        s134 = (n * pow(23, n - 1, MOD)) % MOD
+        s234 = 0
+        s1234 = 0
+        neg = s1+s2+s3+s4 - (s12+s13+s14+s23+s24+s34) + (s123+s124+s134+s234) - s1234
+        return (pow(26, n, MOD) - neg + MOD * 8) % MOD
+
 
 
 
 so = Solution()
-print(so.stringCount(5))
 print(so.stringCount(4))
+print(so.stringCount(5))
 print(so.stringCount(10))
 
 
