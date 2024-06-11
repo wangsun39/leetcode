@@ -47,6 +47,7 @@ class Solution:
     def getProbability(self, balls: List[int]) -> float:
         n = len(balls)
         s = sum(balls)
+        # 这题只需要考虑所有的组合数即可
         tot = comb(s, s // 2)
 
         def dfs(idx, l):  # 从第idx个盒子开始，l表示左盒子已选的球
@@ -64,6 +65,40 @@ class Solution:
             return res
         v = dfs(0, [0] * n)
         return v / tot
+
+    def getProbability2(self, balls: List[int]) -> float:
+        # 另一种dp的写法效率高
+        # 只需要考虑一个盒子的情况即可，另一个盒子是对称的，概率相同。
+        # 一个盒子中的组合总数为C(2n, n)，现在还需要找到这些组合中组合颜色数量和剩余颜色数量相同的组合数。
+        # 颜色相同组合数 / 总组合数 就是要求的概率。
+        # 要颜色相同的最理想状态下就是每一种颜色的球都分到了两个盒子中。
+        # 当一种颜色的球全部都被分到一个盒子中，那么这个盒子的颜色数量会+1
+        # 当一种颜色的球全部都没有分到一个盒子中，那么这个盒子的颜色数量会-1.
+        # 当一种颜色的球分到了两个盒子中，那么这个盒子的颜色数量保持不变。
+        # 这时候问题就变成了背包问题，在每个颜色的球中选多少个可以在选完球后球的数量等于n，且颜色数量无变化。
+        # 构建深搜，参数分别为当前选择的颜色，已选球数量，颜色变化。
+        # 当颜色选择完后，如果已选球数量等于n且颜色无变化则返回1，否则返回0.
+        # 颜色未选择完时，假设当前颜色球数量为n，分别选择[0, n]之间的i个球后继续深搜即可求解。（这里选择i个球后需要乘以C(n, i)，因为选择i个球有C(n, i)种方式)
+
+        def combine(x, y):  # 组合数
+            return math.factorial(x) // math.factorial(y) // math.factorial(x - y)
+
+        s = sum(balls)  # 球总数
+        l = len(balls)  # 颜色总数
+
+        @lru_cache(None)
+        def dfs(i, c, t):
+            if i == l:  # 如果颜色选完了
+                return int(t == 0 and c == s // 2)  # 选了1/2的球数量且颜色无变化
+            res = dfs(i + 1, c, t + 1) + dfs(i + 1, c + balls[i], t - 1)  # 不选和全选组合数都为1，直接相加即可，需要更新颜色变化
+            for j in range(1, balls[i]):  # 其他情况，颜色无变化
+                res += dfs(i + 1, c + j, t) * combine(balls[i], j)
+            return res
+
+        res = dfs(0, 0, 0)
+        return res / combine(s, s // 2)
+
+
 
 
 so = Solution()

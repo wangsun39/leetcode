@@ -28,17 +28,37 @@
 #
 # 1 <= n <= 1000
 # 1 <= k <= n
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def rearrangeSticks(self, n: int, k: int) -> int:
+        MOD = 10 ** 9 + 7
+        @cache
+        def factorial(x):
+            res = 1
+            for i in range(2, x + 1):
+                res *= i
+                res %= MOD
+            return res
+
         @cache
         def dfs(nn, kk):  # 长度为m的
+            if nn == 1 or nn == kk: return 1
+            if kk == 1:
+                return factorial(nn - 1) % MOD
+            # 当从n-1扩充到n个棍子时，不失一般性，增加的是最短的一根，分成两种情况
+            # 前n-1个组成k-1组，最短的一根自成一组，放在最前面
+            # 前n - 1个组成k组，那么最短的一根可以放在任意一根的后面
+            return (dfs(nn - 1, kk - 1) + dfs(nn - 1, kk) * (nn - 1)) % MOD
+        return dfs(n, k)
 
 
 so = Solution()
-print(so.rearrangeSticks())
+print(so.rearrangeSticks(n = 5, k = 5))
+print(so.rearrangeSticks(n = 3, k = 2))
+print(so.rearrangeSticks(n = 20, k = 11))
 
 
 
