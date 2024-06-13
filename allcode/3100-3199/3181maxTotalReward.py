@@ -39,19 +39,11 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxTotalReward(self, rewardValues: List[int]) -> int:
-        ss = SortedSet()
+        rewardValues = list(set(rewardValues))
         rewardValues.sort()
+        f = 0  # 用一个很大数的二进制(二进制有n位)，二进制的第i位（从低到高）表示数字i总奖励是否能达成
         for x in rewardValues:
-            p = ss.bisect_right(x - 1)
-            if p == 0:
-                ss.add(x)
-            else:
-                s = {x}
-                for i in range(p):
-                    s.add(ss[i] + x)
-                for y in s:
-                    ss.add(y)
-        return ss[-1]
+
 
 
 
