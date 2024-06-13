@@ -1,46 +1,61 @@
-# 给你一个下标从 0 开始长度为 n 的数组 nums 。
+# 给你一个长度为 n 的二维整数数组 items 和一个整数 k 。
 #
-# 每一秒，你可以对数组执行以下操作：
+# items[i] = [profiti, categoryi]，其中 profiti 和 categoryi 分别表示第 i 个项目的利润和类别。
 #
-# 对于范围在 [0, n - 1] 内的每一个下标 i ，将 nums[i] 替换成 nums[i] ，nums[(i - 1 + n) % n] 或者 nums[(i + 1) % n] 三者之一。
-# 注意，所有元素会被同时替换。
+# 现定义 items 的 子序列 的 优雅度 可以用 total_profit + distinct_categories2 计算，其中 total_profit 是子序列中所有项目的利润总和，distinct_categories 是所选子序列所含的所有类别中不同类别的数量。
 #
-# 请你返回将数组 nums 中所有元素变成相等元素所需要的 最少 秒数。
+# 你的任务是从 items 所有长度为 k 的子序列中，找出 最大优雅度 。
+#
+# 用整数形式表示并返回 items 中所有长度恰好为 k 的子序列的最大优雅度。
+#
+# 注意：数组的子序列是经由原数组删除一些元素（可能不删除）而产生的新数组，且删除不改变其余元素相对顺序。
 #
 #
 #
 # 示例 1：
 #
-# 输入：nums = [1,2,1,2]
-# 输出：1
-# 解释：我们可以在 1 秒内将数组变成相等元素：
-# - 第 1 秒，将每个位置的元素分别变为 [nums[3],nums[1],nums[3],nums[3]] 。变化后，nums = [2,2,2,2] 。
-# 1 秒是将数组变成相等元素所需要的最少秒数。
+# 输入：items = [[3,2],[5,1],[10,1]], k = 2
+# 输出：17
+# 解释：
+# 在这个例子中，我们需要选出长度为 2 的子序列。
+# 其中一种方案是 items[0] = [3,2] 和 items[2] = [10,1] 。
+# 子序列的总利润为 3 + 10 = 13 ，子序列包含 2 种不同类别 [2,1] 。
+# 因此，优雅度为 13 + 22 = 17 ，可以证明 17 是可以获得的最大优雅度。
 # 示例 2：
 #
-# 输入：nums = [2,1,3,3,2]
-# 输出：2
-# 解释：我们可以在 2 秒内将数组变成相等元素：
-# - 第 1 秒，将每个位置的元素分别变为 [nums[0],nums[2],nums[2],nums[2],nums[3]] 。变化后，nums = [2,3,3,3,3] 。
-# - 第 2 秒，将每个位置的元素分别变为 [nums[1],nums[1],nums[2],nums[3],nums[4]] 。变化后，nums = [3,3,3,3,3] 。
-# 2 秒是将数组变成相等元素所需要的最少秒数。
+# 输入：items = [[3,1],[3,1],[2,2],[5,3]], k = 3
+# 输出：19
+# 解释：
+# 在这个例子中，我们需要选出长度为 3 的子序列。
+# 其中一种方案是 items[0] = [3,1] ，items[2] = [2,2] 和 items[3] = [5,3] 。
+# 子序列的总利润为 3 + 2 + 5 = 10 ，子序列包含 3 种不同类别 [1, 2, 3] 。
+# 因此，优雅度为 10 + 32 = 19 ，可以证明 19 是可以获得的最大优雅度。
 # 示例 3：
 #
-# 输入：nums = [5,5,5,5]
-# 输出：0
-# 解释：不需要执行任何操作，因为一开始数组中的元素已经全部相等。
+# 输入：items = [[1,1],[2,1],[3,1]], k = 3
+# 输出：7
+# 解释：
+# 在这个例子中，我们需要选出长度为 3 的子序列。
+# 我们需要选中所有项目。
+# 子序列的总利润为 1 + 2 + 3 = 6，子序列包含 1 种不同类别 [1] 。
+# 因此，最大优雅度为 6 + 12 = 7 。
 #
 #
 # 提示：
 #
-# 1 <= n == nums.length <= 105
-# 1 <= nums[i] <= 109
+# 1 <= items.length == n <= 105
+# items[i].length == 2
+# items[i][0] == profiti
+# items[i][1] == categoryi
+# 1 <= profiti <= 109
+# 1 <= categoryi <= n
+# 1 <= k <= n
 
 from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def findMaximumElegance(self, items: List[List[int]], k: int) -> int:
+    def findMaximumElegance1(self, items: List[List[int]], k: int) -> int:
         n = len(items)
         items.sort()
         items1, items2 = items[n - k:], items[:n - k][::-1]  # items1 顺序， items2 逆序
@@ -68,10 +83,45 @@ class Solution:
 
         return ans
 
+    def findMaximumElegance(self, items: List[List[int]], k: int) -> int:
+        items.sort(key=lambda x: x[0], reverse=True)
+        counter = Counter()
+        hp = []
+        ans = 0
+        for pro, cat in items[:k]:
+            counter[cat] += 1
+            ans += pro
+        ans += len(counter) ** 2
+        cur = ans
+        for pro, cat in items[:k]:
+            if counter[cat] > 1:
+                heappush(hp, [0, pro, cat])   # 0表示同一种cat有多个，1表示同一种cat只有一个
+            else:
+                heappush(hp, [1, pro, cat])
+        for pro, cat in items[k:]:
+            if cat in counter:
+                continue
+            if hp[0][0] == 1:
+                break
+            delta = pro - hp[0][1] + (len(counter) + 1) ** 2 - len(counter) ** 2
+            # if delta > 0:
+            _, p1, c1 = heappop(hp)
+            counter[c1] -= 1
+            heappush(hp, [1, pro, cat])
+            cur += delta
+            ans = max(ans, cur)
+            counter[cat] += 1
+            while hp[0][0] == 0 and counter[hp[0][2]] == 1:
+                heapreplace(hp, [1, hp[0][1], hp[0][2]])
+
+        return ans
 
 
 so = Solution()
-print(so.findMaximumElegance(items = [[3,2],[5,1],[10,1]], k = 2))
+print(so.findMaximumElegance(items = [[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11]], k = 10))   # 137
+print(so.findMaximumElegance(items = [[2,2],[8,6],[10,6],[2,4],[9,5],[4,5]], k = 4))   # 39
+print(so.findMaximumElegance(items = [[1,4],[4,3],[9,2],[2,4],[5,5],[7,5]], k = 4))   # 38
+print(so.findMaximumElegance(items = [[3,2],[5,1],[10,1]], k = 2))   # 17
 print(so.findMaximumElegance(items = [[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11]], k = 10))
 print(so.findMaximumElegance(items = [[3,4],[8,4],[2,2],[1,3]], k = 2))
 print(so.findMaximumElegance(items = [[5,1],[6,1],[8,1]], k = 2))
