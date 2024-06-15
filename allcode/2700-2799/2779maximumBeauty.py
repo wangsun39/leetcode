@@ -39,7 +39,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maximumBeauty(self, nums: List[int], k: int) -> int:
+    def maximumBeauty1(self, nums: List[int], k: int) -> int:
         nums.sort()
         n = len(nums)
         hi, lo = max(nums), min(nums)
@@ -51,11 +51,29 @@ class Solution:
             ans = max(ans, p2 - p1)
         return ans
 
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        # 2024/6/15 差分
+        mx = max(nums) + 1
+        diff = [0] * mx
+        for x in nums:
+            diff[max(0, x - k)] += 1
+            if x + k + 1 < mx:
+                diff[x + k + 1] -= 1
+        s = 0
+        ans = 0
+        for i in range(mx):
+            s += diff[i]
+            ans = max(ans, s)
+        return ans
+
+
+
 
 so = Solution()
+print(so.maximumBeauty(nums = [1,1,1,1], k = 10))
+print(so.maximumBeauty([0], 1))
 print(so.maximumBeauty([49,26], 12))
 print(so.maximumBeauty(nums = [4,6,1,2], k = 2))
-print(so.maximumBeauty(nums = [1,1,1,1], k = 10))
 
 
 

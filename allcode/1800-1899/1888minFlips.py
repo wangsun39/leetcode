@@ -62,6 +62,25 @@ class Solution:
         s2 = ''.join(s2)
         return min(f(s), f(s2))
 
+    def minFlips(self, s: str) -> int:
+        # 2024/6/15  换个写法
+        n = len(s)
+        # n1 表示转成1010...的操作次数，n2 表示转成0101...的操作次数
+        # 有关系n1 + n2 == n
+        n1 = sum(1 for i, x in enumerate(s) if (i & 1 == 0 and x == '0' or i & 1 == 1 and x == '1'))
+        n2 = n - n1
+        if n & 1 == 0: # 长度为偶数
+            return min(n1, n2)
+        ans = min(n1, n2)
+        for i in range(1, n):
+            # n1, n2 = n2 + int(s[i - 1] == '1'), n1 + int(s[i - 1] == '0')
+            if s[i - 1] == '0':
+                n1 = n2 + 1
+            else:
+                n1 = n2 - 1
+            n2 = n - n1
+            ans = min(ans, min(n1, n2))
+        return ans
 
 
 
