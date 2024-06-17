@@ -1,8 +1,9 @@
-from typing import List
+
 import functools
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def findLUSlength(self, strs: List[str]) -> int:
+    def findLUSlength1(self, strs: List[str]) -> int:
         def cmp(x, y): # return 1 if x <y  -1 if x > y
             if len(x) != len(y):
                 return 1 if len(x) < len(y) else -1
@@ -35,8 +36,33 @@ class Solution:
                 return len(strs[i])
         return -1
 
+    def findLUSlength(self, strs: List[str]) -> int:
+        counter = Counter(strs)
+        counter = list(counter.items())
+        counter.sort(key=lambda x:len(x[0]), reverse=True)
+        def subs(a, b): # a是否是b的子序列
+            bi = 0
+            for ai, x in enumerate(a):
+                while bi < len(b) and x != b[bi]:
+                    bi += 1
+                if bi == len(b):
+                    return False
+                bi += 1
+            return True
+        for i, [k, v] in enumerate(counter):
+            if v > 1: continue
+            found = True
+            for j in range(i):
+                if subs(k, counter[j][0]):
+                    found = False
+                    break
+            if found:
+                return len(k)
+        return -1
 
 so = Solution()
+print(so.findLUSlength(["abcabc","abcabc","abcabc","abc","abc","cca"]))
+print(so.findLUSlength(["aabbcc", "aabbcc","c","e","aabbcd"]))
 print(so.findLUSlength(["aabbcc", "aabbcc","cb","abc"]))
 print(so.findLUSlength(['abc', 'bdd', 'aaab', 'bbas']))
 print(so.findLUSlength(['abcd', 'bdd']))
