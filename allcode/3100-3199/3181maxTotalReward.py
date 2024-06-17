@@ -39,10 +39,14 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxTotalReward(self, rewardValues: List[int]) -> int:
-        rewardValues = list(set(rewardValues))
-        rewardValues.sort()
-        f = 0  # 用一个很大数的二进制(二进制有n位)，二进制的第i位（从低到高）表示数字i总奖励是否能达成
-        for x in rewardValues:
+        rewardValues = sorted(list(set(rewardValues)))  # 去重排序
+        dp = 1 << (rewardValues[0] - 1) # 用一个很大数的二进制(二进制有n位)，二进制的第i位（从1开始，从低到高）表示数字i总奖励是否能达成
+        for x in rewardValues[1:]:  # dp[i][j] = dp[i-1][j] or dp[i-1][j-x-1]  省掉第一个维度
+            y = x * 2 - 1  # dp的低y位会受到x的影响，大于y的位不受影响
+            dp2 = ((1 << y) - 1) & (dp << x)  # 把低x-1位都向左移x位
+            dp |= dp2
+            dp |= (1 << (x - 1))  # x 本身可以达到
+        return dp.bit_length()
 
 
 
