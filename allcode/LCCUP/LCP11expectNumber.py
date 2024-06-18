@@ -35,6 +35,8 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def expectNumber(self, scores: List[int]) -> int:
+        counter = Counter(scores)
+        return len(counter)
 
 
 so = Solution()
