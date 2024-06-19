@@ -45,50 +45,28 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxIncreasingCells(self, mat: List[List[int]]) -> int:
+        g = defaultdict(list)
         r, c = len(mat), len(mat[0])
-        rp = []  # 每一行一个优先队列，按值从大到小排
-        for row in mat:
-            hp = sorted([[x, i] for i, x in enumerate(row)], reverse=True)
-            for i, [x, j] in enumerate(hp):
-                if i == 0:
-                    rp.append(deque([{j}]))
-                    continue
-                if hp[i - 1][0] == x:
-                    rp[-1][-1].add(j)
-                else:
-                    rp[-1].append({j})
-        print(rp)
-        tmat = list(zip(*mat))  # 转置
-        cp = []  # 每一列一个优先队列，按值从大到小排
-        for row in tmat:
-            hp = sorted([[x, i] for i, x in enumerate(row)], reverse=True)
-            for i, [x, j] in enumerate(hp):
-                if i == 0:
-                    cp.append(deque([{j}]))
-                    continue
-                if hp[i - 1][0] == x:
-                    cp[-1][-1].add(j)
-                else:
-                    cp[-1].append({j})
-        print(cp)
-
+        for i in range(r):
+            for j in range(c):
+                g[mat[i][j]].append((i, j))
+        row = [0] * r  # 第i行的当前最大的递增个数
+        col = [0] * c  # 第j列的当前最大的递增个数
         ans = 0
-        while True:
-            for row in range(r):
-                # 取出当前每行的最大元素位置
-                if len(rp[row]) == 0: continue
-                s = rp[row][0]
-                sd = set()  # s 中在本轮会删除的点
-                for col in s:
-                    if row in cp[col][0]:
-                        sd.add(col)
-            ans += 1
+        for v, pairs in sorted(g.items()):
+            map = {}
+            for i, j in pairs:
+                map[(i, j)] = max(row[i], col[j]) + 1
+                ans = max(ans, map[(i, j)])
+            for i, j in pairs:
+                row[i] = max(row[i], map[(i, j)])
+                col[j] = max(col[j], map[(i, j)])
+        return ans
 
-
-        # return ans
 
 
 so = Solution()
+print(so.maxIncreasingCells([[-4,8,-3,2,-4,-8,7,5,-2],[-5,5,-7,-2,6,-6,-8,-4,-4]]))
 print(so.maxIncreasingCells([[7,6,3],[-7,-5,6],[-7,0,-4],[6,6,0],[-8,6,0]]))
 print(so.maxIncreasingCells([[1,1],[1,1]]))
 print(so.maxIncreasingCells([[3,1,6],[-9,5,7]]))
