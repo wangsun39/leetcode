@@ -45,54 +45,51 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxIncreasingCells(self, mat: List[List[int]]) -> int:
-        n, m = len(mat), len(mat[0])
-        nt = [[[-1] * 2 for _ in range(m)] for _ in range(n)]  # next 矩阵
-        for i, r in enumerate(mat):
-            row = [[j, rr] for j, rr in enumerate(r)]
-            row.sort(key=lambda x: x[1])
-            start = 0
-            for kk, [k, v] in enumerate(row[1:], 1):
-                if v > row[start][1]:
-                    nt[i][row[start][0]][0] = k
-                    start = kk
-        xmat = list(zip(*mat))  # mat转置
-        # print(xmat)
-        for i, r in enumerate(xmat):
-            row = [[j, rr] for j, rr in enumerate(r)]
-            row.sort(key=lambda x: x[1])
-            start = 0
-            for kk, [k, v] in enumerate(row[1:], 1):
-                if v > row[start][1]:
-                    nt[row[start][0]][i][1] = k
-                    start = kk
+        r, c = len(mat), len(mat[0])
+        rp = []  # 每一行一个优先队列，按值从大到小排
+        for row in mat:
+            hp = sorted([[x, i] for i, x in enumerate(row)], reverse=True)
+            for i, [x, j] in enumerate(hp):
+                if i == 0:
+                    rp.append(deque([{j}]))
+                    continue
+                if hp[i - 1][0] == x:
+                    rp[-1][-1].add(j)
+                else:
+                    rp[-1].append({j})
+        print(rp)
+        tmat = list(zip(*mat))  # 转置
+        cp = []  # 每一列一个优先队列，按值从大到小排
+        for row in tmat:
+            hp = sorted([[x, i] for i, x in enumerate(row)], reverse=True)
+            for i, [x, j] in enumerate(hp):
+                if i == 0:
+                    cp.append(deque([{j}]))
+                    continue
+                if hp[i - 1][0] == x:
+                    cp[-1][-1].add(j)
+                else:
+                    cp[-1].append({j})
+        print(cp)
 
-        print(nt)
+        ans = 0
+        while True:
+            for row in range(r):
+                # 取出当前每行的最大元素位置
+                if len(rp[row]) == 0: continue
+                s = rp[row][0]
+                sd = set()  # s 中在本轮会删除的点
+                for col in s:
+                    if row in cp[col][0]:
+                        sd.add(col)
+            ans += 1
 
 
-
-        # @cache
-        # def dfs(x, y):
-        #     if nt[x][y][0] == nt[x][y][1] == -1:
-        #         print(x, y, 1)
-        #         return 1
-        #     res = 0
-        #     if nt[x][y][0] != -1:
-        #         res = max(res, dfs(x, nt[x][y][0]) + 1)
-        #     if nt[x][y][1] != -1:
-        #         res = max(res, dfs(nt[x][y][1], y) + 1)
-        #     print(x, y, res)
-        #     return res
-        #
-        # ans = 0
-        # for i in range(n):
-        #     for j in range(m):
-        #         ans = max(ans, dfs(i, j))
-
-        return ans
+        # return ans
 
 
 so = Solution()
 print(so.maxIncreasingCells([[7,6,3],[-7,-5,6],[-7,0,-4],[6,6,0],[-8,6,0]]))
+print(so.maxIncreasingCells([[1,1],[1,1]]))
 print(so.maxIncreasingCells([[3,1,6],[-9,5,7]]))
 print(so.maxIncreasingCells([[3, 1], [3, 4]]))
-print(so.maxIncreasingCells([[1,1],[1,1]]))
