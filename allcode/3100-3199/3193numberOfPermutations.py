@@ -80,7 +80,7 @@ class Solution:
             for j in range(m + 1):
                 if i in d and d[i] != j:
                     continue
-                for k in range(j - i, j + 1):   # 第 i 个元素，最多能和前面的元素新产生 i 个逆序对，前面i-1个元素产生k个逆序对
+                for k in range(max(0, j - i), j + 1):   # 第 i 个元素，最多能和前面的元素新产生 i 个逆序对，前面i-1个元素产生k个逆序对
                     # 则需要由第i个元素新产生 j-k 个逆序对，那么 0 <= j-k <= i，得 j-i<=k<=j
                     dp[i][j] += dp[i - 1][k]
                     dp[i][j] %= MOD
@@ -91,10 +91,10 @@ class Solution:
 
 
 so = Solution()
+print(so.numberOfPermutations(n = 2, requirements = [[0,0],[1,0]]))  # 1
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[0,0]]))  # 2
 print(so.numberOfPermutations(n = 15, requirements = [[4,5],[6,10],[14,53],[0,0]]))  # 393161917
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[0,1]]))  # 0
-print(so.numberOfPermutations(n = 2, requirements = [[0,0],[1,0]]))  # 1
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[1,1],[0,0]]))  # 1
 
 
