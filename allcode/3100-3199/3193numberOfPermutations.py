@@ -68,7 +68,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def numberOfPermutations(self, n: int, requirements: List[List[int]]) -> int:
+    def numberOfPermutations1(self, n: int, requirements: List[List[int]]) -> int:
         MOD = 10 ** 9 + 7
         requirements.sort()
         d = {k: v for k, v in requirements}
@@ -80,19 +80,42 @@ class Solution:
             for j in range(m + 1):
                 if i in d and d[i] != j:
                     continue
-                for k in range(max(0, j - i), j + 1):   # 第 i 个元素，最多能和前面的元素新产生 i 个逆序对，前面i-1个元素产生k个逆序对
-                    # 则需要由第i个元素新产生 j-k 个逆序对，那么 0 <= j-k <= i，得 j-i<=k<=j
+                for k in range(max(0, j - i), j + 1):   # 第 i 个元素，最多能和前面的元素新产生 i 个逆序对，
+                    # 当前面i-1个元素产生k个逆序对时，
+                    # 需要由第i个元素新产生 j-k 个逆序对，同时需要保证 0 <= j-k <= i，得 j-i<=k<=j
                     dp[i][j] += dp[i - 1][k]
                     dp[i][j] %= MOD
                 if i in d and dp[i][j] == 0: return 0  # 不存在这样的排序
         # print(dp)
         return dp[-1][-1]
 
+    def numberOfPermutations(self, n: int, requirements: List[List[int]]) -> int:
+        # 上面方法的前缀和优化
+        MOD = 10 ** 9 + 7
+        requirements.sort()
+        d = {k: v for k, v in requirements}
+        if 0 in d and d[0] != 0: return 0
+        m = requirements[-1][1]  # 最大逆序对数量
+        dp = [[0] * (m + 1) for _ in range(n)]  # dp[i][j] 表示前 i 个数，逆序对的个数为 j 的排列数
+        dp[0][0] = 1
+        for i in range(1, n):
+            pres = 0 # 部分前缀和
+            for j in range(m + 1):
+                pres += dp[i - 1][j]
+                if j - i > 0:
+                    pres -= dp[i - 1][j - i - 1]
+                if i in d and d[i] != j:
+                    continue
+                pres %= MOD
+                dp[i][j] = pres
+                if i in d and dp[i][j] == 0: return 0  # 不存在这样的排序
+        # print(dp)
+        return dp[-1][-1]
 
 
 so = Solution()
-print(so.numberOfPermutations(n = 2, requirements = [[0,0],[1,0]]))  # 1
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[0,0]]))  # 2
+print(so.numberOfPermutations(n = 2, requirements = [[0,0],[1,0]]))  # 1
 print(so.numberOfPermutations(n = 15, requirements = [[4,5],[6,10],[14,53],[0,0]]))  # 393161917
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[0,1]]))  # 0
 print(so.numberOfPermutations(n = 3, requirements = [[2,2],[1,1],[0,0]]))  # 1

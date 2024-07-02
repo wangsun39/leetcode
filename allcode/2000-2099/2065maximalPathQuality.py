@@ -62,7 +62,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maximalPathQuality(self, values: List[int], edges: List[List[int]], maxTime: int) -> int:
+    def maximalPathQuality1(self, values: List[int], edges: List[List[int]], maxTime: int) -> int:
         g = defaultdict(list)
         n = len(values)
         for x, y, t in edges:
@@ -85,10 +85,37 @@ class Solution:
         dfs(0, 0, values[0], {0})
         return ans
 
+    def maximalPathQuality(self, values: List[int], edges: List[List[int]], maxTime: int) -> int:
+        # 2024/7/2 小优化写法，去掉dfs最后一个参数
+        g = defaultdict(list)
+        n = len(values)
+        for x, y, t in edges:
+            g[x].append([y, t])
+            g[y].append([x, t])
+        ans = 0
+
+        def dfs(x, mxt, mxv):  # mxt 路径上经过的总时间，mxv 路径上经过的点的总价值
+            nonlocal ans
+            if x == 0:
+                ans = max(ans, mxv)
+            for y, t in g[x]:
+                ct = mxt + t
+                if ct <= maxTime:
+                    if vis[x]:
+                        dfs(y, ct, mxv)
+                    else:
+                        vis[x] = 1
+                        dfs(y, ct, mxv + values[x])
+                        vis[x] = 0
+            return
+        vis = [0] * n
+        vis[0] = 1
+        dfs(0, 0, values[0])
+        return ans
 
 so = Solution()
-print(so.maximalPathQuality(values = [0,32,10,43], edges = [[0,1,10],[1,2,15],[0,3,10]], maxTime = 49))
 print(so.maximalPathQuality(values = [5,10,15,20], edges = [[0,1,10],[1,2,10],[0,3,10]], maxTime = 30))
+print(so.maximalPathQuality(values = [0,32,10,43], edges = [[0,1,10],[1,2,15],[0,3,10]], maxTime = 49))
 print(so.maximalPathQuality(values = [1,2,3,4], edges = [[0,1,10],[1,2,11],[2,3,12],[1,3,13]], maxTime = 50))
 print(so.maximalPathQuality(values = [0,1,2], edges = [[1,2,10]], maxTime = 10))
 
