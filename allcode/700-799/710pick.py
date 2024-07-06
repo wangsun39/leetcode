@@ -38,9 +38,9 @@
 
 
 
-from typing import List
-import random
-class Solution:
+from leetcode.allcode.competition.mypackage import *
+
+class Solution1:
 
     def __init__(self, n: int, blacklist: List[int]):
         self.n = n - len(blacklist)
@@ -61,7 +61,38 @@ class Solution:
             return self.d[ans]
         return ans
 
+class Solution:
+    # 2024/7/5 二分法
 
+    def __init__(self, n: int, blacklist: List[int]):
+        self.n = n
+        self.m = len(blacklist)
+        blacklist.sort()
+        self.blacklist = blacklist
+
+
+    def pick(self) -> int:
+        num = random.randrange(0, self.n - self.m)
+        def check(v):  # 检查区间[0,v]中是否有num个数
+            p = bisect_right(self.blacklist, v)  # <= v的blacklist数字个数
+            return v - p >= num
+        if check(0): return 0
+        lo, hi = 0, self.n
+        while lo < hi - 1:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+        return hi
+
+
+
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(n, blacklist)
+# param_1 = obj.pick()
 
 so = Solution(4, [2,1])
 print(so.pick())
