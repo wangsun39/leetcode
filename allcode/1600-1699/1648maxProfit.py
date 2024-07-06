@@ -67,6 +67,8 @@ class Solution:
                 ans %= MOD
                 return ans
 
+
+
 so = Solution()
 print(so.maxProfit(inventory = [497978859,167261111,483575207,591815159], orders = 836556809))
 print(so.maxProfit(inventory = [2,5], orders = 4))
