@@ -2,80 +2,88 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class NumArray:
-    __slots__ = 'nums', 'tree'
+class Trie:
 
-    def __init__(self, nums: List[int]):
-        n = len(nums)
-        tree = [0] * (n + 1)
-        for i, x in enumerate(nums, 1):  # i 从 1 开始
-            tree[i] += x
-            nxt = i + (i & -i)  # 下一个关键区间的右端点
-            if nxt <= n:
-                tree[nxt] += tree[i]
-        self.nums = nums[:]
-        self.tree = tree
+    def __init__(self, target):
+        self.root = {}
+        self.target = target
+        self.n = len(target)
 
-    def update(self, index: int, val: int) -> None:
-        delta = val - self.nums[index]
-        self.nums[index] = val
-        i = index + 1
-        while i < len(self.tree):
-            self.tree[i] += delta
-            i += i & -i
+    def insert(self, word: str, cost: int) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {}
+            cur = cur[e]
+        cur['end'] = cost
 
-    def prefixSum(self, i: int) -> int:
-        s = 0
-        while i:
-            s += self.tree[i]
-            i &= i - 1  # i -= i & -i 的另一种写法
-        return s
 
-    def sumRange(self, left: int, right: int) -> int:
-        return self.prefixSum(right + 1) - self.prefixSum(left)
+    def search(self, word: str) -> bool:
+        cur = self.root
+        for e in word:
+            if e in cur:
+                cur = cur[e]
+            else:
+                return False
+        return 'end' in cur
+
+
+
+    def startsWith(self, start: int) -> list:
+        cur = self.root
+        res = []  # 返回 [len, cost] 的数组
+        dep = 0
+        for i in range(start, self.n):
+            e = self.target[i]
+            if e in cur:
+                cur = cur[e]
+                dep += 1
+                if 'end' in cur:
+                    res.append([dep, cur['end']])
+            else:
+                break
+
+        return res
 
 class Solution:
-    def countOfPeaks(self, nums: List[int], queries: List[List[int]]) -> List[int]:
-        n = len(nums)
-        arr = [0] * n
-        for i in range(1, n - 1):
-            if nums[i - 1] < nums[i] > nums[i + 1]:
-                arr[i] = 1
-        na = NumArray(arr)
-        ans = []
-        def check(i):
-            if 0 < i < n - 1 and arr[i] != int(nums[i - 1] < nums[i] > nums[i + 1]):
-                return True  # 表示有变化
-            return False
+    def minimumCost(self, target: str, words: List[str], costs: List[int]) -> int:
+        tr = Trie(target)
+        n = len(target)
+        d = {}
+        for w, c in zip(words, costs):
+            if w not in d:
+                d[w] = c
+            else:
+                d[w] = min(d[w], c)
+        for w, c in d.items():
+            tr.insert(w, c)
 
-        for type, a, b in queries:
-            if type == 1:
-                v = na.sumRange(a, b)
-                if arr[a]: v -= 1
-                if arr[b]: v -= 1
-                ans.append(max(v, 0))
-            if type == 2:
-                i, val = a, b
-                nums[i] = val
-                if check(i - 1):
-                    na.update(i - 1, 1 - arr[i - 1])
-                    arr[i - 1] = 1 - arr[i - 1]
-                if check(i):
-                    na.update(i, 1 - arr[i])
-                    arr[i] = 1 - arr[i]
-                if check(i + 1):
-                    na.update(i + 1, 1 - arr[i + 1])
-                    arr[i + 1] = 1 - arr[i + 1]
-        return ans
+        vis = [inf] * (n + 1)
+        vis[-1] = 0
 
+        @cache
+        def dfs(start):
+            if start == n:
+                return 0
+            mn = inf
+            res = tr.startsWith(start)
+            for l, c in res:
+                if vis[start + l] < inf:
+                    v = vis[start + l] + c
+                else:
+                    v = dfs(start + l) + c
+                if mn > v:
+                    mn = v
+            vis[start] = mn
+            return mn
+        ans = dfs(0)
+        return -1 if ans == inf else ans
 
 
 so = Solution()
-print(so.countOfPeaks([3,9,5,4], [[1,0,3],[2,1,4],[2,0,6],[1,2,3]]))
-print(so.countOfPeaks([5,4,8,6], [[1,2,2],[1,1,2],[2,1,6]]))
-print(so.countOfPeaks([3,1,4,2,5], [[2,3,4],[1,0,4]]))
-print(so.countOfPeaks(nums = [4,1,4,2,1,5], queries = [[2,2,4],[1,0,2],[1,0,4]]))
-print(so.countOfPeaks(nums = [3,1,4,2,5], queries = [[2,3,4],[1,0,4]]))
+print(so.minimumCost("r",["r","r","r","r"],[1,6,3,3]))
+print(so.minimumCost(target = "abcdef", words = ["abdef","abc","d","def","ef"], costs = [100,1,1,10,5]))
+print(so.minimumCost(target = "aaaa", words = ["z","zz","zzz"], costs = [1,10,100]))
 
 
 
