@@ -30,6 +30,7 @@
 
 import time
 import random
+import math
 
 from typing import List
 import copy
@@ -41,11 +42,20 @@ class Solution:
         self.r = radius
 
 
-    def randPoint(self) -> List[float]:
+    def randPoint1(self) -> List[float]:
         while True:
             x, y = random.uniform(-self.r, self.r), random.uniform(-self.r, self.r)
             if x * x + y * y <= self.r * self.r:
                 return [self.x0 + x, self.y0 + y]
+    def randPoint(self) -> List[float]:
+        # 2024/7/16  半径的平方上随机
+        while True:
+            d = random.uniform(0, self.r ** 2) ** 0.5
+            arg = random.uniform(0, math.pi * 2)
+            x = self.x0 + d * math.cos(arg)
+            y = self.y0 + d * math.sin(arg)
+            if (x - self.x0) ** 2 + (y - self.y0) ** 2 <= self.r ** 2:
+                return [x, y]
 
 
 so = Solution(1.0, 0.0, 0.0)
