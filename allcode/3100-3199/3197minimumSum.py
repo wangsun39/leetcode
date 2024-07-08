@@ -46,6 +46,7 @@ class Solution:
     def minimumSum(self, grid: List[List[int]]) -> int:
         r, c = len(grid), len(grid[0])
 
+        @cache
         def minimumArea(r1, r2, c1, c2) -> int:
             # 求一个矩形区域内，包含所有1的最小矩形，没有1时，返回1
             left, right, up, down = inf, -inf, -inf, inf
@@ -78,6 +79,7 @@ class Solution:
                     ans = min(ans, minimumArea(0, i, 0, j) + minimumArea(0, i, j, c) + minimumArea(i, r, 0, c))
 
         f()
+        minimumArea.cache_clear()
         grid = list(zip(*grid[::-1]))
         r, c = len(grid), len(grid[0])
         f()
