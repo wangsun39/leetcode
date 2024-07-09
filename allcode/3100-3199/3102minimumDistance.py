@@ -35,11 +35,42 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumDistance(self, points: List[List[int]]) -> int:
+        l1, l2 = [], []
+        for i, [x, y] in enumerate(points):
+            l1.append([x - y, i])
+            l2.append([x + y, i])
+        l1.sort()
+        l2.sort()
+        ans = max(l1[-1][0] - l1[0][0], l2[-1][0] - l2[0][0])
+        def calc(idx, l):
+            # 删除下标idx的点，计算l中的最多差值是多少
+            if l[0][1] == idx:
+                res = l[-1][0] - l[1][0]
+            elif l[-1][1] == idx:
+                res = l[-2][0] - l[0][0]
+            else:
+                res = l[-1][0] - l[0][0]
+            return res
+
+        cur = max(l1[-1][0] - l1[1][0], calc(l1[0][1], l2))
+        ans = min(ans, cur)
+
+        cur = max(l1[-2][0] - l1[0][0], calc(l1[-1][1], l2))
+        ans = min(ans, cur)
+
+        cur = max(l2[-1][0] - l2[1][0], calc(l2[0][1], l1))
+        ans = min(ans, cur)
+
+        cur = max(l2[-2][0] - l2[0][0], calc(l2[-1][1], l1))
+        ans = min(ans, cur)
+        return ans
 
 
 
 so = Solution()
-print(so.minimumDistance())
+print(so.minimumDistance(points = [[3,10],[5,15],[10,2],[4,4]]))
+print(so.minimumDistance(points = [[4,1],[10,7],[5,6],[3,2],[10,9],[2,9],[2,8]]))
+print(so.minimumDistance(points = [[1,1],[1,1],[1,1]]))
 
 
 
