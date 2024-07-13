@@ -36,9 +36,9 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def incremovableSubarrayCount(self, nums: List[int]) -> int:
+    def incremovableSubarrayCount1(self, nums: List[int]) -> int:
         n = len(nums)
-        left = right = -1  # 分别表示要移除的区间的左侧最大值，后右侧最小值
+        left = right = -1  # 分别表示要移除的区间的左侧最大值，和右侧最小值
         for i, x in enumerate(nums[1:], 1):
             if x > nums[i - 1]:
                 continue
@@ -61,9 +61,30 @@ class Solution:
             l -= 1
         return ans
 
+    def incremovableSubarrayCount(self, nums: List[int]) -> int:
+        n = len(nums)
+        r = 0
+        for i in range(n - 1, 0, -1):
+            if nums[i - 1] >= nums[i]:
+                r = i
+                break
+            else:
+                r = i - 1
+        if r == 0:
+            return n * (n + 1) // 2
+        ans = n - r + 1
+        for l in range(1, n):
+            if l >= 2 and nums[l - 2] >= nums[l - 1]:
+                break
+            while r < n and nums[l - 1] >= nums[r]:
+                r += 1
+            ans += (n - r + 1)
+        return ans
 
 so = Solution()
-
+print(so.incremovableSubarrayCount([9,9,4]))
+print(so.incremovableSubarrayCount([4,2]))
+print(so.incremovableSubarrayCount([6,5,7,8]))
 
 
 

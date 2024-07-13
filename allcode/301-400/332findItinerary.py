@@ -33,41 +33,25 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        names = set()
-        for x, y in tickets:
-            names.add(x)
-            names.add(y)
         g = defaultdict(list)
-        outdeg = defaultdict(int)   # 出度
         for x, y in tickets:
             g[x].append(y)
-            outdeg[x] += 1
         for x in g:
             g[x].sort()
-        x = 'JFK'
+
         ans = []
-        while True:
-            ans.append(x)
-            nxt = None
-            for y in g[x]:
-                if outdeg[y] == 0:
-                    if len(g[x]) == 1:
-                        nxt = y
-                    else:
-                        continue
-                if outdeg[y]:
-                    nxt = y
-                    break
-            if nxt is None: break
-            outdeg[x] -= 1
-            g[x].remove(nxt)
-            x = nxt
+        def dfs(x):
+            while g[x]:
+                y = g[x].pop(0)
+                dfs(y)
+            # 走到这里，说明从x出发已经没有路可以走了，那么x就放入答案，表示它是剩下的点中，第最后一个访问的节点
+            ans.insert(0, x)
+        dfs('JFK')
         return ans
 
 
-
-
 so = Solution()
+print(so.findItinerary(tickets = [["EZE","TIA"],["EZE","HBA"],["AXA","TIA"],["JFK","AXA"],["ANU","JFK"],["ADL","ANU"],["TIA","AUA"],["ANU","AUA"],["ADL","EZE"],["ADL","EZE"],["EZE","ADL"],["AXA","EZE"],["AUA","AXA"],["JFK","AXA"],["AXA","AUA"],["AUA","ADL"],["ANU","EZE"],["TIA","ADL"],["EZE","ANU"],["AUA","ANU"]]))
 print(so.findItinerary(tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]))
 print(so.findItinerary(tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]))
 
