@@ -3,22 +3,29 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def validStrings(self, n: int) -> List[str]:
-        arr = ['0', '1']
-        for _ in range(n - 1):
-            cur = []
-            for x in arr:
-                if x[-1] == '0':
-                    cur.append(x + '1')
-                else:
-                    cur.append(x + '1')
-                    cur.append(x + '0')
-            arr = cur
-        return arr
+    def modifiedList(self, nums: List[int], head: Optional[ListNode]) -> Optional[ListNode]:
+        nums = set(nums)
+        l1 = []
+        cur = head
+        while cur:
+            if cur.val not in nums:
+                l1.append(cur)
+            cur = cur.next
+        if len(l1) == 0:
+            return None
+        head = l1[0]
+        cur = head
+        for x in l1[1:]:
+            cur.next = x
+            cur = cur.next
+        return head
 
+head = ListNode(1)
+head.next = ListNode(2)
+head.next.next = ListNode(3)
 
 so = Solution()
-print(so.validStrings(3))
+print(so.modifiedList([1,2,3], head))
 
 
 
