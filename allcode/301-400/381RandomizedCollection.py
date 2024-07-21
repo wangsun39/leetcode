@@ -70,9 +70,12 @@ class RandomizedCollection:
     def remove(self, val: int) -> bool:
         if self.sarr[val] == 0:
             return False
-        self.predel[val] += 1
-        self.nval -= 1
         self.sarr[val] -= 1
+        self.nval -= 1
+        self.predel[val] += 1
+        while self.npra and self.predel[self.arr[self.npra - 1]]:
+            self.predel[self.arr[self.npra - 1]] -= 1
+            self.npra -= 1
         return True
 
 
