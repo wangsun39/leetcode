@@ -57,7 +57,7 @@ class RandomizedCollection:
 
 
     def insert(self, val: int) -> bool:
-        if len(self.arr) < self.npra:
+        if len(self.arr) > self.npra:
             self.arr[self.npra] = val
         else:
             self.arr.append(val)
@@ -89,6 +89,12 @@ class RandomizedCollection:
             x = self.arr[idx]
         return x
 
+obj = RandomizedCollection()
+print(obj.insert(1))
+print(obj.remove(1))
+print(obj.insert(-1))
+print(obj.remove(1))
+print(obj.getRandom())
 
 
 # Your RandomizedSet object will be instantiated and called as such:
