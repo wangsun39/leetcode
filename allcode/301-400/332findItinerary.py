@@ -44,7 +44,7 @@ class Solution:
             while g[x]:
                 y = g[x].pop(0)
                 dfs(y)
-            # 走到这里，说明从x出发已经没有路可以走了，那么x就放入答案，表示它是剩下的点中，第最后一个访问的节点
+            # 走到这里，说明从x出发已经没有路可以走了，那么x就放入答案，表示它是剩下的点中，最后一个访问的节点
             ans.insert(0, x)
         dfs('JFK')
         return ans

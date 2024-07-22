@@ -48,7 +48,7 @@ class Solution:
         div = []
         n = len(nums)
         for i, x in enumerate(nums):
-            if x & k != k:
+            if x & k != k:  # 任何子数组都不会包含这种 x
                 div.append(i)
         if not div or div[0] > 0:
             div.insert(0, -1)
@@ -72,7 +72,7 @@ class Solution:
                         counter[i] -= 1
                     i += 1
                     num >>= 1
-            def trans():
+            def trans():  # counter 转成数字
                 res = 0
                 for i, x in counter.items():
                     if x:
@@ -81,6 +81,7 @@ class Solution:
             res = 0
             right = start
             add(nums[start])
+            # 以下使用双指针
             for left in range(start, end):
                 cur = trans()
                 if right < left:

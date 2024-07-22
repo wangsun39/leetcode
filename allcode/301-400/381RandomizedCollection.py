@@ -52,68 +52,91 @@ class RandomizedCollection:
         self.arr = []
         self.predel = Counter()  # 与删除列表
         self.sarr = Counter()  # 实际元素计数
-        self.nval = 0  # arr的有效数量
-        self.npra = 0  # arr中包含已删除的有效数量
+        self.n_val = 0  # arr的有效数量
+        self.n_act = 0  # arr中包含已删除的有效数量
 
 
     def insert(self, val: int) -> bool:
-        if len(self.arr) > self.npra:
-            self.arr[self.npra] = val
+        if len(self.arr) > self.n_act:
+            self.arr[self.n_act] = val
         else:
             self.arr.append(val)
-        self.nval += 1
-        self.npra += 1
+        self.n_val += 1
+        self.n_act += 1
         self.sarr[val] += 1
         return self.sarr[val] == 1
+
+    def del_tail(self):
+        # 删除掉 self.arr 末尾已被删除的数字，使 self.arr[self.npra - 1] 始终是有效的
+        # 这样在 getRandom 中替换时，不会去替换 self.arr[self.npra - 1]，这样容易处理
+        while self.n_act and self.predel[self.arr[self.n_act - 1]]:
+            self.predel[self.arr[self.n_act - 1]] -= 1
+            self.n_act -= 1
 
 
     def remove(self, val: int) -> bool:
         if self.sarr[val] == 0:
             return False
         self.sarr[val] -= 1
-        self.nval -= 1
+        self.n_val -= 1
         self.predel[val] += 1
-        while self.npra and self.predel[self.arr[self.npra - 1]]:
-            self.predel[self.arr[self.npra - 1]] -= 1
-            self.npra -= 1
+        self.del_tail()
         return True
 
 
     def getRandom(self) -> int:
-        idx = random.randrange(0, self.npra)
+        idx = random.randrange(0, self.n_act)
         x = self.arr[idx]
         while self.predel[x]:
-            self.arr[idx] = self.arr[self.npra - 1]
+            self.arr[idx] = self.arr[self.n_act - 1]
             self.predel[x] -= 1
-            self.npra -= 1
+            self.n_act -= 1
             x = self.arr[idx]
+        self.del_tail()
         return x
 
 obj = RandomizedCollection()
 print(obj.insert(1))
+print(obj.insert(2))
+print(obj.insert(3))
+print(obj.insert(2))
+print(obj.insert(1))
+print(obj.insert(3))
 print(obj.remove(1))
-print(obj.insert(-1))
 print(obj.remove(1))
+print(obj.remove(3))
+print(obj.remove(3))
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
+print(obj.getRandom())
 print(obj.getRandom())
 
 
 # Your RandomizedSet object will be instantiated and called as such:
-obj = RandomizedCollection()
-print(obj.insert(1))
-print(obj.insert(1))
-print(obj.insert(2))
-print(obj.insert(1))
-print(obj.insert(2))
-print(obj.insert(2))
-print(obj.remove(1))
-print(obj.remove(2))
-print(obj.remove(2))
-print(obj.remove(2))
-print(obj.getRandom())
-print(obj.getRandom())
-print(obj.getRandom())
-print(obj.getRandom())
-print(obj.getRandom())
-print(obj.getRandom())
+# obj = RandomizedCollection()
+# print(obj.insert(1))
+# print(obj.insert(1))
+# print(obj.insert(2))
+# print(obj.insert(1))
+# print(obj.insert(2))
+# print(obj.insert(2))
+# print(obj.remove(1))
+# print(obj.remove(2))
+# print(obj.remove(2))
+# print(obj.remove(2))
+# print(obj.getRandom())
+# print(obj.getRandom())
+# print(obj.getRandom())
+# print(obj.getRandom())
+# print(obj.getRandom())
+# print(obj.getRandom())
 
 
