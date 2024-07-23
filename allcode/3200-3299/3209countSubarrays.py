@@ -58,15 +58,20 @@ class Solution:
             if start >= end:
                 return 0
             counter = Counter()
+            num_cnt = 0
             def add(num):
+                nonlocal num_cnt
                 i = 0
+                num_cnt += 1
                 while num:
                     if num & 1:
                         counter[i] += 1
                     i += 1
                     num >>= 1
             def remove(num):
+                nonlocal num_cnt
                 i = 0
+                num_cnt -= 1
                 while num:
                     if num & 1:
                         counter[i] -= 1
@@ -75,7 +80,7 @@ class Solution:
             def trans():  # counter 转成数字
                 res = 0
                 for i, x in counter.items():
-                    if x:
+                    if x and x == (right - left + 1):
                         res |= (1 << i)
                 return res
             res = 0
@@ -83,16 +88,26 @@ class Solution:
             add(nums[start])
             # 以下使用双指针
             for left in range(start, end):
-                cur = trans()
-                if right < left:
+                right = max(right, left)
+                if nums[left] == k:
                     right = left
-                    add(nums[left])
-                    cur = nums[left]
-                while right < end and cur & nums[right] != k:
-                    add(nums[right])
+                    res += end - right
+                    continue
+                cur = trans()
+                if cur == k and left <= right:
+                    res += end - right
+                    remove(nums[left])
+                    continue
+                while right + 1 < end and cur & nums[right + 1] != k:
+                    cur &= nums[right + 1]
+                    add(nums[right + 1])
                     right += 1
-                if right == end:
+                if right + 1 == end:
+                    if cur == k:
+                        res += 1
                     break
+                right += 1
+                add(nums[right])
                 res += end - right
                 remove(nums[left])
             return res
@@ -103,9 +118,13 @@ class Solution:
         return ans
 
 so = Solution()
-print(so.countSubarrays(nums = [1,1,2], k = 1))
-print(so.countSubarrays(nums = [1,1,1], k = 1))
-print(so.countSubarrays(nums = [1,2,3], k = 2))
+print(so.countSubarrays(nums = [1,9,9,7,4], k = 1))  # 6
+print(so.countSubarrays(nums = [9,1,8,9,5], k = 0))  # 7
+print(so.countSubarrays(nums = [3,5,5,3,10], k = 0))  # 3
+print(so.countSubarrays(nums = [2,1,2,4,0], k = 0))  # 11
+print(so.countSubarrays(nums = [1,1,1], k = 1))  # 6
+print(so.countSubarrays(nums = [1,2,3], k = 2))  # 2
+print(so.countSubarrays(nums = [1,1,2], k = 1))  # 3
 
 
 
