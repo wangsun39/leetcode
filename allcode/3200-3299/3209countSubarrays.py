@@ -53,64 +53,43 @@ class Solution:
         if not div or div[0] > 0:
             div.insert(0, -1)
         div.append(n)
+        counter = [[0] * 32]  # counter[i][j] 前i项的按位累计和(前缀和)
+        for x in nums:
+            i = 0
+            count = counter[-1][:]
+            while x:
+                if x & 1:
+                    count[i] += 1
+                i += 1
+                x >>= 1
+            counter.append(count)
         ans = 0
         def calc(start, end):   # 计算 [start, end) 区间内的子数组个数
-            if start >= end:
-                return 0
-            counter = Counter()
-            num_cnt = 0
-            def add(num):
-                nonlocal num_cnt
-                i = 0
-                num_cnt += 1
-                while num:
-                    if num & 1:
-                        counter[i] += 1
-                    i += 1
-                    num >>= 1
-            def remove(num):
-                nonlocal num_cnt
-                i = 0
-                num_cnt -= 1
-                while num:
-                    if num & 1:
-                        counter[i] -= 1
-                    i += 1
-                    num >>= 1
-            def trans():  # counter 转成数字
-                res = 0
-                for i, x in counter.items():
-                    if x and x == (right - left + 1):
-                        res |= (1 << i)
-                return res
             res = 0
             right = start
-            add(nums[start])
-            # 以下使用双指针
-            for left in range(start, end):
-                right = max(right, left)
-                if nums[left] == k:
-                    right = left
-                    res += end - right
+
+            def trans():
+                len = right - left
+                count = [counter[right][i] - counter[left][i] for i in range(32)]
+                res = 0
+                for i, x in enumerate(count):
+                    if x and x == len:
+                        res |= (1 << i)
+                return res
+
+            for left in range(start, end):  # 双指针
+                right = max(right, left + 1)
+                left_x = nums[left]
+                if left_x == k:
+                    res += end - left
                     continue
-                cur = trans()
-                if cur == k and left <= right:
-                    res += end - right
-                    remove(nums[left])
-                    continue
-                while right + 1 < end and cur & nums[right + 1] != k:
-                    cur &= nums[right + 1]
-                    add(nums[right + 1])
+                while right <= end and trans() != k:
                     right += 1
-                if right + 1 == end:
-                    if cur == k:
-                        res += 1
+                if right > end:
                     break
-                right += 1
-                add(nums[right])
-                res += end - right
-                remove(nums[left])
+                res += end - right + 1
             return res
+
 
         for i in range(len(div) - 1):
             ans += calc(div[i] + 1, div[i + 1])
@@ -118,12 +97,12 @@ class Solution:
         return ans
 
 so = Solution()
-print(so.countSubarrays(nums = [1,9,9,7,4], k = 1))  # 6
 print(so.countSubarrays(nums = [9,1,8,9,5], k = 0))  # 7
+print(so.countSubarrays(nums = [1,2,3], k = 2))  # 2
+print(so.countSubarrays(nums = [1,9,9,7,4], k = 1))  # 6
 print(so.countSubarrays(nums = [3,5,5,3,10], k = 0))  # 3
 print(so.countSubarrays(nums = [2,1,2,4,0], k = 0))  # 11
 print(so.countSubarrays(nums = [1,1,1], k = 1))  # 6
-print(so.countSubarrays(nums = [1,2,3], k = 2))  # 2
 print(so.countSubarrays(nums = [1,1,2], k = 1))  # 3
 
 
