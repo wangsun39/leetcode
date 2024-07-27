@@ -49,20 +49,25 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxBuilding(self, n: int, restrictions: List[List[int]]) -> int:
         restrictions.sort()
-        restrictions.insert(0, [0, 0])
-        mx_hi = [[1, 0]]  # 计算每个限制点实际最高的建筑高度
-        ans = 0
+        restrictions.insert(0, [1, 0])
+        mx_hi = [[1, 0]]  # 计算每个限制点实际最高的建筑高度，需要从左到右，再从右到左一共计算两轮
         for i in range(1, len(restrictions)):
             idx1, mx1 = mx_hi[i - 1]
             idx2, mx2 = restrictions[i]
             cur = min(idx2 - idx1 + mx1, mx2)
-            ans = max(ans, cur)
             mx_hi.append([idx2, cur])
+
+        for i in range(len(restrictions) - 2, -1, -1):
+            idx1, mx1 = mx_hi[i]
+            idx2, mx2 = mx_hi[i + 1]
+            cur = min(mx1, mx2 + (idx2 - idx1))
+            mx_hi[i][1] = cur
 
         if restrictions[-1][0] != n:
             cur = mx_hi[-1][1] + n - mx_hi[-1][0]
-            ans = max(ans, cur)
             mx_hi.append([n, cur])
+
+        ans = max(x for _, x in mx_hi)
 
         for i in range(1, len(mx_hi)):  # 计算在两个限制建筑之间能不能有更高的建筑
             idx1, mx1 = mx_hi[i - 1]
@@ -76,9 +81,10 @@ class Solution:
 
 
 so = Solution()
-print(so.maxBuilding(n = 6, restrictions = []))
-print(so.maxBuilding(n = 5, restrictions = [[2,1],[4,1]]))
-print(so.maxBuilding(n = 10, restrictions = [[5,3],[2,5],[7,4],[10,3]]))
+print(so.maxBuilding(n = 10, restrictions = [[8,5],[9,0],[6,2],[4,0],[3,2],[10,0],[5,3],[7,3],[2,4]]))  # 2
+print(so.maxBuilding(n = 6, restrictions = []))  # 5
+print(so.maxBuilding(n = 5, restrictions = [[2,1],[4,1]]))  # 2
+print(so.maxBuilding(n = 10, restrictions = [[5,3],[2,5],[7,4],[10,3]]))  # 5
 
 
 

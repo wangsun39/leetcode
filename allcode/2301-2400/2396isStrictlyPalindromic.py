@@ -31,6 +31,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def isStrictlyPalindromic(self, n: int) -> bool:
+        return False
 
 
 so = Solution()
