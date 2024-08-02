@@ -34,7 +34,7 @@ class Solution:
 
         def f(x):
             return k * x + b
-        def g(y):
+        def g(y):  # f的反函数
             return (y - b) // k
 
         if down1 <= f(left1) <= up1:
