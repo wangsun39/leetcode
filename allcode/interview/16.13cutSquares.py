@@ -35,7 +35,7 @@ class Solution:
         def f(x):
             return k * x + b
         def g(y):  # f的反函数
-            return (y - b) // k
+            return (y - b) / k
 
         if down1 <= f(left1) <= up1:
             x1, y1 = left1, f(left1)
@@ -56,6 +56,7 @@ class Solution:
         return l[0] + l[-1]
 
 so = Solution()
+print(so.cutSquares([249,-199,5], [-1,136,76]))
 print(so.cutSquares([-1, -1, 2], [0, -1, 2]))
 print(so.cutSquares([-1,1,3], [0,0,5]))
 
