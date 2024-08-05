@@ -29,13 +29,10 @@
 #
 # 1 <= n <= 109
 
-from functools import lru_cache
-
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def findIntegers(self, n: int) -> int:
+    def findIntegers1(self, n: int) -> int:
         s = bin(n)[2:]
         @lru_cache(None)
         def helper(i: int, pre, is_limit: bool) -> int:
@@ -50,13 +47,32 @@ class Solution:
             return ans
         return helper(0, 0, True)
 
+    def findIntegers(self, n: int) -> int:
+        # 2024/8/5 重写一次
+        @cache
+        def helper(i: int, pre: int, is_limit: bool) -> int:
+            if i == len(s):
+                return 1
+            ans = 0
+            upper = int(s[i]) if is_limit else 1  # 判断当前位是否受约束
+            if pre == 1: upper = min(upper, 0)
+            lower = 0
+            for j in range(lower, upper + 1):
+                ans += helper(i + 1, j, is_limit and j == int(s[i]))
+            return ans
+
+        s = bin(n)[2:]
+
+        return helper(0, 0, True)
+
 
 
 
 so = Solution()
 
-print('ret = ', so.findIntegers(5)) # 5
+print('ret = ', so.findIntegers(6)) # 5
 print('ret = ', so.findIntegers(1)) # 2
+print('ret = ', so.findIntegers(5)) # 5
 print('ret = ', so.findIntegers(2)) # 3
 
 
