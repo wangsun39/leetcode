@@ -54,13 +54,13 @@ class Solution:
             if heights[idx] < heights[idy] or idx == idy:
                 ans[i] = idy
                 continue
-            while idy < pos:
+            while idy < pos:  # 把idy 后侧的点，构造一个单调减的栈，用于查找后侧第一个比idx还大的点的位置
                 while dq and dq[0][0] <= heights[pos]:
                     dq.popleft()
                 dq.appendleft([heights[pos], pos])
                 pos -= 1
             # print(stack)
-            p = bisect_left(dq, [heights[idx], n])
+            p = bisect_left(dq, [heights[idx], n])  # 单调栈上二分
             if p == len(dq):
                 ans[i] = -1
             else:
