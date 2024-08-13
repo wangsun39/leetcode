@@ -3,37 +3,38 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def shortestDistanceAfterQueries(self, n: int, queries: List[List[int]]) -> List[int]:
-
-        def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
-            dist = [inf] * n  # 注意这个地方可能要替换成 n
-            dist[start] = 0
-            h = [(0, start)]
-            while h:
-                d, x = heappop(h)
-                if d > dist[x]:
-                    continue
-                for y, wt in g[x]:
-                    new_d = dist[x] + wt
-                    if new_d < dist[y]:
-                        dist[y] = new_d
-                        heappush(h, (new_d, y))
-            return dist
-
+    def countGoodNodes(self, edges: List[List[int]]) -> int:
         g = defaultdict(list)
-        for i in range(n - 1):
-            g[i].append([i + 1, 1])
-        ans = []
-        for u, v in queries:
-            g[u].append([v, 1])
-            dist = dijkstra(g, 0)
-            ans.append(dist[n - 1])
+        for x, y in edges:
+            g[x].append(y)
+            g[y].append(x)
+
+        ans = 0
+
+        def dfs(node, fa):
+            nonlocal ans
+            cnt = 0  # 子节点数
+            sub0 = -1
+            judge = True
+            for y in g[node]:
+                if y == fa: continue
+                sub = dfs(y, node)
+                if sub0 == -1:
+                    sub0 = sub
+                elif sub != sub0:
+                    judge = False
+                cnt += sub  # 子节点数
+            if judge:
+                ans += 1
+            return cnt + 1
+        dfs(0, -1)
         return ans
 
 
 so = Solution()
-print(so.shortestDistanceAfterQueries(n = 5, queries = [[2, 4], [0, 2], [0, 4]]))
-print(so.shortestDistanceAfterQueries(n = 4, queries = [[0, 3], [0, 2]]))
+print(so.countGoodNodes(edges = [[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]]))
+print(so.countGoodNodes(edges = [[0,1],[1,2],[2,3],[3,4],[0,5],[1,6],[2,7],[3,8]]))
+print(so.countGoodNodes(edges = [[0,1],[1,2],[1,3],[1,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[9,12],[10,11]]))
 
 
 

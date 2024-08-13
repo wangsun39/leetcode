@@ -37,7 +37,7 @@
 
 from typing import List
 
-class MagicDictionary:
+class MagicDictionary1:
 
     def __init__(self):
         return
@@ -65,6 +65,58 @@ class MagicDictionary:
         return False
 
 
+# 2024/8/12 Trie + DFS
+class Trie:
+
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if e not in cur:
+                cur[e] = {}
+            cur = cur[e]
+        cur['end'] = True
+
+
+    def search(self, word: str) -> bool:
+        cur = self.root
+        n = len(word)
+        def dfs(cur, idx, flg):
+            if idx == n:
+                return 'end' in cur and flg
+
+            if word[idx] in cur:
+                if dfs(cur[word[idx]], idx + 1, flg):
+                    return True
+            if flg:
+                return False
+            for e in cur:
+                if e == 'end' or e == word[idx]: continue
+                if dfs(cur[e], idx + 1, True):
+                    return True
+
+            return False
+        return dfs(cur, 0, False)
+
+
+
+class MagicDictionary:
+
+    def __init__(self):
+        self.tr = Trie()
+
+
+    def buildDict(self, dictionary: List[str]) -> None:
+        for word in dictionary:
+            self.tr.insert(word)
+
+
+    def search(self, searchWord: str) -> bool:
+        return self.tr.search(searchWord)
+
+
 
 # Your MapSum object will be instantiated and called as such:
 # obj = MapSum()
@@ -76,3 +128,6 @@ class MagicDictionary:
 obj = MagicDictionary()
 obj.buildDict(["hello","hallo","leetcode"])
 print(obj.search("hello"))
+print(obj.search("leetcoded"))
+print(obj.search("hhllo"))
+print(obj.search("hell"))

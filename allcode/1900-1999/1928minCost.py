@@ -54,25 +54,20 @@ class Solution:
         for x, y, t in edges:
             g[x].append([y, t])
             g[y].append([x, t])
-        vis = {0}
+        hp = []
+        heappush(hp, [passingFees[0], 0, 0])  # [cost, idx, time]
+        arr = {}  # arr[i] 表示到达i的最早时间
 
-        def dfs(start, pre_t, pre_c):  # 从start开始，已经用时间t，花费c
-            if pre_c >= dp[-1][-1]: return
-            for j in range(pre_t, maxTime + 1):
-                if dp[start][j] <= pre_c: break
-                dp[start][j] = pre_c
-            for y, t in g[start]:
-                if y in vis: continue
-                if pre_t + t > maxTime: continue
-                if dp[y][pre_t + t] <= pre_c + passingFees[y]: continue
-                vis.add(y)
-                dfs(y, pre_t + t, pre_c + passingFees[y])
-                vis.remove(y)
-
-        dfs(0, 0, passingFees[0])
-        if dp[-1][-1] == inf:
-            return -1
-        return dp[-1][-1]
+        # 相当于从小到大枚举可能的cost，对于同一点到达时间长的路径，如果cost小，还是可以再次入队的
+        while hp:
+            cost, x, t = heappop(hp)
+            if t > maxTime: continue
+            if x == n - 1: return cost
+            for y, t_xy in g[x]:
+                if y not in arr or arr[y] > t + t_xy:
+                    arr[y] = t + t_xy
+                    heappush(hp, [cost + passingFees[y], y, t + t_xy])
+        return -1
 
 
 

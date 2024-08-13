@@ -44,6 +44,7 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+        # 逆序处理
         queries = [sorted(x) for x in queries]
         n = len(heights)
         m = len(queries)
@@ -67,11 +68,43 @@ class Solution:
                 ans[i] = dq[p][1]
         return ans
 
+    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+        # 2024/8/11 顺序处理，最小堆
+        queries = [[x, y] if x <= y else [y, x] for x, y in queries]
+        n = len(heights)
+        m = len(queries)
+        ans = [-1] * m
+
+        hp = []
+        cur = 0
+        for i, (idx, idy) in sorted(enumerate(queries), key=lambda x: max(x[1])):
+            hx, hy = heights[idx], heights[idy]
+            solve = False
+            if idx == idy or hx < hy:
+                ans[i] = idy
+                solve = True
+
+            while cur < idy:
+                while hp and hp[0][0] < heights[cur]:
+                    mn_h, mn_i = heappop(hp)
+                    ans[mn_i] = cur
+                cur += 1
+            if not solve:
+                heappush(hp, [heights[idx], i])
+
+        while cur < n:
+            while hp and hp[0][0] < heights[cur]:
+                mn_h, mn_i = heappop(hp)
+                ans[mn_i] = cur
+            cur += 1
+
+        return ans
 
 so = Solution()
+print(so.leftmostBuildingQueries(heights = [5,3,8,2,6,1,4,6], queries = [[0,7],[3,5],[5,2],[3,0],[1,6]]))  # [7,6,-1,4,6]
+print(so.leftmostBuildingQueries(heights = [6,4,8,5,2,7], queries = [[0,1],[0,3],[2,4],[3,4],[2,2]]))  # [2,5,-1,5,2]
 print(so.leftmostBuildingQueries(heights = [1,2,1,2,1,2], queries = [[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[2,0],[2,1],[2,2],[2,3],[2,4],[2,5],[3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[4,0],[4,1],[4,2],[4,3],[4,4],[4,5],[5,0],[5,1],[5,2],[5,3],[5,4],[5,5]]))
-print(so.leftmostBuildingQueries(heights = [6,4,8,5,2,7], queries = [[0,1],[0,3],[2,4],[3,4],[2,2]]))
-print(so.leftmostBuildingQueries(heights = [5,3,8,2,6,1,4,6], queries = [[0,7],[3,5],[5,2],[3,0],[1,6]]))
+
 
 
 
