@@ -40,7 +40,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def closestRoom(self, rooms: List[List[int]], queries: List[List[int]]) -> List[int]:
+    def closestRoom1(self, rooms: List[List[int]], queries: List[List[int]]) -> List[int]:
         rooms.sort(key=lambda x:x[1], reverse=True)
         n = len(queries)
         m = len(rooms)
@@ -67,6 +67,30 @@ class Solution:
                 ans[i] = cand[p]
         return ans
 
+    def closestRoom(self, rooms: List[List[int]], queries: List[List[int]]) -> List[int]:
+        n, m = len(rooms), len(queries)
+        rooms.sort(key=lambda x: x[1], reverse=True)
+        ans = [-1] * m
+        cand = SortedList()
+        for i, [pr, mn] in sorted(enumerate(queries), key=lambda x: [x[1][1], x[1][0]], reverse=True):
+            while rooms and rooms[0][1] >= mn:
+                roomId, _ = rooms.pop(0)
+                cand.add(roomId)
+            if len(cand) == 0: continue
+            p = cand.bisect_left(pr)
+            if p == len(cand):
+                ans[i] = cand[-1]
+            elif cand[p] == pr:
+                ans[i] = pr
+            else:
+                if p == 0:
+                    ans[i] = cand[p]
+                else:
+                    if pr - cand[p - 1] <= cand[p] - pr:
+                        ans[i] = cand[p - 1]
+                    else:
+                        ans[i] = cand[p]
+        return ans
 
 
 so = Solution()
