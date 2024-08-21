@@ -40,7 +40,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def findMaximumNumber(self, k: int, x: int) -> int:
+    def findMaximumNumber1(self, k: int, x: int) -> int:
 
         def f(val):  # 返回<=n的所有数的价值和
             s = bin(val)[2:]
@@ -69,6 +69,36 @@ class Solution:
                 hi = mid
         return lo
 
+    def findMaximumNumber(self, k: int, x: int) -> int:
+
+        def f(val):  # 返回<=n的所有数的价值和
+            s = bin(val)[2:]
+            n = len(s)
+
+            @cache
+            def helper(i: int, is_limit: bool, cnt: int) -> int:
+                if i == 0:
+                    return 0
+                ans = 0
+                # if not is_num:
+                #     ans = helper(i + 1, mask, False, False)
+                upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
+                lower = 0  # if is_num else 1
+                for j in range(lower, upper + 1):
+                    ans += helper(i + 1, is_limit and j == upper, True)
+                return ans
+
+            return helper(val.bit_length(), True, 0)
+
+        lo, hi = 0, 10 ** 16
+        # lo, hi = 0, 10
+        while hi - lo > 1:
+            mid = (lo + hi) // 2
+            if f(mid) <= k:
+                lo = mid
+            else:
+                hi = mid
+        return lo
 
 so = Solution()
 print(so.findMaximumNumber(k = 9, x = 1))
