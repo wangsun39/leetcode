@@ -77,18 +77,23 @@ class Solution:
 
             @cache
             def helper(i: int, is_limit: bool, cnt: int) -> int:
-                if i == 0:
+                if i == n:
                     return 0
+                from_right = n - i
                 ans = 0
-                # if not is_num:
-                #     ans = helper(i + 1, mask, False, False)
-                upper = int(s[i]) if is_limit else 9  # 判断当前位是否受约束
+                upper = int(s[i]) if is_limit else 1  # 判断当前位是否受约束
                 lower = 0  # if is_num else 1
                 for j in range(lower, upper + 1):
-                    ans += helper(i + 1, is_limit and j == upper, True)
+                    if (from_right % x == 0) and j:
+                        if is_limit and i + 1 < n:
+                            ans += int(s[i + 1:], 2) + 1 + helper(i + 1, is_limit and j == upper, cnt + 1)
+                        else:
+                            ans += 2 ** (n - i - 1) + helper(i + 1, is_limit and j == upper, cnt + 1)
+                    else:
+                        ans += helper(i + 1, is_limit and j == upper, cnt)
                 return ans
 
-            return helper(val.bit_length(), True, 0)
+            return helper(0, True, 0)
 
         lo, hi = 0, 10 ** 16
         # lo, hi = 0, 10
@@ -101,8 +106,9 @@ class Solution:
         return lo
 
 so = Solution()
-print(so.findMaximumNumber(k = 9, x = 1))
-print(so.findMaximumNumber(k = 7, x = 2))
+print(so.findMaximumNumber(k = 7, x = 2))  # 9
+print(so.findMaximumNumber(k = 19, x = 6))  # 6
+print(so.findMaximumNumber(k = 9, x = 1))  # 6
 
 
 

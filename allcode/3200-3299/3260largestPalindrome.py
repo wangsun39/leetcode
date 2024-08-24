@@ -49,53 +49,53 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def largestPalindrome(self, n: int, k: int) -> str:
+        pow10 = [1] * n
+        for i in range(1, n):
+            pow10[i] = pow10[i - 1] * 10 % k
+
         h = (n + 1) // 2  # 长度一半
-        dp = [[-1] * k for _ in range(h)]  # 从中间开始向左侧的距离为i，模k值为j的字符为dp[i][j]
+        # 只考虑前一半
+        dp = [[[None] * 2 for _ in range(k)] for _ in range(h)]
+        # 从中间开始向右侧的距离为 i，dp[i][j] = [a, b]，
+        # 其中a为从位置i向左到达对称点的数中，模k余数为j的最大数在i处填的值，b为取到a时，i+1位需要的模k余数值
         for i in range(10):
-            v = i * 10 ** (h - 1) % k
+            v = (i * pow10[h - 1]) % k
             if n & 1:
-                dp[0][v] = i
+                dp[0][v] = [i, None]
             else:
-                dp[0][v] = dp[0][v] * 10 % k
+                dp[0][(v * 11) % k] = [i, None]
 
         for i in range(1, h):
-            if i == h - 1:
-                mn = 1
-            else:
-                mn = 0
-            for j in range(mn, 10):
+            for j in range(10):  # 第i个位置要填的数字
                 if n & 1:
-                    # 10|0100000...
-                    left = j * 10 ** (h + i - 1) % k
-                    right = j * 10 ** (h - i - 1) % k
+                    # v = j00.mid.00j000.. % k
+                    v = (pow10[h + i - 1] + pow10[h - i - 1]) * j % k
                 else:
-                    # 10[0]010000...
-                    left = j * 10 ** (h + i - 1) % k
-                    right = j * 10 ** (h - i - 2) % k
-                v = (left + right) % k
+                    # v = j00.mid|mid.00j000.. % k
+                    v = (pow10[h + i] + pow10[h - i - 1]) * j % k
                 for t in range(k):
-                    if dp[i - 1][t] != -1:
-                        dp[i][(t + v) % k] = v
-        dp = dp[::-1]
-        res = [str(dp[0][0])]
-        v = dp[0][0]
-        for i in range(1, h):
-            v = k - v
-            res.append(str(dp[i][v]))
+                    if dp[i - 1][t][0]:
+                        u = (v + t) % k
+                        dp[i][u] = [j, t]
 
+        # print(dp)
+        ch, nxt = dp[-1][0]
+        ans = [str(ch)]
+        for i in range(h - 2, -1, -1):
+            ch, nxt = dp[i][nxt]
+            ans.append(str(ch))
         if n & 1:
-            res += res[:-1][::-1]
+            ans = ans + ans[:-1][::-1]
         else:
-            res += res[::-1]
-        return ''.join(res)
-
-
+            ans = ans + ans[::-1]
+        # print(ans)
+        return ''.join(ans)
 
 
 
 so = Solution()
-print(so.largestPalindrome(n = 3, k = 5))
 print(so.largestPalindrome(4, 7))
+print(so.largestPalindrome(n = 3, k = 5))
 
 
 

@@ -33,27 +33,28 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minOperations(self, nums1: List[int], nums2: List[int], k: int) -> int:
-        d1, d2 = defaultdict(list), defaultdict(list)
-        if sum(nums1) != sum(nums2): return -1
-        for x in nums1:
-            d1[x % k].append(x)
-        for x in nums2:
-            d2[x % k].append(x)
-        if len(d1) != len(d2): return -1
+        n = len(nums1)
+        r1 = [x % k for x in nums1]
+        r2 = [x % k for x in nums2]
+        if r1 != r2: return -1
+        diff = [(nums1[i] - nums2[i]) // k for i in range(n)]
         ans = 0
-        for x in d1:
-            if len(d1[x]) != len(d2[x]): return -1
-            c11, c22 = Counter(d1[x]), Counter(d2[x])
-            for y in c11:
-                if c11[y] > c22[y]:
-                    ans += c11[y] - c22[y]
+        counter = Counter()
+        for i in range(n):
+            counter[r1[i]] += diff[i]
+            if diff[i] > 0:
+                ans += diff[i]
+        if any(x != 0 for x in counter.values()):
+            return -1
         return ans
 
 
 
+
 so = Solution()
-print(so.minOperations(nums1 = [3,8,5,2], nums2 = [2,4,1,6], k = 1))
-print(so.minOperations(nums1 = [4,3,1,4], nums2 = [1,3,7,1], k = 3))
+print(so.minOperations(nums1 = [2,4], nums2 = [4,2], k = 2))  # 1
+print(so.minOperations(nums1 = [3,8,5,2], nums2 = [2,4,1,6], k = 1))  # -1
+print(so.minOperations(nums1 = [4,3,1,4], nums2 = [1,3,7,1], k = 3))  # 2
 
 
 
