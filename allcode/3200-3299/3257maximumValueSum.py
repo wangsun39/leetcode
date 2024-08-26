@@ -53,7 +53,7 @@ class Solution:
         r, c = len(board), len(board[0])
         pre_mx = []  # 前i行的三个最大值及列
         sup_mx = []  # 后i行的三个最大值及列
-        cur = [[x, i] for i, x in enumerate(board[0])]  # 前记录每列的最大值
+        cur = [[x, i] for i, x in enumerate(board[0])]  # 记录每列的最大值
         pre_mx.append(deepcopy(sorted(cur, reverse=True)[:3]))
         for i in range(1, r):
             for j in range(c):
