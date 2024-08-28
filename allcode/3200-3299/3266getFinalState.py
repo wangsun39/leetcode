@@ -52,6 +52,8 @@ class Solution:
     def getFinalState(self, nums: List[int], k: int, multiplier: int) -> List[int]:
         MOD = 10 ** 9 + 7
         n = len(nums)
+        if multiplier == 1:
+            return nums
         hp = [[x, i] for i, x in enumerate(nums)]
         mxi = max(hp)[1]
         heapify(hp)

@@ -38,7 +38,7 @@ class Solution:
                 k -= (y - x - 1)
                 ans += (x + y) * (y - x - 1) // 2
             else:
-                ans += (x + 1) * k + k * (k - 1) // 2  # 等差就和公式
+                ans += (x + 1) * k + k * (k - 1) // 2  # 等差求和公式
                 return ans
         ans += (y + 1) * k + k * (k - 1) // 2
         return ans

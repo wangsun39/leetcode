@@ -34,24 +34,18 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minOperations(self, nums1: List[int], nums2: List[int], k: int) -> int:
         n = len(nums1)
+        if k == 0: return 0 if nums1 == nums2 else -1
         r1 = [x % k for x in nums1]
         r2 = [x % k for x in nums2]
         if r1 != r2: return -1
         diff = [(nums1[i] - nums2[i]) // k for i in range(n)]
-        ans = 0
-        counter = Counter()
-        for i in range(n):
-            counter[r1[i]] += diff[i]
-            if diff[i] > 0:
-                ans += diff[i]
-        if any(x != 0 for x in counter.values()):
-            return -1
-        return ans
-
+        if sum(diff) != 0: return -1
+        return sum(x for x in diff if x > 0)
 
 
 
 so = Solution()
+print(so.minOperations(nums1 = [13,6,10,16], nums2 = [1,16,12,16], k = 2))  # 6
 print(so.minOperations(nums1 = [2,4], nums2 = [4,2], k = 2))  # 1
 print(so.minOperations(nums1 = [3,8,5,2], nums2 = [2,4,1,6], k = 1))  # -1
 print(so.minOperations(nums1 = [4,3,1,4], nums2 = [1,3,7,1], k = 3))  # 2
