@@ -22,13 +22,13 @@
 # 0 <= hand[i] <= 109
 # 1 <= groupSize <= hand.length
 
-import collections
-from typing import List
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
-    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+    def isNStraightHand1(self, hand: List[int], groupSize: int) -> bool:
         if groupSize == 1:
             return True
-        d = collections.defaultdict(int)
+        d = defaultdict(int)
         for i in hand:
             d[i] += 1
         l = []
@@ -48,9 +48,26 @@ class Solution:
             print(l)
         return j == len(l)
 
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        counter = Counter(hand)
+        sd = SortedDict(counter)
+        while sd:
+            k = sd.keys()[0]
+            v = sd[k]
+            sd.pop(k)
+            for i in range(1, groupSize):
+                # print(sd[k + i], v)
+                if k + i not in sd or sd[k + i] < v:
+                    return False
+                sd[k + i] -= v
+                if sd[k + i] == 0:
+                    sd.pop(k + i)
+        return True
+
+
 
 
 so = Solution()
-print(so.isNStraightHand([1,2,3,4,5], 4))
 print(so.isNStraightHand([1,2,3,6,2,3,4,7,8], 3))
+print(so.isNStraightHand([1,2,3,4,5], 4))
 
