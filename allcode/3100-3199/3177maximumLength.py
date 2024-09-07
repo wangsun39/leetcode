@@ -37,12 +37,16 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maximumLength(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        dp = [[0] * k for _ in range(n)]
+        for i in range(n):
+            mxd = {}  # mxd[x] 处理在当前，前面所有以 x 结尾的最长子序列长度
+            for j in range(k + 1):
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maximumLength())
 
 
 
