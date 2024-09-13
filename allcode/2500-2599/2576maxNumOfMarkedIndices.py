@@ -35,7 +35,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
+    def maxNumOfMarkedIndices1(self, nums: List[int]) -> int:
         n = len(nums)
         nums.sort()
         ans = 0
@@ -52,6 +52,22 @@ class Solution:
                 break
         return ans
 
+    def maxNumOfMarkedIndices(self, nums: List[int]) -> int:
+        # 2024/9/12  双指针
+        nums.sort()
+        n = len(nums)
+        j = n // 2
+        ans = 0
+        for i in range(n // 2):
+            # print(i)
+            while j < n and nums[i] * 2 > nums[j]:
+                j += 1
+            if j < n:
+                ans += 1
+                j += 1
+            else:
+                break
+        return ans * 2
 
 
 

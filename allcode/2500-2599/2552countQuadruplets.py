@@ -30,7 +30,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countQuadruplets(self, nums: List[int]) -> int:
+    def countQuadruplets1(self, nums: List[int]) -> int:
         n = len(nums)
         gt = [[0] * n for _ in range(n)]  # gt[i][j] 在 [i, n) 中，比 nums[j] 大的元素个数， j < i
         for j in range(n):
@@ -54,6 +54,24 @@ class Solution:
                     ans += lt[i][j] * gt[j][i]
         return ans
 
+
+    def countQuadruplets(self, nums: List[int]) -> int:
+        # 2024/9/10 另一种写法，左右两侧采用不同的策略
+        n = len(nums)
+        ans = 0
+        pre = [0] * (n + 1)  # pre[t] 记录下标小于j，值小于 t 的个数
+        for t in range(nums[0] + 1, n + 1):
+            pre[t] = 1
+        for j in range(1, n - 1):
+            v = 1 if nums[-1] > nums[j] else 0  # 下标大于 k ,值大于nums[j]的个数
+            for k in range(n - 2, j, -1):  # 从右向左枚举
+                if nums[j] > nums[k]:
+                    ans += pre[nums[k]] * v
+                if nums[k] > nums[j]:
+                    v += 1
+            for t in range(nums[j] + 1, n + 1):
+                pre[t] += 1
+        return ans
 
 so = Solution()
 print(so.countQuadruplets([1,3,2,4,5]))   # 2
