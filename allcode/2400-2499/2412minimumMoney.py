@@ -46,6 +46,26 @@ class Solution:
         return ans
 
 
+    def minimumMoney(self, transactions: List[List[int]]) -> int:
+        # 2024/9/21 贪心，先处理亏的交易，再处理赢的交易
+        # 亏的交易按卖出价从小到大排序，赢的交易按买入从大到小排序
+        t1, t2 = [], []
+        for x, y in transactions:
+            if x < y:
+                t2.append([x, y])
+            else:
+                t1.append([x, y])
+        t1.sort(key=lambda x: x[1])
+        t2.sort(reverse=True)
+        cur = 0
+        ans = 0
+        for x, y in t1:
+            if cur < x:
+                ans += (x - cur)
+                cur = y
+        if t2 and cur < t2[0][0]:
+            ans += t2[0][0] - cur
+        return ans
 
 so = Solution()
 print(so.minimumMoney(transactions = [[2,1],[5,0],[4,2]]))
