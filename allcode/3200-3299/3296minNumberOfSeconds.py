@@ -62,7 +62,6 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minNumberOfSeconds(self, mountainHeight: int, workerTimes: List[int]) -> int:
-        n = len(workerTimes)
         mx = max(workerTimes)
 
         def check(val):  # val 秒，总共能降低多少
