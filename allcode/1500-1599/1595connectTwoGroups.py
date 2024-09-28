@@ -44,10 +44,7 @@
 # 0 <= cost[i][j] <= 100
 from functools import cache
 from math import inf
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def connectTwoGroups(self, cost: List[List[int]]) -> int:

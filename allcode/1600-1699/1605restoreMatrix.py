@@ -47,10 +47,7 @@
 # 0 <= rowSum[i], colSum[i] <= 108
 # sum(rowSum) == sum(colSum)
 import bisect
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 from collections import defaultdict
 from heapq import *
 

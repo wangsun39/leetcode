@@ -37,10 +37,7 @@
 # cuts 数组中的所有整数都 互不相同
 from functools import cache
 from math import inf
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 from itertools import accumulate
 
 class Solution:

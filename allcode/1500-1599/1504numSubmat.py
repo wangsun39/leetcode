@@ -39,10 +39,7 @@
 # mat[i][j] 仅包含 0 或 1
 
 
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numSubmat(self, mat: List[List[int]]) -> int:

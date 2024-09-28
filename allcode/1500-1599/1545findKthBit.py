@@ -42,10 +42,7 @@
 # https://leetcode.cn/problems/find-kth-bit-in-nth-binary-string
 
 
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findKthBit(self, n: int, k: int) -> str:

@@ -38,10 +38,7 @@
 
 
 
-from typing import Optional
-from collections import deque
-# Definition for a binary tree node.
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def reorderSpaces(self, text: str) -> str:
