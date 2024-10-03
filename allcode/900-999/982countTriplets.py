@@ -35,8 +35,7 @@
 # 1 <= nums.length <= 1000
 # 0 <= nums[i] < 216
 
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countTriplets1(self, nums: List[int]) -> int:

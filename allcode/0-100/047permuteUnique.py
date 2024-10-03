@@ -19,8 +19,7 @@
 #
 # 1 <= nums.length <= 8
 # -10 <= nums[i] <= 10
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 # 两数之和

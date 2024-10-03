@@ -29,8 +29,7 @@
 # n == matrix[i].length
 # 1 <= m, n <= 300
 # matrix[i][j] == 0 或 1
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

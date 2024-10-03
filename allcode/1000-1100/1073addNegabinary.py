@@ -26,8 +26,7 @@
 # 1 <= arr1.length, arr2.length <= 1000
 # arr1[i] 和 arr2[i] 都是 0 或 1
 # arr1 和 arr2 都没有前导0
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

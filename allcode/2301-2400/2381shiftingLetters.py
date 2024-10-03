@@ -29,8 +29,7 @@
 # 0 <= directioni <= 1
 # s 只包含小写英文字母。
 
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

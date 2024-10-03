@@ -42,8 +42,7 @@
 # secret 存在于 words 中
 # 10 <= allowedGuesses <= 30
 from cmath import inf
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 # """
 # This is Master's API interface.

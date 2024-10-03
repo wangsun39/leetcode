@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

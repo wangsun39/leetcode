@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 # 给定一个整数，打印该整数的英文描述。

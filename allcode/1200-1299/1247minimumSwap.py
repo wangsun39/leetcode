@@ -31,8 +31,7 @@
 # 输入：s1 = "xxyyxyxyxx", s2 = "xyyxyxxxyx"
 # 输出：4
 
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 import bisect
 
 

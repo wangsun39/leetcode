@@ -24,8 +24,7 @@
 # words[i]和 s 都只由小写字母组成。
 
 
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:

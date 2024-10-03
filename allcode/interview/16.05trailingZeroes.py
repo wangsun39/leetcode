@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 # 设计一个算法，算出 n 阶乘有多少个尾随零。

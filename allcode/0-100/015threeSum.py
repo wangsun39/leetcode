@@ -34,8 +34,7 @@
 #
 # 3 <= nums.length <= 3000
 # -105 <= nums[i] <= 105
-from collections import Counter
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         nums.sort()
