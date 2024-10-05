@@ -1,0 +1,71 @@
+# 给你一个下标从 0 开始的整数数组 nums ，它包含 3 * n 个元素。
+#
+# 你可以从 nums 中删除 恰好 n 个元素，剩下的 2 * n 个元素将会被分成两个 相同大小 的部分。
+#
+# 前面 n 个元素属于第一部分，它们的和记为 sumfirst 。
+# 后面 n 个元素属于第二部分，它们的和记为 sumsecond 。
+# 两部分和的 差值 记为 sumfirst - sumsecond 。
+#
+# 比方说，sumfirst = 3 且 sumsecond = 2 ，它们的差值为 1 。
+# 再比方，sumfirst = 2 且 sumsecond = 3 ，它们的差值为 -1 。
+# 请你返回删除 n 个元素之后，剩下两部分和的 差值的最小值 是多少。
+#
+#
+#
+# 示例 1：
+#
+# 输入：nums = [3,1,2]
+# 输出：-1
+# 解释：nums 有 3 个元素，所以 n = 1 。
+# 所以我们需要从 nums 中删除 1 个元素，并将剩下的元素分成两部分。
+# - 如果我们删除 nums[0] = 3 ，数组变为 [1,2] 。两部分和的差值为 1 - 2 = -1 。
+# - 如果我们删除 nums[1] = 1 ，数组变为 [3,2] 。两部分和的差值为 3 - 2 = 1 。
+# - 如果我们删除 nums[2] = 2 ，数组变为 [3,1] 。两部分和的差值为 3 - 1 = 2 。
+# 两部分和的最小差值为 min(-1,1,2) = -1 。
+# 示例 2：
+#
+# 输入：nums = [7,9,5,8,1,3]
+# 输出：1
+# 解释：n = 2 。所以我们需要删除 2 个元素，并将剩下元素分为 2 部分。
+# 如果我们删除元素 nums[2] = 5 和 nums[3] = 8 ，剩下元素为 [7,9,1,3] 。和的差值为 (7+9) - (1+3) = 12 。
+# 为了得到最小差值，我们应该删除 nums[1] = 9 和 nums[4] = 1 ，剩下的元素为 [7,5,8,3] 。和的差值为 (7+5) - (8+3) = 1 。
+# 观察可知，最优答案为 1 。
+#
+#
+# 提示：
+#
+# nums.length == 3 * n
+# 1 <= n <= 105
+# 1 <= nums[i] <= 105
+
+from leetcode.allcode.competition.mypackage import *
+
+class Solution:
+    def minimumDifference(self, nums: List[int]) -> int:
+        n = len(nums) // 3
+        hp = [-x for x in nums[:n]]  # 左侧大顶堆
+        heapify(hp)
+        sl = SortedList(nums[n:])  # 右侧有序数组
+        left, right = -sum(hp), sum(sl[n:])
+        ans = left - right
+        for i in range(n, 2 * n):
+            x = nums[i]  # 把x从右侧放到左侧
+            if -hp[0] > x:
+                left += x + hp[0]
+                heapreplace(hp, -x)
+            p = sl.bisect_right(x) - 1
+            if i - n + p >= n:
+                right += (sl[-n - 1] - x)
+            sl.remove(x)
+            ans = min(ans, left - right)
+        return ans
+
+so = Solution()
+print(so.minimumDifference(nums = [47,26,21,40,3,20,12,19,1,11,37,49,50,29,23,32,27,10,49,24,44,43,46,27,2,3,41,35,10,49,38,44,6,27,27,43,5,36,37,16,5,30,12,15,6,50,44,40,17,45,24,33,32,4,35,37,15,17,13,21]))  # -14
+print(so.minimumDifference(nums = [16,46,43,41,42,14,36,49,50,28,38,25,17,5,18,11,14,21,23,39,23]))  # -14
+print(so.minimumDifference(nums = [3,1,2]))
+print(so.minimumDifference(nums = [7,9,5,8,1,3]))
+
+
+
+
