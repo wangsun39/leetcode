@@ -32,8 +32,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def soupServings(self, n: int) -> float:
         n = (n + 24) // 25  # 上取整

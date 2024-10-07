@@ -34,8 +34,7 @@
 # 1 <= thicknessi <= shelfWidth <= 1000
 # 1 <= heighti <= 1000
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 from functools import reduce, cache
 from math import *
 

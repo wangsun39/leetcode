@@ -37,8 +37,7 @@
 # 1 <= ages[i] <= 120
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def numFriendRequests(self, ages: List[int]) -> int:
         ages.sort()

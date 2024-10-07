@@ -36,8 +36,7 @@
 # 1 <= n <= 13
 # 1 <= m <= 13
 from math import inf
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

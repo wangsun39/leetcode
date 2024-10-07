@@ -31,8 +31,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def toGoatLatin(self, sentence: str) -> str:
         words = sentence.split(' ')

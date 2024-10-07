@@ -45,8 +45,7 @@
 
 # https://leetcode.cn/problems/maximum-profit-in-job-scheduling/
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 """
    This is the custom function interface.

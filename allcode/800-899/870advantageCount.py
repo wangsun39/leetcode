@@ -23,8 +23,7 @@
 # https://leetcode.cn/problems/advantage-shuffle
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 import collections
 class Solution:
     def advantageCount(self, nums1: List[int], nums2: List[int]) -> List[int]:

@@ -45,8 +45,7 @@
 
 # https://leetcode.cn/problems/maximum-profit-in-job-scheduling/
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:

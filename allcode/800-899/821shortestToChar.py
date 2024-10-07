@@ -29,8 +29,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def shortestToChar(self, s: str, c: str) -> List[int]:
         N = len(s)

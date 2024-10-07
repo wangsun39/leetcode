@@ -24,8 +24,7 @@
 # -105 <= arr[i] <= 105
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def canReorderDoubled(self, arr: List[int]) -> bool:
         arr1, arr2 = [], []

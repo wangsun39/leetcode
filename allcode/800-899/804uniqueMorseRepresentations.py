@@ -1,5 +1,4 @@
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def uniqueMorseRepresentations(self, words: List[str]) -> int:
         codeList = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]

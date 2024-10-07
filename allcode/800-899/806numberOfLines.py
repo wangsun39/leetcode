@@ -30,8 +30,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def numberOfLines(self, widths: List[int], s: str) -> List[int]:
         S = "abcdefghijklmnopqrstuvwxyz"

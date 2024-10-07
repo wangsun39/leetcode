@@ -31,8 +31,7 @@
 # 每个测试用例，调用 book 方法的次数最多不超过 1000 次。
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class MyCalendar1:
 
     def __init__(self):

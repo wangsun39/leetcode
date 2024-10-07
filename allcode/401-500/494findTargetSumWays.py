@@ -32,8 +32,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def findTargetSumWays1(self, nums: List[int], target: int) -> int:
         N = len(nums)

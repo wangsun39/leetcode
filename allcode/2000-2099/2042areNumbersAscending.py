@@ -45,8 +45,7 @@
 # s 中的每个数字都是一个 小于 100 的 正 数，且不含前导零
 # s 不含前导或尾随空格
 import math
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 # Definition for a binary tree node.
 class Solution:
     def areNumbersAscending(self, s: str) -> bool:

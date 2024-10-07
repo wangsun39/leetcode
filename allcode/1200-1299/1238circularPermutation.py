@@ -23,8 +23,7 @@
 # 1 <= n <= 16
 # 0 <= start < 2^n
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

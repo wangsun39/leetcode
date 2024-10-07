@@ -40,11 +40,10 @@
 # 0 <= stations.length <= 500
 # 0 < stations[0][0] < stations[1][0] < ... < stations[stations.length-1][0] < target
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+    def minRefuelStops1(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
         dq = [startFuel]
         cur = 0
         st = [e[0] for e in stations]
@@ -63,6 +62,27 @@ class Solution:
                 return -1
 
 
+    def minRefuelStops(self, target: int, startFuel: int, stations: List[List[int]]) -> int:
+        # 2024/10/7  优先队列的写法
+        farthest = startFuel
+        ans = 0
+        hp = []  # 经过的加油站的油量的大顶堆
+        for pos, fu in stations:
+            while farthest < pos:
+                if len(hp) == 0: return -1
+                f = -heappop(hp)
+                farthest += f
+                ans += 1
+            if farthest >= target:
+                return ans
+            heappush(hp, -fu)
+        # 已经经过所有加油站，还未到达target
+        while farthest < target:
+            if len(hp) == 0: return -1
+            f = -heappop(hp)
+            farthest += f
+            ans += 1
+        return ans
 
 
 so = Solution()

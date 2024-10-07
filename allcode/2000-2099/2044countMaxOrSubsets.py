@@ -39,8 +39,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 import math
 # Definition for a binary tree node.
 class Solution:

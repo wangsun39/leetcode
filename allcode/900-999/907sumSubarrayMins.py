@@ -22,8 +22,7 @@
 # 1 <= arr.length <= 3 * 104
 # 1 <= arr[i] <= 3 * 104
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def sumSubarrayMins(self, arr: List[int]) -> int:
         ans = arr[0]

@@ -31,8 +31,7 @@
 # nums 中的所有整数 互不相同
 # nums 是范围 [0, n - 1] 内所有数字组成的一个排列
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def isIdealPermutation(self, nums: List[int]) -> bool:

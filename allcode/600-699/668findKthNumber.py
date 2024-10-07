@@ -30,8 +30,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, x):

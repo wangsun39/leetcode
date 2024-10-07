@@ -49,8 +49,7 @@
 
 
 
-from typing import List
-import bisect
+from leetcode.allcode.competition.mypackage import *
 # Definition for a binary tree node.
 class Solution:
     def goodDaysToRobBank(self, security: List[int], time: int) -> List[int]:
