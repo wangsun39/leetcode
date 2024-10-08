@@ -60,40 +60,24 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minimumTime(self, s: str) -> int:
         n = len(s)
-        left = [inf] * n  # 只用1或3操作，处理前i个元素的最小时间
 
-
-        dp1 = list(range(1, n + 1))  # 操作1的时间
-        left = [-1] * n  # 左侧有多少个1
+        left = [0] * n  # 只用1或3操作，处理前i个元素的最小时间
         if s[0] == '1':
             left[0] = 1
-        pre = -1
+            ans = n
+        else:
+            ans = n - 1
         for i, x in enumerate(s[1:], 1):
-            left[i] = pre
-            if x == '1':
-                pre = i
-
-        dp2 = [0] * n  # 操作3的时间
-        ones = 0
-        for i in range(n - 1, -1, -1):
-            x = s[i]
-            if x == '1':
-                ones += 1
-                dp2[i] = ones * 2
-        if s[0] == '1':
-            left[0] = 1
-            dp2[0] = 2
-        for i, x in enumerate(s[1:], 1):
-            if x == '0':
+            if s[i] == '1':
+                left[i] = min(i + 1, left[i - 1] + 2)
+            else:
                 left[i] = left[i - 1]
-                dp2[i] = dp2[i - 1]
-                continue
-            v1 =
-
-
+            ans = min(ans, left[i] + (n - i - 1))  # 右侧的都用操作2
+        return ans
 
 so = Solution()
-print(so.minimumTime())
+print(so.minimumTime(s = "0"))
+print(so.minimumTime(s = "1100101"))
 
 
 
