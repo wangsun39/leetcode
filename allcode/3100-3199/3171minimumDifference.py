@@ -69,12 +69,37 @@ class Solution:
         return ans
 
 
+    def minimumDifference(self, nums: List[int], k: int) -> int:
+        # 2024/10/9 这题题目改过了
+        # 给你一个数组 nums 和一个整数 k 。你需要找到 nums 的一个
+        # 子数组
+        #  ，满足子数组中所有元素按位或运算 OR 的值与 k 的 绝对差 尽可能 小 。换言之，你需要选择一个子数组 nums[l..r] 满足 |k - (nums[l] OR nums[l + 1] ... OR nums[r])| 最小。
+        #
+        # 请你返回 最小 的绝对差值。
+        #
+        # 子数组 是数组中连续的 非空 元素序列。
+        pos = [inf] * 32  # 记录每个bit位为1的最后下标
+        ans = inf
+        for i, x in enumerate(nums):
+            pp = []  # x中bit为0的位
+            for j in range(32):
+                if (x >> j) & 1:
+                    pos[j] = i
+                else:
+                    if pos[j] < inf:
+                        pp.append(pos[j])
+            pp.sort(reverse=True)
+            ans = min(ans, abs(k - x))
+            for y in pp:
+                x |= nums[y]
+                ans = min(ans, abs(k - x))
+        return ans
 
 
 so = Solution()
+print(so.minimumDifference(nums = [1,2,4,5], k = 3))
 print(so.minimumDifference([44,60,63,79,38], 18))
 print(so.minimumDifference([5,13,90,92,49], 10))  # 2
-print(so.minimumDifference(nums = [1,2,4,5], k = 3))
 print(so.minimumDifference(nums = [1,2,1,2], k = 2))
 print(so.minimumDifference(nums = [1], k = 10))
 
