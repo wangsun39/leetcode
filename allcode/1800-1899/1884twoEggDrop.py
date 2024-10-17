@@ -42,7 +42,7 @@ class Solution:
         def dfs(m):
             if m <= 2: return m
             res = m
-            for i in range(1, m):
+            for i in range(1, m + 1):
                 if i > res: break
                 res = min(res, max(i, dfs(m - i) + 1))
             return res

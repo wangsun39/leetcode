@@ -67,12 +67,12 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def validSequence(self, word1: str, word2: str) -> List[int]:
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.validSequence())
 
 
 

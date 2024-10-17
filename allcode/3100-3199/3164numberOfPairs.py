@@ -37,7 +37,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int) -> int:
+    def numberOfPairs1(self, nums1: List[int], nums2: List[int], k: int) -> int:
         def factors(x):
             res = []
             i = 1
@@ -59,6 +59,17 @@ class Solution:
             ans += cnt[x]
         return ans
 
+    def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int) -> int:
+        # 2024/10/11 优化写法
+        counter1, counter2 = Counter(nums1), Counter(nums2)
+        mx = max(nums1)
+        ans = 0
+
+        for x, v in counter2.items():
+            for y in range(x * k, mx + 1, x * k):
+                if y in counter1:
+                    ans += counter1[y] * v
+        return ans
 
 so = Solution()
 print(so.numberOfPairs(nums1 = [1,2,4,12], nums2 = [2,4], k = 3))

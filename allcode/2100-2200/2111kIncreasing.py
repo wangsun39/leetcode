@@ -51,7 +51,6 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def kIncreasing(self, arr: List[int], k: int) -> int:
-        n = len(arr)
         v_k = defaultdict(list)
         for i, x in enumerate(arr):
             v_k[i % k].append(x)

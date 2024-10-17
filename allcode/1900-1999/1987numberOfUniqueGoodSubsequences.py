@@ -39,16 +39,22 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def numberOfUniqueGoodSubsequences(self, binary: str) -> int:
         MOD = 10 ** 9 + 7
-        n = len(binary)
-        ans = 0
-        for i, x in enumerate(binary):
-            if x == '0': ans += 1
-            ans += pow(2, n - i - 1, MOD)
-        return ans % MOD
+        n0 = n1 = zero = 0
+        for x in binary[::-1]:
+            if x == '0':
+                zero = 1  # 字符串中是否有0
+                n0 += n1 + 1
+                n0 %= MOD
+            else:
+                n1 += n0 + 1
+                n1 %= MOD
+        return n1 + zero
 
 
 so = Solution()
 print(so.numberOfUniqueGoodSubsequences(binary = "001"))
+print(so.numberOfUniqueGoodSubsequences(binary = "11"))
+print(so.numberOfUniqueGoodSubsequences(binary = "101"))
 
 
 

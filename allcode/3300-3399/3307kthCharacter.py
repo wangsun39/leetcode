@@ -56,25 +56,28 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def kthCharacter(self, k: int, operations: List[int]) -> str:
         i2c = {i: c for i, c in enumerate(ascii_lowercase)}
+        k -= 1  # 把k变成下标
         lk = k.bit_length()  # 表示需要经过lk次操作，字符串长度就能达到k
+        # 每进行一次操作字符串长度变成之前的2倍，第i次操作之后，长度变成2^(i+1)  (i=0...n-1)
         inc = 0
         for i in range(lk - 1, -1, -1):
+            if k == 0: break
             # 当前的区间是[2 ^ i, 2 ^ (i+1))
-            v = k - 2 ** i  # k在当前区间的位置
-            if v < 2 ** (i - 1):  # 落在区间前一半
-                k = 2 ** (i - 1) + v
-            else:
-                oper = operations[i]
-                if oper == 0:
-                    pass
-                else:
+            op = operations[i]
+            if k >= 2 ** i:  # 落在区间后一半
+                if op == 1:
                     inc += 1
+                k -= 2 ** i
+            # 落在区间前一半，那么不需要处理
+
         return i2c[inc % 26]
 
 
 so = Solution()
-print(so.kthCharacter(k = 5, operations = [0,0,0]))
-print(so.kthCharacter(k = 10, operations = [0,1,0,1]))
+print(so.kthCharacter(k = 3, operations = [1,0]))  # a
+print(so.kthCharacter(k = 2, operations = [1]))  # b
+print(so.kthCharacter(k = 5, operations = [0,0,0]))  # a
+print(so.kthCharacter(k = 10, operations = [0,1,0,1]))  # b
 
 
 
