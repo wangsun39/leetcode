@@ -68,11 +68,54 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def validSequence(self, word1: str, word2: str) -> List[int]:
-
-
+        n1, n2 = len(word1), len(word2)
+        right = [0] * n1  # word[i:] 从右侧匹配word2的后缀，最长匹配长度
+        j = n2 - 1
+        if word1[-1] == word2[-1]:
+            right[-1] = 1
+            j -= 1
+        for i in range(n1 - 2, -1, -1):
+            if j < 0 or word1[i] != word2[j]:
+                right[i] = right[i + 1]
+            else:
+                right[i] = right[i + 1] + 1
+                j -= 1
+        j = 0
+        ans = []
+        k = n1
+        for i in range(n1):
+            # 前缀匹配
+            if word1[i] == word2[j]:
+                ans.append(i)
+                j += 1
+                if j >= n2: break
+            elif i == n1 - 1:
+                if j + 1 == n2:
+                    ans.append(i)
+                    j = n2
+                    break
+            elif right[i + 1] >= n2 - j - 1:
+                # word1[i]变化之后 与 word2[j] 匹配
+                ans.append(i)
+                k = i + 1
+                j += 1
+                break
+        if j < n2:
+            # 后缀正向匹配
+            for i in range(k, n1):
+                if word1[i] == word2[j]:
+                    j += 1
+                    ans.append(i)
+                    if j == n2: break
+        if j == n2:
+            return ans
+        return []
 
 so = Solution()
-print(so.validSequence())
+print(so.validSequence(word1 = "ccbccccbcc", word2 = "b"))
+print(so.validSequence(word1 = "bacdc", word2 = "abc"))
+print(so.validSequence(word1 = "vbcca", word2 = "abc"))
+print(so.validSequence(word1 = "aaaaaa", word2 = "aaabc"))
 
 
 
