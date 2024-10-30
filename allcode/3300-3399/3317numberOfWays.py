@@ -46,17 +46,38 @@
 # 提示：
 #
 # 1 <= n, x, y <= 1000
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numberOfWays(self, n: int, x: int, y: int) -> int:
         MOD = 10 ** 9 + 7
+        m = min(x, n)
+        dp = [[0] * (m + 1) for _ in range(n + 1)]  # dp[i][j] 表示i个人分到j个组的所有可能组合数
+        dp[0][0] = 1
+        ans = 0
+        p = [math.perm(x, i) % MOD for i in range(x + 1)]
+        e = [pow(y, i, MOD) for i in range(x + 1)]
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                if j > i: break
+                dp[i][j] = dp[i - 1][j] * j + dp[i - 1][j - 1]
+                if i == n:  # 答案只需要考虑i == n的总数
+                    v1 = p[j]  # P(n, j)
+                    v2 = e[j]  # y ** j
+                    v = dp[i][j] * v1 * v2 % MOD
+                    ans += v
+                    ans %= MOD
+        return ans
 
 
 
 so = Solution()
-print(so.numberOfWays())
+print(so.numberOfWays(n = 2, x = 2, y = 1))  # 4
+print(so.numberOfWays(n = 5, x = 2, y = 1))
+print(so.numberOfWays(n = 1, x = 2, y = 3))
+print(so.numberOfWays(n = 3, x = 3, y = 4))
 
 
 

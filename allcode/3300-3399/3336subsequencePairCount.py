@@ -62,33 +62,39 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+N = 200
+GCD = [[0] * (N + 1) for _ in range(N + 1)]
+for i in range(N + 1):
+    for j in range(N + 1):
+        GCD[i][j] = gcd(i, j)
+
 class Solution:
     def subsequencePairCount(self, nums: List[int]) -> int:
         MOD = 10 ** 9 + 7
+        mx = max(nums) + 1
         n = len(nums)
-        # 初始化动态规划数组
-        dp = [[0] * (n + 1) for _ in range(n)]
-        dp[0][0] = 1  # 空子序列的 GCD 为 0
-
-        # 填充动态规划数组
-        for i in range(1, n + 1):
-            for j in range(i, 0, -1):
-                for k in range(1, i + 1):
-                    if j % k == 0:
-                        dp[i][j] += dp[i - k][j]
-
-        # 计算不相交的子序列对
-        total_pairs = 0
-        for i in range(1, n + 1):
-            for j in range(1, i + 1):
-                total_pairs += dp[i][j] * dp[n - i][j]
-
-        return total_pairs
-
+        dp = [[[0] * mx for _ in range(mx)] for _ in range(n)]  # dp[i][j][k] 前i项，使得第一个子序列的gcd是j，使得第一个子序列的gcd是k 的数量
+        dp[0][nums[0]][0] = dp[0][0][nums[0]] = dp[0][0][0] = 1  # gcd(0, x) == x
+        for i in range(1, n):
+            for j in range(mx):
+                for k in range(mx):
+                    v1, v2 = GCD[j][nums[i]], GCD[k][nums[i]]
+                    dp[i][v1][k] += dp[i - 1][j][k]
+                    dp[i][j][v2] += dp[i - 1][j][k]
+                    dp[i][j][k] += dp[i - 1][j][k]
+                    dp[i][v1][k] %= MOD
+                    dp[i][j][v2] %= MOD
+                    dp[i][j][k] %= MOD
+        ans = 0
+        for i in range(1, mx):
+            ans += dp[-1][i][i]
+        return ans % MOD
 
 
 so = Solution()
+print(so.subsequencePairCount([1,1,1]))
 print(so.subsequencePairCount([1,2,3,4]))
+print(so.subsequencePairCount([10,20,30]))
 
 
 

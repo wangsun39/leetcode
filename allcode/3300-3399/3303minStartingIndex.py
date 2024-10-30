@@ -47,7 +47,7 @@
 #
 # 提示：
 #
-# 1 <= pattern.length < s.length <= 3 * 105
+# 1 <= pattern.length < s.length <= 105
 # s 和 pattern 都只包含小写英文字母。
 #
 #
@@ -56,7 +56,8 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def minStartingIndex(self, s: str, pattern: str) -> int:
+    def minStartingIndex1(self, s: str, pattern: str) -> int:
+        # 双哈希，写的有些复杂，性能也比较弱
         n = len(pattern)
         m = len(s)
         c2i = {c: i for i, c in enumerate(ascii_lowercase)}
@@ -80,7 +81,6 @@ class Solution:
                     hash_set.add(new_vi)
             return pow_base, hash_set
 
-        # 以下采用双哈希法
         base1 = random.randint(8 * 10 ** 8, 9 * 10 ** 8)
         MOD1 = 10 ** 9 + 7
         pow_base1, hash_set1 = hash(base1, MOD1)
@@ -113,15 +113,40 @@ class Solution:
                 return i
         return -1
 
+    def minStartingIndex(self, s: str, pattern: str) -> int:
+        # z[i] 表示 s 和 s[i:]的最长公共前缀
+        def z_function(s):
+            n = len(s)
+            z = [0] * n
+            l, r = 0, 0
+            z[0] = n  # 这里根据实际考虑是否为n
+            for i in range(1, n):
+                if i <= r and z[i - l] < r - i + 1:
+                    z[i] = z[i - l]
+                else:
+                    z[i] = max(0, r - i + 1)
+                    while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+                        z[i] += 1
+                if i + z[i] - 1 > r:
+                    l = i
+                    r = i + z[i] - 1
+            return z
 
+        z1 = z_function(pattern + s)
+        z2 = z_function(pattern[::-1] + s[::-1])
+        np = len(pattern)
+        ns = len(s)
+        z1 = z1[np:]
+        z2 = z2[np:][::-1]
+        for i in range(ns - np + 1):
+            if z1[i] + z2[i + np - 1] >= np - 1:  # 从i开始的子串是否能转成pattern
+                return i
+        return -1
 
 
 so = Solution()
-print(so.minStartingIndex(s = "ababzab", pattern = "zac"))
-print(so.minStartingIndex(s = "ababbababa", pattern = "bacaba"))
 print(so.minStartingIndex(s = "abcdefg", pattern = "bcdffg"))
-print(so.minStartingIndex(s = "abcd", pattern = "dba"))
-print(so.minStartingIndex(s = "dde", pattern = "d"))
+print(so.minStartingIndex(s = "ababbababa", pattern = "bacaba"))
 
 
 
