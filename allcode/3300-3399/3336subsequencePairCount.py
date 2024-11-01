@@ -69,7 +69,7 @@ for i in range(N + 1):
         GCD[i][j] = gcd(i, j)
 
 class Solution:
-    def subsequencePairCount(self, nums: List[int]) -> int:
+    def subsequencePairCount1(self, nums: List[int]) -> int:
         MOD = 10 ** 9 + 7
         mx = max(nums) + 1
         n = len(nums)
@@ -90,10 +90,28 @@ class Solution:
             ans += dp[-1][i][i]
         return ans % MOD
 
+    def subsequencePairCount(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        n = len(nums)
+        @cache
+        def dfs(i, j, k):
+            if i == 0:
+                # if j == k == 0: return 1
+                if j == 0 and nums[i] == k: return 1
+                if k == 0 and nums[i] == j: return 1
+                if j == k:
+                    if nums[i] == k: return 3
+                    if j != 0: return 1
+                    return 0
+                return 0
+            res = (dfs(i - 1, j, k) + dfs(i - 1, gcd(j, nums[i]), k) + dfs(i - 1, j, gcd(k, nums[i]))) % MOD
+            print(i, j, k, res)
+            return res
+        return dfs(n - 1, 0, 0) % MOD
 
 so = Solution()
-print(so.subsequencePairCount([1,1,1]))
 print(so.subsequencePairCount([1,2,3,4]))
+print(so.subsequencePairCount([1,1,1]))
 print(so.subsequencePairCount([10,20,30]))
 
 
