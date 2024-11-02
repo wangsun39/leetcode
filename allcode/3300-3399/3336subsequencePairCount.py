@@ -92,24 +92,37 @@ class Solution:
 
     def subsequencePairCount(self, nums: List[int]) -> int:
         MOD = 10 ** 9 + 7
-        mx = max(nums) + 1
         n = len(nums)
-        @cache
-        def dfs(i, j, k): # 前i项，使得第一个子序列的gcd是j，使得第一个子序列的gcd是k 的数量
-            if i == -1:
-                if j == k:
-                    return 1
-                return 0
-            res = dfs(i - 1, j, k) + dfs(i - 1, gcd(nums[i], j), k) + dfs(i - 1, j, gcd(nums[i], k))
-            return res % MOD
 
-        return (sum(dfs(n - 1, i, i) for i in range(1, mx)) - 1) % MOD
+        @cache
+        def dfs(i, j, k):  # 从nums[i]向前推，当前一个子序列gcd是j，当前二个子序列gcd是k，能够得到多少个答案要求的子序列
+            # if i == 0:
+            #     # if j == k == 0: return 1
+            #     if j == 0 and nums[i] == k: return 1
+            #     if k == 0 and nums[i] == j: return 1
+            #     if j == k:
+            #         if gcd(nums[i], k) == k: return 3
+            #         if j != 0: return 1
+            #         return 0
+            #     if gcd(j, nums[i]) == k or gcd(k, nums[i]) == j:
+            #         return 1
+            #     return 0
+            # 以上复杂的写法也是可以的，换成下面的写法更简单
+            if i == -1:
+                if j == k != 0: return 1
+                return 0
+            res = (dfs(i - 1, j, k) + dfs(i - 1, gcd(j, nums[i]), k) + dfs(i - 1, j, gcd(k, nums[i]))) % MOD
+            # print(i, j, k, res)
+            return res
+
+        return dfs(n - 1, 0, 0) % MOD
 
 
 so = Solution()
+print(so.subsequencePairCount([1,2,3,4]))  # 10
+print(so.subsequencePairCount([1,2,3]))  # 2
 print(so.subsequencePairCount([10,20,30]))
 print(so.subsequencePairCount([1,1,1]))
-print(so.subsequencePairCount([1,2,3,4]))
 
 
 
