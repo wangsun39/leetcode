@@ -46,12 +46,54 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def possibleStringCount(self, word: str, k: int) -> int:
+        dup = []  # 顺序存放连续相同的字母数量
+        pre = 0
+        n = len(word)
+        for i, x in enumerate(word[1:], 1):
+            if x == word[pre]:
+                pass
+            else:
+                dup.append(i - pre)
+                pre = i
+        dup.append(n - pre)
+        # if len(word) == 1: dup.append(1)
+        MOD = 10 ** 9 + 7
+        total = 1  # 不考虑约束，Alice输入的所有可能情况
+        for x in dup:
+            total *= x
+            total %= MOD
+
+        if len(dup) >= k:
+            return total
+
+        m = len(dup)
+        # 剩下的问题转化为：dup数组每一项可以减少到至少为1的任意值，使得总和至少为k的不同方案数A
+        # 反过来计算，先求：dup数组每一项可以减少到至少为1的任意值，使得总和至多为k-1的不同方案数C
+        # 答案A = total - C
+        @cache
+        def dfs(i, s): # 前i - 1项的总和是s，第i项开始计算的方案总数
+            if s > k - 1: return 0
+            if i == m: return 1
+            res = 0
+            for j in range(1, dup[i] + 1):
+                if s + j > k - 1: break
+                res += dfs(i + 1, s + j)
+                res %= MOD
+            return res
+        C = dfs(0, 0)
+
+        return (total + MOD - C) % MOD
+
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.possibleStringCount(word = "da", k = 2))
+print(so.possibleStringCount(word = "d", k = 1))
+print(so.possibleStringCount(word = "aabbccdd", k = 7))
+print(so.possibleStringCount(word = "aabbccdd", k = 8))
+print(so.possibleStringCount(word = "aaabbb", k = 3))
 
 
 
