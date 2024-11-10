@@ -79,13 +79,26 @@ class Solution:
         dp1 = [0] * (target + 1)  # dup[:i + 1] 中选择至多i个数的可能数目为 dp[j]
         for i in range(min(dup[0] + 1, target + 1)):
             dp1[i] = 1
+        # 注释的代码是正确的，但性能不够，需要前缀和优化
+        # dp2 = [0] * (target + 1)
+        # for i in range(1, m):
+        #     for j in range(target + 1):
+        #         for t in range(min(j + 1, dup[i] + 1)):
+        #             dp2[j] += dp1[j - t]
+        #             dp2[j] %= MOD
+        #     dp1, dp2 = dp2, [0] * (target + 1)
+        # C = sum(dp1)
+
+        # 前缀和优化
+        s = list(accumulate(dp1, initial=0))
         dp2 = [0] * (target + 1)
         for i in range(1, m):
             for j in range(target + 1):
-                for t in range(min(j + 1, dup[i] + 1)):
-                    dp2[j] += dp1[j - t]
-                    dp2[j] %= MOD
+                # [max(0, j-dup[i]), j) 之前的区间和能转移到
+                dp2[j] = s[j + 1] - s[max(0, j - dup[i])]
+                dp2[j] %= MOD
             dp1, dp2 = dp2, [0] * (target + 1)
+            s = list(accumulate(dp1, initial=0))
         C = sum(dp1)
 
         return (total + MOD - C) % MOD
@@ -94,12 +107,12 @@ class Solution:
 
 
 so = Solution()
+print(so.possibleStringCount(word = "aaabbb", k = 3))
 print(so.possibleStringCount(word = "aabbccdd", k = 7))
 print(so.possibleStringCount(word = "da", k = 2))
 print(so.possibleStringCount(word = "d", k = 1))
 print(so.possibleStringCount(word = "aabbccdd", k = 7))
 print(so.possibleStringCount(word = "aabbccdd", k = 8))
-print(so.possibleStringCount(word = "aaabbb", k = 3))
 
 
 

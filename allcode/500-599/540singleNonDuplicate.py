@@ -23,11 +23,10 @@
 
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def singleNonDuplicate(self, nums: List[int]) -> int:
+    def singleNonDuplicate1(self, nums: List[int]) -> int:
         start, end = 0, len(nums) - 1
         while end != start:
             mid = (end + start) // 2
@@ -43,6 +42,9 @@ class Solution:
                     start = mid + 1
         return nums[start]
 
+    def singleNonDuplicate(self, nums: List[int]) -> int:
+        # 2024/11/10 异或法
+        return reduce(lambda x, y: x ^ y, nums)
 
 
 so = Solution()
