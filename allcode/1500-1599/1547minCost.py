@@ -41,7 +41,7 @@ from leetcode.allcode.competition.mypackage import *
 from itertools import accumulate
 
 class Solution:
-    def minCost(self, n: int, cuts: List[int]) -> int:
+    def minCost1(self, n: int, cuts: List[int]) -> int:
         cuts.sort()
         m = len(cuts) + 1
         seg = [0] * m
@@ -62,6 +62,22 @@ class Solution:
 
         return dfs(0, m - 1)
 
+    def minCost(self, n: int, cuts: List[int]) -> int:
+        # 2024/11/11 区间DP
+        cuts.sort()
+        cuts.insert(0, 0)
+        cuts.append(n)
+
+        @cache
+        def dfs(i, j):
+            if i + 1 == j: return 0
+            res = inf
+            for k in range(i + 1, j):
+                res = min(res, dfs(i, k) + dfs(k, j))
+
+            return res + cuts[j] - cuts[i]
+
+        return dfs(0, len(cuts) - 1)
 
 
 

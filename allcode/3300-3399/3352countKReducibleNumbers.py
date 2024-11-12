@@ -58,24 +58,46 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+M = 801
+v = [0]
+for i in range(1, M):
+    cnt = 0
+    while i != 1:
+        i = i.bit_count()
+        cnt += 1
+    v.append(cnt)
+
 class Solution:
     def countKReducibleNumbers(self, s: str, k: int) -> int:
         MOD = 10 ** 9 + 7
-        M = 801
-        v = [0]
-        for i in range(1, M):
-            cnt = 0
-            while i != 1:
-                i = i.bit_count()
-                cnt += 1
-            v.append(cnt)
-        counter = Counter(v)
-        print(counter)
+        ans = 0
+        if k >= 5:
+            # 可以预先计算，k >= 5时，最终结果都是1
+            return (int(s, 2) - 1) % MOD
 
+        @cache
+        def dfs(i: int, is_limit: bool, target: int) -> int:
+            if i == len(s):
+                return 0 if is_limit or target else 1
+            ans = 0
+            upper = int(s[i]) if is_limit else 1  # 判断当前位是否受约束
+            lower = 0
+            for j in range(lower, upper + 1):
+                if target == 0 and j == 1: break
+                ans += dfs(i + 1, is_limit and j == upper, target if j == 0 else target - 1)
+            return ans
+
+        for i in range(1, len(s)):
+            if v[i] <= k - 1: # i 经过至多 k - 1 步，变成1，
+                ans += dfs(0, True, i)  # 计算有多少个数经过1步能变成i，即多少个数字的二进制表示中有i个1
+                ans %= MOD
+        dfs.cache_clear()
+        return ans
 
 
 so = Solution()
 print(so.countKReducibleNumbers(s = "111", k = 1))
+print(so.countKReducibleNumbers(s = "1", k = 3))
 
 
 
