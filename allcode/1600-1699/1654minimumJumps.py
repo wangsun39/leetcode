@@ -36,8 +36,7 @@
 # forbidden 中所有位置互不相同。
 # 位置 x 不在 forbidden 中。
 from math import gcd
-from typing import Optional,List
-from collections import defaultdict, deque
+from leetcode.allcode.competition.mypackage import *, deque
 
 
 # Definition for a binary tree node.

@@ -44,8 +44,7 @@
 # 1 <= m, n <= 5
 # 0 <= introvertsCount, extrovertsCount <= min(m * n, 6)
 import math
-from typing import Optional,List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import itertools
 from bisect import *
 

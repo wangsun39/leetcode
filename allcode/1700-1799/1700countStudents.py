@@ -48,8 +48,7 @@
 
 
 
-from typing import Optional,List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 # Definition for a binary tree node.

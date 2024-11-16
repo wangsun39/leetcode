@@ -26,8 +26,7 @@
 # 1 <= nums[i] <= 104
 # 1 <= x <= 109
 import math
-from typing import Optional,List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import itertools
 from bisect import *
 
