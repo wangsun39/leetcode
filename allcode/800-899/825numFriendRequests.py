@@ -39,7 +39,7 @@
 
 from leetcode.allcode.competition.mypackage import *
 class Solution:
-    def numFriendRequests(self, ages: List[int]) -> int:
+    def numFriendRequests1(self, ages: List[int]) -> int:
         ages.sort()
         print(ages)
         res = 0
@@ -51,6 +51,22 @@ class Solution:
                 res += (sameAgeId - 1 - targetId)
         return res
 
+    def numFriendRequests(self, ages: List[int]) -> int:
+        # 2024/11/17 双指针
+        counter = Counter(ages)
+        ages.sort()
+        n = len(ages)
+        ans = 0
+        l = r = 0
+        for i, age in enumerate(ages):
+            if i and age == ages[i - 1]: continue
+            while r < n and ages[r] <= age:
+                r += 1
+            while l < n and ages[l] <= age * 0.5 + 7:
+                l += 1
+            if r > l:
+                ans += (r - l - 1) * counter[age]  # [l, r) 是满足条件的
+        return ans
 
 
 
