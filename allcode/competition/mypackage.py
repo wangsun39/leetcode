@@ -8,7 +8,7 @@ from collections import deque
 # de.appendleft(6)
 # de.pop()
 # de.popleft()
-from itertools import pairwise, accumulate
+from itertools import pairwise, accumulate, product
 # list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
