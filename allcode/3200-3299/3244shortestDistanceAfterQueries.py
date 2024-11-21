@@ -61,7 +61,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def shortestDistanceAfterQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+    def shortestDistanceAfterQueries1(self, n: int, queries: List[List[int]]) -> List[int]:
         rmv = SortedList()
         ans = []
         cur = n - 1
@@ -97,11 +97,35 @@ class Solution:
             ans.append(cur)
         return ans
 
+    def shortestDistanceAfterQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        # 2024/11/19  并查集
+        fa = list(range(n - 1))
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        ans = []
+        cnt = n - 1  # 连通分量的个数
+        # 并查集
+        # 本题代表元素是一个并查集中最大的元素
+        # 每次query的答案就是连通分量的个数
+        # 并查集中每个元素是原图中的一条边，将两个边union，表示它们合并成了一条
+        for x, y in queries:
+            while find(x) != find(y - 1):
+                # 将代表元素的下一个和代表元素连起来
+                union(find(x) + 1, x)  # 这里一定要这样，不能写成 union(x, find(x) + 1)
+                x = find(x)
+                cnt -= 1
+            ans.append(cnt)
+        return ans
 
 so = Solution()
+print(so.shortestDistanceAfterQueries( n = 5, queries = [[2, 4], [0, 2], [0, 4]]))
 print(so.shortestDistanceAfterQueries( n = 6, queries = [[3,5],[2,5]]))  # [4,3]
 print(so.shortestDistanceAfterQueries( n = 5, queries = [[1,4],[2,4]]))  # [2,2]
-print(so.shortestDistanceAfterQueries( n = 5, queries = [[2, 4], [0, 2], [0, 4]]))
 print(so.shortestDistanceAfterQueries( n = 4, queries = [[0, 3], [0, 2]]))
 
 
