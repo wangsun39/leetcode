@@ -38,10 +38,66 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxNumOfSubstrings(self, s: str) -> List[str]:
+        c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+        i2c = {i: c for i, c in enumerate(ascii_lowercase)}
+        d1 = defaultdict(list)  # d1[c2i[x]]  记录x的最小下标和最大下标
+        for i, x in enumerate(s):
+            if c2i[x] in d1:
+                d1[c2i[x]][1] = i
+            else:
+                d1[c2i[x]] = [i, i]
+        d2 = defaultdict(set)  # d2[c2i[x]]  记录x的范围内包含的其他字符
+        for j, [l, r] in d1.items():
+            for i in range(l, r + 1):
+                if s[i] != i2c[j]:
+                    d2[j].add(c2i[s[i]])
+
+        fa = list(range(26))
+        def find(x):
+            if x != fa[x]:
+                fa[x] = find(fa[x])
+            return fa[x]
+        def union(x, y):
+            fa[find(y)] = find(x)
+
+        for i in range(26):
+            for j in range(i + 1, 26):
+                # 仅当a中有b，b中有a时，a和b的区间可以合并成一个组
+                if j in d2[i] and i in d2[j]:
+                    union(i, j)
+
+        for i in range(26):
+            find(i)
+        group = defaultdict(list)  # 在一个子区间内的所有字符
+        for i in range(26):
+            if i not in d1: continue
+            group[fa[i]].append(i)
+        seg = []  # 每个组的区间范围
+        for grp in group.values():
+            seg.append([min(d1[x][0] for x in grp), max(d1[x][1] for x in grp)])
+
+        m = len(seg)
+        valid = set(range(m))  # 最终的区间
+        for i in range(m):
+            for j in range(m):
+                if i == j: continue
+                # 一个组包含另一个组，那么外层的组不能成为最终区间
+                if seg[i][0] <= seg[j][0] and seg[i][1] >= seg[j][1]:
+                    valid.remove(i)
+                    break
+        ans = []
+        for i in valid:
+            l, r = seg[i]
+            ans.append(s[l: r + 1])
+        return ans
+
+
 
 
 so = Solution()
-print(so.maxNumOfSubstrings())
+print(so.maxNumOfSubstrings(s = "zyz"))
+print(so.maxNumOfSubstrings(s = "adefaddaccc"))
+print(so.maxNumOfSubstrings(s = "abbaccd"))
 
 
 
