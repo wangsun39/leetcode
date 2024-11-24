@@ -29,7 +29,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def smallestRange(self, nums: List[List[int]]) -> List[int]:
+    def smallestRange1(self, nums: List[List[int]]) -> List[int]:
         n = len(nums)
         idx = [0] * n  # 记录每一行的下标
         hp = []
@@ -53,6 +53,32 @@ class Solution:
             else:
                 break
         return res
+
+    def smallestRange(self, nums: List[List[int]]) -> List[int]:
+        # 2024/11/24  双指针法，性能不如上面的
+        arr = []
+        row = len(nums)
+        for i, l in enumerate(nums):
+            arr += [[i, x] for x in l]
+        arr.sort(key=lambda x:[x[1]])
+        counter = Counter()  # 统计滑窗内每行有多少个元素
+        n = len(arr)
+        r = 0
+        mn = inf
+        for l in range(n):
+            while r < n and len(counter) < row:
+                a, b = arr[r]
+                counter[a] += 1
+                r += 1
+            if len(counter) < row:
+                break
+            if mn > arr[r - 1][1] - arr[l][1]:
+                ans = [arr[l][1], arr[r - 1][1]]
+                mn = arr[r - 1][1] - arr[l][1]
+            counter[arr[l][0]] -= 1
+            if counter[arr[l][0]] == 0:
+                del(counter[arr[l][0]])
+        return ans
 
 so = Solution()
 print(so.smallestRange(nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]))
