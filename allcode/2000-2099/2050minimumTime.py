@@ -48,8 +48,7 @@
 
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 from collections import defaultdict, deque
 from math import *
 

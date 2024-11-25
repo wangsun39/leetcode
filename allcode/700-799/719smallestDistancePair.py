@@ -32,8 +32,7 @@
 
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def smallestDistancePair(self, nums: List[int], k: int) -> int:
         nums.sort()

@@ -28,8 +28,7 @@
 # target 是一个小写字母
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def nextGreatestLetter(self, letters: List[str], target: str) -> str:
         letters = set(letters)

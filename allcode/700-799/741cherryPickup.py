@@ -29,8 +29,7 @@
 
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def cherryPickup(self, grid: List[List[int]]) -> int:
         n = len(grid)

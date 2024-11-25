@@ -38,8 +38,7 @@
 #
 # 1 <= nums.length <= 105
 # 1 <= maxOperations, nums[i] <= 109
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

@@ -37,8 +37,7 @@
 
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def platesBetweenCandles(self, s: str, queries: List[List[int]]) -> List[int]:

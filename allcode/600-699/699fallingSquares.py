@@ -37,8 +37,7 @@
 # 1 <= lefti <= 108
 # 1 <= sideLengthi <= 106
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def fallingSquares(self, positions: List[List[int]]) -> List[int]:

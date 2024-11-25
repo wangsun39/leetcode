@@ -44,8 +44,7 @@
 
 
 
-import bisect
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countVowels(self, word: str) -> int:
