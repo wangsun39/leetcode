@@ -45,7 +45,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def recoverArray(self, nums: List[int]) -> List[int]:
+    def recoverArray1(self, nums: List[int]) -> List[int]:
         n = len(nums) // 2
         nums.sort()
         def check(k):
@@ -73,6 +73,30 @@ class Solution:
             if ret[0]:
                 return ret[1]
 
+    def recoverArray(self, nums: List[int]) -> List[int]:
+        # 2024/11/29 check 函数换个写法
+        nums.sort()
+
+        def check(k2):
+            deleted = defaultdict(int)
+            res = []
+            for i in range(n * 2):
+                x = nums[i]
+                if deleted[x]:
+                    deleted[x] -= 1
+                    continue
+                res.append(x)
+                if len(res) > n: return []
+                deleted[x + k2] += 1
+            return res
+
+        n = len(nums) // 2
+        for i in range(1, n + 1):
+            v = nums[i] - nums[0]
+            if v == 0 or v & 1: continue
+            ans = check(v)
+            if ans:
+                return [x + v // 2 for x in ans]
 
 
 so = Solution()
