@@ -43,9 +43,7 @@
 
 
 from leetcode.allcode.competition.mypackage import *
-from itertools import accumulate
-from collections import defaultdict
-from bisect import *
+
 
 class Solution:
     def minSubarray(self, nums: List[int], p: int) -> int:
