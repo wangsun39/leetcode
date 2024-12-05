@@ -46,8 +46,23 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxFrequency(self, nums: List[int], k: int, numOperations: int) -> int:
-
-
+        diff = defaultdict(int)
+        counter = Counter(nums)
+        for x in nums:
+            diff[x - k] += 1
+            diff[x] += 0
+            diff[x + k + 1] -= 1
+        diff = [[key, v] for key, v in diff.items()]
+        diff.sort()
+        ans = 0
+        s = 0
+        for key, v in diff:
+            s += v
+            if s - counter[key] <= numOperations:
+                ans = max(ans, s)
+            else:
+                ans = max(ans, counter[key] + numOperations)
+        return ans
 
 so = Solution()
 print(so.maxFrequency(nums = [20,51,73,4,19,54,52,8,53,89,77,25,89,48,81,45,49,59,77,13], k = 21, numOperations = 7))

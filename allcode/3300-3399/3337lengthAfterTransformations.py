@@ -64,13 +64,47 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+import numpy as np
+
 class Solution:
     def lengthAfterTransformations(self, s: str, t: int, nums: List[int]) -> int:
         MOD = 10 ** 9 + 7
+        c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+
+        def pow(matrix, n):  # (mat ^ n) % MOD  矩阵快速幂
+            res = np.eye(26, dtype=object)
+            cur = matrix.copy()
+            while n:
+                if n & 1:
+                    res = np.matmul(cur, res)
+                    res %= MOD
+                cur = np.matmul(cur, cur)
+                cur %= MOD
+                n >>= 1
+            return res
+
+        ct = Counter(s)
+        mat = np.zeros((26, 26), dtype=object)
+        a = np.zeros((26, ), dtype=int)
+        for k, v in ct.items():
+            a[c2i[k]] = v
+        for i in range(26):
+            for j in range(nums[i]):
+                mat[i, (i + j + 1) % 26] = 1
+
+        # xy = pow1(mat, t)
+        # zz = np.matmul(a, xy)
+        # print(np.sum(zz) % MOD)
+        v = np.matmul(a, pow(mat, t))
+        return np.sum(v) % MOD
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.lengthAfterTransformations(s = "mppgvcssluzhipednraxbdfbyn", t = 3719, nums = [5,3,8,1,4,2,2,4,5,2,8,5,8,2,6,10,8,1,4,1,7,4,2,4,7,5]))
+print(so.lengthAfterTransformations(s = "u", t = 3, nums = [1,1,2,2,3,1,2,2,1,2,3,1,2,2,2,2,3,3,3,2,3,2,3,2,2,3]))
+print(so.lengthAfterTransformations(s = "u", t = 3, nums = [1,1,2,2,3,1,2,2,1,2,3,1,2,2,2,2,3,3,3,2,3,2,3,2,2,3]))
+print(so.lengthAfterTransformations(s = "azbk", t = 1, nums = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]))
+print(so.lengthAfterTransformations(s = "abcyy", t = 2, nums = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2]))
 
 
 
