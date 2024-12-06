@@ -46,8 +46,7 @@
 # 1 <= val <= 100
 
 
-from typing import List,Optional
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
