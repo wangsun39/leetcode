@@ -53,10 +53,11 @@ class Solution:
         counter = Counter(nums)
         s = sum(nums)
         for sp in sorted(counter.keys(), reverse=True):
-            for su in counter.keys():
-                if counter[sp] > 1 or sp != su:
-                    if su == s - sp - su:
-                        return sp
+            if (s - sp) & 1: continue
+            su = (s - sp) // 2
+            if counter[su] == 0: continue
+            if counter[su] > 1 or sp != su:
+                return sp
 
 
 
