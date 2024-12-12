@@ -52,16 +52,10 @@
 # grid[0][0] == grid[m - 1][n - 1] == 0
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 from functools import lru_cache
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maximumMinutes(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])

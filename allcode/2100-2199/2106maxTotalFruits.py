@@ -51,10 +51,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 from bisect import *
 class Solution:
     def maxTotalFruits(self, fruits: List[List[int]], startPos: int, k: int) -> int:

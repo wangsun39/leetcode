@@ -26,10 +26,7 @@
 # -105 <= nums[i] <= 105
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def findClosestNumber(self, nums: List[int]) -> int:
         d = 1e6

@@ -39,10 +39,7 @@
 # 函数 withdraw 和 deposit 至少各有 一次 调用。
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class ATM:
 
     def __init__(self):

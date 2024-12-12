@@ -33,19 +33,7 @@
 # -105 <= nums[i] <= 105
 
 
-# Map = [['U' for _ in range(n)] for _ in range(m)]
-
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
-from collections import defaultdict
-# d = Counter(list1)
-# d = defaultdict(int)
-
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def waysToSplitArray(self, nums: List[int]) -> int:

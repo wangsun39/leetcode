@@ -39,10 +39,7 @@
 # 1 <= k <= num.length （将 num 视为字符串）
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 from collections import defaultdict
 # d = Counter(list1)
 # d = defaultdict(int)

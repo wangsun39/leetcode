@@ -36,10 +36,7 @@
 # guards 和 walls 中所有位置 互不相同 。
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def countUnguarded(self, m: int, n: int, guards: List[List[int]], walls: List[List[int]]) -> int:
         Map = [['U' for _ in range(n)] for _ in range(m)]

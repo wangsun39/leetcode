@@ -38,10 +38,7 @@
 # s 仅由数字（0 - 9）组成。
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def digitSum(self, s: str, k: int) -> str:
         def helper(s):

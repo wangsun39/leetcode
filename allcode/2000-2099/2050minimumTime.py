@@ -49,8 +49,6 @@
 
 
 from leetcode.allcode.competition.mypackage import *
-from collections import defaultdict, deque
-from math import *
 
 class Solution:
     def minimumTime(self, n: int, relations: List[List[int]], time: List[int]) -> int:

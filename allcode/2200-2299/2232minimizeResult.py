@@ -39,10 +39,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minimizeResult(self, expression: str) -> str:
         l = expression.split('+')

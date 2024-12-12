@@ -30,10 +30,7 @@
 # words[i] 和 s 只 包含小写英文字母。
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def countPrefixes(self, words: List[str], s: str) -> int:
         ans = 0

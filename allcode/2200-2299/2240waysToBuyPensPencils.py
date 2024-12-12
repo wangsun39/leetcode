@@ -1,10 +1,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def waysToBuyPensPencils(self, total: int, cost1: int, cost2: int) -> int:
         ans = 0

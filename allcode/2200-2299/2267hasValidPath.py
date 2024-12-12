@@ -41,10 +41,7 @@
 
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 from functools import lru_cache
 from typing import List

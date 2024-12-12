@@ -3,10 +3,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
