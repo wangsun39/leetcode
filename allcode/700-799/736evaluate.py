@@ -40,8 +40,7 @@
 # 测试用例中的表达式均为合法的且最终结果为整数
 
 
-import copy
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def evaluate(self, expression: str) -> int:
         def get_variable(expr: str):

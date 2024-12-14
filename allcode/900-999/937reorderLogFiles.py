@@ -34,8 +34,7 @@
 # 题目数据保证 logs[i] 都有一个标识符，并且在标识符之后至少存在一个字
 
 
-import copy
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def reorderLogFiles(self, logs: List[str]) -> List[str]:
         logs1, logs2 = [], []

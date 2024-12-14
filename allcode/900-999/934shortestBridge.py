@@ -31,8 +31,7 @@
 # https://leetcode.cn/problems/shortest-bridge/
 
 
-import copy
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def shortestBridge(self, grid: List[List[int]]) -> int:
         row, col = len(grid), len(grid[0])

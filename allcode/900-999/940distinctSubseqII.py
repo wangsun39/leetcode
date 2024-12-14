@@ -57,8 +57,7 @@
 # 仅由小写英文字母组成
 
 
-import copy
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def distinctSubseqII(self, s: str) -> int:
         MOD = int(1e9 + 7)
