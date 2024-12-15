@@ -27,9 +27,7 @@
 # 2 <= arr.length <= 40
 # 1 <= arr[i] <= 15
 # 答案保证是一个 32 位带符号整数，即小于 231 。
-from functools import cache
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 from collections import deque, defaultdict
 
 

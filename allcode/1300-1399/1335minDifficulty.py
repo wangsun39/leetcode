@@ -42,9 +42,7 @@
 # 1 <= jobDifficulty.length <= 300
 # 0 <= jobDifficulty[i] <= 1000
 # 1 <= d <= 10
-from functools import cache
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minDifficulty1(self, jobDifficulty: List[int], d: int) -> int:

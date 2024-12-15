@@ -27,9 +27,7 @@
 # 1 <= coins[i] <= 231 - 1
 # 0 <= amount <= 104
 
-from functools import cache
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def coinChange2(self, coins: List[int], amount: int) -> int:
         min_num = [0] + [-1 for _ in range(max(amount, 2))]

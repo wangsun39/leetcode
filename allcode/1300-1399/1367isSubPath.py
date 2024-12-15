@@ -33,9 +33,7 @@
 # 二叉树包含的节点数目在 1 到 2500 之间。
 
 from collections import deque, defaultdict
-from functools import cache
-from math import inf
-from typing import List, Optional
+from leetcode.allcode.competition.mypackage import *, Optional
 
 
 class ListNode:
