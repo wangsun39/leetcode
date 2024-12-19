@@ -35,9 +35,7 @@
 
 
 
-from typing import List
-
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findRightInterval(self, intervals: List[List[int]]) -> List[int]:

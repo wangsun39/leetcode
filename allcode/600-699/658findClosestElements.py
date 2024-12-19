@@ -26,9 +26,7 @@
 
 
 # 注意: 二叉树的高度在范围 [1, 10] 中。
-from typing import List
-
-import bisect
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
