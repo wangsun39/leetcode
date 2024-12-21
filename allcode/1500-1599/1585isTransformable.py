@@ -47,9 +47,9 @@ class Solution:
         for i, x in enumerate(s):
             pos[x].append(i)
         for x in t:
+            # 当前x要从后面的位置移动到这个位置，需要保证在它前面的数字都比它大，否则就失败了
             if len(pos[x]) == 0: return False
             px = pos[x][0]
-            # v = min(pos[u][0] for u in pos.keys() if len(pos[u]) and u < x)
             for u in pos.keys():
                 if len(pos[u]) and u < x and pos[u][0] < px:
                     return False
