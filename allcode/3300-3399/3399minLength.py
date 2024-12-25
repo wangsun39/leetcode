@@ -50,9 +50,55 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minLength(self, s: str, numOps: int) -> int:
+        first = 0
+        seg = []  # 连续相同字符的段的长度
+        n = len(s)
+        for i, x in enumerate(s):
+            if i == n - 1 or x != s[i + 1]:
+                if i == 0 or x != s[i - 1]:
+                    seg.append(1)
+                else:
+                    seg.append(i - first + 1)
+                first = i + 1
+        # print(seg)
+
+        def check1(val):
+            res = 0
+            for x in seg:
+                if x <= val or x <= 2: continue
+                res += x // (val + 1)
+                if res > numOps:
+                    return False
+            return True
+
+        # 对于结果>=2的场景，用二分求出最小的结果hi
+        lo, hi = 1, n
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check1(mid):
+                hi = mid
+            else:
+                lo = mid
+
+        if hi >= 3: return hi  # hi超过2，表示，无论怎么选最小值不会低于hi
+
+        # 剩下的情况，答案就剩1或2，就需检查是否能为1就可以了
+        def check(a, b):
+            res = 0
+            for i, x in enumerate(s):
+                if i & 1 == 0:
+                    res += (x != a)
+                else:
+                    res += (x != b)
+            return res
+        if min(check('0', '1'), check('1', '0')) <= numOps:
+            return 1
+        return 2
 
 
 so = Solution()
+print(so.minLength(s = "000000", numOps = 1))  # 3
+print(so.minLength(s = "000001", numOps = 1))  # 2
 
 
 

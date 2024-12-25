@@ -32,26 +32,25 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def superPow(self, a: int, b: List[int]) -> int:
         MOD = 1337
-        pow = [a % MOD]
-        for _ in range(1, 2001):
-            pow.append(pow[-1] ** 2 % MOD)
+        pow10 = [a % MOD]
         n = len(b)
+        # b = b0 * 10 ^ (n - 1) + b1 * 10 ^ (n - 2) ...
+        # a ^ (bi * 10 ^ (n - 1 - i)) = (a ^ (10 ^ (n - 1 - i))) ^ bi
+        # 可以预先处理所有 (a ^ (10 ^ i))
+        for _ in range(1, n + 1):
+            pow10.append(pow(pow10[-1], 10, MOD))
         ans = 1
         for i in range(n):
-            j = n - i - 1
-            x = b[j] * 10 ** i
-            for k in range(x.bit_length()):
-                if x & (1 << k):
-                    ans *= pow[k]
-                    ans %= MOD
+            ans *= pow(pow10[n - 1 - i], b[i], MOD)
+            ans %= MOD
         return ans
 
 
 
 so = Solution()
+print(so.superPow(a = 2, b = [3]))
 print(so.superPow(a = 1, b = [4,3,3,8,5,2]))
 print(so.superPow(a = 2, b = [1,0]))
-print(so.superPow(a = 2, b = [3]))
 print(so.superPow(a = 2147483647, b = [2,0,0]))
 
 
