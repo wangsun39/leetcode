@@ -43,43 +43,56 @@ class Solution:
         n = len(machines)
         if s % n: return -1
         avg = s // n
-        stack = deque()
-        ans = 0
+        arr = [0] * n  # 对于每个少于avg的需要移入的最大操作次数
+        stack = deque()  # stack[i][0] 表示下标，stack[i][1] 表示此下标当前还需要移入的衣服数量
+        state = 0  # 1 表示前面的衣服有多余，-1 表示前面的衣服有缺少
         for i, x in enumerate(machines):
             if x == avg: continue
             if x > avg:
-                if not stack or stack[0][1] > 0:
-                    stack.append([i, x - avg])
+                delta = x - avg
+                if not stack or state >= 0:
+                    stack.append([i, delta])
+                    state = 1
                     continue
-                while stack and stack[0][1] + x >= avg:
+                # state < 0
+                while stack and stack[0][1] <= delta:
                     j, y = stack.popleft()
-                    x += y
-                    ans += -y * (i - j)
-                    print(ans)
-                    if x == avg: break
-                if x == avg: continue
+                    arr[j] += (y + (i - j) - 1)
+                    delta -= y
                 if not stack:
-                    stack.append([i, x - avg])
+                    if delta:
+                        stack.append([i, delta])
+                        state = 1
+                    else:
+                        state = 0
                 else:
-                    stack[0][1] += (x - avg)
+                    j = stack[0][0]
+                    arr[j] += (delta + (i - j) - 1)
+                    stack[0][1] -= delta
             else:
-                if not stack or stack[0][1] < 0:
-                    stack.append([i, x - avg])
+                delta = avg - x
+                if not stack or state <= 0:
+                    stack.append([i, delta])
+                    state = -1
                     continue
-                while stack and stack[0][1] + x <= avg:
+                # state > 0
+                while stack and stack[0][1] <= delta:
                     j, y = stack.popleft()
-                    x += y
-                    ans += y * (i - j)
-                    if x == avg: break
-                if x == avg: continue
+                    arr[i] += (y + (i - j) - 1)
+                    delta -= y
                 if not stack:
-                    stack.append([i, avg - x])
+                    if delta:
+                        stack.append([i, delta])
+                        state = -1
+                    else:
+                        state = 0
                 else:
-                    stack[0][1] += (x - avg)
-        return ans
+                    j = stack[0][0]
+                    arr[i] += (delta + (i - j) - 1)
+                    stack[0][1] -= delta
+        return max(arr)
 
 
 so = Solution()
 print(so.findMinMoves(machines = [1,0,5]))
-print(so.longestPalindromeSubseq("cbbd"))
 
