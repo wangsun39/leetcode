@@ -28,49 +28,30 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def trapRainWater(self, heightMap: List[List[int]]) -> int:
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
         r, c = len(heightMap), len((heightMap[0]))
+        if r == 1 or c == 1: return 0
+        mx_high = [[-1] * c for _ in range(r)]  # 每个位置最终的最大高度
         ans = 0
-        right = [[-1] * c for _ in range(r)]  # [i][j] 右侧第一个比它大的值的列号
-        down = [[-1] * c for _ in range(r)]  # [i][j] 下侧第一个比它大的值的行号
-        left = [[-1] * c for _ in range(r)]  # [i][j] 左侧第一个比它大的值的列号
-        up = [[-1] * c for _ in range(r)]  # [i][j] 上侧第一个比它大的值的行号
+        hp = []
         for i in range(r):
-            stack = [c - 1]
-            for j in range(c - 2, -1, -1):
-                while stack and stack[-1] <= heightMap[i][j]:
-                    stack.pop(0)
-                if stack:
-                    right[i][j] = stack[-1]
-                stack.append(j)
-        for i in range(r):
-            stack = [0]
-            for j in range(1, c):
-                while stack and stack[-1] <= heightMap[i][j]:
-                    stack.pop(0)
-                if stack:
-                    right[i][j] = stack[-1]
-                stack.append(j)
-        for j in range(c):
-            stack = [r - 1]
-            for i in range(r - 2, -1, -1):
-                while stack and stack[-1] <= heightMap[i][j]:
-                    stack.pop(0)
-                if stack:
-                    down[i][j] = stack[-1]
-                stack.append(i)
-        for j in range(c):
-            stack = [0]
-            for i in range(1, r):
-                while stack and stack[-1] <= heightMap[i][j]:
-                    stack.pop(0)
-                if stack:
-                    down[i][j] = stack[-1]
-                stack.append(i)
-        for i in range(r):
-            for j in range(c):
-                if right[i][j] == -1 or down[i][j] == -1 or left[i][j] == -1 or up[i][j] == -1: continue
-                ans += (right[i][j] - j) + (down[i][j] - i) - 1
+            for j in [0, c - 1]:
+                heappush(hp, [heightMap[i][j], i, j])
+                mx_high[i][j] = heightMap[i][j]
+        for j in range(1, c - 1):
+            for i in [0, r - 1]:
+                heappush(hp, [heightMap[i][j], i, j])
+                mx_high[i][j] = heightMap[i][j]
+        while hp:
+            h, x, y = heappop(hp)
+            for x0, y0 in dir:
+                u, v = x + x0, y + y0
+                if 0 < u < r - 1 and 0 < v < c - 1 and mx_high[u][v] == -1:
+                    mx_high[u][v] = max(heightMap[u][v], h)
+                    ans += mx_high[u][v] - heightMap[u][v]
+                    heappush(hp, [mx_high[u][v], u, v])
         return ans
+
 
 so = Solution()
 print(so.trapRainWater(heightMap = [[3,3,3,3,3],[3,2,2,2,3],[3,2,1,2,3],[3,2,2,2,3],[3,3,3,3,3]]))
