@@ -39,60 +39,29 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findMinMoves(self, machines: List[int]) -> int:
-        s = sum(machines)
+        total = sum(machines)
         n = len(machines)
-        if s % n: return -1
-        avg = s // n
-        arr = [0] * n  # 对于每个少于avg的需要移入的最大操作次数
-        stack = deque()  # stack[i][0] 表示下标，stack[i][1] 表示此下标当前还需要移入的衣服数量
-        state = 0  # 1 表示前面的衣服有多余，-1 表示前面的衣服有缺少
+        if total % n: return -1
+        avg = total // n
+        s = list(accumulate(machines, initial=0))
+        ans = 0
         for i, x in enumerate(machines):
-            if x == avg: continue
-            if x > avg:
-                delta = x - avg
-                if not stack or state >= 0:
-                    stack.append([i, delta])
-                    state = 1
-                    continue
-                # state < 0
-                while stack and stack[0][1] <= delta:
-                    j, y = stack.popleft()
-                    arr[j] += (y + (i - j) - 1)
-                    delta -= y
-                if not stack:
-                    if delta:
-                        stack.append([i, delta])
-                        state = 1
-                    else:
-                        state = 0
-                else:
-                    j = stack[0][0]
-                    arr[j] += (delta + (i - j) - 1)
-                    stack[0][1] -= delta
-            else:
-                delta = avg - x
-                if not stack or state <= 0:
-                    stack.append([i, delta])
-                    state = -1
-                    continue
-                # state > 0
-                while stack and stack[0][1] <= delta:
-                    j, y = stack.popleft()
-                    arr[i] += (y + (i - j) - 1)
-                    delta -= y
-                if not stack:
-                    if delta:
-                        stack.append([i, delta])
-                        state = -1
-                    else:
-                        state = 0
-                else:
-                    j = stack[0][0]
-                    arr[i] += (delta + (i - j) - 1)
-                    stack[0][1] -= delta
-        return max(arr)
+            left_expect = i * avg
+            right_expect = (n - i - 1) * avg
+            left_diff = left_expect - s[i]
+            right_diff = right_expect - (s[n] - s[i + 1])
+            if left_diff > 0 and right_diff > 0: # 左右两边都是少，那么所有的差值数量都要经过当前的洗衣机
+                ans = max(ans, left_diff + right_diff)
+            else:  # 左右两边一侧多或一侧少，那么差值大的一侧的衣服数量都要经过当前洗衣机
+                # 左右两边都是多，左右两边可以同时给当前的洗衣机
+                ans = max(ans, max(abs(left_diff), abs(right_diff)))
+
+        return ans
+
 
 
 so = Solution()
-print(so.findMinMoves(machines = [1,0,5]))
+print(so.findMinMoves(machines = [1,0,5]))  # 3
+print(so.findMinMoves(machines = [0,3,0]))  # 2
+print(so.findMinMoves(machines = [0,2,0]))  # -1
 

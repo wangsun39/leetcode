@@ -32,7 +32,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maxConsecutive(self, bottom: int, top: int, special: List[int]) -> int:
+    def maxConsecutive1(self, bottom: int, top: int, special: List[int]) -> int:
         special.sort()
         ans = 0
         if special[0] != bottom:
@@ -46,6 +46,13 @@ class Solution:
             num = special[i] - special[i - 1] - 1
             ans = max(num, ans)
         return ans
+
+    def maxConsecutive(self, bottom: int, top: int, special: List[int]) -> int:
+        # 2025/1/6 换个写法
+        special.sort()
+        special.insert(0, bottom - 1)
+        special.append(top + 1)
+        return max(y - x - 1 for x, y in pairwise(special))
 
 
 
