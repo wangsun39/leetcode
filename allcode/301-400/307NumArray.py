@@ -1,13 +1,13 @@
 # 给你一个数组 nums ，请你完成两类查询。
 #
-# 其中一类查询要求 更新 数组 nums 下标对应的值
-# 另一类查询要求返回数组 nums 中索引 left 和索引 right 之间（ 包含 ）的nums元素的 和 ，其中 left <= right
+# 其中一类查询要求 更新 数组 nums 下标对应的值
+# 另一类查询要求返回数组 nums 中索引 left 和索引 right 之间（ 包含 ）的nums元素的 和 ，其中 left <= right
 # 实现 NumArray 类：
 #
 # NumArray(int[] nums) 用整数数组 nums 初始化对象
 # void update(int index, int val) 将 nums[index] 的值 更新 为 val
-# int sumRange(int left, int right) 返回数组 nums 中索引 left 和索引 right 之间（ 包含 ）的nums元素的 和 （即，nums[left] + nums[left + 1], ..., nums[right]）
-#  
+# int sumRange(int left, int right) 返回数组 nums 中索引 left 和索引 right 之间（ 包含 ）的nums元素的 和 （即，nums[left] + nums[left + 1], ..., nums[right]）
+#
 #
 # 示例 1：
 #
@@ -22,21 +22,19 @@
 # numArray.sumRange(0, 2); // 返回 1 + 3 + 5 = 9
 # numArray.update(1, 2);   // nums = [1,2,5]
 # numArray.sumRange(0, 2); // 返回 1 + 2 + 5 = 8
-#  
+#
 #
 # 提示：
 #
-# 1 <= nums.length <= 3 * 104
+# 1 <= nums.length <= 3 * 104
 # -100 <= nums[i] <= 100
 # 0 <= index < nums.length
 # -100 <= val <= 100
 # 0 <= left <= right < nums.length
-# 调用 update 和 sumRange 方法次数不大于 3 * 104 
+# 调用 update 和 sumRange 方法次数不大于 3 * 104
 
 
-from typing import List
-from collections import defaultdict
-import math
+from leetcode.allcode.competition.mypackage import *
 
 
 class NumArray1:
@@ -127,7 +125,7 @@ class NumArray1:
 # param_2 = obj.sumRange(left,right)
 
 
-class NumArray:
+class NumArray2:
     # 树状数组
 
     def lowbit(self, i):
@@ -161,9 +159,63 @@ class NumArray:
         return s
 
 
+# 线段树模板
+class Fenwick:
+    # 所有函数参数下标从1开始
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        self.f = [0] * (n + 1)
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] = val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
+
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        n = len(nums)
+        self.fen = Fenwick(n)
+        for i, x in enumerate(nums):
+            self.fen.update(i + 1, x)
+
+    def update(self, index: int, val: int) -> None:
+        self.fen.update(index + 1, val)
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.fen.query(left + 1, right + 1)
+
+so = NumArray([9,-8])
+# print(so.tree)
+print(so.update(0, 3))
+print(so.sumRange(1, 1))
+print(so.sumRange(0, 1))
 
 so = NumArray([1, 3, 5])
-print(so.tree)
+# print(so.tree)
 print(so.sumRange(0, 2))
 print(so.update(1, 2))
 print(so.sumRange(0, 2))
