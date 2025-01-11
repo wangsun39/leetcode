@@ -35,13 +35,61 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    # 所有函数参数下标从1开始
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        self.f = [0] * (n + 1)
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
     def processQueries(self, queries: List[int], m: int) -> List[int]:
-
+        n = len(queries)
+        ans = []
+        fen = Fenwick(m + n)
+        p = {}  # 记录数字i的当前位置
+        for i in range(m):
+            # 将 1 至 m 放入 fen 的 n + 1 至 m + n
+            fen.update(n + i + 1, 1)
+            p[i + 1] = n + i + 1
+        for i, x in enumerate(queries):
+            px = p[x]
+            v = fen.query(1, px) - 1
+            ans.append(v)
+            fen.update(px, 0)
+            fen.update(n - i, 1)
+            p[x] = n - i
+        return ans
 
 
 so = Solution()
-print(so.processQueries(["leetcode","et","code"]))
+print(so.processQueries(queries = [3,1,2,1], m = 5))
 
 
 
