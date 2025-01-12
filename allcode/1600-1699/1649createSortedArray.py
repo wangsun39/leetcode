@@ -54,8 +54,41 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    # 所有函数参数下标从1开始
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        self.f = [0] * (n + 1)
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
-    def createSortedArray(self, instructions: List[int]) -> int:
+    def createSortedArray1(self, instructions: List[int]) -> int:
         sl = SortedList()
         ans = 0
         for x in instructions:
@@ -65,6 +98,19 @@ class Solution:
             ans += min(p1, m - p2)
             sl.add(x)
         return ans % (10 ** 9 + 7)
+
+    def createSortedArray(self, instructions: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        mx = max(instructions) + 1
+        fw = Fenwick(mx)
+        ans = 0
+        for x in instructions:
+            less = fw.query(1, x - 1)
+            more = fw.query(x + 1, mx)
+            ans += min(less, more)
+            ans %= MOD
+            fw.add(x, 1)
+        return ans
 
 
 so = Solution()
