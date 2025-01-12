@@ -34,7 +34,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def largestCombination(self, candidates: List[int]) -> int:
+    def largestCombination1(self, candidates: List[int]) -> int:
         def getBits(nums):
             res = [0 for i in range(24)]
             i = 0
@@ -58,6 +58,17 @@ class Solution:
             ans = max(ans, num)
         return ans
 
+    def largestCombination(self, candidates: List[int]) -> int:
+        # 2025/1/12  换个写法
+        cnt = [0] * 32
+        for x in candidates:
+            i = 0
+            while x:
+                if x & 1:
+                    cnt[i] += 1
+                x >>= 1
+                i += 1
+        return max(cnt)
 
 
 so = Solution()

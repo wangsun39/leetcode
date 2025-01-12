@@ -85,7 +85,7 @@ class NumArray:
     def sumRange(self, left: int, right: int) -> int:
         return self.prefixSum(right + 1) - self.prefixSum(left)
 
-class Solution:
+class Solution1:
     def countOfPeaks(self, nums: List[int], queries: List[List[int]]) -> List[int]:
         n = len(nums)
         arr = [0] * n
@@ -119,13 +119,83 @@ class Solution:
                     arr[i + 1] = 1 - arr[i + 1]
         return ans
 
+# 2025/1/11 用 Fenwick 模板重写
+class Fenwick:
+    # 所有函数参数下标从1开始
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        self.f = [0] * (n + 1)
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
+class Solution:
+    def countOfPeaks(self, nums: List[int], queries: List[List[int]]) -> List[int]:
+        n = len(nums)
+        peak = [0] * n
+        fen = Fenwick(n)
+        ans = []
+        for i in range(1, n - 1):
+            if nums[i - 1] < nums[i] > nums[i + 1]:
+                fen.update(i + 1, 1)
+                peak[i] = 1
+
+        for t, l, r in queries:
+            if t == 1:
+                if l + 1 > r - 1:
+                    ans.append(0)
+                else:
+                    ans.append(fen.query(l + 2, r))
+            else:
+                idx, val = l, r
+                nums[idx] = val
+                if 0 < idx < n - 1:
+                    if nums[idx - 1] < nums[idx] > nums[idx + 1]:
+                        fen.update(idx + 1, 1)
+                    else:
+                        fen.update(idx + 1, 0)
+                if idx - 1 > 0:
+                    if nums[idx - 2] < nums[idx - 1] > nums[idx]:
+                        fen.update(idx, 1)
+                    else:
+                        fen.update(idx, 0)
+                if idx + 1 < n - 1:
+                    if nums[idx] < nums[idx + 1] > nums[idx + 2]:
+                        fen.update(idx + 2, 1)
+                    else:
+                        fen.update(idx + 2, 0)
+        return ans
 
 
 so = Solution()
+print(so.countOfPeaks(nums = [4,1,4,2,1,5], queries = [[2,2,4],[1,0,2],[1,0,4]]))
+print(so.countOfPeaks([3,1,4,2,5], [[2,3,4],[1,0,4]]))
 print(so.countOfPeaks([3,9,5,4], [[1,0,3],[2,1,4],[2,0,6],[1,2,3]]))
 print(so.countOfPeaks([5,4,8,6], [[1,2,2],[1,1,2],[2,1,6]]))
-print(so.countOfPeaks([3,1,4,2,5], [[2,3,4],[1,0,4]]))
-print(so.countOfPeaks(nums = [4,1,4,2,1,5], queries = [[2,2,4],[1,0,2],[1,0,4]]))
 print(so.countOfPeaks(nums = [3,1,4,2,5], queries = [[2,3,4],[1,0,4]]))
 
 
