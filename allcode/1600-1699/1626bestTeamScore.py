@@ -34,12 +34,31 @@
 
 
 
-from typing import Optional, List
-from collections import deque
-from math import *
+from leetcode.allcode.competition.mypackage import *
+
+class Fenwick2:
+    # 求前缀最大值
+    # 所有函数参数下标从1开始
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        self.f = [0] * (n + 1)   # 关键区间最大值
+
+    def update(self, i: int, val: int) -> None:  # nums[i] = val
+        while i < len(self.f):
+            self.f[i] = max(self.f[i], val)
+            i += i & -i
+
+    def query(self, i: int) -> int:  # 下标<=i的最大值
+        mx = 0
+        while i > 0:
+            mx = max(mx, self.f[i])
+            i &= i - 1
+        return mx
+
 # Definition for a binary tree node.
 class Solution:
-    def bestTeamScore(self, scores: List[int], ages: List[int]) -> int:
+    def bestTeamScore1(self, scores: List[int], ages: List[int]) -> int:
         n = len(scores)
         pair = [[ages[i], scores[i]] for i in range(n)]
         pair.sort()
@@ -55,6 +74,15 @@ class Solution:
         print(dp)
         return ans
 
+    def bestTeamScore(self, scores: List[int], ages: List[int]) -> int:
+        # n = len(scores)
+        fw = Fenwick2(max(ages) + 1)
+        ans = 0
+        for score, age in sorted(zip(scores, ages)):
+            pre_score = fw.query(age)
+            ans = max(ans, pre_score + score)
+            fw.update(age, pre_score + score)
+        return ans
 
 so = Solution()
 print(so.bestTeamScore(scores = [1], ages = [4]))

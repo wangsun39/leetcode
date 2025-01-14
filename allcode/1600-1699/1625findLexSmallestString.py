@@ -58,9 +58,7 @@
 
 
 
-from typing import Optional, List
-from collections import deque
-from math import *
+from leetcode.allcode.competition.mypackage import *
 # Definition for a binary tree node.
 class Solution:
     def findLexSmallestString(self, s: str, a: int, b: int) -> str:

@@ -30,32 +30,26 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
         ans = 0
-        def calc(ch):
-            dq = deque()
-            pre = -1
-            other = 0
-            res = 0
-            for i, x in enumerate(s):
-                if pre == -1:
-                    if x == ch:
-                        pre = x
-                    continue
-                if x != ch:
-                    other += 1
-                    if other > k:
-                        if dq:
-                            pre = dq.popleft()
-                        else:
-                            pre = -1
-                if x == ch:
-                    dq.append(i)
-                    res = max(res, i - pre + 1)
-
-
-
-
+        n = len(s)
+        r = 0
+        counter = Counter()
+        counter[s[0]] += 1
+        for l in range(n):
+            while r < n:
+                tot = r - l + 1
+                if all(tot - v > k for v in counter.values()):
+                    break
+                ans = max(ans, tot)
+                r += 1
+                if r < n:
+                    counter[s[r]] += 1
+            if r == n:
+                break
+            counter[s[l]] -= 1
+        return ans
 
 so = Solution()
-print(so.characterReplacement([3,10,5,25,2,8]))
+print(so.characterReplacement(s = "AABABBA", k = 1))
+print(so.characterReplacement(s = "ABAB", k = 2))
 
 

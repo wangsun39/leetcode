@@ -47,8 +47,9 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Solution:
+class Solution1:
     def countRectangles(self, rectangles: List[List[int]], points: List[List[int]]) -> List[int]:
+        # 二分的解法很简洁
         row = defaultdict(list)
         for x, y in rectangles:
             row[y].append(x)
@@ -64,11 +65,64 @@ class Solution:
             ans.append(res)
         return ans
 
+class Fenwick:
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
 
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)  # 关键区间
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
+
+class Solution:
+    def countRectangles(self, rectangles: List[List[int]], points: List[List[int]]) -> List[int]:
+        n = len(points)
+        ans = [0] * n
+        array = []
+        for x, y in rectangles:
+            array.append([x, y, -1])
+        for i, [x, y] in enumerate(points):
+            array.append([x, y, i])
+        array.sort(key=lambda x: [-x[0], -x[1], x[2]])  # 把矩形和点放在一个数组中排序，按x坐标排序，相同的点矩形放在前面
+        # 按x轴排序，按y轴构造树状数组，
+        fw = Fenwick(100)  # y坐标的长度
+        for x, y, idx in array:
+            if idx == -1:
+                fw.add(y, 1)
+            else:
+                v = fw.query(y, 100)  # 查询后缀和
+                ans[idx] = v
+        return ans
 
 so = Solution()
-print(so.countRectangles([[1,1],[2,2],[3,3]], points = [[1,3],[1,1]]))
 print(so.countRectangles(rectangles = [[1,2],[2,3],[2,5]], points = [[2,1],[1,4]]))
+print(so.countRectangles([[1,1],[2,2],[3,3]], points = [[1,3],[1,1]]))
 
 
 
