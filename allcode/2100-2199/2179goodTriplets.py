@@ -29,9 +29,43 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)  # 关键区间
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
 
-    def goodTriplets(self, nums1: List[int], nums2: List[int]) -> int:
+    def goodTriplets1(self, nums1: List[int], nums2: List[int]) -> int:
         # 把nums1的数字看成从0到n-1的序列，将nums2的按nums1的顺序映射成一个新的数列
         # 那么原问题就转换为，求一个严格递增的三元组个数，然后枚举中点，前后缀分解
         d = {v: k for k, v in enumerate(nums1)}
@@ -51,11 +85,40 @@ class Solution:
             right[i] = len(sl) - p
             sl.add(x)
         ans = 0
+        print(left, right)
         for i in range(n):
             ans += left[i] * right[i]
         return ans
 
+
+
+    def goodTriplets(self, nums1: List[int], nums2: List[int]) -> int:
+        # 把nums1的数字看成从0到n-1的序列，将nums2的按nums1的顺序映射成一个新的数列
+        # 那么原问题就转换为，求一个严格递增的三元组个数，然后枚举中点，前后缀分解
+        d = {v: k for k, v in enumerate(nums1)}
+        nums2 = [d[x] for x in nums2]
+        n = len(nums1)
+        left = [0] * n  # nums[i] 左边有多少个比它小的数
+        right = [0] * n  # nums[i] 右边有多少个比它大的数
+        fw = Fenwick(n)
+        for i, x in enumerate(nums2):
+            left[i] = fw.pre(x)  # <= x 的元素个数
+            fw.add(x + 1, 1)  # x的个数 记录在 x + 1 上
+
+        fw = Fenwick(n + 1)
+        for i in range(n - 1, -1, -1):
+            x = nums2[i]
+            right[i] = fw.query(x + 1, n + 1)  # >= x + 1 的元素个数, x的个数 记录在 x + 1 上
+            fw.add(x + 1, 1)  # x的个数 记录在 x + 1 上
+        ans = 0
+        for i in range(n):
+            ans += left[i] * right[i]
+        return ans
+
+
 so = Solution()
+print(so.goodTriplets1(nums1 = [13,14,10,2,12,3,9,11,15,8,4,7,0,6,5,1], nums2 = [8,7,9,5,6,14,15,10,2,11,4,13,3,12,1,0]))
+print(so.goodTriplets(nums1 = [13,14,10,2,12,3,9,11,15,8,4,7,0,6,5,1], nums2 = [8,7,9,5,6,14,15,10,2,11,4,13,3,12,1,0]))
 print(so.goodTriplets(nums1 = [2,0,1,3], nums2 = [0,1,2,3]))
 print(so.goodTriplets(nums1 = [4,0,1,3,2], nums2 = [4,1,0,2,3]))
 
