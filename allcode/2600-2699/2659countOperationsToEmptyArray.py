@@ -48,8 +48,42 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)  # 关键区间
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
-    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
+    def countOperationsToEmptyArray1(self, nums: List[int]) -> int:
         n = len(nums)
         sl = SortedList()
         left = [0] * n  # 左侧比nums[i]大的数字个数
@@ -79,8 +113,34 @@ class Solution:
                 ans += left[i] - left[pre[i]] + 1
         return ans
 
+    def countOperationsToEmptyArray(self, nums: List[int]) -> int:
+        # 2025/1/18 树状树状解法
+        i_nums = sorted(enumerate(nums), key=lambda x:x[1])
+        j = 1
+        for i, _ in i_nums:
+            nums[i] = j
+            j += 1
+        mx = max(nums)
+        fw = Fenwick(mx)
+        for i in range(1, mx + 1):
+            fw.update(i, 1)
+        cur = 1
+        ans = 0
+        for i, _ in i_nums:
+            if cur <= i + 1:
+                ans += fw.query(cur, i + 1)
+            else:
+                ans += fw.pre(i + 1) + fw.query(cur, mx)
+            fw.update(i + 1, 0)
+            cur = i + 1
+        return ans
+
+
+
+
 
 so = Solution()
+print(so.countOperationsToEmptyArray(nums = [-4,-13,-12]))
 print(so.countOperationsToEmptyArray(nums = [3,4,-1]))
 print(so.countOperationsToEmptyArray(nums = [1,2,4,3]))
 
