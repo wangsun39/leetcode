@@ -41,8 +41,42 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Fenwick:
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)  # 关键区间
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
-    def minInteger(self, num: str, k: int) -> str:
+    def minInteger1(self, num: str, k: int) -> str:
         pos = defaultdict(list)  # pos[i]  记录每个字符i的位置
         for i, x in enumerate(num):
             pos[int(x)].append(i)
@@ -66,6 +100,26 @@ class Solution:
                 break
             if len(ans) < i + 1:
                 ans.append(x)
+        return ''.join(ans)
+
+    def minInteger(self, num: str, k: int) -> str:
+        # 2025/1/8 树状数组方法
+        n = len(num)
+        pos = defaultdict(list)
+        fw = Fenwick(n)
+        ans = []
+        for i, x in enumerate(num):
+            pos[int(x)].append(i)
+            fw.add(i + 1, 1)
+        for i in range(n):
+            for j in range(10):
+                if len(pos[j]):
+                    t = fw.pre(pos[j][0])
+                    if t <= k:
+                        k -= t
+                        ans.append(str(j))
+                        fw.update(pos[j].pop(0) + 1, 0)
+                        break
         return ''.join(ans)
 
 
