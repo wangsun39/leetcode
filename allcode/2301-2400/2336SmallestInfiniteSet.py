@@ -5,7 +5,7 @@
 # SmallestInfiniteSet() 初始化 SmallestInfiniteSet 对象以包含 所有 正整数。
 # int popSmallest() 移除 并返回该无限集中的最小整数。
 # void addBack(int num) 如果正整数 num 不 存在于无限集中，则将一个 num 添加 到该无限集中。
-#  
+#
 #
 # 示例：
 #
@@ -26,7 +26,7 @@
 #                                    // 且 1 是最小的整数，并将其从集合中移除。
 # smallestInfiniteSet.popSmallest(); // 返回 4 ，并将其从集合中移除。
 # smallestInfiniteSet.popSmallest(); // 返回 5 ，并将其从集合中移除。
-#  
+#
 #
 # 提示：
 #

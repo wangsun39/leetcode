@@ -1,10 +1,10 @@
-# 给你一个区间数组 intervals ，其中 intervals[i] = [starti, endi] ，且每个 starti 都 不同 。
+# 给你一个区间数组 intervals ，其中intervals[i] = [starti, endi] ，且每个starti 都 不同 。
 #
-# 区间 i 的 右侧区间 可以记作区间 j ，并满足 startj >= endi ，且 startj 最小化 。
+# 区间 i 的 右侧区间 可以记作区间 j ，并满足 startj>= endi ，且 startj 最小化 。
 #
-# 返回一个由每个区间 i 的 右侧区间 在 intervals 中对应下标组成的数组。如果某个区间 i 不存在对应的 右侧区间 ，则下标 i 处的值设为 -1 。
+# 返回一个由每个区间 i 的 右侧区间 在intervals 中对应下标组成的数组。如果某个区间 i 不存在对应的 右侧区间 ，则下标 i 处的值设为 -1 。
 #
-#  
+#
 # 示例 1：
 #
 # 输入：intervals = [[1,2]]
@@ -23,11 +23,11 @@
 # 输出：[-1,2,-1]
 # 解释：对于区间 [1,4] 和 [3,4] ，没有满足条件的“右侧”区间。
 # 对于 [2,3] ，区间 [3,4] 有最小的“右”起点。
-#  
+#
 #
 # 提示：
 #
-# 1 <= intervals.length <= 2 * 104
+# 1 <=intervals.length <= 2 * 104
 # intervals[i].length == 2
 # -106 <= starti <= endi <= 106
 # 每个间隔的起点都 不相同

@@ -1,6 +1,6 @@
 # 将非负整数 num 转换为其对应的英文表示。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -18,7 +18,7 @@
 #
 # 输入：num = 1234567891
 # 输出："One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
-#  
+#
 #
 # 提示：
 #

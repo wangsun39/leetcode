@@ -10,9 +10,9 @@
 # ratings[i] 是第 i 种食物的最初评分。
 # void changeRating(String food, int newRating) 修改名字为 food 的食物的评分。
 # String highestRated(String cuisine) 返回指定烹饪方式 cuisine 下评分最高的食物的名字。如果存在并列，返回 字典序较小 的名字。
-# 注意，字符串 x 的字典序比字符串 y 更小的前提是：x 在字典中出现的位置在 y 之前，也就是说，要么 x 是 y 的前缀，或者在满足 x[i] != y[i] 的第一个位置 i 处，x[i] 在字母表中出现的位置在 y[i] 之前。
+# 注意，字符串 x 的字典序比字符串 y 更小的前提是：x 在字典中出现的位置在 y 之前，也就是说，要么 x 是 y 的前缀，或者在满足x[i] != y[i] 的第一个位置 i 处，x[i] 在字母表中出现的位置在 y[i] 之前。
 #
-#  
+#
 #
 # 示例：
 #
@@ -35,7 +35,7 @@
 # foodRatings.highestRated("japanese"); // 返回 "ramen"
 #                                       // "sushi" 和 "ramen" 的评分都是 16 。
 #                                       // 但是，"ramen" 的字典序比 "sushi" 更小。
-#  
+#
 #
 # 提示：
 #
@@ -45,8 +45,8 @@
 # foods[i]、cuisines[i] 由小写英文字母组成
 # 1 <= ratings[i] <= 108
 # foods 中的所有字符串 互不相同
-# 在对 changeRating 的所有调用中，food 是系统中食物的名字。
-# 在对 highestRated 的所有调用中，cuisine 是系统中 至少一种 食物的烹饪方式。
+# 在对changeRating 的所有调用中，food 是系统中食物的名字。
+# 在对highestRated 的所有调用中，cuisine 是系统中 至少一种 食物的烹饪方式。
 # 最多调用 changeRating 和 highestRated 总计 2 * 104 次
 
 from typing import List

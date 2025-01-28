@@ -6,7 +6,7 @@
 #
 # MyCalendarThree() 初始化对象。
 # int book(int start, int end) 返回一个整数 k ，表示日历中存在的 k 次预订的最大值。
-#  
+# 
 #
 # 示例：
 #
@@ -24,12 +24,12 @@
 # myCalendarThree.book(5, 15); // 返回 3 ，剩下的日程安排的最大 k 次预订是 3 次预订。
 # myCalendarThree.book(5, 10); // 返回 3
 # myCalendarThree.book(25, 55); // 返回 3
-#  
+# 
 #
 # 提示：
 #
 # 0 <= start < end <= 109
-# 每个测试用例，调用 book 函数最多不超过 400次
+# 每个测试用例，调用 book函数最多不超过400次
 
 
 from typing import List

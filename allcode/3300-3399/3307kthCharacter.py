@@ -11,7 +11,7 @@
 #
 # 注意，在第二种类型的操作中，字符 'z' 可以变成 'a'。
 #
-#  
+#
 #
 # 示例 1:
 #
@@ -40,7 +40,7 @@
 # 将 "bb" 附加到 "aa"，word 变为 "aabb"。
 # 将 "aabb" 附加到 "aabb"，word 变为 "aabbaabb"。
 # 将 "bbccbbcc" 附加到 "aabbaabb"，word 变为 "aabbaabbbbccbbcc"。
-#  
+#
 #
 # 提示：
 #

@@ -1,12 +1,12 @@
-# 有 n 个筹码。第 i 个筹码的位置是 position[i] 。
+# 有n个筹码。第 i 个筹码的位置是position[i]。
 #
-# 我们需要把所有筹码移到同一个位置。在一步中，我们可以将第 i 个筹码的位置从 position[i] 改变为:
+# 我们需要把所有筹码移到同一个位置。在一步中，我们可以将第 i 个筹码的位置从position[i]改变为:
 #
-# position[i] + 2 或 position[i] - 2 ，此时 cost = 0
-# position[i] + 1 或 position[i] - 1 ，此时 cost = 1
+# position[i] + 2或position[i] - 2，此时cost = 0
+# position[i] + 1或position[i] - 1，此时cost = 1
 # 返回将所有筹码移动到同一位置上所需要的 最小代价 。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -28,7 +28,7 @@
 #
 # 输入：position = [1,1000000000]
 # 输出：1
-#  
+#
 #
 # 提示：
 #

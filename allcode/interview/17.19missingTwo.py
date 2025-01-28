@@ -12,7 +12,7 @@
 # 输出: [1,4]
 # 提示：
 #
-# nums.length <= 30000
+# nums.length <=30000
 
 
 from typing import List

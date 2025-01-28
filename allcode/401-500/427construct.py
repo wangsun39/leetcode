@@ -10,11 +10,11 @@
 # isLeaf: 当这个节点是一个叶子结点时为 True，如果它有 4 个子节点则为 False 。
 # class Node {
 #     public boolean val;
-#     public boolean isLeaf;
-#     public Node topLeft;
-#     public Node topRight;
-#     public Node bottomLeft;
-#     public Node bottomRight;
+#   public boolean isLeaf;
+#   public Node topLeft;
+#   public Node topRight;
+#   public Node bottomLeft;
+#   public Node bottomRight;
 # }
 # 我们可以按以下步骤为二维区域构建四叉树：
 #
@@ -31,9 +31,9 @@
 #
 # 它与二叉树的序列化非常相似。唯一的区别是节点以列表形式表示 [isLeaf, val] 。
 #
-# 如果 isLeaf 或者 val 的值为 True ，则表示它在列表 [isLeaf, val] 中的值为 1 ；如果 isLeaf 或者 val 的值为 False ，则表示值为 0 。
+# 如果 isLeaf 或者 val 的值为 True ，则表示它在列表[isLeaf, val] 中的值为 1 ；如果 isLeaf 或者 val 的值为 False ，则表示值为 0 。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -67,7 +67,7 @@
 #
 # 输入：grid = [[1,1,0,0],[1,1,0,0],[0,0,1,1],[0,0,1,1]]
 # 输出：[[0,1],[1,1],[1,0],[1,0],[1,1]]
-#  
+#
 #
 # 提示：
 #

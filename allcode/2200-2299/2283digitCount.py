@@ -1,8 +1,8 @@
-# 给你一个下标从 0 开始长度为 n 的字符串 num ，它只包含数字。
+# 给你一个下标从 0开始长度为 n的字符串num，它只包含数字。
 #
-# 如果对于 每个 0 <= i < n 的下标 i ，都满足数位 i 在 num 中出现了 num[i]次，那么请你返回 true ，否则返回 false 。
+# 如果对于 每个0 <= i < n的下标i，都满足数位i在 num中出现了num[i]次，那么请你返回true，否则返回false。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -23,13 +23,13 @@
 # num[1] = '3' 。数字 1 应该出现 3 次，但是在 num 中出现了零次。
 # num[2] = '0' 。数字 2 在 num 中出现了 0 次。
 # 下标 0 和 1 都违反了题目要求，所以返回 false 。
-#  
+#
 #
 # 提示：
 #
 # n == num.length
 # 1 <= n <= 10
-# num 只包含数字。
+# num只包含数字。
 
 
 from leetcode.allcode.competition.mypackage import *

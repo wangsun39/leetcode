@@ -1,12 +1,12 @@
-# 给定一个整数 n 和一个 无重复 黑名单整数数组 blacklist 。设计一种算法，从 [0, n - 1] 范围内的任意整数中选取一个 未加入 黑名单 blacklist 的整数。任何在上述范围内且不在黑名单 blacklist 中的整数都应该有 同等的可能性 被返回。
+# 给定一个整数 n 和一个 无重复 黑名单整数数组blacklist。设计一种算法，从 [0, n - 1] 范围内的任意整数中选取一个未加入黑名单blacklist的整数。任何在上述范围内且不在黑名单blacklist中的整数都应该有 同等的可能性 被返回。
 #
 # 优化你的算法，使它最小化调用语言 内置 随机函数的次数。
 #
-# 实现 Solution 类:
+# 实现Solution类:
 #
-# Solution(int n, int[] blacklist) 初始化整数 n 和被加入黑名单 blacklist 的整数
-# int pick() 返回一个范围为 [0, n - 1] 且不在黑名单 blacklist 中的随机整数
-#  
+# Solution(int n, int[] blacklist)初始化整数 n 和被加入黑名单blacklist的整数
+# int pick()返回一个范围为 [0, n - 1] 且不在黑名单blacklist 中的随机整数
+#
 #
 # 示例 1：
 #
@@ -26,15 +26,15 @@
 # solution.pick(); // 返回 1
 # solution.pick(); // 返回 0
 # solution.pick(); // 返回 4
-#  
+#
 #
 # 提示:
 #
 # 1 <= n <= 109
 # 0 <= blacklist.length <= min(105, n - 1)
 # 0 <= blacklist[i] < n
-# blacklist 中所有值都 不同
-#  pick 最多被调用 2 * 104 次
+# blacklist中所有值都 不同
+# pick最多被调用2 * 104次
 
 
 

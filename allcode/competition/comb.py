@@ -14,4 +14,8 @@ for i in range(1, MX):
 
 
 
+# 杨辉三角
+# https://leetcode.cn/problems/pascals-triangle-ii/solutions/601082/yang-hui-san-jiao-ii-by-leetcode-solutio-shuk
+# (a+b) ^ n 的展开式（二项式展开）中的各项系数依次对应杨辉三角的第 n 行中的每一项。
+# C(n, m) = C(n, m - 1) * (n - m + 1) // m
 

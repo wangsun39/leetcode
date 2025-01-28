@@ -8,7 +8,7 @@
 #
 # 网格中的障碍物和空位置分别用 1 和 0 来表示。
 #
-#  
+# 
 #
 # 示例 1：
 #
@@ -25,12 +25,12 @@
 #
 # 输入：obstacleGrid = [[0,1],[0,0]]
 # 输出：1
-#  
+# 
 #
 # 提示：
 #
-# m == obstacleGrid.length
-# n == obstacleGrid[i].length
+# m ==obstacleGrid.length
+# n ==obstacleGrid[i].length
 # 1 <= m, n <= 100
 # obstacleGrid[i][j] 为 0 或 1
 

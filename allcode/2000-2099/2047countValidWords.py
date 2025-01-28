@@ -9,7 +9,7 @@
 #
 # 给你一个字符串 sentence ，请你找出并返回 sentence 中 有效单词的数目 。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -34,7 +34,7 @@
 # 输入：sentence = "he bought 2 pencils, 3 erasers, and 1  pencil-sharpener."
 # 输出：6
 # 解释：句子中的有效单词是 "he"、"bought"、"pencils,"、"erasers,"、"and" 和 "pencil-sharpener."
-#  
+#
 #
 # 提示：
 #

@@ -6,7 +6,7 @@
 # void put(int key, int value) 向 HashMap 插入一个键值对 (key, value) 。如果 key 已经存在于映射中，则更新其对应的值 value 。
 # int get(int key) 返回特定的 key 所映射的 value ；如果映射中不包含 key 的映射，返回 -1 。
 # void remove(key) 如果映射中存在 key 的映射，则移除 key 和它所对应的 value 。
-#  
+#
 #
 # 示例：
 #
@@ -26,7 +26,7 @@
 # myHashMap.get(2);    // 返回 1 ，myHashMap 现在为 [[1,1], [2,1]]
 # myHashMap.remove(2); // 删除键为 2 的数据，myHashMap 现在为 [[1,1]]
 # myHashMap.get(2);    // 返回 -1（未找到），myHashMap 现在为 [[1,1]]
-#  
+#
 #
 # 提示：
 #

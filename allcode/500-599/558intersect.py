@@ -51,11 +51,11 @@
 #
 # class Node {
 # public boolean val;
-#     public boolean isLeaf;
-#     public Node topLeft;
-#     public Node topRight;
-#     public Node bottomLeft;
-#     public Node bottomRight;
+#   public boolean isLeaf;
+#   public Node topLeft;
+#   public Node topRight;
+#   public Node bottomLeft;
+#   public Node bottomRight;
 # }
 #
 #
@@ -97,7 +97,7 @@
 # 或者
 # val
 # 的值为
-# True ，则表示它在列表 [isLeaf, val]
+# True ，则表示它在列表[isLeaf, val]
 # 中的值为
 # 1 ；如果
 # isLeaf
@@ -107,7 +107,7 @@
 # False ，则表示值为
 # 0 。
 #
-#  
+# 
 #
 # 示例
 # 1：
@@ -154,7 +154,7 @@
 # 输入：quadTree1 = [[0, 1], [1, 0], [0, 1], [1, 1], [1, 0], null, null, null, null, [1, 0], [1, 0], [1, 1], [1, 1]]
 # , quadTree2 = [[0, 1], [0, 1], [1, 0], [1, 1], [1, 0], [1, 0], [1, 0], [1, 1], [1, 1]]
 # 输出：[[0, 0], [0, 1], [0, 1], [1, 1], [1, 0], [1, 0], [1, 0], [1, 1], [1, 1], [1, 0], [1, 0], [1, 1], [1, 1]]
-#  
+# 
 #
 # 提示：
 #

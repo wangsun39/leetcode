@@ -4,7 +4,7 @@
 #
 # 请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。
 #
-#  
+#
 #
 # 示例 1：
 #
@@ -31,14 +31,14 @@
 #
 # 输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5
 # 输出：5
-#  
+#
 #
 # 提示：
 #
 # startTime.length == endTime.length
 # 1 <= startTime.length <= 100
 # 1 <= startTime[i] <= endTime[i] <= 1000
-# 1 <= queryTime <= 1000
+# 1 <=queryTime <= 1000
 
 
 

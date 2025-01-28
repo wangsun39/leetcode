@@ -4,10 +4,10 @@
 #
 # 实现 CBTInserter 类:
 #
-# CBTInserter(TreeNode root) 使用头节点为 root 的给定树初始化该数据结构；
-# CBTInserter.insert(int v)  向树中插入一个值为 Node.val == val的新节点 TreeNode。使树保持完全二叉树的状态，并返回插入节点 TreeNode 的父节点的值；
+# CBTInserter(TreeNode root)使用头节点为root的给定树初始化该数据结构；
+# CBTInserter.insert(int v) 向树中插入一个值为Node.val == val的新节点TreeNode。使树保持完全二叉树的状态，并返回插入节点TreeNode的父节点的值；
 # CBTInserter.get_root() 将返回树的头节点。
-#  
+# 
 #
 # 示例 1：
 #
@@ -24,15 +24,15 @@
 # cBTInserter.insert(3);  // 返回 1
 # cBTInserter.insert(4);  // 返回 2
 # cBTInserter.get_root(); // 返回 [1, 2, 3, 4]
-#  
+# 
 #
 # 提示：
 #
-# 树中节点数量范围为 [1, 1000] 
+# 树中节点数量范围为[1, 1000]
 # 0 <= Node.val <= 5000
-# root 是完全二叉树
-# 0 <= val <= 5000 
-# 每个测试用例最多调用 insert 和 get_root 操作 104 次
+# root是完全二叉树
+# 0 <= val <= 5000
+# 每个测试用例最多调用insert和get_root操作104次
 
 from collections import deque
 
