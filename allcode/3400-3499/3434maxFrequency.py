@@ -44,27 +44,34 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxFrequency(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        pre = [0] * n
-        sup = [0] * n
-        for i, x in enumerate(nums):
-            if x == k:
-                if i > 0:
-                    pre[i] = pre[i - 1] + 1
-                else:
-                    pre[i] = 1
-        for i in range(n - 1, -1, -1):
-            x = nums[i]
-            if x == k:
-                if i < n - 1:
-                    sup[i] = sup[i + 1] + 1
-                else:
-                    sup[i] = 1
-        def check(val):
-            for
+        numk = [1 if x == k else 0 for x in nums]  # 标识k的位置
+        sk = list(accumulate(numk, initial=0))
+        kn = nums.count(k)
 
+        def calc(val):  # 检查把一个子数组中的val变成k，能构造的k的最大频率
+            # 枚举右端点，右端点应该只在nums[i]==val时
+            # k的频率= 子数组内val的个数+(kn-子数组内k的个数)
+            # 子数组内val的个数 和 子数组内k的个数 都能用前缀和计算出来
+            # 分别是sv[r + 1] - sv[l], sk[r + 1] - sk[l]
+            # 移项之后 = sv[r + 1] - sk[r + 1] - min(sv[l] - sk[l]) + kn
+            # 只需记录前面最小的sv[l] - sk[l]，就可以直接计算出右端点为r的最大k频率
+            res = 0
+            numv = [1 if x == val else 0 for x in nums]  # 标识val的位置
+            sv = list(accumulate(numv, initial=0))
+
+            mn = inf  # 保存最小的 sv[i] - sk[i]
+            for r in range(n):  # 枚举子数组右端点
+                # 子数组的左右端点的值都应该是val
+                if nums[r] != val: continue
+                mn = min(mn, sv[r] - sk[r])
+                res = max(res, sv[r + 1] - sk[r + 1] - mn)
+            return res + kn
+        return max(calc(x) for x in set(nums))
 
 so = Solution()
-print(so.maxFrequency())
+print(so.maxFrequency(nums = [1,2,3,4,5,6], k = 1))
+print(so.maxFrequency(nums = [10,2,3,4,5,5,4,3,2,2], k = 10))
+print(so.maxFrequency(nums = [1,2,3,4,5,6], k = 1))
 
 
 

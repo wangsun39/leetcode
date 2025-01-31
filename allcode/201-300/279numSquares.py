@@ -1,5 +1,4 @@
-from math import *
-from functools import cache
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution1:
