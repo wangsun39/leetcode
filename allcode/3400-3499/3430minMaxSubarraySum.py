@@ -54,50 +54,73 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def minMaxSubarraySum(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        left_low = [-1] * n  # left_low[i]  表示左侧第一个比nums[i]小的下标
-        right_low = [n] * n  # right_low[i]  表示左侧第一个<=nums[i]的下标
-        stack = [0]
+        left_min = [0] * n  # left_min[i]  表示左侧连续left_min[i]个元素>=nums[i]，不能超过k - 1个
+        right_min = [0] * n  # right_min[i]  表示右侧连续right_min[i]个元素>nums[i]，不能超过k - 1个
+        left_max = [0] * n  # left_max[i]  表示左侧连续left_max[i]个元素<=nums[i]，不能超过k - 1个
+        right_max = [0] * n  # right_max[i]  表示右侧连续right_max[i]个元素<nums[i]，不能超过k - 1个
+        stack1 = [0]
+        stack2 = [0]
         for i, x in enumerate(nums[1:], 1):
-            while stack and nums[stack[-1]] < x:
-                stack.pop()
-            if stack:
-                left_low[i] = stack[-1]
-            stack.append(i)
-        stack = [n - 1]
-        for i in range(n - 2, -1, -1):
-            x = nums[i]
-            while stack and nums[stack[-1]] < x:
-                stack.pop()
-            if stack:
-                right_low[i] = stack[-1]
-            stack.append(i)
+            while stack1 and nums[stack1[-1]] >= x:
+                stack1.pop()
+            if stack1:
+                left_min[i] = min(k - 1, i - stack1[-1] - 1)
+            else:
+                left_min[i] = min(k - 1, i)
+            stack1.append(i)
+            while stack2 and nums[stack2[-1]] <= x:
+                stack2.pop()
+            if stack2:
+                left_max[i] = min(k - 1, i - stack2[-1] - 1)
+            else:
+                left_max[i] = min(k - 1, i)
+            stack2.append(i)
 
-        left_hi = [-1] * n  # left_low[i]  表示左侧第一个比nums[i]小的下标
-        right_hi = [n] * n  # right_low[i]  表示右侧第一个>=nums[i]的下标
-        stack = [0]
-        for i, x in enumerate(nums[1:], 1):
-            while stack and nums[stack[-1]] > x:
-                stack.pop()
-            if stack:
-                left_hi[i] = stack[-1]
-            stack.append(i)
-        stack = [n - 1]
+        stack1 = [n - 1]
+        stack2 = [n - 1]
         for i in range(n - 2, -1, -1):
             x = nums[i]
-            while stack and nums[stack[-1]] >= x:
-                stack.pop()
-            if stack:
-                right_hi[i] = stack[-1]
-            stack.append(i)
-        ans = 0
-        for i in range(n):
-            if i - left_low[i]
-            ans
+            while stack1 and nums[stack1[-1]] > x:
+                stack1.pop()
+            if stack1:
+                right_min[i] = min(k - 1, stack1[-1] - i - 1)
+            else:
+                right_min[i] = min(k - 1, n - i - 1)
+            stack1.append(i)
+            while stack2 and nums[stack2[-1]] < x:
+                stack2.pop()
+            if stack2:
+                right_max[i] = min(k - 1, stack2[-1] - i - 1)
+            else:
+                right_max[i] = min(k - 1, n - i - 1)
+            stack2.append(i)
+
+        # print(left_min, left_max)
+        # print(right_min, right_max)
+        def calc(left, right):
+            res = 0
+            # 给定左右元素计数数组，计算每个点的贡献值
+            for i, x in enumerate(nums):
+                if left[i] + right[i] <= k - 1:
+                    res += x * (left[i] + 1) * (right[i] + 1)
+                else:
+                    # 右侧是等差数列，从 k - 1 - left[i] + 1 到 right[i] + 1，之后都是 right[i] + 1
+                    # 等差数列有 right[i] - (k - 1 - left[i]) + 1 项
+                    n1 = right[i] - (k - 1 - left[i]) + 1
+                    # 之后有 left[i] + 1 - n1 项
+                    n2 = left[i] + 1 - n1
+                    res += x * (k - left[i] + right[i] + 1) * n1 // 2
+                    res += x * (right[i] + 1) * n2
+            return res
+
+        return calc(left_min, right_min) + calc(left_max, right_max)
+
 
 
 
 so = Solution()
-print(so.minMaxSubarraySum())
+print(so.minMaxSubarraySum(nums = [1,2,3], k = 2))
+print(so.minMaxSubarraySum(nums = [1,-3,1], k = 2))
 
 
 
