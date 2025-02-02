@@ -25,8 +25,7 @@
 # list2 中的所有字符串都是 唯一 的。
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findRestaurant(self, list1: List[str], list2: List[str]) -> List[str]:

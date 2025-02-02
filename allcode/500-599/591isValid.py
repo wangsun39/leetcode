@@ -74,8 +74,7 @@
 
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def isValid(self, code: str) -> bool:

@@ -26,8 +26,7 @@
 # 输入的点没有顺序。输出顺序也没有要求。
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

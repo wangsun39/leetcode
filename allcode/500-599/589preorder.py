@@ -11,8 +11,7 @@
 
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 class Node:
     def __init__(self, val=None, children=None):

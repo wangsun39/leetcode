@@ -29,8 +29,7 @@
 
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 import math
 

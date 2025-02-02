@@ -15,8 +15,7 @@
 # 说明:递归法很简单，你可以使用迭代法完成此题吗?
 
 
-from typing import List
-import collections
+from leetcode.allcode.competition.mypackage import *
 
 class Node:
     def __init__(self, val=None, children=None):
