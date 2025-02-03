@@ -1,6 +1,7 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+# 数据超过10 ** 5，需要对数据离散化
 
 # 树状数组模板
 class Fenwick1:
@@ -59,7 +60,7 @@ class Fenwick:
         return self.pre(r) - self.pre(l - 1)
 
 class Fenwick2:
-    # 求前缀最大值
+    # 求前缀最大值（区间求max不能用!!!）
     # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
     __slots__ = ['f', 'nums']
 

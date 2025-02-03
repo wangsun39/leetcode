@@ -52,14 +52,40 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumIncrements(self, nums: List[int], target: List[int]) -> int:
+        target = list(set(target))
         n, m = len(nums), len(target)
-        dp = [inf] * 2 ** m
 
+        dp = [[0] * 2 ** m for _ in range(n)]  # dp[i][j] 表示前i个数，覆盖mask为j的target的子集的倍数需要的最少操作数
 
+        mask_to_num = {0: 1}  # mask 到 target中对应数字的lcm
+        for i in range(1, 2 ** m):
+            v = 1
+            for j, u in enumerate(bin(i)[2:][::-1]):
+                if u == '1':
+                    v = lcm(v, target[j])
+            mask_to_num[i] = v
 
+        for j in range(1, 2 ** m):
+            # 计算 nums[0] 变成 mask_to_num[j] 的最小倍数，nums[0] / mask_to_num[j] 下取整
+            v = (nums[0] + mask_to_num[j] - 1) // mask_to_num[j]
+            dp[0][j] = v * mask_to_num[j] - nums[0]
+        for i, x in enumerate(nums[1:], 1):
+            for j in range(1, 2 ** m):
+                dp[i][j] = dp[i - 1][j]
+                # 枚举j的子集
+                sub = j
+                while True:
+                    # 处理 sub 的逻辑
+                    v = (x + mask_to_num[sub] - 1) // mask_to_num[sub]   # x 需要变成 mask_to_num[sub] 的倍数
+                    dp[i][j] = min(dp[i][j], dp[i - 1][j & ~sub] + mask_to_num[sub] * v - x)
+                    sub = (sub - 1) & j
+                    if sub == j:
+                        break
+        return dp[-1][-1]
 
 so = Solution()
-print(so.minimumIncrements())
+print(so.minimumIncrements(nums = [4,2,8,10], target = [8,8,10,8]))
+print(so.minimumIncrements(nums = [1,2,3], target = [4]))
 
 
 
