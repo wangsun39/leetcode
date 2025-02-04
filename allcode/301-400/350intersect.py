@@ -23,8 +23,7 @@
 # 如果nums2的元素存储在磁盘上，内存是有限的，并且你不能一次加载所有的元素到内存中，你该怎么办？
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:

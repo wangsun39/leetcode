@@ -18,8 +18,9 @@ from leetcode.allcode.competition.mypackage import *
 
 
 
-class Solution:
+class Solution1:
     def reversePairs(self, record: List[int]) -> int:
+        # 二分解法
         sl = SortedList()
         ans = 0
         for x in record:
@@ -28,7 +29,57 @@ class Solution:
             sl.add(x)
         return ans
 
+class Fenwick:
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
 
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)  # 关键区间
+        self.nums = [0] * (n + 1)
+
+    def add(self, i: int, val: int) -> None:  # nums[i] += val
+        self.nums[i] += val
+        while i < len(self.f):
+            self.f[i] += val
+            i += i & -i
+
+    def update(self, i: int, val: int) -> None:  # nums[i] += val
+        delta = val - self.nums[i]
+        self.add(i, delta)
+
+    def pre(self, i: int) -> int:  # 下标<=i的和
+        res = 0
+        while i > 0:
+            res += self.f[i]
+            i &= i - 1
+        return res
+
+    def query_one(self, idx: int):
+        return self.nums[idx]
+
+    def query(self, l: int, r: int) -> int:  # [l, r]  区间求和
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
+
+class Solution:
+    def reversePairs(self, record: List[int]) -> int:
+        # 2025/2/3 树状数组解法
+        if len(record) == 0: return 0
+        rr = []
+        for i, x in sorted(enumerate(record), key=lambda x: x[1]):
+            rr.append(i + 1)
+        mx = len(rr)
+        fw = Fenwick(mx)
+        ans = 0
+        for x in rr:
+            if x + 1 <= mx:
+                ans += fw.query(x + 1, mx)
+            fw.add(x, 1)
+
+        return ans
 
 so = Solution()
 print(so.reversePairs([9, 7, 5, 4, 6]))

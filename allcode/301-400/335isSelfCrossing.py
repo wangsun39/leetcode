@@ -34,19 +34,18 @@ class Solution:
     def isSelfCrossing(self, distance: List[int]) -> bool:
         n = len(distance)
         if n <= 3: return False
-        right = [[0, 0], [0, distance[0]]]
-        up = [[-distance[1], distance[0]], [0, distance[0]]]
-        left = [[-distance[1], distance[0] - distance[2]], [-distance[1], distance[0]]]
-        down =  [[-distance[1], distance[0] - distance[2]], [-distance[1] + distance[3], distance[0] - distance[2]]]
-        pre = [-distance[1], distance[0] - distance[2]]
-        for i, x in enumerate(distance[3:], 3):
-            if i % 4 == 0:
-
-
-
+        for i in range(3, n):
+            if distance[i] >= distance[i - 2] and distance[i - 1] <= distance[i - 3]:
+                return True
+            if i >= 4 and distance[i - 3] == distance[i - 1] and distance[i] + distance[i - 4] >= distance[i - 2]:
+                return True
+            if i >= 5 and distance[i - 5] + distance[i - 1] >= distance[i - 3] and distance[i - 1] <= distance[i - 3] and distance[i - 4] + distance[i] >= distance[i - 2] and distance[i - 4] < distance[i - 2]:
+                return True
+        return False
 
 so = Solution()
-print(so.findItinerary(tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]))
+print(so.isSelfCrossing(distance = [1,1,2,2,3,3,4,4,10,4,4,3,3,2,2,1,1]))
+print(so.isSelfCrossing(distance = [2,1,1,2]))
 
 
 

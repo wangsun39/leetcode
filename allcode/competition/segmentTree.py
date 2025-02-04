@@ -103,6 +103,51 @@ class Solution2:
         # return ans
 
 
+# 只能应对 n <= 10 ** 5 的范围
+class BookMyShow:
+    def __init__(self, n: int):
+        self.n = n
+        self.min = [0] * (2 << n.bit_length())  # 相比 4n 空间更小
+        self.sum = [0] * (2 << n.bit_length())
+
+    # 线段树：把下标 i 上的元素值增加 val，单点更新
+    # o 是当前区间对应的下标，[l, r]当前区间的范围
+    def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
+        if l == r:
+            self.min[o] += val
+            self.sum[o] += val
+            return
+        m = (l + r) // 2
+        if i <= m:
+            self.update(o * 2, l, m, i, val)
+        else:
+            self.update(o * 2 + 1, m + 1, r, i, val)
+        self.min[o] = min(self.min[o * 2], self.min[o * 2 + 1])
+        self.sum[o] = self.sum[o * 2] + self.sum[o * 2 + 1]
+
+    # 线段树：返回区间 [L,R] 内的元素和，区间查询和
+    def query_sum(self, o: int, l: int, r: int, L: int, R: int) -> int:
+        if L <= l and r <= R:
+            return self.sum[o]
+        res = 0
+        m = (l + r) // 2
+        if L <= m:
+            res = self.query_sum(o * 2, l, m, L, R)
+        if R > m:
+            res += self.query_sum(o * 2 + 1, m + 1, r, L, R)
+        return res
+
+    # 线段树：返回区间 [L,R] 内的元素和，区间查询最小值
+    def query_min(self, o: int, l: int, r: int, L: int, R: int) -> int:
+        if L <= l and r <= R:
+            return self.min[o]
+        res = inf
+        m = (l + r) // 2
+        if L <= m:
+            res = min(res, self.query_min(o * 2, l, m, L, R))
+        if R > m:
+            res = min(res, self.query_min(o * 2 + 1, m + 1, r, L, R))
+        return res
 
 
 
