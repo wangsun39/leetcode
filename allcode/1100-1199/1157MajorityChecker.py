@@ -31,14 +31,12 @@
 # threshold <= right - left + 1
 # 2 * threshold > right - left + 1
 # 调用 query 的次数最多为 104
+
 from random import randint
-from typing import List, Optional
-from collections import deque, defaultdict
-from functools import cache
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 
 
-class MajorityChecker:
+class MajorityChecker1:
 
     def __init__(self, arr: List[int]):
         self.arr = arr
@@ -60,11 +58,83 @@ class MajorityChecker:
                 return -1
         return -1
 
+# 以下是线段树的方法，线段树记录每个区间，出现次数最多的元素，及其出现次数
+# 出现次数是和其他元素比较之后剩余的次数，类似一种打擂台的结果，这种方式仅适用于找到绝对众数
+# 参考 https://leetcode.cn/problems/online-majority-element-in-subarray/solutions/19976/san-chong-fang-fa-bao-li-fen-kuai-xian-duan-shu-by
+class STree2:
+    # 非动态开点，单点更新，区间查询
+    def __init__(self, n: int):
+        self.element = [0] * (2 << n.bit_length())  # 出现次数最多的元素，0表示不存在
+        self.count = [0] * (2 << n.bit_length())  # 出现次数最多的元素出现的次数
+
+    # 线段树：把下标 i 上的元素值增加 val，单点更新
+    # o 是当前区间对应的下标，[l, r]当前区间的范围
+    def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
+        if l == r:
+            self.element[o] = val
+            self.count[o] = 1
+            return
+        m = (l + r) // 2
+        if i <= m:
+            self.update(o * 2, l, m, i, val)
+        else:
+            self.update(o * 2 + 1, m + 1, r, i, val)
+        if self.element[o * 2] == self.element[o * 2 + 1]:
+            self.element[o] = self.element[o * 2]
+            self.count[o] = self.count[o * 2] + self.count[o * 2 + 1]
+        elif self.count[o * 2] >= self.count[o * 2 + 1]:
+            self.element[o] = self.element[o * 2]
+            self.count[o] = self.count[o * 2] - self.count[o * 2 + 1]
+        else:
+            self.element[o] = self.element[o * 2 + 1]
+            self.count[o] = self.count[o * 2 + 1] - self.count[o * 2]
+
+    # 线段树：返回区间 [L,R] 内的众数，及其出现次数，如果区间内存在绝对众数，这里一定会返回绝对众数
+    # 如果不存在绝对众数，这里返回的不一定是众数，这点很重要，次方法不适合查询普通众数
+    def query(self, o: int, l: int, r: int, L: int, R: int) -> [int, int]:
+        if L <= l and r <= R:
+            return [self.element[o], self.count[o]]
+        m = (l + r) // 2
+        if L > m:
+            return self.query(o * 2 + 1, m + 1, r, L, R)
+        if R <= m:
+            return self.query(o * 2, l, m, L, R)
+
+        v1, c1 = self.query(o * 2, l, m, L, R)
+        v2, c2 = self.query(o * 2 + 1, m + 1, r, L, R)
+
+        if v1 == v2:
+            return [v1, c1 + c2]
+        elif c1 >= c2:
+            return [v1, c1 - c2]
+        else:
+            return [v2, c2 - c1]
+
+
+class MajorityChecker:
+
+    def __init__(self, arr: List[int]):
+        self.n = len(arr)
+        self.st = STree2(len(arr))
+        self.dd = defaultdict(list)
+        for i, x in enumerate(arr):
+            self.st.update(1, 1, self.n, i + 1, x)
+            self.dd[x].append(i)
+
+    def query(self, left: int, right: int, threshold: int) -> int:
+        val, _ = self.st.query(1, 1, self.n, left + 1, right + 1)  # 找一个出现次数最多的数，但不一定是绝对众数，下面要验证是否是绝对众数
+        num = bisect_right(self.dd[val], right) - bisect_left(self.dd[val], left)
+        if num >= threshold:
+            return val
+        return -1
+
 
 # ["MajorityChecker","query","query","query","query","query","query","query","query","query","query"]
 # [[[2,2,1,2,1,2,2,1,1,2]],[2,5,4],[0,5,6],[0,1,2],[2,3,2],[6,6,1],[0,3,3],[4,9,6],[4,8,4],[5,9,5],[0,1,2]]
 
 # Your MajorityChecker object will be instantiated and called as such:
+obj = MajorityChecker([2,1,1,1,2,1,2,1,2,2,1,1,2])
+print(obj.query(0,6,4))
 obj = MajorityChecker([2,2,1,2,1,2,2,1,1,2])
 print(obj.query(0,1,2))
 

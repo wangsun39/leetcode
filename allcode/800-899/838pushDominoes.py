@@ -1,4 +1,5 @@
-from typing import List
+
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def isRectangleOverlap(self, rec1: List[int], rec2: List[int]) -> bool:
         # if rec1[0] > rec2[0]:

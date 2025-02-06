@@ -4,6 +4,9 @@ from leetcode.allcode.competition.mypackage import *
 # 二维前缀和
 # https://leetcode.cn/circle/discuss/UUuRex/
 
+# 二维差分
+# https://leetcode.cn/problems/stamping-the-grid/solutions/1199642/wu-nao-zuo-fa-er-wei-qian-zhui-he-er-wei-zwiu
+
 # 差分
 # 差分数组求前缀和得到原数组
 # 前缀和数组求差分得到原数组
@@ -32,13 +35,17 @@ class Solution:
 
 
     def possibleToStamp(self, grid: List[List[int]], stampHeight: int, stampWidth: int) -> bool:
-        m, n = len(grid), len(grid[0])
+        r, c = len(grid), len(grid[0])
 
         # 1. 计算 grid 的二维前缀和
-        s = [[0] * (n + 1) for _ in range(m + 1)]
+        s = [[0] * (c + 1) for _ in range(r + 1)]
         for i, row in enumerate(grid):
             for j, v in enumerate(row):
                 s[i + 1][j + 1] = s[i + 1][j] + s[i][j + 1] - s[i][j] + v
+
+        # 2. 计算任意矩形区域和
+        def sumRegion(row1: int, col1: int, row2: int, col2: int) -> int:
+            return s[row2 + 1][col2 + 1] - s[row1][col2 + 1] - s[row2 + 1][col1] + s[row1][col1]
 
 
 

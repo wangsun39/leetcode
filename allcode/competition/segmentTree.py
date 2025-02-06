@@ -150,5 +150,34 @@ class BookMyShow:
         return res
 
 
+class STree2:
+    # 非动态开点，单点更新，区间查询
+    def __init__(self, n: int):
+        # self.n = n
+        self.max = [0] * (2 << n.bit_length())  # 相比 4n 空间更小
 
+    # 线段树：把下标 i 上的元素值增加 val，单点更新
+    # o 是当前区间对应的下标，[l, r]当前区间的范围
+    def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
+        if l == r:
+            self.max[o] = val
+            return
+        m = (l + r) // 2
+        if i <= m:
+            self.update(o * 2, l, m, i, val)
+        else:
+            self.update(o * 2 + 1, m + 1, r, i, val)
+        self.max[o] = max(self.max[o * 2], self.max[o * 2 + 1])
+
+    # 线段树：返回区间 [L,R] 内的元素和，区间查询最大值
+    def query(self, o: int, l: int, r: int, L: int, R: int) -> int:
+        if L <= l and r <= R:
+            return self.max[o]
+        res = 0
+        m = (l + r) // 2
+        if L <= m:
+            res = max(res, self.query(o * 2, l, m, L, R))
+        if R > m:
+            res = max(res, self.query(o * 2 + 1, m + 1, r, L, R))
+        return res
 
