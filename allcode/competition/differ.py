@@ -48,9 +48,3 @@ class Solution:
             return s[row2 + 1][col2 + 1] - s[row1][col2 + 1] - s[row2 + 1][col1] + s[row1][col1]
 
 
-
-so = Solution()
-
-
-
-

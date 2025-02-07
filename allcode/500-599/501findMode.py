@@ -1,10 +1,5 @@
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
 class Solution:
     def findMode(self, root: TreeNode) -> List[int]:
         if root is None:
