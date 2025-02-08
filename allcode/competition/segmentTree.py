@@ -158,6 +158,7 @@ class STree2:
 
     # 线段树：把下标 i 上的元素值增加 val，单点更新
     # o 是当前区间对应的下标，[l, r]当前区间的范围
+    # 调用入口update(1,1,n,...) 或 update(1,0,n-1,...) 根据实际需要填写，l和r一般情况可以不用，就标识一个范围，不会产生越界
     def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
         if l == r:
             self.max[o] = val
@@ -170,6 +171,7 @@ class STree2:
         self.max[o] = max(self.max[o * 2], self.max[o * 2 + 1])
 
     # 线段树：返回区间 [L,R] 内的元素和，区间查询最大值
+    # 调用入口 query(1,1,n,...) 或 query(1,0,n-1,...)
     def query(self, o: int, l: int, r: int, L: int, R: int) -> int:
         if L <= l and r <= R:
             return self.max[o]

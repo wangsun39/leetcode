@@ -42,8 +42,8 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Solution:
-    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+class Solution1:
+    def leftmostBuildingQueries1(self, heights: List[int], queries: List[List[int]]) -> List[int]:
         # 逆序处理
         queries = [sorted(x) for x in queries]
         n = len(heights)
@@ -100,9 +100,75 @@ class Solution:
 
         return ans
 
+
+# 2025/2/7 线段树上二分
+class STree2:
+    # 非动态开点，单点更新，区间查询
+    def __init__(self, n: int):
+        # self.n = n
+        self.max = [0] * (2 << n.bit_length())  # 相比 4n 空间更小
+
+    # 线段树：把下标 i 上的元素值增加 val，单点更新
+    # o 是当前区间对应的下标，[l, r]当前区间的范围
+    def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
+        if l == r:
+            self.max[o] = val
+            return
+        m = (l + r) // 2
+        if i <= m:
+            self.update(o * 2, l, m, i, val)
+        else:
+            self.update(o * 2 + 1, m + 1, r, i, val)
+        self.max[o] = max(self.max[o * 2], self.max[o * 2 + 1])
+
+    # 线段树：返回区间 [L,R] 内的元素和，区间查询最大值
+    def query(self, o: int, l: int, r: int, L: int, R: int) -> int:
+        if L <= l and r <= R:
+            return self.max[o]
+        res = 0
+        m = (l + r) // 2
+        if L <= m:
+            res = max(res, self.query(o * 2, l, m, L, R))
+        if R > m:
+            res = max(res, self.query(o * 2 + 1, m + 1, r, L, R))
+        return res
+
+    # 线段树：返回区间 [L,R] 内最左侧的一个大于val的下标
+    # 线段树上二分
+    def query_left(self, o: int, l: int, r: int, L: int, val: int) -> int:
+        if self.max[o] <= val: return -1
+        if l == r:
+            return l
+        # res = 0
+        m = (l + r) // 2
+        if L <= m:
+            if (res := self.query_left(o * 2, l, m, L, val)) > 0:
+                return res
+        return self.query_left(o * 2 + 1, m + 1, r, L, val)
+
+class Solution:
+    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+        n = len(heights)
+        st = STree2(n)
+        for i, x in enumerate(heights):
+            st.update(1, 0, n - 1, i, x)
+        ans = []
+
+        for a, b in queries:
+            if a > b: a, b = b, a
+            if a == b or heights[a] < heights[b]:
+                ans.append(b)
+                continue
+            ans.append(st.query_left(1, 0, n - 1, b + 1, heights[a]))
+        return ans
+
+
+
 so = Solution()
-print(so.leftmostBuildingQueries(heights = [5,3,8,2,6,1,4,6], queries = [[0,7],[3,5],[5,2],[3,0],[1,6]]))  # [7,6,-1,4,6]
 print(so.leftmostBuildingQueries(heights = [6,4,8,5,2,7], queries = [[0,1],[0,3],[2,4],[3,4],[2,2]]))  # [2,5,-1,5,2]
+print(so.leftmostBuildingQueries(heights = [1,2,1,2,1,2], queries = [[0,2]]))  # [3]
+print(so.leftmostBuildingQueries(heights = [4,1,2,3,5], queries = [[0,1]]))  # [4]
+print(so.leftmostBuildingQueries(heights = [5,3,8,2,6,1,4,6], queries = [[0,7],[3,5],[5,2],[3,0],[1,6]]))  # [7,6,-1,4,6]
 print(so.leftmostBuildingQueries(heights = [1,2,1,2,1,2], queries = [[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[2,0],[2,1],[2,2],[2,3],[2,4],[2,5],[3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[4,0],[4,1],[4,2],[4,3],[4,4],[4,5],[5,0],[5,1],[5,2],[5,3],[5,4],[5,5]]))
 
 
