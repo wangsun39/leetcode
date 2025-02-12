@@ -158,7 +158,7 @@ class STree2:
 
     # 线段树：把下标 i 上的元素值增加 val，单点更新
     # o 是当前区间对应的下标，[l, r]当前区间的范围
-    # 调用入口update(1,1,n,...) 或 update(1,0,n-1,...) 根据实际需要填写，l和r一般情况可以不用，就标识一个范围，不会产生越界
+    # 调用入口update(1,1,n,...) 或 update(1,0,n-1,...) 根据实际需要填写，l和r一般和L和R的范围一致就可以，不会产生越界
     def update(self, o: int, l: int, r: int, i: int, val: int) -> None:
         if l == r:
             self.max[o] = val
