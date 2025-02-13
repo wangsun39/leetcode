@@ -97,7 +97,7 @@ class Solution:
             else:
                 sz = queries[i][2]
                 v1 = st.query(1, 0, MX, 0, x)
-                v2 = p - sl[p - 1]
+                v2 = x - sl[p - 1]  # 最后一段的长度
                 if max(v1, v2) >= sz:
                     ans.append(True)
                 else:
@@ -106,6 +106,7 @@ class Solution:
 
 
 so = Solution()
+print(so.getResults(queries = [[2,2,2]]))
 print(so.getResults(queries = [[1,7],[2,7,6],[1,2],[2,7,5],[2,7,6]]))
 print(so.getResults(queries = [[1,2],[2,3,3],[2,3,1],[2,2,2]]))
 

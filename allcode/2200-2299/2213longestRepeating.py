@@ -73,22 +73,6 @@ class STree2:
             self.pre[o] = self.pre[o * 2]
             self.suff[o] = self.suff[o * 2 + 1]
 
-    # 线段树：返回区间 [L,R] 内的最大连续子串长度
-    # 调用入口 query(1,1,n,...) 或 query(1,0,n-1,...)
-    # def query(self, o: int, l: int, r: int, L: int, R: int) -> list:
-    #     if L <= l and r <= R:
-    #         return [self.max[o], self.pre[o], self.suff[o]]
-    #     m = (l + r) // 2
-    #     if L > m:
-    #         return self.query(o * 2 + 1, m + 1, r, L, R)
-    #     if R <= m:
-    #         return self.query(o * 2, l, m, L, R)
-    #     q1 = self.query(o * 2, l, m, L, R)
-    #     q2 = self.query(o * 2 + 1, m + 1, r, L, R)
-    #     if self.s[m] == self.s[m + 1]:
-    #         return [q1[1], max(q1[0], q2[0], q1[2] + q2[1]), q2[2]]
-    #     return [q1[1], max(q1[0], q2[0]), q2[2]]
-
 class Solution:
     def longestRepeating(self, s: str, queryCharacters: str, queryIndices: List[int]) -> List[int]:
         ans = []
