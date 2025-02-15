@@ -36,8 +36,7 @@
 # 1 <= ai, bi <= n
 # 1 <= t <= 50
 # 1 <= target <= n
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def frogPosition(self, n: int, edges: List[List[int]], t: int, target: int) -> float:

@@ -49,8 +49,7 @@
 
 from bisect import *
 from cmath import inf
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

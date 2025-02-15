@@ -32,8 +32,7 @@
 # slices.length % 3 == 0
 # 1 <= slices[i] <= 1000
 from cmath import inf
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

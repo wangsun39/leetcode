@@ -1,5 +1,4 @@
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
         """

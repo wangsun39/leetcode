@@ -19,8 +19,7 @@
 # -10^4<= nums[i] <= 10^4
 
 
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countSmaller(self, nums: List[int]) -> List[int]:

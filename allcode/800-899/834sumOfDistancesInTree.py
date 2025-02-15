@@ -35,8 +35,7 @@
 # 0 <= ai, bi < n
 # ai != bi
 # 给定的输入保证为有效的树
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 import math
 class Solution:
     def sumOfDistancesInTree(self, n: int, edges: List[List[int]]) -> List[int]:

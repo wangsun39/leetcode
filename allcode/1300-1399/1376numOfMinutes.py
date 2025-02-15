@@ -36,8 +36,7 @@
 # 0 <= informTime[i] <= 1000
 # 如果员工 i 没有下属，informTime[i] == 0 。
 # 题目 保证 所有员工都可以收到通知。
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:

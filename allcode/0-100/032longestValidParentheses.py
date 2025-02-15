@@ -1,5 +1,4 @@
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def longestValidParentheses1(self, s: str) -> int:
         eInfo = {}  # idx -> maxLen

@@ -23,8 +23,7 @@
 #
 # 树节点的数目在 [1, 104] 范围内。
 # 1 <= Node.val <= 105
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):

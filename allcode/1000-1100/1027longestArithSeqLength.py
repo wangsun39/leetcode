@@ -28,8 +28,9 @@
 #
 # 2 <= nums.length <= 1000
 # 0 <= nums[i] <= 500
-from collections import defaultdict
-from typing import List
+
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
     def longestArithSeqLength(self, nums: List[int]) -> int:
         n = len(nums)

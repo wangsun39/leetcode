@@ -35,8 +35,7 @@
 # 图中没有重复的边。
 import bisect
 from cmath import inf
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

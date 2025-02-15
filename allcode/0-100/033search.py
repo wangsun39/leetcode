@@ -33,8 +33,7 @@
 
 
 
-from collections import defaultdict
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
         N = len(nums)
