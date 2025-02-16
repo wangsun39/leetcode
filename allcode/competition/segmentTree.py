@@ -177,6 +177,12 @@ class STree1:
         self.build(o * 2 + 1, m + 1, r)
         self.maintain(o)
 
+    def spread(self, o: int, l: int, m: int, r: int) -> None:
+        if self.todo[o]:
+            self.todo[0] = False
+            self.do(o * 2, l, m)
+            self.do(o * 2 + 1, m + 1, r)
+
     # 反转区间 [L,R]   o,l,r=1,1,n
     def update(self, o: int, l: int, r: int, L: int, R: int) -> None:
         # 进入这个函数的前提是，[l,r] 与 [L,R]有交集
@@ -184,13 +190,20 @@ class STree1:
             self.do(o, l, r)
             return
         m = (l + r) // 2
-        if self.todo[o]:  # 有 lazy tag的区间要被破坏开
-            self.do(o * 2, l, m)
-            self.do(o * 2 + 1, m + 1, r)
-            self.todo[o] = False
+        self.spread(o, l, m, r)  # 有 lazy tag的区间要被破坏开
         if m >= L: self.update(o * 2, l, m, L, R)
         if m < R: self.update(o * 2 + 1, m + 1, r, L, R)
         self.maintain(o)
+
+    def query(self, o: int, l: int, r: int, L: int, R: int) -> int:
+        if L <= l and r <= R: return self.cnt[o]
+        m = (l + r) // 2
+        self.spread(o, l, m, r)
+        if m >= L: self.query(o * 2, l, m, L, R)
+        if m < R: self.query(o * 2 + 1, m + 1, r, L, R)
+        self.maintain(o)
+        return self.cnt[o]
+
 
     # build(1, 1, n)
     # ans, s = [], sum(nums2)

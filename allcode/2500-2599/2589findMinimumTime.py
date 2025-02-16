@@ -98,7 +98,7 @@ class STree1:
         self.build(o * 2 + 1, m + 1, r)
         self.maintain(o)
 
-    # 尽可能更新后面的没有置为的0，共要更新v个
+    # 尽可能更新后面的没有置为的0点，最多更新v个
     def update(self, o: int, l: int, r: int, L: int, R: int, v) -> int:
         if self.todo[o] or self.cnt[o] == r - l + 1:  # 有 lazy tag的区间说明已经全覆盖了
             return 0
