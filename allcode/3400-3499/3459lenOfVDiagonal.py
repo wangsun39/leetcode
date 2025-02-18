@@ -73,10 +73,38 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def lenOfVDiagonal(self, grid: List[List[int]]) -> int:
+        dir = [[-1, -1], [1, 1], [1, -1], [-1, 1]]
+        t = {0: 3, 1: 2, 2: 0, 3: 1}  # 方向转换
+        r, c = len(grid), len(grid[0])
+
+        @cache
+        def dfs(x, y, d, turn):  # 沿着d方向到达x行，y列后最长能走的长度，turn表示是否转弯过
+            res = 1
+            u, v = x + dir[d][0], y + dir[d][1]
+            if 0 <= u < r and 0 <= v < c and grid[u][v] + grid[x][y] == 2:
+                res = max(res, 1 + dfs(u, v, d, turn))
+            if not turn:
+                x0, y0 = dir[t[d]]  # d1 为转弯后的方向
+                u, v = x + x0, y + y0
+                if 0 <= u < r and 0 <= v < c and grid[u][v] + grid[x][y] == 2:
+                    res = max(res, 1 + dfs(u, v, t[d], True))
+            return res
+        ans = 0
+        for i in range(r):
+            for j in range(c):
+                if grid[i][j] == 1:
+                    ans = max(ans, 1)
+                    for k, [x0, y0] in enumerate(dir):
+                        u, v = i + x0, j + y0
+                        if 0 <= u < r and 0 <= v < c and grid[u][v] == 2:
+                            ans = max(ans, 1 + dfs(u, v, k, False))
+        return ans
+
+
 
 
 so = Solution()
-print(so.lenOfVDiagonal())
+print(so.lenOfVDiagonal(grid = [[2,2,1,2,2],[2,0,2,2,0],[2,0,1,1,0],[1,0,2,2,2],[2,0,0,2,2]]))
 
 
 
