@@ -36,8 +36,7 @@
 
 
 
-from typing import List
-import random
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def projectionArea(self, grid: List[List[int]]) -> int:

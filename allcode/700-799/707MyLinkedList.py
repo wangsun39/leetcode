@@ -29,8 +29,7 @@
 
 
 
-from typing import List
-import random
+from leetcode.allcode.competition.mypackage import *
 class MyLinkedList:
 
     def __init__(self):

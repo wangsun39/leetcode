@@ -25,8 +25,7 @@
 
 
 
-from typing import List
-import random
+from leetcode.allcode.competition.mypackage import *
 import bisect
 class Solution:
 
