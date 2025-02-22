@@ -179,7 +179,7 @@ class STree1:
 
     def spread(self, o: int, l: int, m: int, r: int) -> None:
         if self.todo[o]:
-            self.todo[0] = False
+            self.todo[o] = False
             self.do(o * 2, l, m)
             self.do(o * 2 + 1, m + 1, r)
 
