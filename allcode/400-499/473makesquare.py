@@ -19,11 +19,7 @@
 # 给定的火柴长度和在0到10^9之间。
 # 火柴数组的长度不超过15。
 
-import time
-
-
-from typing import List
-import copy
+from leetcode.allcode.competition.mypackage import *
 from functools import lru_cache
 class Solution:
     def makesquare2(self, matchsticks: List[int]) -> bool:

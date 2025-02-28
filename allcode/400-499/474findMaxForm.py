@@ -27,11 +27,7 @@
 # 1 <= m, n <= 100
 
 
-import time
-
-
-from typing import List
-import copy
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
         countList = []

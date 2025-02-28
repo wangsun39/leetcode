@@ -24,11 +24,7 @@
 
 
 
-import time
-
-
-from typing import List
-import copy
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def magicalString(self, n: int) -> int:
         s = '122'

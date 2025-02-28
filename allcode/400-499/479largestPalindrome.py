@@ -19,11 +19,7 @@
 
 
 
-import time
-
-
-from typing import List
-import copy
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def largestPalindrome(self, n: int) -> int:
         def getP(n):
