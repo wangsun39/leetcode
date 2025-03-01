@@ -24,9 +24,7 @@
 # 0 <= fromi < toi <= 1000
 # 1 <= capacity <= 105
 
-from math import inf
-from typing import List
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def carPooling1(self, trips: List[List[int]], capacity: int) -> bool:

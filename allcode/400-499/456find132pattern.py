@@ -26,9 +26,7 @@
 # n == nums.length
 # 1 <= n <= 2 * 105
 # -109 <= nums[i] <= 109
-from math import inf
-from typing import List
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def find132pattern(self, nums: List[int]) -> bool:

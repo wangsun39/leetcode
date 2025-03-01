@@ -39,9 +39,7 @@
 # 0 <= count[i] <= 109
 # 1 <= sum(count) <= 109
 #  count 的众数是 唯一 的
-from math import inf
-from typing import List
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def sampleStats(self, count: List[int]) -> List[float]:

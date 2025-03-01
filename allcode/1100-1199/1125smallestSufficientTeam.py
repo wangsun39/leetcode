@@ -30,9 +30,7 @@
 # people[i] 中的所有字符串 互不相同
 # people[i] 中的每个技能是 req_skills 中的技能
 # 题目数据保证「必要团队」一定存在
-from math import inf
-from typing import List
-from bisect import *
+from leetcode.allcode.competition.mypackage import *
 from collections import defaultdict
 
 class Solution:
