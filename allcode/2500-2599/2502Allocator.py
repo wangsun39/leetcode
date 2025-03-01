@@ -44,7 +44,7 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Allocator1:
+class Allocator:
 
     def __init__(self, n: int):
         self.mem = [0] * n
@@ -70,10 +70,6 @@ class Allocator1:
                 ans += 1
                 self.mem[i] = 0
         return ans
-
-
-class Allocator:
-
 
 
 so = Allocator(10)

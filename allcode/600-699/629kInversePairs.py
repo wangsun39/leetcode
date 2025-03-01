@@ -26,7 +26,8 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def kInversePairs(self, n: int, k: int) -> int:
+    def kInversePairs1(self, n: int, k: int) -> int:
+        # 这个方法简洁，容易理解，但性能不够
         MOD = 10 ** 9 + 7
 
         @cache
@@ -40,6 +41,19 @@ class Solution:
             return res
 
         return dfs(n, k)
+
+    def kInversePairs(self, n: int, k: int) -> int:
+        MOD = 10 ** 9 + 7
+        dp = [[0] * (k + 1) for _ in range(n)]  # dp[i][j] 表示前i项（从0开始），逆序对数为j的数组个数
+        for i in range(n): dp[i][0] = 1
+        for i in range(1, n):
+            for j in range(1, k + 1):
+                if j <= i:
+                    dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % MOD
+                else:
+                    dp[i][j] = (dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - i - 1]) % MOD
+        return dp[-1][-1]
+
 
 
 obj = Solution()
