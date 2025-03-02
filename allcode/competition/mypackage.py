@@ -9,6 +9,8 @@ from collections import deque
 # de.pop()
 # de.popleft()
 from itertools import pairwise, accumulate, product, permutations
+# list(permutations(cards))  # 迭代器必须转成list，否则只能使用一次
+# p2 = list(product(['+', '-', '*', '/'], repeat=3))  # 生成 3 个范围为 0-3 的序列
 # list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
