@@ -33,8 +33,6 @@
 # 1 <= nums.length <= 10^5
 # 1 <= nums[i] <= 10^9
 
-from typing import List
-from math import *
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:

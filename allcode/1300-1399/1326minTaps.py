@@ -35,8 +35,7 @@
 # ranges.length == n + 1
 # 0 <= ranges[i] <= 100
 
-from typing import List
-from math import *
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minTaps1(self, n: int, ranges: List[int]) -> int:
