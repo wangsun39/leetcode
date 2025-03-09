@@ -42,7 +42,7 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Solution:
+class Solution1:
     def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
         items.sort()
         mx = 0
@@ -56,6 +56,37 @@ class Solution:
             ans[i] = mx
         return ans
 
+class Fenwick2:
+    # 求前缀最大值（区间求max不能用!!!）
+    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    __slots__ = ['f', 'nums']
+
+    def __init__(self, n: int):
+        # n 是能调用下面函数的下标最大值
+        self.f = [0] * (n + 1)   # 关键区间最大值
+
+    def update(self, i: int, val: int) -> None:  # nums[i] = val
+        while i < len(self.f):
+            self.f[i] = max(self.f[i], val)
+            i += i & -i
+
+    def query(self, i: int) -> int:  # 下标<=i的最大值
+        mx = 0
+        while i > 0:
+            mx = max(mx, self.f[i])
+            i &= i - 1
+        return mx
+
+class Solution:
+    def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
+        idx = list(set(x for x, _ in items) | set(queries))
+        n = len(idx)
+        fw = Fenwick2(n)
+        idx.sort()
+        map = {x: i + 1 for i, x in enumerate(idx)}
+        for x, y in items:
+            fw.update(map[x], y)
+        return [fw.query(map[x]) for x in queries]
 
 
 so = Solution()

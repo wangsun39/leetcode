@@ -45,7 +45,7 @@ class Solution:
     def countOfAtoms(self, formula: str) -> str:
         n = len(formula)
 
-        def get_num(i):
+        def get_num(i): # 获取i开始的完整整数值，及其后面的下标位置
             if i >= n or not formula[i].isdigit():
                 return 1, i
             v = 0
@@ -71,7 +71,7 @@ class Solution:
                         i += 1
                     v, i = get_num(i)
                     res[e] += v
-                else:
+                else:  #  ')'  在每个右括号处计算括号内的值及其整体的倍数
                     i += 1
                     v, i = get_num(i)
                     for k, vv in res.items():
