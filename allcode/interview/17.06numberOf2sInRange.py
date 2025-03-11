@@ -10,9 +10,8 @@
 # n <= 10^9
 
 
-from typing import List
-from collections import defaultdict
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
+
 
 class Solution:
     def numberOf2sInRange(self, n: int) -> int:

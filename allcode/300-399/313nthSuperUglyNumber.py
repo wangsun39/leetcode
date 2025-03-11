@@ -1,5 +1,4 @@
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 # 编写一段程序来查找第 n 个超级丑数。
 #

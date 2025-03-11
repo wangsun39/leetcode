@@ -35,8 +35,7 @@
 # 1 <= nums.length <= 1000
 # -231 <= nums[i] <= 231 - 1
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numberOfArithmeticSlices1(self, nums: List[int]) -> int:  # 这个方法可行，但稍有些复杂，没有必要单独考虑相等的数列，看下个方法

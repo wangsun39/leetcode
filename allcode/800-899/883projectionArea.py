@@ -23,8 +23,7 @@
 # s1 和 s2 都不含前导或尾随空格
 # s1 和 s2 中的所有单词间均由单个空格分隔
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:

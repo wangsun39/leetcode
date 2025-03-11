@@ -26,8 +26,7 @@
 # 坡度的值不会超过 32 位整数的范围。
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, x):

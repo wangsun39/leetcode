@@ -44,7 +44,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countSubarrays(self, nums: List[int], k: int) -> int:
+    def countSubarrays1(self, nums: List[int], k: int) -> int:
         div = []
         n = len(nums)
         for i, x in enumerate(nums):
@@ -95,6 +95,43 @@ class Solution:
             ans += calc(div[i] + 1, div[i + 1])
 
         return ans
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        counter = Counter()
+        def add(x):
+            i = 0
+            while x:
+                if x & 1:
+                    counter[i] += 1
+                i += 1
+        def sub(x):
+            i = 0
+            while x:
+                if x & 1:
+                    counter[i] -= 1
+                i += 1
+        def to_num():
+            res = 0
+            for k, v in counter.items():
+                if v: res |= (1 << k)
+            return res
+
+        l, r = 0, -1
+        ans = 0
+        while l < n:
+            while r < n:
+                add(nums[r])
+                v = to_num()
+                av = v & k
+                if av != k:
+                    l = r + 1
+                    counter.clear()
+                elif v > k:
+                    r += 1
+                else:
+                    ans += 1
+        return ans
+
 
 so = Solution()
 print(so.countSubarrays(nums = [9,1,8,9,5], k = 0))  # 7

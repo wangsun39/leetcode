@@ -28,8 +28,7 @@
 # 1 <= k <= 105
 
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def smallestRepunitDivByK(self, k: int) -> int:

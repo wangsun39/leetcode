@@ -42,8 +42,7 @@
 # 1 <= hour <= 109
 # hours 中，小数点后最多存在两位数字
 
-from typing import List
-from collections import defaultdict, deque
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

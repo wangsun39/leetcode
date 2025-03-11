@@ -13,8 +13,7 @@
 
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

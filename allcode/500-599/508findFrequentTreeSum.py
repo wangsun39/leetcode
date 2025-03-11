@@ -25,9 +25,8 @@
 # 提示：假设任意子树元素和均可以用 32 位有符号整数表示。
 
 
-from typing import List
-from collections import defaultdict
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
+
 
 class TreeNode:
     def __init__(self, x):

@@ -10,8 +10,7 @@
 #
 # words.length <= 100000
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findClosest(self, words: List[str], word1: str, word2: str) -> int:

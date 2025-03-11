@@ -32,8 +32,7 @@
 # s 只包含大写英文字符
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def uniqueLetterString1(self, s: str) -> int:
         dp1, dp2 = defaultdict(int), defaultdict(int)

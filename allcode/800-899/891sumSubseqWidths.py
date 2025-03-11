@@ -25,8 +25,7 @@
 # 1 <= nums[i] <= 105
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def sumSubseqWidths(self, nums: List[int]) -> int:

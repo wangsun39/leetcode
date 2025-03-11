@@ -32,10 +32,8 @@
 # ui != vi
 # 1 <= queries.length <= 20
 # 0 <= queries[j] < edges.length
-from bisect import bisect_left
-from typing import List
-from collections import defaultdict, Counter
-from math import inf
+
+from leetcode.allcode.competition.mypackage import *, Counter
 
 class Solution:
     def countPairs(self, n: int, edges: List[List[int]], queries: List[int]) -> List[int]:

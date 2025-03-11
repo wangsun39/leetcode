@@ -30,9 +30,8 @@
 # 0 <= matrix[i][j] <= 231 - 1
 
 
-from typing import List
-from functools import lru_cache
-from collections import deque, defaultdict
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
     def longestIncreasingPath1(self, matrix: List[List[int]]) -> int:
         row = len(matrix)

@@ -23,8 +23,7 @@
 # 1 <= n <= 109
 
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numDupDigitsAtMostN(self, n: int) -> int:

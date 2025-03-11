@@ -18,8 +18,7 @@
 # timePoints[i] 格式为 "HH:MM"
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findMinDifference(self, timePoints: List[str]) -> int:

@@ -33,9 +33,7 @@
 # colors 只含有小写英文字母。
 # 0 <= aj, bj < n
 
-from typing import List
-from collections import defaultdict, deque
-
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:

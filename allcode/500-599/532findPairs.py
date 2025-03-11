@@ -34,8 +34,7 @@
 # 0 <= k <= 107
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import bisect
 
 class Solution:

@@ -29,8 +29,7 @@
 # 二维数组大小的在3到1000范围内。
 # 二维数组中的每个整数在1到N之间，其中 N 是二维数组的大小。
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class UnionFind:
     def __init__(self, n):

@@ -28,9 +28,8 @@
 # 0 <= n <= 30
 
 
-from typing import List
-from collections import defaultdict
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
+
 
 class Solution:
     def fib(self, n: int) -> int:

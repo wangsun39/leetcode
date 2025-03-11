@@ -19,8 +19,7 @@
 # 0 < nums[i] < 10000
 # 每个元素的频率在 [1,4] 范围内
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def canPartitionKSubsets(self, nums: List[int], k: int) -> bool:

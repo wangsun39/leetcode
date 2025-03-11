@@ -27,8 +27,7 @@
 #
 # 1 <= n <= 15
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import copy
 
 class Solution:

@@ -35,8 +35,7 @@
 # 输入保证在调用 pop 之前堆栈中至少有一个元素。
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import bisect
 
 class FreqStack:

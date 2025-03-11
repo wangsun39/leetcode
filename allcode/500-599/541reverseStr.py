@@ -16,8 +16,7 @@
 # 给定字符串的长度和 k 在 [1, 10000] 范围内。
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def reverseStr(self, s: str, k: int) -> str:

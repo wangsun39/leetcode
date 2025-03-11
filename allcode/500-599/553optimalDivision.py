@@ -23,8 +23,7 @@
 # 每个测试用例只有一个最优除法解。
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

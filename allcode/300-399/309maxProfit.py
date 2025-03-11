@@ -1,6 +1,5 @@
-from cmath import inf
-from typing import List
-from collections import defaultdict
+
+from leetcode.allcode.competition.mypackage import *
 
 # 给定一个整数数组，其中第i个元素代表了第i天的股票价格 。​
 #

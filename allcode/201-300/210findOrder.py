@@ -30,8 +30,7 @@
 # ai != bi
 # 所有[ai, bi] 互不相同
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:

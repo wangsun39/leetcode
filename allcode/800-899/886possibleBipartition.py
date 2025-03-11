@@ -31,9 +31,8 @@
 # ai < bi
 # dislikes中每一组都不同
 
-from typing import List
-from collections import defaultdict
-from functools import cache
+from leetcode.allcode.competition.mypackage import *
+
 
 class Solution:
     def possibleBipartition(self, n: int, dislikes: List[List[int]]) -> bool:

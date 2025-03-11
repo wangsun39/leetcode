@@ -24,8 +24,7 @@
 # 1 <= n <= 300
 # 0 <= nums[i] <= 100
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 import time
 class Solution:

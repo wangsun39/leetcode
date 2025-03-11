@@ -30,8 +30,7 @@
 
 
 # Definition for a binary tree node.
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def replaceWords(self, dictionary: List[str], sentence: str) -> str:

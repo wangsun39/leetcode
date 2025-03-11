@@ -15,8 +15,7 @@
 # nums.length <=30000
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def missingTwo(self, nums: List[int]) -> List[int]:

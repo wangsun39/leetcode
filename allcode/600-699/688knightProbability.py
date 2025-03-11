@@ -32,8 +32,7 @@
 # 0 <= row, column <= n
 
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, x):

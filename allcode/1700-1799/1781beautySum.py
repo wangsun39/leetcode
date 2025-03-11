@@ -24,10 +24,7 @@
 
 
 
-from typing import List
-from collections import defaultdict, Counter
-from math import inf
-from sortedcontainers import SortedList
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def beautySum1(self, s: str) -> int:

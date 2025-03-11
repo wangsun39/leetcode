@@ -34,8 +34,7 @@
 # 0 <= values[i], labels[i] <= 2 * 104
 # 1 <= numWanted, useLimit <= n
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def largestValsFromLabels(self, values: List[int], labels: List[int], numWanted: int, useLimit: int) -> int:

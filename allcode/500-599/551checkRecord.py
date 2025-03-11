@@ -16,8 +16,7 @@
 # 输入: "PPALLL"
 # 输出: False
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

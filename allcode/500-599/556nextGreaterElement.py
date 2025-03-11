@@ -19,8 +19,7 @@
 # 1 <= n <= 231 - 1
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 import bisect
 
 class Solution:

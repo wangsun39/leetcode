@@ -10,10 +10,8 @@
 
 
 
-from typing import List
-from collections import defaultdict
-from functools import lru_cache
-import heapq
+from leetcode.allcode.competition.mypackage import *
+
 
 class Solution:
     def getKthMagicNumber(self, k: int) -> int:

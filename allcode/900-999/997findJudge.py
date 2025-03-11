@@ -1,5 +1,4 @@
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findJudge(self, N: int, trust: List[List[int]]) -> int:

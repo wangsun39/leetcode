@@ -37,8 +37,7 @@
 # 给定的树为二叉搜索树。
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class TreeNode:
     def __init__(self, x):

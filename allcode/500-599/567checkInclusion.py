@@ -23,30 +23,23 @@
 
 
 
-
 from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def arrayNesting(self, nums: List[int]) -> int:
-        s = set(nums)
-        curS = set()
-        n = len(nums)
-        ans = 0
-        for i in range(n):
-            if nums[i] not in s:
-                continue
-            j = i
-            while j not in curS:
-                curS.add(j)
-                s.remove(j)
-                j = nums[j]
-            ans = max(ans, len(curS))
-            curS = set()
-        return ans
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        n = len(s1)
+        c1, c2 = Counter(s1), Counter(s2[:n])
+        if c1 == c2: return True
+        for i, x in enumerate(s2[n:], n):
+            c2[x] += 1
+            c2[s2[i - n]] -= 1
+            if c1 == c2: return True
+
+        return False
 
 
 
 
 so = Solution()
-print(so.arrayNesting([5,4,0,3,1,6,2]))
+print(so.checkInclusion(s1 = "ab", s2 = "eidbaooo"))

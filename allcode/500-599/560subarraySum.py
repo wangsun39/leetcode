@@ -21,8 +21,7 @@
 
 
 
-from typing import List
-from collections import defaultdict, Counter
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

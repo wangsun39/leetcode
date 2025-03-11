@@ -20,8 +20,7 @@
 
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Node:
     def __init__(self, val=None, children=None):

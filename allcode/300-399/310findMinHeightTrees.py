@@ -1,5 +1,4 @@
-from typing import List
-from collections import defaultdict, deque
+from leetcode.allcode.competition.mypackage import *, deque
 
 # 树是一个无向图，其中任何两个顶点只通过一条路径连接。 换句话说，一个任何没有简单环路的连通图都是一棵树。
 #

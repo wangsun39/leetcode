@@ -171,8 +171,7 @@
 
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Node:
     def __init__(self, val, isLeaf, topLeft, topRight, bottomLeft, bottomRight):

@@ -56,8 +56,7 @@
 # 桌面上一开始的球中，不会有三个及三个以上颜色相同且连着的球
 
 
-from typing import List
-from functools import lru_cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findMinStep(self, board: str, hand: str) -> int:

@@ -31,9 +31,8 @@
 # grid[i][j] 为 0 或 1
 
 
-from typing import List
-from collections import defaultdict
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
     def largestIsland(self, grid: List[List[int]]) -> int:
         islands = defaultdict(int)  # 一个格子对应的岛编号

@@ -26,8 +26,7 @@
 # 题目数据保证 url 是一个有效的 URL
 
 
-from typing import List
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Codec:
 
