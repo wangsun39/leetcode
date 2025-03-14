@@ -45,31 +45,6 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Fenwick1:
-    def __init__(self, n):
-        self.n = n
-        self.f = [0] * (n + 1)
-        self.nums = [0] * (n + 1)
-
-    def update(self, idx, value):
-        self.nums[idx] = value
-
-        while idx <= self.n:
-            max_val = self.nums[idx]
-            parent_idx = idx - (idx & -idx) + 1
-            for i in range(parent_idx, idx + 1):
-                max_val = max(max_val, self.nums[i])
-
-            self.f[idx] = max_val
-            idx += idx & -idx
-
-    def query(self, idx):
-        max_val = 0
-        while idx > 0:
-            max_val = max(max_val, self.f[idx])
-            idx -= idx & -idx
-        return max_val
-
 class Fenwick2:
     def __init__(self, n):
         self.n = n

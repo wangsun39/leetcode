@@ -66,18 +66,15 @@ class STree2:
             self.update(o * 2 + 1, m + 1, r, i, val)
         self.max[o] = max(self.max[o * 2], self.max[o * 2 + 1])
 
-    # 线段树：返回区间 [L,R] 内的元素和，区间查询最大值
+    # 线段树：返回区间 [L,R] 内第一个值>=val的位置
     # 调用入口 query(1,1,n,...) 或 query(1,0,n-1,...)
-    def query(self, o: int, l: int, r: int, L: int, R: int) -> int:
-        if L <= l and r <= R:
-            return self.max[o]
-        res = 0
+    def query(self, o: int, l: int, r: int, L: int, R: int, val: int) -> int:
+        if self.max[o] < val: return -1
+        if l == r: return l
         m = (l + r) // 2
-        if L <= m:
-            res = max(res, self.query(o * 2, l, m, L, R))
-        if R > m:
-            res = max(res, self.query(o * 2 + 1, m + 1, r, L, R))
-        return res
+        if self.max[o * 2] >= val:
+            return self.query(o * 2, l, m, L, R, val)
+        return self.query(o * 2 + 1, m + 1, r, L, R, val)
 
 
 class Solution:
@@ -88,21 +85,10 @@ class Solution:
             st.update(1,1,m,i + 1, x)
         ans = 0
         for x in fruits:
-            if st.query(1,1,m,1,m) < x:
+            i = st.query(1, 1, m, 1, m, x)
+            if i == -1:
                 ans += 1
             else:
-                if st.query(1,1,m,1,1) >= x:
-                    i = 1
-                else:
-                    lo, hi = 1, m
-                    while lo + 1 < hi:
-                        mid = (lo + hi) // 2
-                        if st.query(1,1,m,1,mid) < x:
-                            lo = mid
-                        else:
-                            hi = mid
-                    i = hi
-                # baskets[i - 1] -= x
                 st.update(1,1,m,i, 0)
 
         return ans

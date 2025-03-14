@@ -44,92 +44,31 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countSubarrays1(self, nums: List[int], k: int) -> int:
-        div = []
-        n = len(nums)
-        for i, x in enumerate(nums):
-            if x & k != k:  # 任何子数组都不会包含这种 x
-                div.append(i)
-        if not div or div[0] > 0:
-            div.insert(0, -1)
-        div.append(n)
-        counter = [[0] * 32]  # counter[i][j] 前i项的按位累计和(前缀和)
-        for x in nums:
-            i = 0
-            count = counter[-1][:]
-            while x:
-                if x & 1:
-                    count[i] += 1
-                i += 1
-                x >>= 1
-            counter.append(count)
-        ans = 0
-        def calc(start, end):   # 计算 [start, end) 区间内的子数组个数
-            res = 0
-            right = start
-
-            def trans():
-                len = right - left
-                count = [counter[right][i] - counter[left][i] for i in range(32)]
-                res = 0
-                for i, x in enumerate(count):
-                    if x and x == len:
-                        res |= (1 << i)
-                return res
-
-            for left in range(start, end):  # 双指针
-                right = max(right, left + 1)
-                left_x = nums[left]
-                if left_x == k:
-                    res += end - left
-                    continue
-                while right <= end and trans() != k:
-                    right += 1
-                if right > end:
-                    break
-                res += end - right + 1
-            return res
-
-
-        for i in range(len(div) - 1):
-            ans += calc(div[i] + 1, div[i + 1])
-
-        return ans
     def countSubarrays(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        counter = Counter()
-        def add(x):
-            i = 0
-            while x:
-                if x & 1:
-                    counter[i] += 1
-                i += 1
-        def sub(x):
-            i = 0
-            while x:
-                if x & 1:
-                    counter[i] -= 1
-                i += 1
-        def to_num():
+        idx = [i for i, x in enumerate(nums) if x & k != k]  # 包含这些点的区间是不能满足要求的
+        bits = []  # 保存k为0的bit位
+        for i in range(32):
+            if k & (1 << i) == 0:
+                bits.append(i)
+        idx.insert(0, -1)
+        idx.append(n)
+        def calc(arr):  # 计算一个子区间的所有子数组数
+            if len(arr) == 0: return 0
             res = 0
-            for k, v in counter.items():
-                if v: res |= (1 << k)
+            mx = {i: -1 for i in bits}  # mx[i] 记录bit位i为0的最右侧位置
+            for i, x in enumerate(arr):
+                # 枚举子区间的右端点，左端的最大值为所有 mx[i] 的最小值，这样才能保证所有bits上&之后都为0
+                for j in bits:
+                    if x & (1 << j) == 0:
+                        mx[j] = i
+                res += min(mx.values()) + 1
             return res
 
-        l, r = 0, -1
         ans = 0
-        while l < n:
-            while r < n:
-                add(nums[r])
-                v = to_num()
-                av = v & k
-                if av != k:
-                    l = r + 1
-                    counter.clear()
-                elif v > k:
-                    r += 1
-                else:
-                    ans += 1
+        for a, b in pairwise(idx):
+            ans += calc(nums[a + 1: b])  # 只需计算每个子区间的值
+
         return ans
 
 
