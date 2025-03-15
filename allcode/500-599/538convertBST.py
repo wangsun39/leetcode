@@ -45,7 +45,7 @@ class TreeNode:
         self.left = None
         self.right = None
 class Solution:
-    def convertBST(self, root: TreeNode) -> TreeNode:
+    def convertBST1(self, root: TreeNode) -> TreeNode:
         curSum = 0
         if root is None:
             return root
@@ -58,6 +58,20 @@ class Solution:
             if node.left is not None:
                 helper(node.left)
         helper(root)
+        return root
+
+    def convertBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 2025/3/15 换个写法
+        def dfs(node, base):  # 传入当前节点，及前面累计需要加的值，返回当前节点的子树总值（即当前节点左子树更新后的val或当前节点更新后的val）
+            if node.right:
+                node.val += dfs(node.right, base)
+            else:
+                node.val += base
+            if node.left:
+                return dfs(node.left, node.val)
+            return node.val
+
+        if root: dfs(root, 0)
         return root
 
 so = Solution()
