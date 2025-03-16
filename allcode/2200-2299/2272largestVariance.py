@@ -35,27 +35,23 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def largestVariance(self, s: str) -> int:
-        s = list(s)
-        counter = Counter(s)
-        n = len(counter)
-        if n == 1:
-            return 0
-        type = [k for k in counter]
-        def maxSubSum(l):
+        us = list(set(s))
+        n, m = len(s), len(us)
+        if m == 1: return 0
 
-        def helper(a, b):
-            new = [0] * len(s)
-            for i in range(len(s)):
-                if s[i] == a:
-                    new[i] = 1
-                elif s[i] == b:
-                    new[i] = -1
-            return maxSubSum(new)
+        def calc(c1, c2):  # 仅考虑两个字母的最大波动值
+            arr = []
+            for x in s:
+                if x == c1:
+                    arr.append(1)
+                elif x == c2:
+                    arr.append(-1)
+            
+
         ans = 0
-        for i in range(n):
-            for j in range(i, n):
-                ans = max(ans, helper(type[i], type[j]))
-                ans = max(ans, helper(type[j], type[i]))
+        for i in range(m):
+            for j in range(i + 1, m):
+                ans = max(ans, calc(us[i], us[j]))
         return ans
 
 
