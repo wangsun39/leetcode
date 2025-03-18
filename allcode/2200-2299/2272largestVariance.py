@@ -46,12 +46,25 @@ class Solution:
                     arr.append(1)
                 elif x == c2:
                     arr.append(-1)
-            
+            t = len(arr)
+            dp0 = [-inf] * t  # 以i项结尾的最大子区间和
+            dp1 = [-inf] * t  # 以i项结尾且包含-1的最大子区间和
+            dp0[0] = arr[0]
+            if arr[0] == -1: dp1[0] = -1
+            for i in range(1, t):
+                x = arr[i]
+                if x == 1:
+                    dp0[i] = max(dp0[i - 1] + 1, 1)
+                    dp1[i] = dp1[i - 1] + 1
+                else:
+                    dp0[i] = max(dp0[i - 1] - 1, -1)
+                    dp1[i] = max(dp0[i - 1] - 1, -1)
+            return max(dp1)
 
         ans = 0
         for i in range(m):
-            for j in range(i + 1, m):
-                ans = max(ans, calc(us[i], us[j]))
+            for j in range(m):
+                if i != j: ans = max(ans, calc(us[i], us[j]))
         return ans
 
 
