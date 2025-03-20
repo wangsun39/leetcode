@@ -47,17 +47,55 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minReverseOperations(self, n: int, p: int, banned: List[int], k: int) -> List[int]:
-        ans = [-2] * n
+        ans = [-1] * n
+        dp1 = deque([p])
+        banned = set(banned)
+        sl0 = SortedList(i for i in range(0, n, 2) if i not in banned and i != p)
+        sl1 = SortedList(i for i in range(1, n, 2) if i not in banned and i != p)
+        step = 1
         ans[p] = 0
-        for x in banned:
-            ans[x] = -1
+        while dp1:
+            dp2 = deque()
+            while dp1:
+                x = dp1.popleft()
+                lo = max(x - k + 1, k - 1 - x)   # L+R==x+y L的最小值是0，因此y的最小值是k - 1 - x
+                hi = min(x + k - 1, n - 1 + n - k - x)   # R最大值为n - 1， y的最大值为 n - 1 + n - k - x
+                if k & 1: # 子区间长度为奇数，那么x和y必须有相同奇偶性
+                    if (lo & 1) ^ (x & 1):
+                        lo += 1
+                else: # 子区间长度为偶数，那么x和y必须有相反奇偶性
+                    if (lo & 1) ^ (x & 1) == 0:
+                        lo += 1
+                if lo & 1:
+                    p = sl1.bisect_left(lo)
+                    arr = []
+                    while p < len(sl1) and sl1[p] <= hi:
+                        arr.append(sl1[p])
+                        p += 1
+                    for y in arr:
+                        dp2.append(y)
+                        ans[y] = step
+                        sl1.remove(y)
+                else:
+                    p = sl0.bisect_left(lo)
+                    arr = []
+                    while p < len(sl0) and sl0[p] <= hi:
+                        arr.append(sl0[p])
+                        p += 1
+                    for y in arr:
+                        dp2.append(y)
+                        ans[y] = step
+                        sl0.remove(y)
 
-
+            dp1 = dp2
+            step += 1
 
         return ans
 
 so = Solution()
 print(so.minReverseOperations(n = 5, p = 0, banned = [], k = 2))  # [0,1,2,3,4]
+print(so.minReverseOperations(n = 4, p = 0, banned = [], k = 4))  # [0,-1,-1,1]
+print(so.minReverseOperations(n = 8, p = 6, banned = [0], k = 5))  # [-1,-1,1,-1,1,-1,0,-1]
 print(so.minReverseOperations(n = 5, p = 0, banned = [2,4], k = 3))  # [0,-1,-1,-1,-1]
 print(so.minReverseOperations(n = 4, p = 0, banned = [1,2], k = 4))  # [0,-1,-1,1]
 print(so.minReverseOperations(n = 4, p = 2, banned = [0,1,3], k = 1))  # [-1,-1,0,-1]

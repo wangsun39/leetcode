@@ -77,4 +77,4 @@ orders = pd.DataFrame(data, columns=['id', 'customerId']).astype({'id':'Int64', 
 
 print(find_customers(customers, orders))
 
-# select a.name as Employee from Employee a, Employee b where a.managerId=b.id and a.salary>b.salary;
+# select name as Customers from Customers  where id not in (select customerId from Orders);
