@@ -36,10 +36,7 @@
 # xi != yi
 # 每个花园 最多 有 3 条路径可以进入或离开
 
-from typing import List
-from functools import cache
-from math import *
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def gardenNoAdj(self, n: int, paths: List[List[int]]) -> List[int]:

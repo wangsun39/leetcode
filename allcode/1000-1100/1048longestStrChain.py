@@ -32,10 +32,7 @@
 # 1 <= words[i].length <= 16
 # words[i] 仅由小写英文字母组成。
 
-from typing import List
-from functools import cache
-from math import *
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def longestStrChain(self, words: List[str]) -> int:

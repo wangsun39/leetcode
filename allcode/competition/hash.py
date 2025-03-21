@@ -30,6 +30,7 @@ class Solution:
     def minValidStrings(self, words: List[str], target: str) -> int:
         n = len(target)
 
+        # 如有哈希冲突，可以使用双hash
         # 多项式字符串哈希（方便计算子串哈希值）
         # 哈希函数 hash(s) = s[0] * BASE^(n-1) + s[1] * BASE^(n-2) + ... + s[n-2] * BASE + s[n-1]
         MOD = 1_070_777_777

@@ -25,10 +25,7 @@
 # 0 <= arr[i] <= 109
 # 1 <= k <= arr.length
 
-from typing import List
-from functools import cache
-from math import *
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxSumAfterPartitioning(self, arr: List[int], k: int) -> int:
