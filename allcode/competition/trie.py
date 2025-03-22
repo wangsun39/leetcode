@@ -83,7 +83,7 @@ class Trie:
 class Trie:
 
     def __init__(self):
-        self.root = {'cnt': 0}   # cnt 表示以当前节点为前缀的单词有多少个，'end' 表示以当前前缀作为单词的有多少个
+        self.root = {'cnt': 0, 'end': 0}   # cnt 表示以当前节点为前缀的单词有多少个，'end' 表示以当前前缀作为单词的有多少个
 
     def insert(self, word: str) -> None:  # O(log(len(word)))
         cur = self.root
@@ -98,6 +98,7 @@ class Trie:
         else:
             cur['end'] += 1
         # cur['cnt'] += 1
+        self.root['cnt'] += 1
 
     def countWordsEqualTo(self, word: str) -> int:
         cur = self.root
@@ -131,6 +132,7 @@ class Trie:
                     break
             cur = cur[e]
         cur[e]['end'] -= 1
+        self.root['cnt'] -= 1
 
     def startsWith(self, prefix: str) -> [str]:
         # 返回以前缀开头的所有词
