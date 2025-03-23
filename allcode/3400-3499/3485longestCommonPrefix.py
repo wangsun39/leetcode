@@ -51,21 +51,21 @@ from leetcode.allcode.competition.mypackage import *
 class Trie:
 
     def __init__(self):
-        self.root = {'cnt': 0, 'end': 0}   # cnt 表示以当前节点为前缀的单词有多少个，'end' 表示以当前前缀作为单词的有多少个
+        self.root = {'#': 0, '@': 0}   # # 表示以当前节点为前缀的单词有多少个，'@' 表示以当前前缀作为单词的有多少个
 
     def insert(self, word: str) -> None:  # O(log(len(word)))
         cur = self.root
         for e in word:
             if e not in cur:
-                cur[e] = {'cnt': 1}
+                cur[e] = {'#': 1}
             else:
-                cur[e]['cnt'] += 1
+                cur[e]['#'] += 1
             cur = cur[e]
-        if 'end' not in cur:
-            cur['end'] = 1
+        if '@' not in cur:
+            cur['@'] = 1
         else:
-            cur['end'] += 1
-        self.root['cnt'] += 1
+            cur['@'] += 1
+        self.root['#'] += 1
 
     def countWordsEqualTo(self, word: str) -> int:
         cur = self.root
@@ -74,8 +74,8 @@ class Trie:
                 cur = cur[e]
             else:
                 return 0
-        if 'end' in cur:
-            return cur['end']
+        if '@' in cur:
+            return cur['@']
         return 0
 
     def countWordsStartingWith(self, prefix: str) -> int:
@@ -85,31 +85,28 @@ class Trie:
                 cur = cur[e]
             else:
                 return 0
-        return cur['cnt']
+        return cur['#']
 
     def erase(self, word: str) -> None:
         cur = self.root
         for i, e in enumerate(word):
-            if cur[e]['cnt'] == 1:
+            if cur[e]['#'] == 1:
                 del(cur[e])
                 return
             else:
-                cur[e]['cnt'] -= 1
+                cur[e]['#'] -= 1
                 if i == len(word) - 1:
                     break
             cur = cur[e]
-        cur[e]['end'] -= 1
-        self.root['cnt'] -= 1
+        cur[e]['@'] -= 1
+        self.root['#'] -= 1
 
     def startsWith(self, lo: int) -> int:  # 具有公共前缀的最少数量
         def dfs(node, dep):
-            if node['cnt'] < lo:
+            if node['#'] < lo:
                 return 0
             res = dep
-            # if dep >= lo:
-            #     res = dep
-            # if len(node) <= 2: return 0
-            return max([dfs(node[x], dep + 1) for x in node if x not in ('cnt', 'end')] + [res])
+            return max([dfs(node[x], dep + 1) for x in node if x not in ('#', '@')] + [res])
         return dfs(self.root, 0)
 class Solution:
     def longestCommonPrefix(self, words: List[str], k: int) -> List[int]:
