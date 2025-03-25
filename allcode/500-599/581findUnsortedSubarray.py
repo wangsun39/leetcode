@@ -32,16 +32,19 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def findUnsortedSubarray(self, nums: List[int]) -> int:
         n = len(nums)
-        start, end = -1, -1
-        mx = nums[0]
-        for i in range(1, n):
-            if mx > nums[i]:
-                if start == -1:
-                    start = i
-                end = i + 1
-            mx = max(mx, nums[i])
-        if start == -1: return 0
+        queue = [[nums[0], 0]]  # 单调队列
+        start, end = inf, -inf
+        for i, x in enumerate(nums[1:], 1):
+            if x >= queue[-1][0]:
+                queue.append([x, i])
+                continue
+            p = bisect_left(queue, [x, i])
+            start = min(start, queue[p][1])
+            end = i
+        if start == inf:
+            return 0
         return end - start + 1
+
 
 
 

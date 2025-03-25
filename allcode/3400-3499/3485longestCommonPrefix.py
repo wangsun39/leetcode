@@ -48,85 +48,82 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class Tnode:
+    def __init__(self):
+        self.cnt = 0  # 经过这个点的word数量
+        self.dep = -1  # 前缀超过 width 的最大深度， -1 表示不存在
+        self.next = {}  # 子节点
+
 class Trie:
 
-    def __init__(self):
-        self.root = {'#': 0, '@': 0}   # # 表示以当前节点为前缀的单词有多少个，'@' 表示以当前前缀作为单词的有多少个
+    def __init__(self, width):
+        self.width = width
+        self.root = Tnode()
 
     def insert(self, word: str) -> None:  # O(log(len(word)))
-        cur = self.root
-        for e in word:
-            if e not in cur:
-                cur[e] = {'#': 1}
-            else:
-                cur[e]['#'] += 1
-            cur = cur[e]
-        if '@' not in cur:
-            cur['@'] = 1
-        else:
-            cur['@'] += 1
-        self.root['#'] += 1
+        m = len(word)
+        def dfs(idx, cur):  # word[idx] 插入 cur 下
+            if idx < m:
+                if word[idx] not in cur.next:
+                    nd = Tnode()
+                    cur.next[word[idx]] = nd
+                else:
+                    nd = cur.next[word[idx]]
+                dfs(idx + 1, nd)
+                if nd.dep != -1:
+                    cur.dep = max(cur.dep, nd.dep + 1)
+            cur.cnt += 1
+            if cur.cnt >= self.width:
+                cur.dep = max(0, cur.dep)
 
-    def countWordsEqualTo(self, word: str) -> int:
-        cur = self.root
-        for e in word:
-            if e in cur:
-                cur = cur[e]
-            else:
-                return 0
-        if '@' in cur:
-            return cur['@']
-        return 0
-
-    def countWordsStartingWith(self, prefix: str) -> int:
-        cur = self.root
-        for e in prefix:
-            if e in cur:
-                cur = cur[e]
-            else:
-                return 0
-        return cur['#']
+        dfs(0, self.root)
 
     def erase(self, word: str) -> None:
-        cur = self.root
-        for i, e in enumerate(word):
-            if cur[e]['#'] == 1:
-                del(cur[e])
-                return
+        m = len(word)
+        def dfs(idx, cur):
+            if idx < m:
+                nd = cur.next[word[idx]]
+                dfs(idx + 1, nd)
+            cur.cnt -= 1
+            if cur.cnt == 0:
+                cur.next = {}
+            if cur.cnt < self.width:
+                cur.dep = -1
             else:
-                cur[e]['#'] -= 1
-                if i == len(word) - 1:
-                    break
-            cur = cur[e]
-        cur[e]['@'] -= 1
-        self.root['#'] -= 1
+                mx_dep = -1
+                for ch in cur.next:  # 重新根据子节点的dep，计算cur的dep
+                    mx_dep = max(mx_dep, cur.next[ch].dep)
+                if mx_dep != -1: cur.dep = mx_dep + 1  # 子节点有有效的dep
+                else: cur.dep = 0  # 子节点都没有有效的dep，当前节点从0开始
 
-    def startsWith(self, lo: int) -> int:  # 具有公共前缀的最少数量
-        def dfs(node, dep):
-            if node['#'] < lo:
-                return 0
-            res = dep
-            return max([dfs(node[x], dep + 1) for x in node if x not in ('#', '@')] + [res])
-        return dfs(self.root, 0)
+        dfs(0, self.root)
+
+    def query(self) -> int:
+        if self.root.dep == -1:
+            return 0
+        return self.root.dep
 class Solution:
     def longestCommonPrefix(self, words: List[str], k: int) -> List[int]:
         n = len(words)
-        tr = Trie()
+        tr = Trie(k)
         ans = [0] * n
         for i in range(1, n):
             tr.insert(words[i])
-        ans[0] = tr.startsWith(k)
+        ans[0] = tr.query()
         for i in range(1, n):
             tr.erase(words[i])
             tr.insert(words[i - 1])
-            ans[i] = tr.startsWith(k)
+            ans[i] = tr.query()
         return ans
 
 
 
 
 so = Solution()
+print(so.longestCommonPrefix(words = ["cdb","c","cdecf","aee","afdd","dad","bdebb","a","efdb","cffe","bed","ba"], k = 2))
+print(so.longestCommonPrefix(words = ["ccd","adc","dba","bff","cbfae","fcae","cbbc"], k = 3))
 print(so.longestCommonPrefix(words = ["jump","run","run","jump","run"], k = 2))
+print(so.longestCommonPrefix(words = ["db","ca","ab","e","dff","b","afcff"], k = 4))
 
 
 
