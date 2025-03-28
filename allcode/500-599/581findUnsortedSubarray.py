@@ -31,7 +31,6 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findUnsortedSubarray(self, nums: List[int]) -> int:
-        n = len(nums)
         queue = [[nums[0], 0]]  # 单调队列
         start, end = inf, -inf
         for i, x in enumerate(nums[1:], 1):

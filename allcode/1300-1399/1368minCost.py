@@ -52,9 +52,7 @@
 # n == grid[i].length
 # 1 <= m, n <= 100
 
-from collections import deque, defaultdict
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minCost(self, grid: List[List[int]]) -> int:

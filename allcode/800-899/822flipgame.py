@@ -32,8 +32,7 @@
 # 1 <= n <= 1000
 # 1 <= fronts[i], backs[i] <= 2000
 
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def flipgame(self, fronts: List[int], backs: List[int]) -> int:

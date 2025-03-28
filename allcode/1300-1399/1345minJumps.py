@@ -33,9 +33,7 @@
 # 1 <= arr.length <= 5 * 104
 # -108 <= arr[i] <= 108
 
-from collections import deque, defaultdict
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minJumps(self, arr: List[int]) -> int:

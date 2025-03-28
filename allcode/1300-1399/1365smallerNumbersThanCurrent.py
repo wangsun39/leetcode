@@ -31,9 +31,7 @@
 # 2 <= nums.length <= 500
 # 0 <= nums[i] <= 100
 
-from collections import deque, defaultdict
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:

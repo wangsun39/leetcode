@@ -28,10 +28,8 @@
 # n == nums.length
 # 1 <= n <= 3 * 104
 # -3 * 104 <= nums[i] <= 3 * 104
-from heapq import *
-from itertools import accumulate
-from math import inf
-from typing import List
+
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

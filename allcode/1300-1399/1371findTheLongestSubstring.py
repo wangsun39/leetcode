@@ -25,8 +25,7 @@
 # s 只包含小写英文字母。
 
 
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findTheLongestSubstring(self, s: str) -> int:

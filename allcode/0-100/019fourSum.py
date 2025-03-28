@@ -23,9 +23,7 @@
 # -109 <= nums[i] <= 109
 # -109 <= target <= 109
 
-from collections import Counter, defaultdict
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
         nums.sort()

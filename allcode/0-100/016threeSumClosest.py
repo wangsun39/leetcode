@@ -24,8 +24,7 @@
 # -104 <= target <= 104
 
 from collections import Counter
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         n = len(nums)

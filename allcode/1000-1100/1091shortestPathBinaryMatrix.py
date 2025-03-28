@@ -30,10 +30,8 @@
 # n == grid[i].length
 # 1 <= n <= 100
 # grid[i][j] 为 0 或 1
-from math import inf
-from typing import List
-from collections import deque
-from collections import defaultdict
+from leetcode.allcode.competition.mypackage import *
+
 
 class Solution:
     def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:

@@ -41,8 +41,7 @@
 # 每棵树有 1 到 40000 个节点。
 # 每个节点的键值在 [-4 * 10^4 , 4 * 10^4] 之间。
 
-from math import inf
-from typing import List, Optional
+from leetcode.allcode.competition.mypackage import *
 
 
 class TreeNode:

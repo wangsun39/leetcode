@@ -36,8 +36,7 @@
 # 0 <= minutes <= 59
 # 与标准答案误差在 10^-5 以内的结果都被视为正确结果。
 
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def angleClock(self, hour: int, minutes: int) -> float:

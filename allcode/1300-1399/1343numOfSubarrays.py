@@ -23,8 +23,7 @@
 # 1 <= k <= arr.length
 # 0 <= threshold <= 104
 
-from math import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numOfSubarrays(self, arr: List[int], k: int, threshold: int) -> int:

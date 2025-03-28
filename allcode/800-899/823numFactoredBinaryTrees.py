@@ -24,9 +24,7 @@
 # 2 <= arr[i] <= 109
 # arr 中的所有值 互不相同
 
-from math import inf
-from typing import List
-from functools import cache
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numFactoredBinaryTrees1(self, arr: List[int]) -> int:
