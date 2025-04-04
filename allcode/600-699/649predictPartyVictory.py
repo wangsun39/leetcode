@@ -46,32 +46,31 @@ class Solution:
         dd = []
         for i, x in enumerate(senate):
             if x == 'R':
-                dr.append([x, i])
+                dr.append([i, 0])  # 最后一个是flag
             else:
-                dd.append([x, i])
-        r1 = r2 = 0  # dr 的双指针， r1表示剩余元素的左端点，r2 表示当前要处理的位置
-        d1 = d2 = 0  # dd 的双指针， d1表示剩余元素的左端点，d2 表示当前要处理的位置
+                dd.append([i, 0])
         while True:
-            pass
-            if d2 >= len(dd) or (r2 < len(dr) and dr[r2][1] < dd[d2][1]):
-                d1 += 1
-                if d1 > d2: d2 = d1
-                r2 += 1
-            else:
-                r1 += 1
-                if r1 > r2: r2 = r1
-                d2 += 1
-            if r1 >= len(dr): return 'Dire'
-            if d1 >= len(dd): return 'Radiant'
-            if d2 >= len(dd) and r2 >= len(dr):
-                d2, r2 = d1, r1
-
-
-
+            nr, nd = len(dr), len(dd)
+            mn = min(nr, nd)
+            for i in range(mn):
+                if dr[i][0] < dd[i][0]:
+                    dd[i][1] = 1  # 标识删除
+                else:
+                    dr[i][1] = 1
+            dr = [[idx, 0] for idx, flg in dr if flg == 0]
+            dd = [[idx, 0] for idx, flg in dd if flg == 0]
+            if nr < nd:
+                if len(dr) <= nd - nr:
+                    return 'Dire'
+                dr = dr[nd - nr:]
+            elif nr > nd:
+                if len(dd) <= nr - nd:
+                    return 'Radiant'
+                dd = dd[nr - nd:]
 
 so = Solution()
-print(so.predictPartyVictory(senate = "DRRDRDRDRDDRDRDR"))
-print(so.predictPartyVictory(senate = "DDRRR"))
+print(so.predictPartyVictory(senate = "DDRRR"))  # Dire
+print(so.predictPartyVictory(senate = "DRRDRDRDRDDRDRDR"))   # Radiant
 print(so.predictPartyVictory(senate = "RDD"))
 print(so.predictPartyVictory(senate = "RD"))
 
