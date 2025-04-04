@@ -43,10 +43,6 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
-
 class Solution:
     def hasValidPath(self, grid: List[List[str]]) -> bool:
         row, col = len(grid), len(grid[0])

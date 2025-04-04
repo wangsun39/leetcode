@@ -31,20 +31,8 @@
 # 0 <= Node.val <= 1000
 
 
-# Map = [['U' for _ in range(n)] for _ in range(m)]
-
 from leetcode.allcode.competition.mypackage import *
 
-from functools import lru_cache
-from typing import List
-from typing import Optional
-# @lru_cache(None)
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 class Solution:
     def averageOfSubtree(self, root: Optional[TreeNode]) -> int:
         ans = 0

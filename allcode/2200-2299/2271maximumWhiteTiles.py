@@ -35,18 +35,7 @@
 # tiles互相 不会重叠。
 
 
-# Map = [['U' for _ in range(n)] for _ in range(m)]
-
 from leetcode.allcode.competition.mypackage import *
-from collections import defaultdict
-# d = Counter(list1)
-# d = defaultdict(int)
-
-import bisect
-
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
 
 class Solution:
     def maximumWhiteTiles(self, tiles: List[List[int]], carpetLen: int) -> int:

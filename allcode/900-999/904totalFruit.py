@@ -67,9 +67,7 @@
 # 0 <= fruits[i] < fruits.length
 
 
-from functools import lru_cache
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
