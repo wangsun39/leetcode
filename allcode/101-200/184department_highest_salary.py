@@ -65,9 +65,9 @@ import pandas as pd
 
 def department_highest_salary(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:
     grouped = employee.groupby('departmentId')
-    # print(grouped)
+    print(grouped['salary'].max())
     mx_salary = grouped['salary'].max().reset_index()
-    # print(mx_salary)
+    print(mx_salary)
     df = pd.merge(employee, department, left_on='departmentId', right_on='id', how='left')
     # print(df)
     df = pd.merge(mx_salary, df, left_on='departmentId', right_on='departmentId', how='left')
