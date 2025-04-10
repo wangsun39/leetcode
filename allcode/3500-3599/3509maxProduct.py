@@ -74,38 +74,26 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxProduct(self, nums: List[int], k: int, limit: int) -> int:
         n = len(nums)
-        mxp = 1
-        for x in nums:
-            if x > 0:
-                mxp *= x
-        mxp = min(mxp, limit)
 
         @cache
-        def dfs(end, sign, s, p):
-            if end == 0:
-                if p == -1:  # 乘积为0，且已经出现过0
-                    return sign == 1 and s == nums[0]
-                return sign == 1 and s == nums[0] and p == nums[0]
-            if sign == 1 and s == nums[end]:
-                if p == -1 or p == nums[end]: return True
-            if p == -1:
-                if dfs(end - 1, -sign, s - nums[end] * sign, p):
-                    return True
-            elif nums[end] and p % nums[end] == 0:
-                if dfs(end - 1, -sign, s - nums[end] * sign, p // nums[end]):
-                    return True
-            elif p == 0 and nums[end] == 0:
-                if dfs(end - 1, -sign, s - nums[end] * sign, -1):  # 乘积为0，且已经出现过0
-                    return True
-            return dfs(end - 1, sign, s, p)
+        def dfs(start, sign, s, p, empty):
+            res = -1
+            if start == n - 1:
+                # if p <= limit and s == k:
+                #     res = max(p, res)
+                if p * nums[start] <= limit and s + sign * nums[start] == k:
+                    res = max(p * nums[start], res)
+                return res
+            res = dfs(start + 1, sign, s, p, empty)
+            if p * nums[start] <= limit and s + sign * nums[start] == k:
+                res = max(res, p * nums[start])
+            res = max(res, dfs(start + 1, -sign, s + sign * nums[start], p * nums[start], 1))
+            return res
 
-        for p in range(mxp, -1, -1):
-            if dfs(n - 1, 1, k, p):
-                return p
-            if dfs(n - 1, -1, k, p):
-                return p
+        ans = dfs(0, 1, 0, 1, 0)
+
         dfs.cache_clear()
-        return -1
+        return ans
 
 
 so = Solution()

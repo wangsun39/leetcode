@@ -42,11 +42,13 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minimumPairRemoval(self, nums: List[int]) -> int:
-        sl = SortedList()  # [s, i, j]  记录相邻元素 nums[i] 和 nums[j] 的和 s
+        sl = SortedList()  # [s, i, j]  记录相邻元素 nums[i] 和 nums[j] 的和 s 实际上 j == i+1
+        pre = list(accumulate(nums, initial=0))
         dec = set()  # 下降的点对
         n = len(nums)
-        left = list(range(-1, n - 1, 1))
-        right = list(range(1, n + 1, 1))
+        left = list(range(n))  # 聚合之后的左端点
+        right = list(range(n))  # 聚合之后的右端点
+        # 过程中只需要更每个聚合区间左端点的right值，和右端点的left，中间点的left和right都不需要维护了
         for i in range(1, n):
             x, y = nums[i - 1], nums[i]
             if x > y: dec.add((i - 1, i))
@@ -54,34 +56,44 @@ class Solution:
         ans = 0
         while dec:
             s, i, j = sl.pop(0)
-            print(ans)
-            if i > 0:
-                s1 = nums[left[i]] + s
-                if [nums[left[i]] + nums[i], left[i], i] in sl:
-                    sl.remove([nums[left[i]] + nums[i], left[i], i])
-                else:
-                    sl.remove([nums[left[i]] + nums[i], left[i], right[i]])
-                sl.add([s1, left[i], j])
-                if (left[i], i) in dec and nums[left[i]] <= s:
-                    dec.remove((left[i], i))
-                right[left[i]] = j
-            if j < n - 1:
-                s2 = nums[right[j]] + s
-                sl.remove([nums[j] + nums[right[j]], j, right[j]])
-                sl.add([s2, i, right[j]])
-                if s > nums[right[j]]:
-                    dec.add((i, right[j]))
-                left[right[j]] = i
-            nums[i] = nums[j] = s
+            # 连续4段聚合后的区间 [i3, i2] [i1, i] [j,j1] [j2,j3]
+            # 现在要合并 [i1, i] [j,j1] 两个区间
+            # 同时需要更新前后的 sl 值和 dec 值
+            # print(ans)
+            # print(dec)
+            i1, j1 = left[i], right[j]
+            i2, j2 = i1 - 1, j1 + 1
+            if i1 > 0:
+                i3 = left[i2]
+                si = pre[j1 + 1] - pre[i3]  # [i3, j1] 区间和
+                sl.remove([pre[i + 1] - pre[i3], i2, i1])
+                sl.add([si, i2, i1])
+                if (i2, i1) in dec and pre[i2 + 1] - pre[i3] <= s:
+                    dec.remove((i2, i1))
+                if pre[i2 + 1] - pre[i3] > s:
+                    dec.add((i2, i1))
+            if j1 < n - 1:
+                j3 = right[j2]
+                sj = pre[j3 + 1] - pre[i1]  # [i1, j3] 区间和
+                sl.remove([pre[j3 + 1] - pre[j], j1, j2])
+                sl.add([sj, j1, j2])
+                if (j1, j2) in dec and s <= pre[j3 + 1] - pre[j2]:
+                    dec.remove((j1, j2))
+                if s > pre[j3 + 1] - pre[j2]:
+                    dec.add((j1, j2))
             if (i, j) in dec: dec.remove((i, j))
-            right[i] = right[j]
-            left[j] = left[i]
+            right[i1] = j1
+            left[j1] = i1
             ans += 1
 
         return ans
 
+
+
 so = Solution()
-print(so.minimumPairRemoval([2,2,-1,3,-2,2,1,1,1,0,-1]))  #
+print(so.minimumPairRemoval([-7,-2,-4,4,8,-6,0,0,4,5,1,-8]))  # 11
+print(so.minimumPairRemoval([-2,1,2,-1,-1,-2,-2,-1,-1,1,1]))  # 10
+print(so.minimumPairRemoval([2,2,-1,3,-2,2,1,1,1,0,-1]))  # 9
 print(so.minimumPairRemoval([5,2,3,1]))  # 2
 
 

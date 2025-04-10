@@ -46,6 +46,7 @@ class Solution:
             return all(p <= q for p, q in pairwise(arr))
         ans = 0
         while not check(nums):
+            print(nums)
             pair = list(q + p for p, q in pairwise(nums))
             mn = min(pair)
             for i, x in enumerate(pair):
@@ -57,6 +58,7 @@ class Solution:
 
 
 so = Solution()
+print(so.minimumPairRemoval([-2,1,2,-1,-1,-2,-2,-1,-1,1,1]))  # 10
 print(so.minimumPairRemoval([5,2,3,1]))
 print(so.minimumPairRemoval([1,2,2]))
 
