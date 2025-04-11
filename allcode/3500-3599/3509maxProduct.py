@@ -74,20 +74,23 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxProduct(self, nums: List[int], k: int, limit: int) -> int:
         n = len(nums)
+        zero = 0 in nums
 
         @cache
         def dfs(start, sign, s, p, empty):
             res = -1
             if start == n - 1:
-                # if p <= limit and s == k:
-                #     res = max(p, res)
                 if p * nums[start] <= limit and s + sign * nums[start] == k:
                     res = max(p * nums[start], res)
                 return res
             res = dfs(start + 1, sign, s, p, empty)
             if p * nums[start] <= limit and s + sign * nums[start] == k:
                 res = max(res, p * nums[start])
-            res = max(res, dfs(start + 1, -sign, s + sign * nums[start], p * nums[start], 1))
+            if p * nums[start] > limit and zero:
+                res = max(res, dfs(start + 1, -sign, s + sign * nums[start], limit + 1, 1))  # 这步是提高性能的关键
+                # 将乘积大于limit的都看作为limit+1，后面有
+            else:
+                res = max(res, dfs(start + 1, -sign, s + sign * nums[start], p * nums[start], 1))
             return res
 
         ans = dfs(0, 1, 0, 1, 0)

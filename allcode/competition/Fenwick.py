@@ -40,7 +40,7 @@ class Fenwick:
             self.f[i] += val
             i += i & -i
 
-    def update(self, i: int, val: int) -> None:  # nums[i] += val
+    def update(self, i: int, val: int) -> None:  # nums[i] = val
         delta = val - self.nums[i]
         self.add(i, delta)
 
