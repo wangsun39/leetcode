@@ -23,45 +23,33 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-class Fenwick:
-    # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
-    __slots__ = ['f', 'nums']
-
-    def __init__(self, n: int):
-        # n 是能调用下面函数的下标最大值
-        self.f = [0] * (n + 1)  # 关键区间
-        self.nums = [0] * (n + 1)
-
-    def add(self, i: int, val: int) -> None:  # nums[i] += val
-        self.nums[i] += val
-        while i < len(self.f):
-            self.f[i] += val
-            i += i & -i
-
-    def update(self, i: int, val: int) -> None:  # nums[i] = val
-        delta = val - self.nums[i]
-        self.add(i, delta)
-
-    def pre(self, i: int) -> int:  # 下标<=i的和
-        res = 0
-        while i > 0:
-            res += self.f[i]
-            i &= i - 1
-        return res
-
 class Solution:
     def findNumberOfLIS(self, nums: List[int]) -> int:
-        mx = max(nums)
-        fw = Fenwick(mx)
-        ans = 0
-        for x in nums:
-            if x > 1:
-            fw.add(x)
-
+        n = len(nums)
+        arr = sorted(nums)
+        d = {x: i + 1 for i, x in enumerate(arr)}
+        nums = [d[x] for x in nums]  # 离散化
+        dp1 = [1] * n  # 以 nums 结尾的最长子序列个数
+        dp2 = [1] * n  # 以 nums 结尾的最长子序列长度
+        for i in range(1, n):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    if dp2[i] < dp2[j] + 1:
+                        dp2[i] = dp2[j] + 1
+                        dp1[i] = dp1[j]
+                    elif dp2[i] == dp2[j] + 1:
+                        dp1[i] += dp1[j]
+        print(dp1)
+        print(dp2)
+        mx = max(dp2)
+        return sum(dp1[i] for i in range(n) if mx == dp2[i])
 
 
 so = Solution()
-print(so.findNumberOfLIS([-7,-2,-4,4,8,-6,0,0,4,5,1,-8]))  # 11
+print(so.findNumberOfLIS([1,2,3,1,2,3,1,2,3]))  # 10
+print(so.findNumberOfLIS([1,1,1,2,2,2,3,3,3]))  # 27
+print(so.findNumberOfLIS([1,3,5,4,7]))  # 2
+print(so.findNumberOfLIS([2,2,2,2,2]))  # 5
 
 
 
