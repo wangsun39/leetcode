@@ -19,3 +19,14 @@ for i in range(1, MX):
 # (a+b) ^ n 的展开式（二项式展开）中的各项系数依次对应杨辉三角的第 n 行中的每一项。
 # C(n, m) = C(n, m - 1) * (n - m + 1) // m
 
+
+# 当组合数超过k时，退出
+def comb(n: int, m: int) -> int:
+    m = min(m, n - m)
+    res = 1
+    for i in range(1, m + 1):
+        res = res * (n + 1 - i) // i
+        if res >= k:  # 太大了
+            return k
+    return res
+
