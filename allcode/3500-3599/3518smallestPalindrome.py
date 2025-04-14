@@ -54,6 +54,7 @@
 # s 由小写英文字母组成。
 # 保证 s 是回文字符串。
 # 1 <= k <= 106
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
@@ -62,82 +63,55 @@ class Solution:
     def smallestPalindrome(self, s: str, k: int) -> str:
         n = len(s)
         counter = Counter(s[:n//2])
-
         s1 = [''] * (n//2)
 
-        def multinomial_coefficient_optimized(v_list):
-            N = sum(v_list)
-            # 统计每个数字在 v_list 中的出现次数
-            counter_v = Counter(v_list)
+        def comb(n, m):
+            m = min(m, n - m)
+            res = 1
+            for i in range(1, m + 1):
+                res = res * (n + 1 - i) // i
+                if res >= k:  # 太大了
+                    return k
+            return res
 
-            # 分子分母约分的辅助函数
-            def reduce_fraction(numerator, denominator):
-                # common_factors = min(counter_v.get(i, 0) for i in range(1, max(numerator.keys(), default=0) + 1) if i in denominator)
-                for i in range(1, max(numerator.keys(), default=0) + 1):
-                    if i in denominator:
-                        numerator[i] -= min(numerator.get(i, 0), denominator[i])
-                        if numerator[i] == 0:
-                            del numerator[i]
-                    if i in numerator and numerator[i] < 0:
-                        # 处理约分后分子出现负数的情况
-                        denominator[i] = -numerator[i]
-                        numerator[i] = 0
-                return numerator, denominator
+        def calc():
+            # 计算现在Counter()中所有数字的排列数，当超过k时，提前返回
+            v = list(x for x in counter.values() if x)
+            if len(v) == 0: return 1
+            m = sum(v)
+            # C(m, v1)*C(m-v1,v2)*...*C(vi,vi)
+            res = 1
+            for vi in v:
+                # res *= math.comb(m, vi)
+                res *= comb(m, vi)
+                if res > k: return k + 1
+                m -= vi
+            return res
 
-            numerator = Counter()
-            denominator = Counter()
-
-            # 先将 N! 的因子加入分子
-            for i in range(1, N + 1):
-                numerator[i] = numerator.get(i, 0) + 1
-
-            # 减去 v_i! 的因子
-            for v in v_list:
-                for i in range(1, v + 1):
-                    denominator[i] = denominator.get(i, 0) + 1
-
-            # 约分
-            numerator, denominator = reduce_fraction(numerator, denominator)
-
-            # 计算结果
-            result = 1
-            for prime, exp in numerator.items():
-                if prime in denominator:
-                    exp -= denominator[prime]
-                if exp > 0:
-                    result *= prime ** exp
-
-            # 处理分母中剩余的因子（这里简单处理，实际可能需要更复杂的素数分解）
-            # 由于约分过程已经尽量简化，这里假设分母剩余因子已在约分中处理
-            return result
-
-
+        if calc() < k: return ''
         for i in range(n//2):
-            t2, v2 = '', 0
-            c2 = [[kk, v] for kk, v in counter.items()]
-            c2.sort()
-            for t, v in c2:
-                if v == 0: continue
-                counter[t] -= 1
-                v1 = multinomial_coefficient_optimized(counter.values())  # 选择t后，最多有多少可能
-                if v1 < k:
-                    k -= v1
-                    t2, v2 = t, v
-                    counter[t] += 1
+            for x in ascii_lowercase:
+                if counter[x] == 0: continue
+                counter[x] -= 1
+                cnt = calc()
+                if cnt < k:
+                    counter[x] += 1
+                    k -= cnt
                 else:
+                    s1[i] = x
                     break
-            s1[i] = t2
+
         if n & 1 == 0:
             s1 = s1 + s1[::-1]
             return ''.join(s1)
-        s1 = list(s[:n // 2])
-        s1.sort()
         s1 = s1 + [s[n//2]] + s1[::-1]
         return ''.join(s1)
 
 
 so = Solution()
+print(so.smallestPalindrome(s = "rpqpr", k = 2))
 print(so.smallestPalindrome(s = "abba", k = 2))
+print(so.smallestPalindrome(s = "kxk", k = 2))
 
 
 
