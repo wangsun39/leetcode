@@ -39,8 +39,7 @@
 # 进阶：你可以设计一个时间复杂度为 O(n + m + indices.length) 且仅用 O(n + m) 额外空间的算法来解决此问题吗？
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def oddCells(self, m: int, n: int, indices: List[List[int]]) -> int:
         N = len(indices)

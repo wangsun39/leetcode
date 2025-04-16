@@ -25,8 +25,7 @@
 # 1 <= time[i] <= 500
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def numPairsDivisibleBy60(self, time: List[int]) -> int:
         counter = Counter([x % 60 for x in time])

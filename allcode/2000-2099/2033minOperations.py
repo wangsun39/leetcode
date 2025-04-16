@@ -42,8 +42,7 @@
 # 1 <= x, grid[i][j] <= 104
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 from collections import deque
 
 

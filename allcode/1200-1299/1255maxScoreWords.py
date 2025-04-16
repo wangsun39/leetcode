@@ -46,8 +46,7 @@
 # words[i] 和 letters[i] 只包含小写的英文字母。
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 import string
 
 class Solution:

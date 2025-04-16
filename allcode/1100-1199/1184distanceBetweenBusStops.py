@@ -34,8 +34,7 @@
 #
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def distanceBetweenBusStops(self, distance: List[int], start: int, destination: int) -> int:
         if destination < start: start, destination = destination, start

@@ -29,8 +29,7 @@
 # points[i].length == 2
 # 1 <= x, y, ai, bi <= 104
 import math
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def nearestValidPoint(self, x: int, y: int, points: List[List[int]]) -> int:
         minV, ans = math.inf, -1

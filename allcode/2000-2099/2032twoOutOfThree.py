@@ -29,8 +29,7 @@
 # 1 <= nums1[i], nums2[j], nums3[k] <= 100
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 from collections import deque
 
 

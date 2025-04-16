@@ -34,8 +34,7 @@
 # 0 <= colsum[i] <= 2
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def reconstructMatrix(self, upper: int, lower: int, colsum: List[int]) -> List[List[int]]:
         if sum(colsum) != upper + lower: return []

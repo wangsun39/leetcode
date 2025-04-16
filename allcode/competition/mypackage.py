@@ -153,3 +153,21 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
+# 字符串大顶堆的写法
+# class ComparableString:
+#     def __init__(self, s):
+#         self.s = s
+#
+#     def __lt__(self, other):
+#         # 反转比较逻辑，使得较大的字符串在堆顶
+#         return self.s > other.s
+#
+#     def __repr__(self):
+#         # 这个方法定义了对象的字符串表示形式。
+#         return self.s
+#
+# hp = []
+# w = 'abc'
+# heappush(hp, ComparableString(w))
+# w2 = heappop(hp).s

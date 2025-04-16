@@ -36,8 +36,7 @@
 # 0 <= grid[i][j] <=1
 
 
-from typing import List
-from collections import Counter, defaultdict
+from leetcode.allcode.competition.mypackage import *, defaultdict
 
 
 class Solution:

@@ -38,8 +38,7 @@
 # 2 <= n <= 30
 # board[i][j]将只包含0或1
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def movesToChessboard(self, board: List[List[int]]) -> int:

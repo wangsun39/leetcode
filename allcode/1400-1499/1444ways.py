@@ -31,8 +31,7 @@
 # 1 <= k <= 10
 # pizza 只包含字符 'A' 和 '.' 。
 from functools import cache
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 import math
 
 class Solution:

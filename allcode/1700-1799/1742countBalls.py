@@ -40,8 +40,7 @@
 
 # Definition for a binary tree node.
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countBalls(self, lowLimit: int, highLimit: int) -> int:

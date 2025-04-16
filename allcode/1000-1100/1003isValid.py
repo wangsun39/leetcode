@@ -33,8 +33,7 @@
 # s 由字母 'a'、'b' 和 'c' 组成
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def isValid(self, s: str) -> bool:
         stack = []

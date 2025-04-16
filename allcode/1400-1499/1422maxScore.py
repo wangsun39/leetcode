@@ -35,8 +35,7 @@
 
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 import math
 
 class Solution:

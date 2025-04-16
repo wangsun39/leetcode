@@ -26,8 +26,7 @@
 # s 由小写英文字母、大写英文字母和数字组成
 # https://leetcode.cn/problems/letter-case-permutation/
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def letterCasePermutation(self, s: str) -> List[str]:

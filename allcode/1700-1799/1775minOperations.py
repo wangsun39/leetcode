@@ -37,8 +37,7 @@
 
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minOperations(self, nums1: List[int], nums2: List[int]) -> int:

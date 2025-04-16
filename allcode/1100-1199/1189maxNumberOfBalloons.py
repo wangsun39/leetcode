@@ -27,8 +27,7 @@
 # text全部由小写英文字母组成
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxNumberOfBalloons(self, text: str) -> int:
         counter = Counter(text)

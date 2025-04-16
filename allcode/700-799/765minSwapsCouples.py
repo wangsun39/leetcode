@@ -26,8 +26,7 @@
 # 0 <= row[i] < 2n
 # row 中所有元素均无重复
 from copy import deepcopy
-from typing import List
-from collections import Counter, defaultdict
+from leetcode.allcode.competition.mypackage import *, defaultdict
 
 class Solution:
     def minSwapsCouples1(self, row: List[int]) -> int:

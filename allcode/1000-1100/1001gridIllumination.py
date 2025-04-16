@@ -40,8 +40,7 @@
 # 0 <= rowj, colj < n
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def gridIllumination(self, n: int, lamps: List[List[int]], queries: List[List[int]]) -> List[int]:
         points = set()

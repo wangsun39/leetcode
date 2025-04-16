@@ -37,8 +37,7 @@
 # k 的取值范围是 [用户的最大用户活跃分钟数, 105]
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def findingUsersActiveMinutes(self, logs: List[List[int]], k: int) -> List[int]:

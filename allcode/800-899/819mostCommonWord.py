@@ -31,8 +31,7 @@
 
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:

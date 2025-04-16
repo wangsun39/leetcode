@@ -32,8 +32,7 @@
 # stickers[i]和target由小写英文单词组成
 
 
-from typing import List
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minStickers(self, stickers: List[str], target: str) -> int:
