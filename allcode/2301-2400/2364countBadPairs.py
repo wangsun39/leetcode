@@ -47,17 +47,19 @@
 
 
 from leetcode.allcode.competition.mypackage import *
+
 class Solution:
-    def mergeSimilarItems(self, items1: List[List[int]], items2: List[List[int]]) -> List[List[int]]:
-        dd = defaultdict(int)
-        for k, v in items1 + items2:
-            dd[k] += v
-        return sorted([[k, v] for k, v in dd.items()])
-
-
+    def countBadPairs(self, nums: List[int]) -> int:
+        counter = Counter()
+        ans = 0
+        for i, x in enumerate(nums):
+            ans += (i - counter[i - x])
+            counter[i - x] += 1
+        return ans
 
 
 so = Solution()
+print(so.countBadPairs([4,1,3,3]))
 
 
 
