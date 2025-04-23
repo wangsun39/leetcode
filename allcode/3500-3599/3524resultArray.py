@@ -72,53 +72,18 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def resultArray(self, nums: List[int], k: int) -> List[int]:
         n = len(nums)
-        nums = [x % k for x in nums]
-        idx0 = [i for i in range(n) if nums[i] == 0]
-        seg = []
-        if len(idx0) == 0: seg.append([0, n - 1])
-        else:
-            if idx0[0] > 0: seg.append([0, idx0[0] - 1])
-            for x, y in pairwise(idx0):
-                if x + 1 < y:
-                    seg.append([x + 1, y - 1])
-            if idx0[-1] < n - 1: seg.append([idx0[-1] + 1, n - 1])
+        dp = [[0] * k for _ in range(n)]  # dp[i][j] 以 i 结尾的子数组乘积模k为j的个数
+        dp[0][nums[0]%k] = 1
+        for i, x in enumerate(nums[1:], 1):
+            dp[i][x % k] = 1
+            for j in range(k):
+                dp[i][(j * x) % k] += dp[i - 1][j]
+        ans = [0] * k
+        for j in range(k):
+            for i in range(n):
+                ans[j] += dp[i][j]
+        return ans
 
-        def calc0():
-            if len(idx0) == 0: return 0
-            res = 0
-            l = 0  # idx0[l] 为左端点的最大值
-            for i in range(n):  # 枚举以i为右端点，能找到多少个左端点
-                while l + 1 < len(idx0) and idx0[l + 1] <= i:
-                    l += 1
-                if i >= idx0[l]:
-                    res += idx0[l] + 1
-            return res
-
-        def calc_n(val):
-            def calc_seg(a, b):  # 在区间[a, b]中找子区间积模k余val的所以子区间
-                res = 0
-                p = 1  # 前缀积
-                counter = Counter()  # 前缀积模k余数的计数
-                counter[1] = 1
-                for i in range(a, b + 1):
-                    p = (nums[i] * p) % k  # 到i结尾时的前缀积模k的余数
-                    # 需要找到有多少个前缀积j，使得 j * val 与 p 模 k 同余
-                    for j in range(1, k):
-                        if (j * val) % k == p:
-                            res += counter[j]
-                    counter[p] += 1
-                    # p = p1
-                return res
-
-            if len(seg) == 0: return 0
-            return sum(calc_seg(a, b) for a, b in seg)
-
-
-        def calc(val):
-            if val == 0: return calc0()
-            return calc_n(val)
-
-        return [calc(i) for i in range(k)]
 
 
 
