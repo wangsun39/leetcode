@@ -1,14 +1,16 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+# https://leetcode.cn/problems/network-delay-time/solutions/2668220/liang-chong-dijkstra-xie-fa-fu-ti-dan-py-ooe8/
 
 class Solution:
 
     # Dijkstra 算法模板
     # g[x] = [y, w]
     # 返回从 start 到每个点的最短路
-    def dijkstra(g: List[List[Tuple[int]]], start: int) -> List[int]:
-        dist = [inf] * len(g)   # 注意这个地方可能要替换成 n
+    def dijkstra(g: List[List[Tuple[int]]], start: int, n: int) -> List[int]:
+        # dist = [inf] * len(g)   # 注意这个地方可能要替换成 n
+        dist = [inf] * n
         dist[start] = 0
         h = [(0, start)]
         while h:
