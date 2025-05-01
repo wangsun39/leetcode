@@ -51,7 +51,7 @@ from typing import List
 def buildTopo(conditions, n):
     g = defaultdict(set)
     pre_num = [0] * n
-    for x, y in conditions:
+    for x, y in conditions:  # x 先于 y , 原图需要反转时，可以写成 for y, x in conditions:
         if y not in g[x]:
             g[x].add(y)
             pre_num[y] += 1

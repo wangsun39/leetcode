@@ -20,17 +20,13 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def CheckPermutation(self, s1: str, s2: str) -> bool:
-        if len(s1) != len(s2): return False
-        counter = Counter(s1)
-        for e in s2:
-            counter[e] -= 1
-            if counter[e] < 0:
-                return False
-        return True
-
-
-
-
-
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+        for i in range((n + 1) // 2):
+            for j in range(n // 2):
+                matrix[j][n-1-i],matrix[n-1-i][n-1-j],matrix[n-1-j][i],matrix[i][j]=matrix[i][j],matrix[j][n-1-i],matrix[n-1-i][n-1-j],matrix[n-1-j][i]
+        return
 

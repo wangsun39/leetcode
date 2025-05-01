@@ -37,9 +37,7 @@
 
 
 
-from typing import List
-
-from collections import Counter
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
