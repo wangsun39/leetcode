@@ -73,16 +73,65 @@
 # 1 <= queries.length <= 105
 # queries[i] == [ui, vi]
 # 0 <= ui, vi < n
+import math
 
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def pathExistenceQueries(self, n: int, nums: List[int], maxDiff: int, queries: List[List[int]]) -> List[int]:
+        map1 = {i: x for i, x in enumerate(nums)}  # 下标到原数字
+        nums.sort()
+        map2 = {x: i for i, x in enumerate(nums)}  # 原数字到新下标
+        # print(math.log(n, 2))
+        mx = int(math.log(n, 2)) + 1  # 最多走 32 步
+        dp = [[0] * mx for _ in range(n)]  # g[i][j]  表示第i个数字，走 2**j 步，最多走到第几个数字
+        r = 0
+        for i in range(n):
+            while r < n and nums[r] - nums[i] <= maxDiff:
+                r += 1
+            dp[i][0] = r - 1
+        for j in range(1, mx):
+            for i in range(n):
+                last = dp[i][j - 1]
+                if last == n - 1 or nums[last + 1] - nums[last] > maxDiff:
+                    dp[i][j] = last
+                    continue
+                dp[i][j] = dp[last][j - 1]
 
+        def calc(a, b):
+            if dp[a][-1] < b: return -1
+            lo, hi = 0, mx - 1
+            while lo + 1 < hi:
+                mid = (lo + hi) // 2
+                pos = a
+                res = False
+                for i in range(mx):
+                    if mid & (1<<i):
+                        pos = dp[pos][i]
+                        if pos >= b:
+                            res = True
+                            break
 
+                if res:
+                    hi = mid
+                else:
+                    lo = mid
+            return hi
+
+        ans = []
+        for i, j in queries:
+            if i == j:
+                ans.append(0)
+                continue
+            x, y = map2[map1[i]], map2[map1[j]]  # 找到新的下标
+            if y < x: x, y = y, x
+            ans.append(calc(x, y))
+        return ans
 
 so = Solution()
-print(so.pathExistenceQueries())
+print(so.pathExistenceQueries(n = 5, nums = [1,8,3,4,2], maxDiff = 3, queries = [[0,3],[2,4]]))
+print(so.pathExistenceQueries(n = 5, nums = [5,3,1,9,10], maxDiff = 2, queries = [[0,1],[0,2],[2,3],[4,3]]))
+print(so.pathExistenceQueries(n = 3, nums = [3,6,1], maxDiff = 1, queries = [[0,0],[0,1],[1,2]]))
 
 
 
