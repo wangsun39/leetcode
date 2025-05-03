@@ -73,7 +73,6 @@
 # 1 <= queries.length <= 105
 # queries[i] == [ui, vi]
 # 0 <= ui, vi < n
-import math
 
 from leetcode.allcode.competition.mypackage import *
 
@@ -83,7 +82,7 @@ class Solution:
         nums.sort()
         map2 = {x: i for i, x in enumerate(nums)}  # 原数字到新下标
         # print(math.log(n, 2))
-        mx = int(math.log(n, 2)) + 1  # 最多走 32 步
+        mx = int(math.log(n, 2)) + 2  # 最多走 2 ** (mx - 1) 步，这个地方用 + 1会有问题
         dp = [[0] * mx for _ in range(n)]  # g[i][j]  表示第i个数字，走 2**j 步，最多走到第几个数字
         r = 0
         for i in range(n):
@@ -98,9 +97,10 @@ class Solution:
                     continue
                 dp[i][j] = dp[last][j - 1]
 
+        @cache
         def calc(a, b):
             if dp[a][-1] < b: return -1
-            lo, hi = 0, mx - 1
+            lo, hi = 0, 2 ** (mx - 1)
             while lo + 1 < hi:
                 mid = (lo + hi) // 2
                 pos = a
@@ -129,6 +129,8 @@ class Solution:
         return ans
 
 so = Solution()
+print(so.pathExistenceQueries(n = 7, nums = [56,181,45,15,1,144,103], maxDiff = 73, queries = [[1,3]]))
+print(so.pathExistenceQueries(n = 3, nums = [15,19,3], maxDiff = 14, queries = [[2,1],[2,2]]))
 print(so.pathExistenceQueries(n = 5, nums = [1,8,3,4,2], maxDiff = 3, queries = [[0,3],[2,4]]))
 print(so.pathExistenceQueries(n = 5, nums = [5,3,1,9,10], maxDiff = 2, queries = [[0,1],[0,2],[2,3],[4,3]]))
 print(so.pathExistenceQueries(n = 3, nums = [3,6,1], maxDiff = 1, queries = [[0,0],[0,1],[1,2]]))
