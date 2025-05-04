@@ -103,9 +103,10 @@ def trips_and_users(trips: pd.DataFrame, users: pd.DataFrame) -> pd.DataFrame:
     print(df)
     df = df[('2013-10-01' <= df['request_at']) & (df['request_at'] <= '2013-10-03')]
     df['comp'] = (df['status'] == 'completed').astype(int)   # 增加一列表示完成的订单
-    print(df)
+    print('1:', df.to_markdown(index=False))
     grouped = df.groupby('request_at')
     ans = grouped.agg({'comp': 'sum', 'request_at': 'count'}).rename(columns={'request_at': 'count'}).reset_index()
+    print('2:', ans.to_markdown(index=False))
     ans['Cancellation Rate'] = round((ans['count']-ans['comp'])/ans['count'], 2)
     ans.rename(columns={'request_at': 'Day'}, inplace=True)
     del(ans['comp'])

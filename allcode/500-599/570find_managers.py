@@ -50,6 +50,7 @@ def find_managers(employee: pd.DataFrame) -> pd.DataFrame:
     grouped = selected.groupby('managerId')
     g1 = grouped.size().reset_index(name='count')
     print(g1)
+    print(g1.to_markdown(index=False))
     g1 = g1[g1['count']>=5]
     g2 = pd.merge(employee, g1, left_on='id', right_on='managerId', how='inner')
     # print()
