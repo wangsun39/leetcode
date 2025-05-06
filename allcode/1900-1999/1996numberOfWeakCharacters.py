@@ -32,10 +32,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def numberOfWeakCharacters1(self, properties: List[List[int]]) -> int:
         N = len(properties)

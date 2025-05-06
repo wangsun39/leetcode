@@ -39,10 +39,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def getLucky(self, s: str, k: int) -> int:
         ss = ''

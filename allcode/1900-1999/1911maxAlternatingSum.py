@@ -32,10 +32,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def maxAlternatingSum(self, nums: List[int]) -> int:
         n = len(nums)

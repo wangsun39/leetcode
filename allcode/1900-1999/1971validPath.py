@@ -36,10 +36,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
         fa = list(range(n))

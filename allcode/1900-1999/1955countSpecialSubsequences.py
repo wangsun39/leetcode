@@ -40,10 +40,7 @@
 
 
 
-from typing import List
-from collections import deque
-# Definition for a binary tree node.
-import bisect
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def countSpecialSubsequences(self, nums: List[int]) -> int:
         MOD = 10 ** 9 + 7
