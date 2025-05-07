@@ -67,44 +67,28 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minTravelTime(self, l: int, n: int, k: int, position: List[int], time: List[int]) -> int:
-        st = sum(time)
+        s = list(accumulate(time, initial=0))
 
-        # @cache
-        def dfs(i, j, t):  # 从第 i 个位置开始，共进行了j次合并，且最后一段每公里的用时为t时，最小的旅行时间
-            if i == 0:
-                if j == 0 and t == 0:
-                    print('0:', i, j, t, 0)
-                    return 0
-                return inf
-            if i == 1:
-                if j == 0 and t == time[0]:
-                    print('0:', i, j, t, (position[i] - position[i - 1]) * t)
-                    return (position[i] - position[i - 1]) * t
-                return inf
+        @cache
+        def dfs(pre, i, leftK):  # 从第 i 个位置开始向后，还需要合并leftK次，pre是在i左侧连续被合并的第一个位置，
+            # 即从pre...i-1都被合并了，在此前提下，从i到结尾的最小的旅行时间
+            # 从状态定义可知，pre...i-1这段的时间都会被加到i向后的时间上
+            if i == n - 1:
+                return inf if leftK else 0
+            if leftK == 0:
+                return (position[i + 1] - position[i]) * (s[i + 1] - s[pre]) + dfs(i + 1, i + 1, leftK)
+            # 枚举下一个从i直接将走到的点
+            # i+1 是下一段开始第一个被合并的点
             res = inf
-            if t == time[i - 1]:
-                res = min(dfs(i - 1, j, ii) + (position[i] - position[i - 1]) * (ii + time[i - 1]) for ii in range(st + 1))
-            if t >= time[i - 1] and j >= 1:
-                v = dfs(i - 1, j - 1, t - time[i - 1])
-                if v != inf:
-                    tt = 0
-                    for ii in range(i - 2, -1, -1):
-                        tt += time[ii]
-                        if tt == t - time[i - 1]:
-                            # delta = (position[i] - position[i - 1]) * t + (position[i - 1] - position[ii]) * time[i - 1]
-                            # res = min(res, v + delta)
-                            res = min(res, v + (position[i - 1] - position[ii]) * time[ii])
-                            break
-                    # res = min(res, v + (position[i] - position[i - 1]) * (t - time[i - 1]))
-            print('2:', i, j, t, res)
+            for nxt in range(i + 1, n):
+                if nxt - (i + 1) > leftK: break  # 合并的点超过leftK
+                v = (position[nxt] - position[i]) * (s[i + 1] - s[pre]) + dfs(i + 1, nxt, leftK - (nxt - (i + 1)))
+                res = min(res, v)
             return res
 
-        ans = inf
-        for ii in range(st + 1):
-            v = dfs(n - 1, k, ii)
-            if ans > v:
-                ans = v
-        return ans
+        return dfs(0, 0, k)
+
+
 
 
 so = Solution()
