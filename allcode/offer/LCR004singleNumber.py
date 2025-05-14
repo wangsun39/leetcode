@@ -29,6 +29,19 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
+        counter = Counter()
+        for x in nums:
+            for i in range(32):
+                if x & (1 << i):
+                    counter[i] += 1
+        ans = 0
+        for i, c in counter.items():
+            if c % 3 != 0:
+                ans |= (1 << i)
+
+        if ans & (1 << 31):
+            ans -= (1 << 32)
+        return ans
 
 
 so = Solution()
