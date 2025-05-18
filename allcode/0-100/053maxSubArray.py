@@ -53,7 +53,7 @@ class Solution:
                 sumFromStart = 0
         return maxSegment
 
-    def maxSubArray(self, nums: List[int]) -> int:
+    def maxSubArray2(self, nums: List[int]) -> int:
         # 2023/7/20:  DP
         ans = v = nums[0]
         for i, x in enumerate(nums[1:], 1):
@@ -63,6 +63,18 @@ class Solution:
             else:
                 v += x
             ans = max(ans, v)
+        return ans
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        # 2025/5/17 前缀和，记录之前最小值
+        s = 0
+        mn = 0
+        ans = nums[0]
+        for x in nums:
+            s += x
+            ans = max(ans, s - mn)
+            mn = min(mn, s)
+
         return ans
 
 so = Solution()
