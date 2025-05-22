@@ -18,13 +18,6 @@ class Solution {
 int main()
 {
     std::cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    std::vector<std::vector<char>> board = {
-        {'A', 'B', 'C', 'E'},
-        {'S', 'F', 'C', 'S'},
-        {'A', 'D', 'E', 'E'}
-    };
-    Solution so;
-    auto v = so.exist(board, "ABCCED");
-    cout << v << endl;
+
     return 0;
 }
