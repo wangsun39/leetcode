@@ -67,6 +67,8 @@ from heapq import *
 # heapq.heapreplace(heap, item)  删除最小值并添加新值
 # 如果需要获取堆中最大或最小的范围值，则可以使用heapq.nlargest() 或heapq.nsmallest() 函数  这2个性能很差
 
+import functools
+
 # Map = [['U' for _ in range(n)] for _ in range(m)]
 # Map = [['U'] * n for _ in range(m)]
 
@@ -138,6 +140,15 @@ from sortedcontainers import SortedList, SortedDict, SortedSet
 
 # v = reduce(lambda x, y: x ^ y, nums)  对 nums 所有元素进行异或运算
 
+# 自定义排序的比较函数
+# def cmp(x, y):  # return -1 if x < y  1 if x > y
+#     xy = x + y
+#     yx = y + x
+#     return 1 if xy > yx else -1
+#
+#
+# password = [str(x) for x in password]
+# password.sort(key=functools.cmp_to_key(cmp))
 
 # T9 键盘
 T9 = {'a': '2', 'b': '2', 'c': '2', 'd': '3', 'e': '3', 'f': '3', 'g': '4', 'h': '4', 'i': '4', 'j': '5',

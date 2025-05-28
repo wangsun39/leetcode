@@ -1,40 +1,38 @@
-# 有一只跳蚤的家在数轴上的位置 x 处。请你帮助它从位置 0 出发，到达它的家。
+# 给你一个长度为 n 的整数数组 nums ，这个数组中至多有 50 个不同的值。同时你有 m 个顾客的订单 quantity ，其中，整数 quantity[i] 是第 i 位顾客订单的数目。请你判断是否能将 nums 中的整数分配给这些顾客，且满足：
 #
-# 跳蚤跳跃的规则如下：
-#
-# 它可以 往前 跳恰好 a 个位置（即往右跳）。
-# 它可以 往后 跳恰好 b 个位置（即往左跳）。
-# 它不能 连续 往后跳 2 次。
-# 它不能跳到任何 forbidden 数组中的位置。
-# 跳蚤可以往前跳 超过 它的家的位置，但是它 不能跳到负整数 的位置。
-#
-# 给你一个整数数组 forbidden ，其中 forbidden[i] 是跳蚤不能跳到的位置，同时给你整数 a， b 和 x ，请你返回跳蚤到家的最少跳跃次数。如果没有恰好到达 x 的可行方案，请你返回 -1 。
+# 第 i 位顾客 恰好 有 quantity[i] 个整数。
+# 第 i 位顾客拿到的整数都是 相同的 。
+# 每位顾客都满足上述两个要求。
+# 如果你可以分配 nums 中的整数满足上面的要求，那么请返回 true ，否则返回 false 。
 #
 #
 #
 # 示例 1：
 #
-# 输入：forbidden = [14,4,18,1,15], a = 3, b = 15, x = 9
-# 输出：3
-# 解释：往前跳 3 次（0 -> 3 -> 6 -> 9），跳蚤就到家了。
+# 输入：nums = [1,2,3,4], quantity = [2]
+# 输出：false
+# 解释：第 0 位顾客没办法得到两个相同的整数。
 # 示例 2：
 #
-# 输入：forbidden = [8,3,16,6,12,20], a = 15, b = 13, x = 11
-# 输出：-1
+# 输入：nums = [1,2,3,3], quantity = [2]
+# 输出：true
+# 解释：第 0 位顾客得到 [3,3] 。整数 [1,2] 都没有被使用。
 # 示例 3：
 #
-# 输入：forbidden = [1,6,2,14,5,17,4], a = 16, b = 9, x = 7
-# 输出：2
-# 解释：往前跳一次（0 -> 16），然后往回跳一次（16 -> 7），跳蚤就到家了。
+# 输入：nums = [1,1,2,2], quantity = [2,2]
+# 输出：true
+# 解释：第 0 位顾客得到 [1,1] ，第 1 位顾客得到 [2,2] 。
 #
 #
 # 提示：
 #
-# 1 <= forbidden.length <= 1000
-# 1 <= a, b, forbidden[i] <= 2000
-# 0 <= x <= 2000
-# forbidden 中所有位置互不相同。
-# 位置 x 不在 forbidden 中。
+# n == nums.length
+# 1 <= n <= 105
+# 1 <= nums[i] <= 1000
+# m == quantity.length
+# 1 <= m <= 10
+# 1 <= quantity[i] <= 105
+# nums 中至多有 50 个不同的数字。
 
 from leetcode.allcode.competition.mypackage import *
 
@@ -46,23 +44,41 @@ class Solution:
         counter = list(counter.values())
         n, m = len(counter), len(quantity)
 
+        s = [0] * (1 << m)  # 预处理所有bits对应的quantity之和
+        for i in range(1 << m):
+            for j in range(m):
+                if i & (1 << j):
+                    s[i] += quantity[j]
+
         @cache
         def dfs(idx, bits):  # 用bits描述对 quantity 覆盖情况
             # 返回前idx个counter，是否能覆盖bits对应的 quantity
             if bits == 0:
                 return True
             if idx == 0:
-                s = 0
-                for i in range(m):
-                    if bits & (1 << i):
-                        s += quantity[i]
-                return counter[idx] >= s
+                return counter[idx] >= s[bits]
+
+            # 遍历bits的所有子集
+            sub = bits
+            while True:
+                # 处理 sub 的逻辑
+                c = bits - sub  # bits中除了 sub的子集
+                if counter[idx] >= s[c] and dfs(idx - 1, sub):
+                    return True
+                sub = (sub - 1) & bits
+                if sub == bits:
+                    break
+
+            return False
+
+        return dfs(n - 1, (1 << m) - 1)
 
 
 
 
 so = Solution()
-print(so.canDistribute(forbidden = [8,3,16,6,12,20], a = 15, b = 13, x = 11))   # -1
+print(so.canDistribute(nums = [1,2,3,3], quantity = [2]))   # True
+print(so.canDistribute(nums = [1,2,3,4], quantity = [2]))   # False
 
 
 
