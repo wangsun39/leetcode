@@ -5,7 +5,7 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def getDepthAndBal(self, root, depth):
+    def getDepthAndBal1(self, root, depth):
         if root.left is None:
             depth_l = depth
         else:
@@ -20,13 +20,21 @@ class Solution:
                 return False, 0
         return (abs(depth_l - depth_r) <= 1), max(depth_l, depth_r)
 
-    def isBalanced(self, root):
+    def isBalanced1(self, root):
         if root is None:
             return True
         ret, depth = self.getDepthAndBal(root, 1)
         return ret
 
+    def isBalanced(self, root):
+        # 2025/5/30 简化写法
+        def dfs(node):
+            if node is None: return True, 0
+            l, r = dfs(node.left), dfs(node.right)
+            if not l[0] or not r[0] or abs(l[1] - r[1]) > 1: return False, 0
+            return True, max(l[1], r[1]) + 1
 
+        return dfs(root)[0]
 
 root = TreeNode(3)
 root.left = TreeNode(9)
