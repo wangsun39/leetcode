@@ -68,12 +68,11 @@ class Solution:
                 for i in range(1, 7):
                     y = x + i
                     if y == m - 1: return cnt
-                    if vis[y] and arr[y] == -1: continue  # 到达过y，并且y不能跳转时
+                    if vis[y] == 1: continue  # 曾经路过y
                     if arr[y] == -1:
                         dq2.append(y)
                         vis[y] = 1
                         continue
-                    if vis[y] == 1: continue  # 曾经路过y  （路过的节点和到达过的节点是不同的）
                     vis[y] = 1  # 路过y，但没有到达
                     z = arr[y] - 1
                     if z == m - 1: return cnt

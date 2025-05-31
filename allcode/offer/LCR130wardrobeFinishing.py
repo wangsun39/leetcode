@@ -21,21 +21,35 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def wardrobeFinishing(self, m: int, n: int, cnt: int) -> int:
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
+        @cache
         def count(x):
             res = 0
             while x:
                 res += x % 10
                 x //= 10
             return res
-        for i in range(m):
-            ci = count(i)
-            for j in range(n):
-                cj = count(j)
-                if ci + cj
+        vis = {(0, 0)}
+        dq1 = deque([(0,0)])
+        while dq1:
+            dq2 = deque()
+            while dq1:
+                x, y = dq1.popleft()
+                for dx, dy in dir:
+                    u, v = x + dx, y + dy
+                    if 0 <= u < m and 0 <= v < n and (u, v) not in vis and count(u) + count(v) <= cnt:
+                        dq2.append((u, v))
+                        vis.add((u, v))
+            dq1 = dq2
+
+        return len(vis)
 
 
 so = Solution()
-print(so.wardrobeFinishing(grid = [["a","a"]], target = "aaa"))
+print(so.wardrobeFinishing(m = 3, n = 1, cnt = 0))
+print(so.wardrobeFinishing(m = 16, n = 8, cnt = 4))
+print(so.wardrobeFinishing(m = 4, n = 7, cnt = 5))
 
 
 
