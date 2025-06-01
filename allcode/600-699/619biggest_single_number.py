@@ -85,7 +85,6 @@ my_numbers = pd.DataFrame(data, columns=['num']).astype({'num':'Int64'})
 
 print(biggest_single_number(my_numbers))
 
-# select name as Customers from Customers  where id not in (select customerId from Orders);
 # -- Write your PostgreSQL query statement below
 
 # PostgreSQL
