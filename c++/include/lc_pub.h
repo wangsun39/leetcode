@@ -42,6 +42,27 @@ std::ostream &operator<<(std::ostream &out, const std::vector<T> &v)
     return out;
 }
 
+template <typename T>
+std::ostream &operator<<(std::ostream &out, const std::vector<std::vector<T>> &v)
+{
+    if (!v.empty())
+    {
+        out << '[';
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            out << '[';
+            std::copy(v[i].begin(), v[i].end(), std::ostream_iterator<T>(out, ", "));
+            out << "\b\b";
+            if (i != v.size() - 1)
+            {
+                out << "], ";
+            }
+        }
+        out << "]";
+    }
+    return out;
+}
+
 // 字符串转为二维vector数组
 // "[[1,1,1,-1,-1],[1,1,1,-1,-1],[-1,-1,-1,1,1],[1,1,1,1,-1],[-1,-1,-1,-1,-1]]"
 vector<vector<int>> parseGrid(const string &gridText)

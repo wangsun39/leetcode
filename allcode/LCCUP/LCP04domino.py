@@ -36,42 +36,20 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def domino(self, n: int, m: int, broken: List[List[int]]) -> int:
-        arr = [[0] * m for _ in range(n)]
-        for x, y in broken:
-            arr[x][y] = 1
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        match = {}  # 记录匹配的点对
+        br = set(tuple(x) for x in broken)
 
-        def dfs(r, c):
-            # print(r, c)
-            res = 0
-            if r == n and c == m: return 0
-            for i in range(r, n):
-                start = 0
-                if i == r:
-                    start = c
-                for j in range(start, m):
-                    if arr[i][j] == 1: continue
-                    # 不选 arr[i][j]
-                    arr[i][j] = 1
-                    res = max(res, dfs(i, j + 1))
-                    arr[i][j] = 0
-                    # flg = 0
-                    # 选 arr[i][j]
-                    if j < m - 1 and arr[i][j + 1] == 0:
-                        arr[i][j] = arr[i][j + 1] = 1
-                        res = max(res, dfs(i, j + 2) + 1)
-                        arr[i][j] = arr[i][j + 1] = 0
-                        # flg = 1
-                    if i < n - 1 and arr[i + 1][j] == 0:
-                        arr[i][j] = arr[i + 1][j] = 1
-                        res = max(res, dfs(i, j + 1) + 1)
-                        arr[i][j] = arr[i + 1][j] = 0
-                        flg = 1
-                    # if flg == 1:
-                    #     break
-                    break
-            return res
 
-        return dfs(0, 0)
+        def dfs(node):
+            # 从点node出发找一条增广路径
+            x, y = node
+            vis = set()
+            for dx, dy in dir:
+                u, v = x + dx, y + dy
+                if 0 <= u < n and 0 <= v < m and (u, v) not in br and (u, v) not in vis:
+
+
 
 so = Solution()
 print(so.domino(n = 8, m = 8, broken = []))
