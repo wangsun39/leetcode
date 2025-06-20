@@ -39,21 +39,39 @@ class Solution:
         dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
         match = {}  # 记录匹配的点对
         br = set(tuple(x) for x in broken)
-
+        ans = 0
 
         def dfs(node):
             # 从点node出发找一条增广路径
             x, y = node
-            vis = set()
+            vis.add(node)
             for dx, dy in dir:
-                u, v = x + dx, y + dy
-                if 0 <= u < n and 0 <= v < m and (u, v) not in br and (u, v) not in vis:
+                u, v = x + dx, y + dy  # (u, v) 是node的匹配点
+                if 0 <= u < n and 0 <= v < m and (u, v) not in br:
+                    if (u, v) in match and match[(u, v)] in vis: continue
+                    if (u, v) not in match or dfs(match[(u, v)]):
+                        # match[(u, v)] 与 node在二分图的同侧
+                        match[node] = (u, v)
+                        match[(u, v)] = node
+                        return True
+            return False
+
+        for i in range(n):
+            for j in range(m):
+                if (i + j) & 1 and (i, j) not in br:
+                    vis = set()  # vis 中只存 (i,j)侧的点
+                    if dfs((i, j)):
+                        ans += 1
+        return ans
+
 
 
 
 so = Solution()
-print(so.domino(n = 8, m = 8, broken = []))
+print(so.domino(n = 3, m = 2, broken = [[1, 0], [2, 0]]))
+print(so.domino(n = 3, m = 3, broken = []))
 print(so.domino(n = 2, m = 3, broken = [[1, 0], [1, 1]]))
+print(so.domino(n = 8, m = 8, broken = []))
 
 
 
