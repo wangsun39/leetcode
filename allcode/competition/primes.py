@@ -92,6 +92,13 @@ for i in range(1, MX):  # 预处理每个数的所有因子，时间复杂度 O(
     for j in range(i, MX, i):
         divisors[j].append(i)
 
+MX = 10 ** 5 + 1
+# MX = 10
+omega = [[] for _ in range(MX)]  # omega[i]  表示i的所有质因子
+for i in range(2, MX):  # 预处理 omega
+    if len(omega[i]) == 0:  # i 是质数
+        for j in range(i, MX, i):
+            omega[j].append(i)  # i 是 j 的一个质因子
 
 # 因子分解
 def factors(x):
