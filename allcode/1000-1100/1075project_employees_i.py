@@ -87,7 +87,6 @@ print(project_employees_i(project, employee))
 # -- Write your PostgreSQL query statement below
 
 # PostgreSQL
-
-
+# select Project_id, round(sum(experience_years)/count(1)::NUMERIC, 2) average_years from Project a, Employee b where a.employee_id = b.employee_id group by Project_id;
 
 

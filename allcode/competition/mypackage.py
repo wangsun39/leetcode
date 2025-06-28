@@ -10,7 +10,9 @@ from collections import deque
 # de.popleft()
 from itertools import pairwise, accumulate, product, permutations
 # list(permutations(cards))  # 迭代器必须转成list，否则只能使用一次
-# p2 = list(product(['+', '-', '*', '/'], repeat=3))  # 生成 3 个范围为 0-3 的序列
+# for v in permutations(cand, l):  # 枚举长度为l的所以排序，检测它的k倍是否是一个合适的子序列
+# permutations 可以保证按cand的顺序枚举
+# p2 = list(product(['+', '-', '*', '/'], repeat=3))  # 生成 所有长度为3的序列，每个元素都从这个4个值中取，共64种
 # list(accumulate(nums))  数组前缀和
 # Definition for a binary tree node.
 from collections import Counter
