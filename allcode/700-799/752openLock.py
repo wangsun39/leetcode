@@ -68,6 +68,7 @@ for i in range(10000):
 class Solution:
     def openLock(self, deadends: List[str], target: str) -> int:
         s = set(int(x) for x in deadends)
+        if 0 in s: return -1
 
         def dijkstra(g: List[List[Tuple[int]]], start: int, n: int) -> List[int]:
             # dist = [inf] * len(g)   # 注意这个地方可能要替换成 n
