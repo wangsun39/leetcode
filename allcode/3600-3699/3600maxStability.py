@@ -66,13 +66,76 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+class UnionFind:
+    def __init__(self, n: int):
+        # 一开始有 n 个集合 {0}, {1}, ..., {n-1}
+        # 集合 i 的代表元是自己
+        self._fa = list(range(n))  # 代表元
+        self.cc = n  # 连通块个数
+
+    # 返回 x 所在集合的代表元
+    # 同时做路径压缩，也就是把 x 所在集合中的所有元素的 fa 都改成代表元
+    def find(self, x: int) -> int:
+        # 如果 fa[x] == x，则表示 x 是代表元
+        if self._fa[x] != x:
+            self._fa[x] = self.find(self._fa[x])  # fa 改成代表元
+        return self._fa[x]
+
+    # 把 from 所在集合合并到 to 所在集合中
+    # 返回是否合并成功
+    def merge(self, from_: int, to: int) -> bool:
+        x, y = self.find(from_), self.find(to)
+        if x == y:  # from 和 to 在同一个集合，不做合并
+            return False
+        self._fa[x] = y  # 合并集合。修改后就可以认为 from 和 to 在同一个集合了
+        self.cc -= 1  # 成功合并，连通块个数减一
+        return True
+
+
 class Solution:
     def maxStability(self, n: int, edges: List[List[int]], k: int) -> int:
+        e1 = [[x, y, w] for x, y, w, m in edges if m == 1]
+        if len(e1):
+            mn1 = min(e[2] for e in e1)
+        else:
+            mn1 = inf
+        e2 = [[x, y, w] for x, y, w, m in edges if m == 0]
+
+        def check(val):
+            # 检查稳定性为val的生成树是否存在
+            if mn1 < val: return False
+            e3, e4 = [], []
+            for e in e2:
+                if e[2] >= val: e3.append(e)
+                elif e[2] * 2 >= val: e4.append(e)
+            uf = UnionFind(n)
+            for x, y, w in e1:
+                if not uf.merge(x, y):
+                    return False
+            cnt = 0
+            for x, y, _ in e3:
+                uf.merge(x, y)
+            for x, y, _ in e4:
+                if not uf.merge(x, y): continue
+                cnt += 1
+                if cnt > k: return False
+            return uf.cc == 1
+
+        if not check(1): return -1
+        lo, hi = 0, max(w for _, _, w, _ in edges) * 2 + 1
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
+            else:
+                hi = mid
+        return lo
 
 
 so = Solution()
-print(so.maxStability(n = 3, edges = [[0,1,2,1],[1,2,3,0]], k = 1))
 print(so.maxStability(n = 3, edges = [[0,1,4,0],[1,2,3,0],[0,2,1,0]], k = 2))
+print(so.maxStability(n = 5, edges = [[0,1,96990,0],[2,4,48733,1],[0,4,78225,0],[3,4,858,1],[1,4,92483,0]], k = 1))
+print(so.maxStability(n = 3, edges = [[0,1,2,1],[1,2,3,0]], k = 1))
 print(so.maxStability(n = 3, edges = [[0,1,1,1],[1,2,1,1],[2,0,1,1]], k = 0))
 
 
