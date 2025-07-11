@@ -27,8 +27,7 @@
 # 1 <= c <= 100
 # a != b, b != c, c != a
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def numMovesStones(self, a: int, b: int, c: int) -> List[int]:

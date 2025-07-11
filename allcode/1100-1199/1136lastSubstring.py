@@ -18,8 +18,7 @@
 # 1 <= s.length <= 4 * 105
 # s 仅含有小写英文字符。
 
-from typing import List
-from collections import deque, defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

@@ -18,8 +18,7 @@
 # 1 <= grid[0].length <= 100
 # grid[i][j] 为 0 或 1
 
-from typing import List
-from collections import deque, defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

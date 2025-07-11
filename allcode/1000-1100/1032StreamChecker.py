@@ -40,8 +40,7 @@
 # letter 是一个小写英文字母
 # 最多调用查询 4 * 104 次
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 
 class Trie:
 

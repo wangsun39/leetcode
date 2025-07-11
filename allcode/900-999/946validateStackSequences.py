@@ -25,8 +25,7 @@
 # # popped 是 pushed 的一个排列
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
         n = len(pushed)

@@ -32,8 +32,7 @@
 # 1 <= target.length <= 100
 # target 仅含有小写英文字母。
 
-from typing import List
-from collections import deque, defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

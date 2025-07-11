@@ -46,8 +46,7 @@
 
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 # Definition for a binary tree node.
 class Solution:
     def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:

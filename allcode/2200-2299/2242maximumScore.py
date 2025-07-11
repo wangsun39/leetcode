@@ -43,11 +43,9 @@
 # 0 <= ai, bi <= n - 1
 # ai != bi
 # 不会有重边。
-from heapq import *
-from typing import List
-from collections import deque, defaultdict
-# Definition for a binary tree node.
-from collections import Counter
+
+from leetcode.allcode.competition.mypackage import *
+
 class Solution:
     def maximumScore(self, scores: List[int], edges: List[List[int]]) -> int:
         g = defaultdict(list)

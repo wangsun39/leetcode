@@ -41,8 +41,7 @@
 
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 # Definition for a binary tree node.
 class Solution:
     def missingRolls1(self, rolls: List[int], mean: int, n: int) -> List[int]:

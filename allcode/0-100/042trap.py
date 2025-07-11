@@ -22,8 +22,7 @@
 # 0 <= height[i] <= 105
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def trap(self, height: List[int]) -> int:

@@ -30,8 +30,7 @@
 
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def crackSafe1(self, n: int, k: int) -> str:
         seen = set()

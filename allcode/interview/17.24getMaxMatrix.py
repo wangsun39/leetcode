@@ -39,15 +39,21 @@ class Solution:
         ans = [0, 0, 0, 0]
         for i in range(r):
             for k in range(i + 1):
-                dp = [0] * c  # 考虑从k行到i行，以j列结尾的所有子矩阵的最大和
+                dp = [-inf] * c  # 考虑从k行到i行，以j列结尾的所有子矩阵的最大和
                 dp[0] = sumRegion(k, 0, i, 0)
+                start = [0] * c  # 记录取到最小值时的开始列
                 if mx < dp[0]:
                     ans = [k, 0, i, 0]
                     mx = dp[0]
                 for j in range(1, c):
-                    dp[j] = max(dp[j], dp[j - 1] + sumRegion(k, j, i, j))
+                    if dp[j - 1] > 0:
+                        start[j] = start[j - 1]
+                        dp[j] = dp[j - 1] + sumRegion(k, j, i, j)
+                    else:
+                        start[j] = j
+                        dp[j] = sumRegion(k, j, i, j)
                     if mx < dp[j]:
-                        ans = [k, j, i, j]
+                        ans = [k, start[j], i, j]
                         mx = dp[j]
         return ans
 
@@ -55,6 +61,7 @@ class Solution:
 
 
 so = Solution()
+print(so.getMaxMatrix([[9,-8,1,3,-2],[-3,7,6,-2,4],[6,-4,-4,8,-7]]))
 print(so.getMaxMatrix([
    [-1,0],
    [0,-1]

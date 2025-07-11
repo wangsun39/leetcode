@@ -33,8 +33,7 @@
 
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def reachNumber(self, target: int) -> int:
         target = abs(target)

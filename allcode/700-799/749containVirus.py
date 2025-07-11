@@ -44,8 +44,7 @@
 
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def containVirus(self, isInfected: List[List[int]]) -> int:
         dirs = [[0, 1], [0, -1], [-1, 0], [1, 0]]

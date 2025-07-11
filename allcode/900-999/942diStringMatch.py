@@ -26,8 +26,7 @@
 # s 只包含字符"I"或"D"
 
 
-from typing import List
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def diStringMatch(self, s: str) -> List[int]:
         n = len(s) + 1
