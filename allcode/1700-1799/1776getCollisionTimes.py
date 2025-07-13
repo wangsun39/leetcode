@@ -29,9 +29,39 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def getCollisionTimes(self, cars: List[List[int]]) -> List[float]:
+        n = len(cars)
+        ans = [0] * n
+        stack = []  # 右侧一辆车入栈时的位置和速度
+        for i in range(n - 1, -1, -1):
+            if len(stack) == 0:
+                stack = [cars[i] + [i]]  # [车位置,车速度,车id]
+                ans[i] = inf
+                continue
+            while stack:
+                if stack[-1][1] >= cars[i][1]:
+                    t1 = inf
+                else:
+                    t1 = (stack[-1][0] - cars[i][0]) / (cars[i][1] - stack[-1][1])  # cars[i] 追上 前一辆车的时间
+                r = stack[-1][2]
+                if t1 < ans[r]:
+                    # cars[i] 与 stack[-1]相撞的时间 小于stack[-1]与stack[-2]相撞的时间
+                    # 此时之间得到cars[i]的答案
+                    # 这个地方不能加等号，如果几辆车同时相撞，要把最前面的留下，其他都pop出去，因为最前面的速度最小
+                    # 如果t1==ans[r]==inf，把前面的车pop掉也没有问题
+                    ans[i] = t1
+                    stack.append(cars[i] + [i])
+                    break
+                stack.pop()
+            if len(stack) == 0:
+                ans[i] = inf
+                stack.append(cars[i] + [i])
 
+        for i in range(n):
+            if ans[i] == inf: ans[i] = -1
+        return ans
 
 obj = Solution()
-#print(obj.kConcatenationMaxSum([1,-2], 3))
+print(obj.getCollisionTimes(cars = [[3,4],[5,4],[6,3],[9,1]]))
+print(obj.getCollisionTimes(cars = [[1,2],[2,1],[4,3],[7,2]]))
 
 

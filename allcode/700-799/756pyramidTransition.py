@@ -45,7 +45,7 @@ class Solution:
             da[al[:2]].append(al[2])
 
         @cache
-        def dfs(arr1, arr2): # 枚举最上两层
+        def dfs(arr1, arr2): # 枚举最下两层
             l1, l2 = len(arr1), len(arr2)
             if l1 == l2 - 1:
                 if l1 == 1: return True
