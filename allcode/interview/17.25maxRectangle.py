@@ -38,28 +38,72 @@ class Trie:
         cur['end'] = True
 
 
-    def search(self, word: str) -> bool:
-        cur = self.root
-        for e in word:
-            if e in cur:
-                cur = cur[e]
-            else:
-                return False
-        return 'end' in cur
+
 
 
 class Solution:
     def maxRectangle(self, words: List[str]) -> List[str]:
+        mx = max(len(w) for w in words)
         tr = Trie()
+        len_to_words = defaultdict(list)
         for w in words:
             tr.insert(w)
+            len_to_words[len(w)].append(w)
 
+        def search(node, ch: str):
+            if ch in node:
+                return node[ch]
+            return None
 
+        def calc(arr):
+            # 计算由 arr 组成的最大矩阵，arr中的word都是相同长度
+            m = len(arr[0])
+            n = len(arr)
+            res = 0
+            matrix = []
+            vis = []
+            def dfs(pos):
+                # mask 是选中arr的掩码，pos是列的trie中的节点列表
+                nonlocal res, matrix
+                n_vis = len(vis)
+                for i in range(n):
+                    pos1 = []
+                    flg = True
+                    end = True
+                    for j in range(m):
+                        v = search(pos[j], arr[i][j])
+                        if v is None:
+                            flg = False
+                            break
+                        if 'end' not in v:
+                            end = False
+                        pos1.append(v)
+                    if flg:
+                        vis.append(i)
+                        if end:
+                            if res < m * (n_vis + 1):
+                                res = m * (n_vis + 1)
+                                matrix = [arr[i] for i in vis]
+                        dfs(pos1)
+                        vis.pop()
+            dfs([tr.root] * m)
+            return res, matrix
+
+        ans = 0
+        mat = []
+        for le in sorted(len_to_words.keys(), reverse=True):
+            if le * mx <= ans: break  # 剪枝优化
+            res, mt = calc(len_to_words[le])
+            if res > ans:
+                mat = mt
+                ans = res
+        return mat
 
 
 so = Solution()
-print(so.getMaxMatrix(["this", "real", "hard", "trh", "hea", "iar", "sld"]))
-
-
+print(so.maxRectangle(["hv", "pi", "iu", "w", "yk", "lu", "dl", "e", "r", "pl"]))
+print(so.maxRectangle(["eat", "tea", "tan", "ate", "nat", "bat"]))
+print(so.maxRectangle(["aa"]))
+print(so.maxRectangle(["this", "real", "hard", "trh", "hea", "iar", "sld"]))
 
 
