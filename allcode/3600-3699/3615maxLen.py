@@ -69,32 +69,37 @@ class Solution:
             adj[u].append(v)
             adj[v].append(u)
 
-        max_len = 1
-        vis = set()
+        ans = 1
 
-        def dfs(mask, u, current_labels):
-            if (u, current_labels) in vis: return
-            vis.add((u, current_labels))
-            nonlocal max_len
-            if self.is_palindrome(current_labels):
-                max_len = max(max_len, len(current_labels))
-            for v in adj[u]:
-                if not (mask & (1 << v)):
-                    new_mask = mask | (1 << v)
-                    new_labels = current_labels + label[v]
-                    dfs(new_mask, v, new_labels)
+        @cache
+        def dfs(x, y, vis):
+            # x, y是中心扩展法的两头端点
+            nonlocal ans
+            ans = max(ans, vis.bit_count())
+            for u in adj[x]:
+                if vis & (1 << u): continue
+                for v in adj[y]:
+                    if vis & (1 << v) or u == v or label[u] != label[v]: continue
+                    u1, v1 = u, v
+                    if u > v: u1, v1 = v, u
+                    dfs(u1, v1, vis | (1 << u) | (1 << v))
 
-        for u in range(n):
-            dfs(1 << u, u, label[u])
+
+        for i in range(n):
+            dfs(i, i, 1 << i)
+        for x, y in edges:
+            if label[x] == label[y]:
+                if x > y: x, y = y, x
+                dfs(x, y, (1 << x) | (1 << y))
         # dfs.cache_clear()
-        return max_len
+        return ans
 
-    def is_palindrome(self, s: str) -> bool:
-        return s == s[::-1]
 
 
 
 so = Solution()
+print(so.maxLen(n = 11, edges = [[0,5],[0,4],[0,2],[5,1],[5,3],[1,7],[4,6],[7,10],[3,8],[8,9]], label = "abbbbadddee"))
+print(so.maxLen(n = 3, edges = [[2,0],[2,1]], label = "mll"))
 print(so.maxLen(n = 5, edges = [[0,1],[4,0],[1,2],[2,0],[4,1],[3,0],[4,2],[3,1]], label = "stppt"))
 print(so.maxLen(n = 3, edges = [[0,1],[1,2]], label = "aba"))
 print(so.maxLen(n = 3, edges = [[0,1],[0,2]], label = "abc"))
