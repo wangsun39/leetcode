@@ -82,7 +82,7 @@ class Solution:
                     if k[0] * (pi[1] - pj[1]) == k[1] * (pi[0] - pj[0]):
                         vis.add(j)
                         cnt += 1
-                group.append(cnt)
+                group.append(cnt) # 在同一条直线上的点的个数
 
             arr1 = [x * (x - 1) // 2 for x in group]
             s = sum(arr1)
