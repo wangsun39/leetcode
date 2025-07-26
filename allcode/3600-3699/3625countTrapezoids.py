@@ -45,7 +45,8 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def countTrapezoids(self, points: List[List[int]]) -> int:
-        slope = defaultdict(set)
+        slope = defaultdict(set)  # 用斜率的最简分数表示斜率
+        # 按斜率为每个点分组
 
         n = len(points)
         for i in range(n):
@@ -63,45 +64,73 @@ class Solution:
                     g = gcd(dx, dy)
                     if dx * dy < 0 and dx > 0:
                         dx, dy = -dx, -dy
+                    if dx < 0 and dy < 0:
+                        dx, dy = -dx, -dy
                     dx, dy = dx // g, dy // g
                     slope[(dx, dy)].add(tuple(points[i]))
                     slope[(dx, dy)].add(tuple(points[j]))
 
         def calc(k, arr):
+            # 计算斜率为k的一组点，能构成多少个梯形
+            # 同时计算有多少个平行四边形
             vis = set()
-            group = []
+            group = []  # 将在一条直线上的点放在一个组内
             arr = list(arr)
             m = len(arr)
+
             for i, pi in enumerate(arr):
                 if i in vis: continue
                 vis.add(i)
-                cnt = 1
+                ps = [pi]  # 一个条直线上的所有点
                 for j in range(i + 1, m):
                     if j in vis: continue
                     pj = arr[j]
                     if k[0] * (pi[1] - pj[1]) == k[1] * (pi[0] - pj[0]):
                         vis.add(j)
-                        cnt += 1
-                group.append(cnt) # 在同一条直线上的点的个数
+                        ps.append(pj)
+                group.append(ps)
 
-            arr1 = [x * (x - 1) // 2 for x in group]
-            s = sum(arr1)
             ans = 0
-            for x in arr1:
-                ans += (s - x) * x
-            return ans // 2
+            cnt = 0  # 不同线段的计数
+            counter = Counter()  # 不同线段在x轴投影的长度的计数
+            cnt2 = 0  # 平行四边形的计数
+            for ps in group:
+                c1 = len(ps) * (len(ps) - 1) // 2
+                ans += cnt * c1
+                cnt += c1
+                for i in range(len(ps)):
+                    for j in range(i + 1, len(ps)):
+                        if k[0]:
+                            dx = abs(ps[i][0] - ps[j][0])
+                        else:
+                            dx = abs(ps[i][1] - ps[j][1])
+                        cnt2 += counter[dx]
+                for i in range(len(ps)):
+                    for j in range(i + 1, len(ps)):
+                        if k[0]:
+                            dx = abs(ps[i][0] - ps[j][0])
+                        else:
+                            dx = abs(ps[i][1] - ps[j][1])
+                        counter[dx] += 1
+
+            return ans, cnt2
         ans = 0
+        c = 0
         for k, arr in slope.items():
-            ans += calc(k, arr)
-        return ans
+            if len(arr) < 4: continue
+            c1, c2 = calc(k, arr)
+            ans += c1
+            c += c2
+        return ans - c // 2
 
 
 
 
 so = Solution()
-print(so.countTrapezoids(points = [[71,-89],[-75,-89],[-9,11],[-24,-89],[-51,-89],[-77,-89],[42,11]]))
+print(so.countTrapezoids(points = [[-5,94],[28,45],[77,94],[-61,38]]))   # 1
+print(so.countTrapezoids(points = [[-3,2],[3,0],[2,3],[3,2],[2,-3]]))   # 2
+print(so.countTrapezoids(points = [[71,-89],[-75,-89],[-9,11],[-24,-89],[-51,-89],[-77,-89],[42,11]]))  # 10
 print(so.countTrapezoids(points = [[34,88],[-62,-38],[26,88],[91,88],[47,-38]]))
-print(so.countTrapezoids(points = [[-3,2],[3,0],[2,3],[3,2],[2,-3]]))
 
 
 

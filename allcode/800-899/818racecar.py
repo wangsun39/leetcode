@@ -38,9 +38,25 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def racecar(self, target: int) -> int:
+        dp = [0] * max(target + 1, 4)
+        dp[1] = 1
+        dp[2] = 4
+        dp[3] = 2
+        if target < 4: return dp[target]
+        k = 3
+        for i in range(4, target + 1):
+            if i == 2 ** k - 1:
+                dp[i] = k
+                k += 1
+                continue
+            dp[i] = dp[2 ** k - 1 - i] + k + 1 # 先走到 2 ** k - 1，再回头走 2 ** k - 1 - i
+            # 以下循环表示，先走到 2 ** (k - 1) - 1，再回头走 2 ** j - 1，再回头
+            for j in range(k):
+                if 2 ** j - 1 >= i: break
+                dp[i] = min(dp[i], k - 1 + 1 + j + 1 + dp[i - (2 ** (k - 1) - 1 - (2 ** j - 1))])
 
-
+        return dp[-1]
 
 so = Solution()
-print(so.racecar(3))
+print(so.racecar(4))
 
