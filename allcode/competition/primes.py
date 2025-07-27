@@ -147,6 +147,15 @@ for x in range(2, MX):
     if x > 1:
         factors[-1][x] += 1  # 剩余的一个质数
 
+# 预处理每个数的质因子列表
+mx = 1000001
+PRIME_FACTORS = [[] for _ in range(mx)]
+for i in range(2, mx):
+    if not PRIME_FACTORS[i]:  # i 是质数
+        for j in range(i, mx, i):  # i 的倍数有质因子 i
+            PRIME_FACTORS[j].append(i)
+
+
 # MOD = 1_000_000_007
 #
 # // 加
