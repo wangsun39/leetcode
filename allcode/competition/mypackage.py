@@ -40,6 +40,7 @@ import random
 # 浮点数： price = "{:.02f}".format(price)
 # newword = float(word[1:]) * (100 - discount) / 100
 # newword = "%.2f" % newword
+# f"{i},{j}: {(u / 10000):.4f}"   # f-string的小数写法
 # a.isalpha()  # 判断字符串中是否所有的字符都是字母
 # a.isdigit() # 判断字符串中是否所有的字符都是整数
 # a.isalnum()  # 判断字符串中是否所有的字符都是字母or数字
