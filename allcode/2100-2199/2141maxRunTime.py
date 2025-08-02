@@ -42,31 +42,19 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxRunTime(self, n: int, batteries: List[int]) -> int:
-        if len(batteries) < n: return 0
-        if n == 1: return sum(batteries)
-        batteries.sort(reverse=True)
-        counter = Counter(batteries[:n])
-        counter = sorted([[k, v] for k, v in counter.items()])
+        s = sum(batteries)
+        lo, hi = 0, s // n + 1
+        def check(val):
+            ss = sum(val if x > val else x for x in batteries)
+            return n * val <= ss
 
-        batteries = deque(batteries)
-        hp = []
-        for i in range(n):
-            heappush(hp, batteries.popleft())
-
-
-        while batteries:
-            x1 = heappop(hp)  # 当前电量最少的两个
-            x2 = heappop(hp)
-            y = batteries.popleft()
-            if y + x1 <= x2:
-                x1 += y
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                lo = mid
             else:
-                z1 = (y + x1 - x2) // 2
-                x2 += z1
-                x1 += (-z1 + y)
-            heappush(hp, x1)
-            heappush(hp, x2)
-        return hp[0]
+                hi = mid
+        return lo
 
 so = Solution()
 print(so.maxRunTime(n = 3, batteries = [10,10,3,5]))
