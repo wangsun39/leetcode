@@ -62,6 +62,7 @@ class Fenwick:
 class Fenwick2:
     # 求前缀最大值（区间求max不能用!!!）
     # 所有函数参数下标从1开始，可以传入使用者的数值x+1的值
+    # update 只能往大的更新，如果要向小的更新需要用下面一个模板
     __slots__ = ['f', 'nums']
 
     def __init__(self, n: int):
@@ -79,4 +80,40 @@ class Fenwick2:
             mx = max(mx, self.f[i])
             i &= i - 1
         return mx
+
+class Fenwick2:
+    def __init__(self, n):
+        self.n = n
+        self.tree = [0] * (n + 1)  # 存储每个节点负责区间的最大值
+        self.original = [0] * (n + 1)  # 存储原始数组的值
+
+    def build(self, arr):
+        # 保存原始数组的值（1-based index）
+        self.original = [0] + arr
+        for idx in range(1, len(arr) + 1):
+            # 初始化树状数组，将原数组值插入树状数组
+            self.update(idx, self.original[idx], force=True)
+
+    def update(self, idx, value, force=False):
+        self.original[idx] = value
+
+        while idx <= self.n:
+            if not force:
+                left = idx - (idx & -idx) + 1
+                right = idx
+                max_val = max(self.original[left:right + 1])
+                if self.tree[idx] == max_val:
+                    break
+                self.tree[idx] = max_val
+            else:
+                self.tree[idx] = max(self.tree[idx], value)
+
+            idx += idx & -idx
+
+    def query(self, idx):
+        max_val = 0
+        while idx > 0:
+            max_val = max(max_val, self.tree[idx])
+            idx -= idx & -idx
+        return max_val
 

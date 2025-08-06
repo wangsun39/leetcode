@@ -1,63 +1,4 @@
-#pragma once
-
 #include "lc_pub.h"
- 
-// 前缀和
-template<typename T>
-class FenwickTree {
-    vector<T> tree;
-
-public:
-    // 使用下标 1 到 n
-    FenwickTree(int n) : tree(n + 1) {}
-
-    // a[i] 增加 val
-    // 1 <= i <= n
-    void update(int i, T val) {
-        for (; i < tree.size(); i += i & -i) {
-            tree[i] += val;
-        }
-    }
-
-    // 求前缀和 a[1] + ... + a[i]
-    // 1 <= i <= n
-    T pre(int i) const {
-        T res = 0;
-        for (; i > 0; i &= i - 1) {
-            res += tree[i];
-        }
-        return res;
-    }
-};
-
-// 前缀最大值，update不能向小的更新
-template<typename T>
-class FenwickTree2 {
-    vector<T> tree;
-
-public:
-    // 使用下标 1 到 n
-    FenwickTree2(int n) : tree(n + 1) {}
-
-    // a[i] 增加 val
-    // 1 <= i <= n
-    void update(int i, T val) {
-        for (; i < tree.size(); i += i & -i) {
-            tree[i] = max(tree[i], val);
-        }
-    }
-
-    // 下标<=i的最大值
-    // 1 <= i <= n
-    T query(int i) const {
-        T res = 0;
-        for (; i > 0; i &= i - 1) {
-            res += max(tree[i], res);
-        }
-        return res;
-    }
-};
-
 
 template<typename T>
 class FenwickTree2 {
@@ -106,3 +47,48 @@ public:
     /* 可选：查询整个数组的最大值 */
     T query_all() const { return query(n); }
 };
+
+class Solution {
+    public:
+    int numOfUnplacedFruits(vector<int>& fruits, vector<int>& baskets) {
+        int n = fruits.size();
+        FenwickTree2<int> fw(n);
+        int ans = 0;
+        for (int i=0;i<n;i++) {
+            fw.update(i+1, baskets[i]);
+        }
+        for (int i=0;i<n;i++) {
+            if (fw.query(n) < fruits[i]) {
+                ans++;
+                continue;
+            }
+            if (fw.query(1) >= fruits[i]) {
+                fw.update(1, 0);
+                continue;
+            }
+            int lo=1,hi=n;
+            while (lo + 1 < hi) {
+                int mid = (lo+hi)/2;
+                if (fw.query(mid)>=fruits[i]) {
+                    hi=mid;
+                }
+                else {
+                    lo=mid;
+                }
+            }
+            fw.update(hi,0);
+        }
+        return ans;
+    }
+    };
+
+    
+int main()
+{
+    cout<<"test let us start! %s" << __cplusplus <<std::endl;
+    vector<int> nums{3,6,1}, baskets{6,4,7};
+
+    Solution so;
+    cout<<so.numOfUnplacedFruits(nums,baskets)<<endl;
+    return 0;
+}

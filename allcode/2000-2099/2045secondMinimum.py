@@ -86,6 +86,7 @@ class Solution:
                 for y, wt in g[x]:
                     lv1 = leave_time(d)
                     new_d = lv1 + wt
+                    if new_d == dist[y]: continue
                     if new_d < dist[y]:
                         dist2[y] = dist[y]
                         dist[y] = new_d
@@ -100,6 +101,7 @@ class Solution:
 
 
 so = Solution()
+print(so.secondMinimum(n = 7, edges = [[1,2],[1,3],[2,5],[2,6],[6,5],[5,7],[3,4],[4,7]], time = 4, change = 7))
 print(so.secondMinimum(n = 2, edges = [[1,2]], time = 3, change = 2))
 print(so.secondMinimum(n = 5, edges = [[1,2],[1,3],[1,4],[3,4],[4,5]], time = 3, change = 5))
 
