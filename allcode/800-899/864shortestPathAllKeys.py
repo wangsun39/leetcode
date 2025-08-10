@@ -43,13 +43,7 @@
 # 每个钥匙都对应一个 不同 的字母
 # 每个钥匙正好打开一个对应的锁
 
-import bisect
-import collections
-from typing import List
-
-from itertools import accumulate
-from cmath import inf
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def shortestPathAllKeys(self, grid: List[str]) -> int:
         row, col = len(grid), len(grid[0])

@@ -31,8 +31,7 @@
 # 1 <= n <= 109
 
 
-import bisect
-import collections
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def binaryGap(self, n: int) -> int:
         cur = 0

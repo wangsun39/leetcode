@@ -1,10 +1,4 @@
-import bisect
-import collections
-from typing import List
-
-from itertools import accumulate
-from cmath import inf
-from collections import deque
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def shortestSubarray(self, A, K: int):
         s = 0
