@@ -89,7 +89,6 @@ def queries_stats(queries: pd.DataFrame) -> pd.DataFrame:
     ans['quality'] = ans['quality'].apply(lambda x: my_round(x))
     ans['poor_query_percentage'] = ans['poor_query_percentage'].apply(lambda x: my_round(x))
 
-
     return ans.drop(columns=['count'])
 
 
