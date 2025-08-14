@@ -42,33 +42,6 @@ from leetcode.allcode.competition.mypackage import *
 min = lambda a, b: b if b < a else a
 max = lambda a, b: b if b > a else a
 
-all_palindrome = set()
-
-def gen(aarr):
-    # 根据一组排列的组合，生成所有对应的回文
-    for arr in aarr:
-        if len(arr) & 1:
-            arr += arr[:-1][::-1]
-        else:
-            arr += arr[::-1]
-        v = 0
-        for x in arr:
-            v = v * 10 + x
-        all_palindrome.add(v)
-
-even = [2, 4, 6, 8]
-for i in range(1, 16):
-    arr = []
-    for j in range(4):
-        if i & (1 << j):
-            for _ in range(even[j]):
-                arr.append(even[j] // 2)
-    aarr = permutations(arr)
-    for j in [1,3,5,7,9]:
-        for arr in aarr:
-            arr +=
-
-
 
 def permuteUnique(nums: List[int]) -> List[List[int]]:
     counter = Counter(nums)
@@ -89,16 +62,58 @@ def permuteUnique(nums: List[int]) -> List[List[int]]:
 
     return dfs(counter)
 
+all_palindrome = {1}
+
+def gen(aarr):
+    # 根据一组排列的组合，生成所有对应的回文
+    for arr in aarr:
+        arr2 = arr + arr[::-1]
+        v = 0
+        for x in arr2:
+            v = v * 10 + x
+        all_palindrome.add(v)
+
+def gen1(aarr, odds):
+    # 根据一组排列的组合，生成所有对应的回文
+    for arr in aarr:
+        arr2 = arr + [odds] + arr[::-1]
+        v = 0
+        for x in arr2:
+            v = v * 10 + x
+        all_palindrome.add(v)
+
+even = [2, 4, 6, 8]
+for i in range(16):
+    # 遍历偶数的各种组合
+    arr = []
+    for j in range(4):
+        if i & (1 << j):
+            for _ in range(even[j] // 2):
+                arr.append(even[j])
+    if len(arr) * 2 > 16: continue
+    aarr = permuteUnique(arr)
+    gen(aarr)
+    gen1(aarr, 1)
+
+    for j in [3,5,7,9]:
+        for _ in range(j // 2):
+            arr.append(j)
+        aarr = permuteUnique(arr)
+        gen1(aarr, j)
+        for _ in range(j // 2):
+            arr.pop()
+
+all_palindrome = sorted(list(all_palindrome))
+print(len(all_palindrome))
+
 class Solution:
     def specialPalindrome(self, n: int) -> int:
-
-
-
-
-
+        p = bisect_right(all_palindrome, n)
+        return all_palindrome[p]
 
 so = Solution()
-print(so.specialPalindrome())
+print(so.specialPalindrome(0))
+print(so.specialPalindrome(216))
 
 
 
