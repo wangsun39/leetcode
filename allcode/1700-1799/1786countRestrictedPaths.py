@@ -35,10 +35,7 @@
 # 1 <= weighti <= 105
 # 任意两个节点之间至多存在一条边
 # 任意两个节点之间至少存在一条路径
-from collections import defaultdict, deque
-from typing import List, Tuple
-from math import *
-from heapq import *
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

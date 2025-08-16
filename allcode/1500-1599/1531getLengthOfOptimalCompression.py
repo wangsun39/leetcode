@@ -33,64 +33,39 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+min = lambda a, b: b if b < a else a
+
 class Solution:
     def getLengthOfOptimalCompression(self, s: str, k: int) -> int:
-        c1 = []  # 记录各段长度
-        i = 1
-        n = len(s)
-        acc = 1
-        while i <= n:
-            if i == n or s[i] != s[i - 1]:
-                c1.append(acc)
-                acc = 1
-            else:
-                acc += 1
-            i += 1
-        ans = 0  # 压缩后长度
-        c2 = []  # 记录当前段的长度需要减少多少才能使字符标识的长度减1
         def getLen(l):
             if l == 1:
                 return 1
-            if x < 10:
-                return x - 1
-            if x < 100:
-                return x - 9
-            return x - 99
-        for x in c1:
-            if x == 1:
-                c2.append(1)
-                ans += 1
-            elif x < 10:
-                c2.append(x - 1)
-                ans += 2
-            elif x < 100:
-                c2.append(x - 9)
-                ans += 3
-            else:
-                c2.append(x - 99)
-                ans += 4
-        hp = []
-        for i, x in enumerate(c2):
-            heappush(hp, [x, i])
-
-        while k > 0 and len(hp):
-            cnt, idx = heappop(hp)
-            if cnt > k:
-                return ans
-            k -= cnt
-            ans -= 1
-            c1[idx] -= cnt
-            if c1[idx] == 0: # 这个子段已被删除
-                continue
-            # x2 = getLen(c1[idx])  # 需要删掉x2个字符，子段长度能减1
-            heappush(hp, [getLen(c1[idx]), idx])
-        return ans
-
-
-
+            if l < 10:
+                return 2
+            if l < 100:
+                return 3
+            return 4
+        n = len(s)
+        m = n - k
+        dp = [[inf] * (m + 1) for _ in range(n + 1)]  # 表示之前已经保留j个字母，从第i个字母向后，缩写的最小长度
+        dp[n][m] = 0
+        for i in range(n - 1, -1, -1):
+            for j in range(min(m + 1, i + 1)):
+                if j == m:
+                    dp[i][j] = 0
+                    break
+                dp[i][j] = dp[i + 1][j]
+                cj = 0
+                for t in range(i, n):
+                    if s[i] == s[t]:
+                        cj += 1
+                    if j + cj > m: break
+                    dp[i][j] = min(dp[i][j], dp[t + 1][j + cj] + getLen(cj))
+        return dp[0][0]
 
 
 so = Solution()
+print(so.getLengthOfOptimalCompression(s = "aaaa", k = 0))
 print(so.getLengthOfOptimalCompression(s = "aabbaa", k = 2))
 print(so.getLengthOfOptimalCompression(s = "aaabcccd", k = 2))
 print(so.getLengthOfOptimalCompression(s = "aaaaaaaaaaa", k = 0))
