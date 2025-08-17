@@ -10,13 +10,13 @@ class Solution {
             arr[i] = num % 10;
             num /= 10;
         }
-        for (int i=5;i>=0;i--)
+        for (int i=4;i>=0;i--)
             if (arr[i]==6) {
                 arr[i]=9;
                 break;
             }
         int ans=0;
-        for (int i=5;i>=0;i--)
+        for (int i=4;i>=0;i--)
             ans = ans * 10 + arr[i];
         
         return ans;
