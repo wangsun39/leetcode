@@ -47,8 +47,8 @@ class Solution:
         s = list(accumulate(nums))
         remain = [x % k for x in s]
         dp = [0] * n
-        dp[0] = nums[0]
-        mn = {remain[0]: 0}
+        dp[0] = nums[0] if remain[0] else 0   # 前i个数在处理之后的最小和
+        mn = {remain[0]: 0}  # 记录所有同余的数的前一个下标的dp最小值的min(dp[i-1])
         for i in range(1, n):
             x = remain[i]
             if x == 0:
@@ -67,6 +67,7 @@ class Solution:
 
 
 so = Solution()
+print(so.minArraySum(nums = [42], k = 1))
 print(so.minArraySum(nums = [58,68,57,71,52,6,40,22,13,29,26,17,47,31,51,73,59,69,37,14], k = 34))
 print(so.minArraySum(nums = [71,91,43,49,80,93,65], k = 205))
 print(so.minArraySum(nums = [1,1,1], k = 2))

@@ -51,12 +51,11 @@ min = lambda a, b: b if b < a else a
 max = lambda a, b: b if b > a else a
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def xorAfterQueries(self, nums: List[int], queries: List[List[int]]) -> int:
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.xorAfterQueries(nums = [1,1,1], queries = [[0,2,1,4]]))
 
 
 
