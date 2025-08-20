@@ -52,9 +52,39 @@ max = lambda a, b: b if b > a else a
 
 class Solution:
     def xorAfterQueries(self, nums: List[int], queries: List[List[int]]) -> int:
+        MOD = 10 ** 9 + 7
+        n = len(nums)
+        diff = defaultdict(dict)  # key (start, interval) 的一个差商字典
+        for l, r, k, v in queries:
+            if k * k < n:
+                # 差商法
+                start = l % k
+                if (start, k) not in diff:
+                    diff[(start, k)] = [1] * (n // k + 2)
+                # 在差商数组中，第i1个元素 * v， 第i2个元素 / v
+                i1 = l // k
+                i2 = (r - start) // k + 1
+                diff[(start, k)][i1] = diff[(start, k)][i1] * v % MOD
+                diff[(start, k)][i2] = diff[(start, k)][i2] * pow(v, -1, MOD) % MOD  # pow支持进行逆元运算
+            else:
+                # 暴力法
+                for i in range(l, r + 1, k):
+                    nums[i] = nums[i] * v % MOD
+
+        for key, val in diff.items():
+            start, k = key
+            s = 1  # 差商的前缀积
+            for i in range(len(val)):
+                s *= val[i]
+                j = start + i * k  # 根据差商数组的下标找到原数组下标
+                if j >= n: break
+                nums[j] = nums[j] * s % MOD
+        return reduce(lambda x, y: x ^ y, nums)
 
 
 so = Solution()
+print(so.xorAfterQueries(nums = [780], queries = [[0,0,1,13]]))
+print(so.xorAfterQueries(nums = [2,3,1,5,4], queries = [[1,4,2,3],[0,2,1,2]]))
 print(so.xorAfterQueries(nums = [1,1,1], queries = [[0,2,1,4]]))
 
 
