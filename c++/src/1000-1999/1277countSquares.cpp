@@ -34,7 +34,6 @@ int main()
     Solution so;
     auto arr=parseGrid("[[1,0,1],[1,1,0],[1,1,0]]");
     auto v = so.countSquares(arr);
-    // auto v = so.minCut("ababababababababababababcbabababababababababababa");
     cout << v << endl;
     return 0;
 }

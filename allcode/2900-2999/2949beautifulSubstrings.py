@@ -52,11 +52,50 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def beautifulSubstrings(self, s: str, k: int) -> int:
+        arr1 = [1 if x in 'aeiou' else 0 for x in s]   # 元音计数前缀
+        arr2 = [1 if x in 'aeiou' else -1 for x in s]  # 元音辅音差值前缀
+        n = len(s)
+
+        def prime_factors(x):
+            res = []
+            i = 2
+            while i * i <= x:
+                if x % i != 0:
+                    i += 1
+                    continue
+                j = 0
+                while x % i == 0:
+                    j += 1
+                    x //= i
+                res.append([i, j])
+                i += 1
+            if x > 1:
+                res.append([x, 1])
+            return res
+        factors = prime_factors(k)
+        k2 = 1  # 元音个数必须是k2的倍数
+        for kk, v in factors:
+            if v & 1:
+                k2 *= (kk ** ((v + 1) // 2))
+            else:
+                k2 *= kk ** (v // 2)
+        counter = defaultdict(int)
+        counter[(0, 0)] = 1  # key为(元音数量模k2, 元音和辅音的差值)
+        s1 = s2 = 0
+        ans = 0
+        for i in range(n):
+            s1 += arr1[i]
+            s2 += arr2[i]
+            ans += counter[(s1 % k2, s2)]
+            counter[(s1 % k2, s2)] += 1
+        return ans
+
+
 
 
 
 so = Solution()
-print(so.beautifulSubstrings())
+print(so.beautifulSubstrings(s = "baeyh", k = 2))
 
 
 
