@@ -1,0 +1,57 @@
+# 给你一个整数 n。请你计算以下两个值的 最大公约数（GCD）：
+#
+# sumOdd：前 n 个奇数的总和。
+#
+# sumEven：前 n 个偶数的总和。
+#
+# 返回 sumOdd 和 sumEven 的 GCD。
+#
+#
+#
+# 示例 1：
+#
+# 输入： n = 4
+#
+# 输出： 4
+#
+# 解释：
+#
+# 前 4 个奇数的总和 sumOdd = 1 + 3 + 5 + 7 = 16
+# 前 4 个偶数的总和 sumEven = 2 + 4 + 6 + 8 = 20
+# 因此，GCD(sumOdd, sumEven) = GCD(16, 20) = 4。
+#
+# 示例 2：
+#
+# 输入： n = 5
+#
+# 输出： 5
+#
+# 解释：
+#
+# 前 5 个奇数的总和 sumOdd = 1 + 3 + 5 + 7 + 9 = 25
+# 前 5 个偶数的总和 sumEven = 2 + 4 + 6 + 8 + 10 = 30
+# 因此，GCD(sumOdd, sumEven) = GCD(25, 30) = 5。
+#
+#
+#
+# 提示：
+#
+# 1 <= n <= 1000
+
+from leetcode.allcode.competition.mypackage import *
+
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        s1 = s2 = 0
+        for i in range(n):
+            s1 += i * 2 + 1
+            s2 += i * 2
+        return gcd(s1, s2)
+
+
+so = Solution()
+print(so.gcdOfOddEvenSums(4))
+
+
+
+
