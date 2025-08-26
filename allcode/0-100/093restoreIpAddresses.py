@@ -79,6 +79,35 @@ class Solution:
         print(d)
         return x[1]
 
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        n = len(s)
+        def dfs(i, seg):
+            if seg == 1 and i < n:
+                if i < n - 1 and s[i] == '0': return False, []
+                if int(s[i:]) <= 255:
+                    return True, [s[i:]]
+                return False, []
+            if i == n:
+                return False, []
+            ans = []
+            if s[i] == '0':
+                res = dfs(i + 1, seg - 1)
+                if not res[0]: return res
+                for x in res[1]:
+                    ans.append('0.' + x)
+                return True, ans
+            for j in range(3):
+                if i + j + 1 >= n or int(s[i: i + j + 1]) > 255: break
+                pre = s[i: i + j + 1] + '.'
+                res = dfs(i + j + 1, seg - 1)
+                if not res[0]: continue
+                for x in res[1]:
+                    ans.append(pre + x)
+            if len(ans):
+                return True, ans
+            return False, []
+        return dfs(0, 4)[1]
+
 
 so = Solution()
 print(so.restoreIpAddresses("101023"))
