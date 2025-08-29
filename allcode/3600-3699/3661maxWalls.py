@@ -63,43 +63,65 @@ max = lambda a, b: b if b > a else a
 
 class Solution:
     def maxWalls(self, robots: List[int], distance: List[int], walls: List[int]) -> int:
-        p = []
-        ro = set(robots)
+        s_walls = set(walls)
         ans = 0
-        n, m = len(robots), len(walls)
-        # for x in robots:
-        #     p.append(x)
-        for x in walls:
-            if x in ro:
+        for i, x in enumerate(robots):
+            if x in s_walls:
                 ans += 1
-            else:
-                p.append(x)
-        robots.sort()
+                s_walls.remove(x)  # 删除与机器人重合的墙，只考虑不重合的机器人和墙
+        z = list(zip(robots, distance))
+        walls = list(s_walls)
+        if len(walls) == 0: return ans
+
+        z.sort()
+        robots, distance = list(zip(*z))
+        n, m = len(robots), len(walls)
         walls.sort()
-        left = [0] * n
-        right = [0] * n
-        for i in range(n):
-            l = robots[i] - distance[i]
-            if i > 0:
-                l = max(robots[i] - distance[i], robots[i - 1] + 1)
-            p1 = bisect_left(p, l)
-            p2 = bisect_left(p, robots[i])
-            left[i] = p2 - p1
-        for i in range(n):
-            r = robots[i] + distance[i]
-            if i < n:
-                r = max(r, robots[i - 1] - 1)
-            p2 = bisect_right(p, r)
-            p1 = bisect_left(p, robots[i])
-            right[i] = p2 - p1
+        mixed = []
+        for i, x in enumerate(robots):
+            mixed.append([x, 1, i])
+        for i, x in enumerate(walls):
+            mixed.append([x, 0, i])
+        mixed.sort()
+        left = [0] * n  # 机器人向左能射穿的墙
+        left2 = [0] * n  # 机器人向左遇到机器人之前有多少个墙
+        right = [0] * n  # 机器人向右能射穿的墙
+        right2 = [0] * n  # 机器人向右遇到机器人之前有多少个墙
+        idr = None
+        for i in range(n + m):
+            if mixed[i][1] == 1:
+                idr = mixed[i][2]
+            else:
+                if idr is not None:
+                    if mixed[i][0] - robots[idr] <= distance[idr]:
+                        right[idr] += 1
+                    right2[idr] += 1
+        idr = None
+        for i in range(n + m - 1, -1, -1):
+            if mixed[i][1] == 1:
+                idr = mixed[i][2]
+            else:
+                if idr is not None:
+                    if robots[idr] - mixed[i][0] <= distance[idr]:
+                        left[idr] += 1
+                    left2[idr] += 1
 
-
-
+        dp = [[0] * 2 for _ in range(n)]  # dp[i][0]  前i个机器人，其中第i个向左射击的最大墙壁数，dp[i][1] 是向右射击的最大墙壁数
+        dp[0][0] = left[0]
+        dp[0][1] = right[0]
+        z = list(zip(robots,left,right))
+        for i in range(1, n):
+            dp[i][0] = dp[i - 1][1] + min(left[i], right2[i - 1] - right[i - 1])
+            dp[i][0] = max(dp[i - 1][0] + left[i], dp[i][0])
+            dp[i][1] = max(dp[i - 1][0], dp[i - 1][1]) + right[i]
+        return max(dp[-1][0], dp[-1][1]) + ans
 
 
 
 so = Solution()
-print(so.maxWalls())
+print(so.maxWalls(robots = [63,56,40,45,4,9,44,69,55,26,73,15,12,60,43,39,37,74,36,34,13,23,66,14,11,42,72,3,57,10,53,8,70,17,58,61,30,32], distance = [8,7,4,8,9,5,2,4,5,2,6,9,5,9,5,3,7,6,9,2,8,7,4,3,5,1,7,5,1,3,5,3,5,4,8,7,6,4], walls = [6,22,50,52,20,9,23,75,26,21,60,58,41,28,30]))  # 15
+print(so.maxWalls(robots = [17,59,32,11,72,18], distance = [5,7,6,5,2,10], walls = [17,25,33,29,54,53,18,35,39,37,20,14,34,13,16,58,22,51,56,27,10,15,12,23,45,43,21,2,42,7,32,40,8,9,1,5,55,30,38,4,3,31,36,41,57,28,11,49,26,19,50,52,6,47,46,44,24,48]))  # 37
+print(so.maxWalls(robots = [4], distance = [3], walls = [1,10]))  # 1
 
 
 
