@@ -50,28 +50,48 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def totalStrength(self, strength: List[int]) -> int:
         n = len(strength)
-        M = int(1e9) + 7
-        T = [0] * n # 从 sum(strength[i:m])
-        Min = [int(1e10)] * n  # 从i 到m - 1的最小值
-        T[0] = strength[0]
-        Min[0] = strength[0]
-        ans = T[0] * T[0]
-        for i in range(1, n):
+        MOD = 10 ** 9 + 7
+        s = list(accumulate(strength, initial=0))
+        ss = list(accumulate(s, initial=0))
+        l = [0] * n  # 左侧第一个<=strength[i]的位置与i的距离
+        r = [0] * n  # 右侧第一个<strength[i]的位置与i的距离
+        stack = []
+        for i in range(n):
+            while stack and strength[stack[-1]] > strength[i]:
+                stack.pop()
+            if len(stack):
+                l[i] = i - stack[-1] - 1
+            else:
+                l[i] = i
+            stack.append(i)
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and strength[stack[-1]] >= strength[i]:
+                stack.pop()
+            if len(stack):
+                r[i] = stack[-1] - i - 1
+            else:
+                r[i] = n - 1 - i
+            stack.append(i)
 
-            for j in range(i + 1):
-                T[j] += strength[i]
-                Min[j] = min(Min[j], strength[i])
-                ans += ((T[j] * Min[j]) % M)
-                ans %= M
+        ans = 0
+        v = [0] * n  # 每个点的贡献值
+        for i in range(n):
+            # 下面这步就是最终推导出来的公式
+            v[i] = (l[i] + 1) * (ss[i + r[i] + 2] - ss[i + 1]) - (r[i] + 1) * (ss[i + 1] - ss[i - l[i]])
+            v[i] *= strength[i]
+            ans += v[i]
+            ans %= MOD
+
         return ans
 
 
 
 
 so = Solution()
-print(so.totalStrength([747,812,112,1230,1426,1477,1388,976,849,1431,1885,1845,1070,1980,280,1075,232,1330,1868,1696,1361,1822,524,1899,1904,538,731,985,279,1608,1558,930,1232,1497,875,1850,1173,805,1720,33,233,330,1429,1688,281,362,1963,927,1688,256,1594,1823,743,553,1633,1898,1101,1278,717,522,1926,1451,119,1283,1016,194,780,1436,1233,710,1608,523,874,1779,1822,134,1984]))
-print(so.totalStrength([5,4,6]))
 print(so.totalStrength([1,3,1,2]))
+print(so.totalStrength([5,4,6]))
+print(so.totalStrength([747,812,112,1230,1426,1477,1388,976,849,1431,1885,1845,1070,1980,280,1075,232,1330,1868,1696,1361,1822,524,1899,1904,538,731,985,279,1608,1558,930,1232,1497,875,1850,1173,805,1720,33,233,330,1429,1688,281,362,1963,927,1688,256,1594,1823,743,553,1633,1898,1101,1278,717,522,1926,1451,119,1283,1016,194,780,1436,1233,710,1608,523,874,1779,1822,134,1984]))
 
 
 
