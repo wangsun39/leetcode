@@ -1,0 +1,90 @@
+# 给你两个整数 n 和 k，将数字 n 恰好分割成 k 个正整数，使得这些整数的 乘积 等于 n。
+#
+# 返回一个分割方案，使得这些数字中 最大值 和 最小值 之间的 差值 最小化。结果可以以 任意顺序 返回。
+#
+#
+#
+# 示例 1：
+#
+# 输入：n = 100, k = 2
+#
+# 输出：[10,10]
+#
+# 解释：
+#
+# 分割方案 [10, 10] 的结果是 10 * 10 = 100，且最大值与最小值的差值为 0，这是最小可能值。
+#
+# 示例 2：
+#
+# 输入：n = 44, k = 3
+#
+# 输出：[2,2,11]
+#
+# 解释：
+#
+# 分割方案 [1, 1, 44] 的差值为 43
+# 分割方案 [1, 2, 22] 的差值为 21
+# 分割方案 [1, 4, 11] 的差值为 10
+# 分割方案 [2, 2, 11] 的差值为 9
+# 因此，[2, 2, 11] 是最优分割方案，其差值最小，为 9。
+#
+#
+#
+# 提示：
+#
+# 4 <= n <= 105
+# 2 <= k <= 5
+# k 严格小于 n 的正因数的总数。
+
+from leetcode.allcode.competition.mypackage import *
+
+# min = lambda a, b: b if b < a else a
+# max = lambda a, b: b if b > a else a
+
+class Solution:
+    def minDifference(self, n: int, k: int) -> List[int]:
+
+        @cache
+        def factors(x):
+            res = []
+            i = 1
+            while i * i <= x:
+                if x % i == 0:
+                    res.append(i)
+                    if i * i != x:
+                        res.append(x // i)
+                i += 1
+            return res
+
+        @cache
+        def dfs(n1, k1):
+            if k1 == 1:
+                return [[n1]]
+            arr = factors(n1)
+            if len(arr) < k1:
+                return []
+            cand = []
+            for x in arr:
+                res = dfs(n1 // x, k1 - 1)
+                if len(res) == 0: continue
+                for y in res:
+                    cand.append([x] + y)
+            return cand
+
+        res = dfs(n, k)
+        mn = inf
+        ans = []
+        for arr in res:
+            cur = max(arr) - min(arr)
+            if cur < mn:
+                ans = arr
+                mn = cur
+        return ans
+
+
+so = Solution()
+print(so.minDifference(100, 2))
+
+
+
+
