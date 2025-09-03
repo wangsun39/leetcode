@@ -37,33 +37,37 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def busRapidTransit(self, target: int, inc: int, dec: int, jump: List[int], cost: List[int]) -> int:
         MOD = 10 ** 9 + 7
-        hp = [[0, target]]
-        vis = {}
         m = len(jump)
-        ans = inc * target  # 上界
 
-        def need_to_add(x, t):
-            return x not in vis or vis[x] > t
-        while hp:
-            t, p = heappop(hp)
-            if p == 0: return t
-            ans = min(ans, t + inc * p)
+        @cache
+        def dfs(pos):  # 逆向考虑，在位置pos要走到0的最小代价
+            if pos == 0: return 0
+            if pos == 1: return inc
+            res = inc * pos  # 上限值，方便剪枝优化
             for i in range(m):
-                q, r = divmod(p, jump[i])
+                # 枚举到pos前，最后一次上公交的地方，注意不是下公交的地方（否则会死循环，两个点可能彼此都能作为对方最后一次下车点，而上车点一定在pos左侧）
+                # 下一个问题是对于公交车i，哪个地方是可能的最后一次上车点，此时只需要考虑最后一次上车前所处的位置是 a=floor(pos/i) 或 b=ceil(pos/i)
+                # 证明见excel
+                ju, co = jump[i], cost[i]
+                q, r = divmod(pos, ju)
                 if r == 0:
-                    if t + cost[i] < ans and need_to_add(q, t + cost[i]):
-                        heappush(hp, [t + cost[i], q])
+                    if co < res:
+                        res = min(res, dfs(q) + co)
                 else:
-                    if t + inc * r < ans and need_to_add():
-                        heappush(hp, [t + inc * r, q * jump[i]])
+                    p1, p2 = q * ju, (q + 1) * ju
+                    if co + (pos - p1) * inc < res:
+                        res = min(res, dfs(q) + co + (pos - p1) * inc)
+                    if co + (p2 - pos) * dec < res:
+                        res = min(res, dfs(q + 1) + co + (p2 - pos) * dec)
+            return res
 
-
-        return ans % MOD
+        return dfs(target) % MOD
 
 
 
 so = Solution()
-print(so.busRapidTransit([2,3,5,7]))  # 4
+print(so.busRapidTransit(target = 612, inc = 4, dec = 5, jump = [3,6,8,11,5,10,4], cost = [4,7,6,3,7,6,4]))  # 26
+print(so.busRapidTransit(target = 31, inc = 5, dec = 3, jump = [6], cost = [10]))  # 33
 
 
 
