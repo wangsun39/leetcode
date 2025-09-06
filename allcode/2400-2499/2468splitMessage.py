@@ -47,6 +47,7 @@ class Solution:
                 res.append(f"{ans[i - 1]}<{i}/{mx}>")
             return res
         x = (n + 8) // 9  # n / 9 上取整
+        # 以下一些数字是通过解方程得到
         if x + 5 <= limit:
             # 一位数mx即可满足
             cnt = 1
