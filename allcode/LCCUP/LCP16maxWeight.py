@@ -37,10 +37,66 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxWeight(self, edges: List[List[int]], value: List[int]) -> int:
+        g = defaultdict(list)
+        gs = defaultdict(set)
+        # ge = defaultdict(list)  # 边找对点
+        m = len(edges)
+        m2 = m ** 0.5
+        for x, y in edges:
+            g[x].append(y)
+            g[y].append(x)
+            gs[x].add(y)
+            gs[y].add(x)
+        n = len(g)
+        deg = [len(g[i]) for i in range(n)]
+        triangle = defaultdict(list)
+        ans = 0
+
+        def calc(x, max_l):
+            # 在之多三个三角形中选至多2个，求最大的value和
+            res = 0
+            if len(max_l) == 1: return value[x] + value[max_l[0][0]] + value[max_l[0][1]]
+            for i in range(len(max_l)):
+                for j in range(i + 1, len(max_l)):
+                    res = max(res, sum(value[y] for y in set(max_l[i][:2] + max_l[j][:2])))
+            return res + value[x]
+
+        for i in range(n):
+            # 枚举 A 点，找到所有 B,C 点对
+            # 找所有 B，C对的前3大的对
+            max_l = []
+            if deg[i] <= m2:
+                ni = len(g[i])
+                for jj in range(ni):
+                    j = g[i][jj]
+                    for kk in range(j + 1, ni):
+                        k = g[i][kk]
+                        if j in gs[k]:
+                            triangle[i].append([j, k])
+                            if len(max_l) == 0 or max_l[-1][-1] <= value[j] + value[k]:
+                                max_l.append([j, k, value[j] + value[k]])
+                                max_l.sort(key=lambda x:x[2], reverse=True)
+                                if len(max_l) > 4: max_l.pop()
+            else:
+                for j, k in edges:
+                    if j == i or k == i: continue
+                    if j in gs[i] and k in gs[i]:
+                        triangle[i].append([j, k])
+                        if len(max_l) == 0 or max_l[-1][-1] <= value[j] + value[k]:
+                            max_l.append([j, k, value[j] + value[k]])
+                            max_l.sort(key=lambda x: x[2], reverse=True)
+                            if len(max_l) > 4: max_l.pop()
+            if len(max_l):
+                ans = max(ans, calc(i, max_l))
+
+        return ans
 
 
 so = Solution()
-print(so.maxWeight([2,3,5,7]))  # 4
+print(so.maxWeight(edges = [[3,8],[4,7],[0,8],[5,7],[6,7],[7,8],[1,3],[4,8],[0,5],[3,5],[5,6],[8,9],[3,9],[0,2],[5,8],[1,2],[4,9],[6,9],[7,9],[1,6],[1,7],[0,7],[1,5],[2,5],[2,6],[0,4],[1,9],[0,9],[2,4],[2,8]], value = [7080,5450,4841,8487,8689,8563,281,3794,3916,4946]))  # 36735
+print(so.maxWeight(edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[4,5],[4,6],[4,7],[4,8],[4,9],[5,6],[5,7],[5,8],[5,9],[6,7],[6,8],[6,9],[7,8],[7,9],[8,9]], value = [6808,5250,74,3659,8931,1273,7545,879,7924,7710]))  # 38918
+print(so.maxWeight(edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[1,3],[2,4],[2,5],[3,4],[3,5],[4,5]], value = [7,8,6,8,9,7]))  # 39
+print(so.maxWeight(edges = [[0,1],[1,2],[0,2]], value = [1,2,3]))  # 6
 
 
 
