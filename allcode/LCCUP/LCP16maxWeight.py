@@ -39,7 +39,7 @@ class Solution:
     def maxWeight(self, edges: List[List[int]], value: List[int]) -> int:
         g = defaultdict(list)
         gs = defaultdict(set)
-        # ge = defaultdict(list)  # 边找对点
+        ge = defaultdict(list)  # 边找对点， 保留前三大的
         m = len(edges)
         m2 = m ** 0.5
         for x, y in edges:
@@ -50,49 +50,76 @@ class Solution:
         n = len(g)
         deg = [len(g[i]) for i in range(n)]
         triangle = defaultdict(list)
+        max_triangle = [[-1] * 2 for _ in range(n)]  # 以 i 点顶点的最大三角形对边点对
         ans = 0
-
-        def calc(x, max_l):
-            # 在之多三个三角形中选至多2个，求最大的value和
-            res = 0
-            if len(max_l) == 1: return value[x] + value[max_l[0][0]] + value[max_l[0][1]]
-            for i in range(len(max_l)):
-                for j in range(i + 1, len(max_l)):
-                    res = max(res, sum(value[y] for y in set(max_l[i][:2] + max_l[j][:2])))
-            return res + value[x]
 
         for i in range(n):
             # 枚举 A 点，找到所有 B,C 点对
+            # 先找到最大的一组 B,C 点对
             # 找所有 B，C对的前3大的对
-            max_l = []
+            max_pair = None
             if deg[i] <= m2:
                 ni = len(g[i])
                 for jj in range(ni):
                     j = g[i][jj]
-                    for kk in range(j + 1, ni):
+                    for kk in range(jj + 1, ni):
                         k = g[i][kk]
                         if j in gs[k]:
                             triangle[i].append([j, k])
-                            if len(max_l) == 0 or max_l[-1][-1] <= value[j] + value[k]:
-                                max_l.append([j, k, value[j] + value[k]])
-                                max_l.sort(key=lambda x:x[2], reverse=True)
-                                if len(max_l) > 4: max_l.pop()
+                            j0, k0 = k, j
+                            if j0 > k0: j0, k0 = k0, j0
+                            ge[(j0, k0)].append([value[i], i])
+                            ge[(j0, k0)].sort(reverse=True)
+                            if len(ge[(j0, k0)]) > 3: ge[(j0, k0)].pop()
+                            if not max_pair or max_pair[-1] <= value[j] + value[k]:
+                                max_pair = [j, k, value[j] + value[k]]
             else:
                 for j, k in edges:
                     if j == i or k == i: continue
                     if j in gs[i] and k in gs[i]:
                         triangle[i].append([j, k])
-                        if len(max_l) == 0 or max_l[-1][-1] <= value[j] + value[k]:
-                            max_l.append([j, k, value[j] + value[k]])
-                            max_l.sort(key=lambda x: x[2], reverse=True)
-                            if len(max_l) > 4: max_l.pop()
-            if len(max_l):
-                ans = max(ans, calc(i, max_l))
+                        if j > k: j, k = k, j
+                        ge[(j, k)].append([value[i], i])
+                        ge[(j, k)].sort(reverse=True)
+                        if len(ge[(j, k)]) > 3: ge[(j, k)].pop()
+                        if not max_pair or max_pair[-1] < value[j] + value[k]:
+                            max_pair = [j, k, value[j] + value[k]]
+
+            if max_pair is not None:
+                max_triangle[i] = max_pair[:2]
+
+        for a in range(n):
+            # B,C 一定出现在满足题目的一组答案中
+            if max_triangle[a][0] == -1: continue
+            b, c = max_triangle[a]
+            ans = max(ans, value[b] + value[c] + value[a])
+            # 1) A,B,C 构成一组三角形
+            for x, y in triangle[a]:
+                # if x not in [b, c] and y not in [b, c]:
+                #     ans = max(ans, value[b] + value[c] + value[x] + value[y] + value[a])
+                vs = {a, b, c, x, y}
+                ans = max(ans, sum(value[x] for x in vs))
+
+            # 2) AB, BC 在两个三角形中
+            a0, b0 = a, b
+            if a0 > b0: a0, b0 = b0, a0
+
+            for _, x in ge[(a0, b0)]:
+                # if x == c: continue
+                if a > c: a, c = c, a
+                for _, y in ge[(a, c)]:
+                    # if x != y and y != b:
+                    vs = {a, b, c, x, y}
+                    ans = max(ans, sum(value[x] for x in vs))
 
         return ans
 
 
 so = Solution()
+print(so.maxWeight(edges = [[14,17],[3,7],[3,12],[5,8],[6,18],[7,18],[8,18],[12,15],[14,16],[7,12],[7,9],[2,19],[7,8],[10,11],[11,16],[8,14],[1,4],[0,2],[0,7],[1,19],[17,19],[7,15],[18,19],[12,17],[9,12],[0,11],[1,8],[1,3],[16,19],[13,15],[0,10],[9,10],[9,14],[1,13],[1,12],[14,19],[4,14],[4,16],[14,15],[7,16],[0,18],[5,12],[7,13],[6,9],[2,14],[1,18],[0,19],[7,17],[13,16],[0,4],[8,9],[5,19],[6,16],[5,11],[2,8],[5,10],[2,4],[2,18],[2,17],[5,15],[2,12],[8,10],[4,7],[6,15],[9,15],[2,7],[0,5],[3,17],[8,15],[4,18],[4,9],[4,15],[11,18],[0,16],[2,16],[5,13],[8,17],[10,13],[15,19],[1,7],[7,14],[16,18],[9,19],[1,17],[13,19],[6,7],[12,18],[7,10],[6,13],[8,19],[13,18],[1,14],[5,7],[0,17],[3,8],[9,18],[1,6],[5,16],[3,11],[0,9]], value = [550,8976,3983,7479,3045,7898,7890,2978,593,5131,9832,6043,9362,5813,4775,8986,3605,7941,95,1775]))  # 43163
+print(so.maxWeight(edges = [[9,16],[4,19],[5,14],[17,18],[0,8],[8,12],[2,16],[2,9],[6,14],[1,9],[15,16],[4,9],[7,14],[6,17],[1,10],[1,12],[8,17],[2,3],[0,6],[3,14],[2,10],[7,18],[11,12],[0,5],[2,12],[5,17],[13,14],[3,5],[0,18],[12,17],[3,17],[16,17],[6,11],[14,18],[9,12],[8,18],[11,15],[15,19],[2,17],[15,17],[1,11],[7,13],[9,18],[2,18],[1,14],[0,11],[11,14],[14,15],[6,8],[4,5],[3,18],[2,13],[6,9],[8,19],[0,2],[8,16],[17,19],[1,19],[0,13],[8,9],[12,13],[7,15],[1,17],[0,10],[3,10],[2,5],[5,10],[1,3],[0,12],[3,19],[6,19],[11,17],[2,4],[5,18],[3,8],[12,16],[9,19],[1,16],[3,13],[3,4],[7,11],[3,15],[7,16],[1,7],[3,9],[4,16],[0,17],[0,19],[1,2],[13,18],[0,9],[0,4],[1,4],[4,10],[7,10],[0,16],[4,7],[12,19],[7,12],[18,19]], value = [5715,6802,3864,6955,3848,7073,7747,7348,8111,7493,3252,6082,1063,9974,4607,964,8404,754,1140,6143]))  # 38557
+print(so.maxWeight(edges = [[0,3],[5,8],[5,9],[1,5],[3,9],[1,7],[4,7],[6,8],[1,8],[1,3],[2,4],[4,6],[0,9],[3,4],[3,6],[4,8],[3,5],[1,4],[0,6],[8,9],[2,3],[2,6],[6,9],[4,5],[0,7],[2,8],[7,9],[0,2],[0,8],[5,7]], value = [7204,2529,7132,5563,4355,877,1706,6302,7382,821]))  # 31636
+print(so.maxWeight(edges = [[1,2],[0,2]], value = [1,2,5]))  # 0
 print(so.maxWeight(edges = [[3,8],[4,7],[0,8],[5,7],[6,7],[7,8],[1,3],[4,8],[0,5],[3,5],[5,6],[8,9],[3,9],[0,2],[5,8],[1,2],[4,9],[6,9],[7,9],[1,6],[1,7],[0,7],[1,5],[2,5],[2,6],[0,4],[1,9],[0,9],[2,4],[2,8]], value = [7080,5450,4841,8487,8689,8563,281,3794,3916,4946]))  # 36735
 print(so.maxWeight(edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[4,5],[4,6],[4,7],[4,8],[4,9],[5,6],[5,7],[5,8],[5,9],[6,7],[6,8],[6,9],[7,8],[7,9],[8,9]], value = [6808,5250,74,3659,8931,1273,7545,879,7924,7710]))  # 38918
 print(so.maxWeight(edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[1,3],[2,4],[2,5],[3,4],[3,5],[4,5]], value = [7,8,6,8,9,7]))  # 39

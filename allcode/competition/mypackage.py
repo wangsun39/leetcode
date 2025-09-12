@@ -94,6 +94,10 @@ from string import *
 # c2i = {c: i for i, c in enumerate(ascii_lowercase)}
 # i2c = {i: c for i, c in enumerate(ascii_lowercase)}
 
+# 多个字母同时替换的写法
+# trans = str.maketrans("aeiou", "?????")  # 替换元音为 '?'
+# s.translate(trans)
+
 from itertools import accumulate
 # 前缀和
 # 左闭右开区间 [left,right) 来表示从 nums[left] 到 nums[right−1] 的子数组，
