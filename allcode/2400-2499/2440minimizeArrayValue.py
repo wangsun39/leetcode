@@ -91,23 +91,52 @@ import string
 class Solution:
     def componentValue(self, nums: List[int], edges: List[List[int]]) -> int:
         n = len(nums)
-        nums = sorted(enumerate(nums), key=lambda x: x[1])
-        g = [None] * n
+        mx = max(nums)
+        s = sum(nums)
+        g = defaultdict(list)
         for x, y in edges:
-            if g[x] is None:
-                g[x] = [y]
-            else:
-                g[x].append(y)
-            if g[y] is None:
-                g[y] = [x]
-            else:
-                g[y].append(x)
+            g[x].append(y)
+            g[y].append(x)
+
+        def factors(x):
+            res = []
+            i = 1
+            while i * i <= x:
+                if x % i == 0:
+                    res.append(i)
+                    if i * i != x:
+                        res.append(x // i)
+                i += 1
+            return res
+
+        sub = [0] * n   # 子树的节点值之和
+
+        def dfs(x, fa):
+            res = nums[x]
+            for y in g[x]:
+                if y == fa: continue
+                res += dfs(y, x)
+            sub[x] = res
+            return res
+
+        dfs(0, -1)
+
+        fs = factors(s)
+        fs.sort()
+        for x in fs:
+            # 枚举每个数因子 x，作为每个连通集合的和
+            if x < mx: continue
+            y = s // x  # 连通块数，需要剪边 y - 1条
+            if sum(z % x == 0 for z in sub[1:]) == y - 1:
+                return y - 1
+
+
 
 
 
 
 so = Solution()
-print(so.componentValue("?5:00"))
+print(so.componentValue(nums = [6,2,2,2,6], edges = [[0,1],[1,2],[1,3],[3,4]]))
 
 
 
