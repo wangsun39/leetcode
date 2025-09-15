@@ -92,7 +92,7 @@ def list_products(products: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:
         )
     ).reset_index()
     ans = ans[ans['unit'] >= 100]
-    ans.drop(columns=['product_id'], inplace=True)
+    # ans.drop(columns=['product_id'], inplace=True)
     return ans
 
 
