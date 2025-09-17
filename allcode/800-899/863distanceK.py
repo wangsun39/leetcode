@@ -1,0 +1,61 @@
+# 给定一个二叉树（具有根结点 root）， 一个目标结点 target ，和一个整数值 k ，返回到目标结点 target 距离为 k 的所有结点的值的数组。
+#
+# 答案可以以 任何顺序 返回。
+#
+#
+#
+# 示例 1：
+#
+#
+#
+# 输入：root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+# 输出：[7,4,1]
+# 解释：所求结点为与目标结点（值为 5）距离为 2 的结点，值分别为 7，4，以及 1
+# 示例 2:
+#
+# 输入: root = [1], target = 1, k = 3
+# 输出: []
+#
+#
+# 提示:
+#
+# 节点数在 [1, 500] 范围内
+# 0 <= Node.val <= 500
+# Node.val 中所有值 不同
+# 目标结点 target 是树上的结点。
+# 0 <= k <= 1000
+
+from leetcode.allcode.competition.mypackage import *
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        g = defaultdict(list)
+
+        def dfs(node):
+            if node.left is not None:
+                g[node.val].append(node.left.val)
+                g[node.left.val].append(node.val)
+                dfs(node.left)
+            if node.right is not None:
+                g[node.val].append(node.right.val)
+                g[node.right.val].append(node.val)
+                dfs(node.right)
+
+        dfs(root)
+
+        ans = []
+        def dfs2(x, fa, dep):
+            if dep == k:
+                ans.append(x)
+            else:
+                for y in g[x]:
+                    if y != fa:
+                        dfs2(y, x, dep + 1)
+
+        dfs2(target.val, -1, 0)
+        return ans
+
+
+
+so = Solution()
+
