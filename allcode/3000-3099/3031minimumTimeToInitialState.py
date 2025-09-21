@@ -47,20 +47,33 @@ class Solution:
     def minimumTimeToInitialState(self, word: str, k: int) -> int:
         n = len(word)
 
-        def check(start):
-            # 以 word[:start] 为一个匹配周期,向后匹配,看最多能匹配多少个周期,如果剩余部分不足一个周期,看是否为这个周期的前缀
-            # 如果是,返回成功
-            # 如果不是,下次就可以从不匹配的那个周期开始做check
-            left = n - start
-            if left >= start:
-                return word.startswith(word[start])
+        def z_function(s):
+            n = len(s)
+            z = [0] * n
+            l, r = 0, 0
+            z[0] = n  # 这里根据实际考虑是否为n
+            for i in range(1, n):
+                if i <= r and z[i - l] < r - i + 1:
+                    z[i] = z[i - l]
+                else:
+                    z[i] = max(0, r - i + 1)
+                    while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+                        z[i] += 1
+                if i + z[i] - 1 > r:
+                    l = i
+                    r = i + z[i] - 1
+            return z
 
-
-
+        z = z_function(word)
+        for i in range(k, n, k):
+            if z[i] == n - i:
+                return i // k
+        return (n + k - 1) // k
 
 
 so = Solution()
-print(so.minimumTimeToInitialState())
+print(so.minimumTimeToInitialState(word = "abbbb", k = 3))
+print(so.minimumTimeToInitialState(word = "abacaba", k = 3))
 
 
 

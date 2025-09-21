@@ -6,8 +6,9 @@ MIN = lambda a, b: b if b < a else a
 MAX = lambda a, b: b if b > a else a
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+        mn, mx = min(nums), max(nums)
+        return k * (mx - mn)
 
 
 so = Solution()

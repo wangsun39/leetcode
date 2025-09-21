@@ -6,12 +6,13 @@ MIN = lambda a, b: b if b < a else a
 MAX = lambda a, b: b if b > a else a
 
 class Solution:
-    def removeDigit(self) -> str:
-        pass
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.maxTotalValue(nums = [1,3,2], k = 2))
+print(so.maxTotalValue(nums = [4,2,5,1], k = 3))
 
 
 
