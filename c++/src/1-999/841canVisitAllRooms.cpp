@@ -28,6 +28,5 @@ int main()
     std::cout<<"test let us start! %s" << __cplusplus <<std::endl;
     vector<int> arrays = {1,1,2};
     Solution so;
-    cout << so.pushDominoes("RR.L") <<endl;
     return 0;
 }
