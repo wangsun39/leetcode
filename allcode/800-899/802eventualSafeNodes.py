@@ -33,7 +33,7 @@
 # 图中可能包含自环。
 # 图中边的数目在范围 [1, 4 * 104] 内。
 
-from collections import defaultdict, deque
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def recurseMarkNodes(self, L, node):
