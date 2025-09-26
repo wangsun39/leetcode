@@ -64,13 +64,19 @@ class Solution:
         r, c = len(grid), len(grid[0])
         n = r * c
         fa = list(range(n))
+        grid0 = [[0] * c for _ in range(r)]
+        for i in range(r):
+            for j in range(c):
+                grid0[i][j] = grid[i][j]
+
         def find(x):
             if x != fa[x]:
                 fa[x] = find(fa[x])
             return fa[x]
+
         def union(x, y):
-            # 用小的数作代表元
-            if x < y:
+            # 用小的数作代表元，这步很关键
+            if find(x) < find(y):
                 fa[find(y)] = find(x)
             else:
                 fa[find(x)] = find(y)
@@ -97,6 +103,9 @@ class Solution:
                         union(x * c + y, i * c + j)
         ans = []
         for i, j in hits[::-1]:
+            if grid0[i][j] == 0:
+                ans.insert(0, 0)
+                continue
             fij = find(i * c + j)
             l1 = []  # 存放不稳定的岛
             l2 = []  # 存放稳定的岛
@@ -109,35 +118,35 @@ class Solution:
                     else:
                         l1.append([x, y])
 
+            grid[i][j] = 1
+            if len(l2):
+                union(i * c + j, l2[0][0] * c + l2[0][1])  # 将(i,j)置为稳定
             if len(l1) == 0:
                 # 周围已经都是稳定的岛了
                 ans.insert(0, 0)
-                grid[i][j] = 1
                 continue
             if len(l2) == 0 and fij >= c:
                 # 周围都没有稳定的岛了
                 ans.insert(0, 0)
-                grid[i][j] = 1
                 for x, y in l1:
                     union(x * c + y, i * c + j)
                 continue
 
             # 不稳定的岛，都是因为这步hit产生的
-            grid[i][j] = 1
-            if l2:
-                si, sj = l2[0]
-                union(i * c + j, l2[0][0] * c + l2[0][1])
-            else:
-                si, sj = i, j
             vis = set()
+            cnt = 0
             for x, y in l1:
-                ans.insert(0, dfs(x, y))
-                union(x * c + y, si * c + sj)
+                if find(x * c + y) < c: continue
+                cnt += dfs(x, y)
+                union(x * c + y, i * c + j)  # 合并到(i,j) 因为(i,j)已经稳定了
+            ans.insert(0, cnt)
 
         return ans
 
 
 so = Solution()
+print(so.hitBricks(grid = [[1,1,1],[1,1,1],[1,1,1]], hits = [[2,0],[2,1],[2,2],[1,0],[1,1],[1,2],[0,0],[0,1],[0,2]]))
+print(so.hitBricks(grid = [[0,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1],[0,0,0,1,0,0,1,1,1],[0,0,1,1,0,1,1,1,0],[0,0,0,0,0,1,1,1,1],[0,0,0,0,0,0,0,1,0]], hits = [[1,8],[2,1],[1,4],[3,0],[3,4],[0,7],[1,6],[0,8],[2,5],[3,2],[2,0],[0,2],[0,5],[0,1],[4,8],[3,7],[0,6],[5,7],[5,3],[2,6],[2,2],[5,8],[2,8],[4,0],[3,3],[1,1],[0,0],[4,7],[0,3],[2,4],[3,1],[1,0],[5,2],[3,8],[4,2],[5,0],[1,2],[1,7],[3,6],[4,1],[5,6],[0,4],[5,5],[5,4],[1,5],[4,4],[3,5],[4,6],[2,3],[2,7]]))
 print(so.hitBricks(grid = [[1,0,1],[1,1,1]], hits = [[0,0],[0,2],[1,1]]))
 print(so.hitBricks(grid = [[1,0,0,0],[1,1,1,0]], hits = [[1,0]]))
 
