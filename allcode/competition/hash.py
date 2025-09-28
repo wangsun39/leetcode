@@ -34,7 +34,7 @@ class Solution:
         # 多项式字符串哈希（方便计算子串哈希值）
         # 哈希函数 hash(s) = s[0] * BASE^(n-1) + s[1] * BASE^(n-2) + ... + s[n-2] * BASE + s[n-1]
         MOD = 1_070_777_777
-        # MOD = 10 ** 18 + 3   有时可以用这个更大的模值
+        # MOD = 10 ** 18 + 3   #  有时可以用这个更大的模值
         BASE = random.randint(8 * 10 ** 8, 9 * 10 ** 8)  # 随机 BASE，防止 hack
         pow_base = [1] + [0] * n  # pow_base[i] = BASE^i
         pre_hash = [0] * (n + 1)  # 前缀哈希值 pre_hash[i] = hash(s[:i])

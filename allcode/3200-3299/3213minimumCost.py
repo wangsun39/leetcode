@@ -45,11 +45,13 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
+
 class Solution:
     def minimumCost(self, target: str, words: List[str], costs: List[int]) -> int:
-
         n = len(target)
         MOD = 1_070_777_777
+        # MOD = 10 ** 18 + 3   #  有时可以用这个更大的模值
         BASE = random.randint(8 * 10 ** 8, 9 * 10 ** 8)  # 随机 BASE，防止 hack
         pow_base = [1] + [0] * n  # pow_base[i] = BASE^i
         pre_hash = [0] * (n + 1)  # 前缀哈希值 pre_hash[i] = hash(s[:i])
@@ -62,23 +64,34 @@ class Solution:
         def sub_hash(l: int, r: int) -> int:
             return (pre_hash[r] - pre_hash[l] * pow_base[r - l]) % MOD
 
-        m = max(len(w) for w in words)
-        map = {}  # map: i -> dict  长度为i的字符串的字典，其中dict: hash -> cost  把一个哈希值映射到cost值
+        hash_to_cost = {}
+        words_lens = set()
 
         for i, word in enumerate(words):
             # 依次计算每个word的哈希值
             v = 0
             for x in word:
-                v = v * BASE + ord(x)
-            if len(word) not in map:
-                map[len(word)] = {v: costs[i]}
+                v = (v * BASE + ord(x)) % MOD
+            words_lens.add(len(word))
+            if v in hash_to_cost:
+                hash_to_cost[v] = min(hash_to_cost[v], costs[i])
             else:
-                map[len(word)][v] = costs[i]
+                hash_to_cost[v] = costs[i]
 
-        @cache
-        def dfs(start):
-            # 从位置start开始的子串，最小代价
-            if start == n: return 0
+        words_lens = sorted(words_lens)
+
+        dp = [0] + [inf] * n
+        for i in range(1, n + 1):
+            for le in words_lens:
+                if le > i: break
+                # value_of_target = sub_hash(i - le, i)
+                value_of_target = (pre_hash[i] - pre_hash[i - le] * pow_base[le]) % MOD
+                cost_val = hash_to_cost.get(value_of_target, inf)
+                if cost_val + dp[i - le] < dp[i]:
+                    dp[i] = cost_val + dp[i - le]
+
+        return dp[-1] if dp[-1] < inf else -1
+
 
 
 
