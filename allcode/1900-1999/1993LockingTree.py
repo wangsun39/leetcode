@@ -54,11 +54,7 @@
 
 
 
-from typing import List, Tuple
-from collections import defaultdict
-from heapq import *
-# Definition for a binary tree node.
-from math import *
+from leetcode.allcode.competition.mypackage import *
 class LockingTree:
 
     def __init__(self, parent: List[int]):

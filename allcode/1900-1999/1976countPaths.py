@@ -38,11 +38,7 @@
 
 
 
-from typing import List, Tuple
-from collections import defaultdict
-from heapq import *
-# Definition for a binary tree node.
-from math import *
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def countPaths(self, n: int, roads: List[List[int]]) -> int:
         MOD = 10 ** 9 + 7
