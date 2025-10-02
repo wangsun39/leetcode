@@ -31,7 +31,7 @@ def comb(n: int, m: int) -> int:
     return res
 
 
-# 带模的组合数
+# 带模的组合数，且模是素数
 MOD = 1_000_000_007
 MX = 100_000
 

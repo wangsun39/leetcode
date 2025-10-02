@@ -48,35 +48,11 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-
-def getRow(rowIndex: int) -> List[int]:
-    row = [1] * (rowIndex + 1)
-    for i in range(1, rowIndex + 1):
-        # 计算组合数 C(rowIndex, i)，然后取模10
-        row[i] = (row[i - 1] * (rowIndex - i + 1) // i) % 10
-    return row
-
-
-ta = getRow(5)  # 杨辉三角
-print(ta)
-
-def binomial_coefficient(n, k):
-    if k > n:
-        return 0
-    if k == 0 or k == n:
-        return 1
-    result = 1
-    for i in range(1, k + 1):
-        result = result * (n - i + 1) // i
-    return result
-
-def all_binomial_mod_10(n):
-    return [binomial_coefficient(n, k) % 10 for k in range(n + 1)]
-
-# 示例：求 n = 5 的所有二项式系数的个位数
-n = 5
-result = all_binomial_mod_10(n)
-print(result)
+MX = 5
+C = [[1] * (MX + 1) for _ in range(MX + 1)]  # 预处理计算小的组合数
+for i in range(1, MX + 1):
+    for j in range(1, i + 1):
+        C[i][j] = C[i][j - 1] * (i - j + 1) // j
 
 class Solution:
     def hasSameDigits(self, s: str) -> bool:
@@ -84,27 +60,38 @@ class Solution:
         s = [int(x) for x in s]
         n = len(s)
 
-        # def getRow(rowIndex: int) -> List[int]:
-        #     row = [1] * (rowIndex + 1)
-        #     for i in range(1, rowIndex + 1):
-        #         row[i] = (row[i - 1] * (rowIndex - i + 1) // i) % 10
-        #         if 0 == row[i]:
-        #             row[i] = 10
-        #     return row
-        #
-        # ta = getRow(n - 2)  # 杨辉三角
+        @cache
+        def COMB(n, k, p):  # p为质数，计算在mod p的意义下的组合数C(n,k)
+            # Lucas 定理
+            if k == 0: return 1
+            n1, k1 = n % p, k % p
+            n2, k2 = n // p, k // p
+            if n1 < k1 or n2 < k2: return 0
+            return C[n1][k1] * COMB(n2, k2, p) % p
 
-        v1 = sum((comb(n - 2, i) * s[i]) % 10 for i in range(n - 1)) % 10
-        v2 = sum((comb(n - 2, i) * s[i + 1]) % 10 for i in range(n - 1)) % 10
+        def CRT(n, k):
+            # 根据Lucas扩展，有下式
+            # x === COMB(n, k, 2) mod 2
+            # x === COMB(n, k, 5) mod 5
+            # 用中国剩余定理解得 x，
+            # 5，6的系数是要用到模的逆元求法
+            return (COMB(n, k, 2) * 5 + COMB(n, k, 5) * 6) % 10
+
+        f_bi = [0] * (n - 1)  # 二项式系数，mod 10
+        for i in range(n - 1):
+            f_bi[i] = CRT(n - 2, i)
+
+        COMB.cache_clear()
+
+        v1 = sum(int(s[i]) * f_bi[i] for i in range(n - 1)) % 10
+        v2 = sum(int(s[i + 1]) * f_bi[i] for i in range(n - 1)) % 10
 
         return v1 == v2
 
-
-
-
 so = Solution()
-print(so.hasSameDigits('8506969'))
+print(so.hasSameDigits('323'))
 print(so.hasSameDigits('3902'))
+print(so.hasSameDigits('8506969'))
 
 
 
