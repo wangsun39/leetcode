@@ -174,7 +174,7 @@ priority_queue<int> big_heap;
 // 一种构建大顶堆的方法
 priority_queue<int, vector<int>, less<int>> big_heap2;
 
-// 构造一个空的优先队列,此优先队列是一个小顶堆
+// 构造一个空的优先队列,此优先队列是一个小顶堆           
 priority_queue<int, vector<int>, greater<int>> small_heap;
 
 // deque<int> queue;   // deque 有 pop_back / pop_front  的用法
