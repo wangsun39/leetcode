@@ -45,13 +45,47 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def escapeMaze(self, maze: List[List[str]]) -> bool:
         n = len(maze)
+        if maze[0][0][0] == '#': return False
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
         r, c = len(maze[0]), len(maze[0][0])
 
         @cache
-        def dfs(t, px, py):  # t 表示时间， st 表示使用了魔法的格子
+        def dfs(t, px, py, f1, f2):  # t 表示时间， f1,f2分别表示两种消除术是否使用
+            if [px, py] == [r - 1, c - 1]:
+                return True
+            if t >= n - 1:
+                return False
+
+            # 先考虑不移动的场景
+            if maze[t + 1][px][py] == '.':
+                if dfs(t + 1, px, py, f1, f2): return True
+            else:
+                if not f1:
+                    if dfs(t + 1, px, py, f1 ^ 1, f2): return True
+                if not f2:
+                    for k in range(t + 1, n):
+                        if dfs(t + 1, px, py, f1, f2 ^ 1): return True
+
+            # 再考虑移动的场景
+            for dx, dy in dir:
+                x, y = px + dx, py + dy
+                if 0 <= x < r and 0 <= y < c:
+                    if maze[t + 1][x][y] == '.':
+                        if dfs(t + 1, x, y, f1, f2): return True
+                    else:
+                        if not f1:
+                            if dfs(t + 1, x, y, 1, f2): return True
+                        if not f2:
+                            for k in range(t + 1, n):
+                                if dfs(k, x, y, f1, 1): return True
+            return False
+
+        return dfs(0, 0, 0, 0, 0)
+
 
 
 so = Solution()
+print(so.escapeMaze(maze = [["....","...."],[".#..","#..."],["..#.",".#.."],["...#","..#."],["....",".##."]]))
 print(so.escapeMaze(maze = [["...","...","..."],[".##","###","##."],[".##","###","##."],[".##","###","##."],[".##","###","##."],[".##","###","##."],[".##","###","##."]]))
 
 
