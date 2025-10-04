@@ -76,7 +76,21 @@ class Solution:
                     f[i][j] = min(f[i][j], f[i][k] + f[k][j])
         return f
 
-
+    def floyd5(edges: List[List]) -> defaultdict:  # 有向图，递推，图表示中点可以是字符串，不一定是 0~n-1
+        f = defaultdict(lambda: defaultdict(lambda: inf))
+        s = set()
+        for x, y, _ in edges:
+            s.add(x)
+            s.add(y)
+            f[x][x] = f[y][y] = 0
+        for x, y, w in edges:
+            f[x][y] = w  # 添加一条边（题目保证没有重边和自环）
+        for k in s:
+            for i in s:
+                if f[i][k] == inf: continue
+                for j in s:
+                    f[i][j] = MIN(f[i][j], f[i][k] + f[k][j])
+        return f
 
 
 

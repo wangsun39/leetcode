@@ -54,12 +54,65 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
 class Solution:
     def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
 
+        def floyd4(edges: List[List]) -> defaultdict:  # 有向图，递推
+            f = defaultdict(lambda: defaultdict(lambda: inf))
+            s = set()
+            for x, y, _ in edges:
+                s.add(x)
+                s.add(y)
+                f[x][x] = f[y][y] = 0
+            for x, y, w in edges:
+                f[x][y] = w  # 添加一条边（题目保证没有重边和自环）
+            for k in s:
+                for i in s:
+                    if f[i][k] == inf: continue
+                    for j in s:
+                        f[i][j] = MIN(f[i][j], f[i][k] + f[k][j])
+            return f
+
+        n = len(source)
+        dis = defaultdict(lambda: defaultdict(lambda: inf))
+        len_to_str = defaultdict(set)
+        edges = []
+        for s, t, c in zip(original, changed, cost):
+            dis[s][t] = MIN(dis[s][t], c)
+            len_to_str[len(s)].add(s)
+            len_to_str[len(t)].add(t)
+        for s, map in dis.items():
+            for t, c in map.items():
+                edges.append([s, t, c])
+
+        f = floyd4(edges)
+        # print(f)
+        len_to_str = sorted(len_to_str.items())
+        m = len(len_to_str)
+
+        @cache
+        def dfs(start):
+            if start == n: return 0
+            res = inf
+            if source[start] == target[start]:
+                res = dfs(start + 1)
+            for l, ss in len_to_str:
+                if start + l > n: break
+                s, t = source[start: start + l], target[start: start + l]
+                if s == t:
+                    res = MIN(res, dfs(start + l))
+                res = MIN(res, f[s][t] + dfs(start + l))
+            return res
+        ans = dfs(0)
+        if ans == inf:
+            return -1
+        return ans
+
 
 so = Solution()
-print(so.minimumCost())
+print(so.minimumCost(source = "abcdefgh", target = "acdeeghh", original = ["bcd","fgh","thh"], changed = ["cde","thh","ghh"], cost = [1,3,5]))
+print(so.minimumCost(source = "abcd", target = "acbe", original = ["a","b","c","c","e","d"], changed = ["b","c","b","e","b","e"], cost = [2,5,5,1,2,20]))
 
 
 
