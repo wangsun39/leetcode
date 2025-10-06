@@ -60,40 +60,43 @@ class Solution:
         mx = 0
         mn = 1
 
-        vis = {nums[0]}
-        arr = [[0, 0]]
+        arr = deque([[0, 0]])   # 记录根节点到当前节点的一条路上的点和路径上每点到root的距离
+        group = defaultdict(list)  # 路径上值相同点的列表
+        group[nums[0]].append(0)
 
-        def dfs(x, fa, dis, pos):
-            # pos 记录与当前节点在一条路径上最远祖先在arr中位置下标
+        def dfs(x, fa, left):
+            # left 表示在arr中只能在下标>=left的元素中计算最长路径
             nonlocal mx, mn
-            arr.append([x, g[fa][x]])
-            pos0 = pos
-            while nums[x] in vis:
-                vis.remove(nums[arr[pos][0]])
-                pos += 1
-                dis -= arr[pos][1]
-            vis.add(nums[x])
-            dis += g[fa][x]
+            # print(fa, x)
+            arr.append([x, arr[-1][1] + g[fa][x]])
+            p = len(arr) - 1
+            p0 = left
+            if len(group[nums[x]]):
+                p0 = max(p0, group[nums[x]][-1] + 1)
+            dis = arr[p][1] - arr[p0][1]
             if dis > mx:
                 mx = dis
-                mn = len(arr) - pos
+                mn = p - p0 + 1
             elif dis == mx:
-                mn = min(mn, len(arr) - pos)
-            for y, w in g[x].items():
-                if y == fa: continue
-                dfs(y, x, dis, pos)
-            vis.remove(nums[x])
-            for i in range(pos0, pos + 1):
-                vis.add(nums[arr[i][0]])
+                mn = min(mn, p - p0 + 1)
+            group[nums[x]].append(p)
+            for y in g[x]:
+                if y == fa or g[x][y] == inf: continue
+                dfs(y, x, p0)
+
+            group[nums[x]].pop()
             arr.pop()
 
-        for x, _ in g[0].items():
-            dfs(x, 0, 0, 0)
+        for x in g[0]:
+            dfs(x, 0, 0)
 
         return [mx, mn]
 
 
 so = Solution()
+
+print(so.longestSpecialPath(edges = [[1,0,7],[1,2,4]], nums = [1,1,3]))
+print(so.longestSpecialPath(edges = [[1,0,8]], nums = [2,2]))
 print(so.longestSpecialPath(edges = [[1,0,2],[0,2,10]], nums = [2,4,4]))
 print(so.longestSpecialPath(edges = [[0,1,2],[1,2,3],[1,3,5],[1,4,4],[2,5,6]], nums = [2,1,2,1,3,1]))
 

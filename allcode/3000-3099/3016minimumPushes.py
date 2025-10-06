@@ -63,29 +63,24 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def countOfPairs(self, n: int, x: int, y: int) -> List[int]:
-        if x > y:
-            x, y = y, x
-        ans = [0] * (n + 1)
-        if x == y or x + 1 == y:
-            for k in range(1, n + 1):
-                ans[k] = (n - k) * 2
-        else:
-            for k in range(1, n + 1):
-                p1 = max(0, n - k - x)
-                p2 = min(x, n - (y - x + 1) - k)
-                p2 = max(0, p2)
-                ans[k] = (p1 + p2) * 2
-
-        ans.pop(0)
+    def minimumPushes(self, word: str) -> int:
+        counter = Counter(word)
+        counter = sorted([[k, v] for k, v in counter.items()], key=lambda x:x[1], reverse=True)
+        d = defaultdict(int)
+        ans = 0
+        idx = 0
+        for k, v in counter:
+            d[idx] += 1
+            ans += v * d[idx]
+            idx += 1
+            idx %= 8
         return ans
 
 
 so = Solution()
-print(so.countOfPairs(n = 5, x = 1, y = 5))
-print(so.countOfPairs(n = 3, x = 1, y = 3))
-print(so.countOfPairs(n = 5, x = 2, y = 4))
-print(so.countOfPairs(n = 4, x = 1, y = 1))
+print(so.minimumPushes("abcde"))
+print(so.minimumPushes("xyzxyzxyzxyz"))
+print(so.minimumPushes("aabbccddeeffgghhiiiiii"))
 
 
 

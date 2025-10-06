@@ -51,25 +51,61 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
-    def minimumPushes(self, word: str) -> int:
-        counter = Counter(word)
-        counter = sorted([[k, v] for k, v in counter.items()], key=lambda x:x[1], reverse=True)
-        d = defaultdict(int)
-        ans = 0
-        idx = 0
-        for k, v in counter:
-            d[idx] += 1
-            ans += v * d[idx]
-            idx += 1
-            idx %= 8
+    def countOfPairs(self, n: int, x: int, y: int) -> List[int]:
+        diff = [0] * (n + 1)
+        x, y = x - 1, y - 1
+        if x > y: x, y = y, x
+        m = y - x + 1  # 环的大小
+
+        def add(from_, unit):
+            # 在差分数组，从下标from开始，连续加unit元素，每个增加 1
+            to_ = from_ + unit
+            diff[from_] += 1
+            diff[to_] -= 1
+
+        if m < 3:
+            for i in range(n):
+                add(1, i)  # [0, i-1]
+                add(1, n - (i + 1))  # [i+1, n-1]
+            ans = list(accumulate(diff[1:]))
+            return ans
+
+        def calc(x, y, flg):
+            # 只枚举下标[0,(x + y) // 2]的点，剩下的点利用对称性处理
+            for i in range(x):
+                add(1, i)   # 处理房屋的编号 [0, i - 1]
+                j = (x + y) // 2
+                add(1, j - (i + 1) + 1)   # 处理房屋的编号 [i + 1, (x+y)//2]
+                add(x - i + 1, n - 1 - y + 1)   # 处理房屋的编号 [y, n - 1]
+                add(x - i + 2, y - 1 - j)   # 处理房屋的编号 [(x+y)//2+1,y-1]
+
+            upper = (x + y) // 2 + 1
+            if flg == 0 and ((x + y) & 1) == 0:
+                upper = (x + y) // 2
+            for i in range(x, upper):
+                add(i - x + 1, x)   # 处理房屋的编号 [0, x - 1]
+                add(MIN(i - x + 2, y - i + 1), n - 1 - y)   # 处理房屋的编号 [y + 1, n - 1]
+                # 处理环上的点, (m-1)//2个点都是成对相同的
+                add(1, (m - 1) // 2)
+                add(1, (m - 1) // 2)
+                if (m & 1) == 0:  # 有一个最远点单独处理一下
+                    add((m - 1) // 2 + 1, 1)
+
+        calc(x, y, 1)
+        calc(n - 1 - y, n - 1 - x, 0)  # 不用处理中间点
+
+        ans = list(accumulate(diff[1:]))
         return ans
 
 
+
+
 so = Solution()
-print(so.minimumPushes("abcde"))
-print(so.minimumPushes("xyzxyzxyzxyz"))
-print(so.minimumPushes("aabbccddeeffgghhiiiiii"))
+print(so.countOfPairs(n = 3, x = 1, y = 3))
 
 
 
