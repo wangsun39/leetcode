@@ -63,13 +63,6 @@ public:
         for (int i=0;i<r;i++) {
             for (int j=0;j<c;j++) {
                 pq.push({grid[i][j],i,j});
-                
-                // for (int k=0;k<4;k++) {
-                //     auto [dx, dy] = dir[k];
-                //     int x=i+dx,y=j+dy;
-                //     if (0<=x&&x<r&&0<=y&&y<c&&vis.find(x*c+y)!=vis.end())
-                //         uf.merge(i*c+j,x*c+y);
-                // }
             }
         }
         while (true) {
@@ -86,7 +79,6 @@ public:
             
             if (uf.find(0)==uf.find(r*c-1)) return ans;
         }
-
     }
 };
 
