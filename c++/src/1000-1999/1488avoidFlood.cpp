@@ -9,10 +9,7 @@ public:
         vector<int> ans(n, -1);
         for (int i=0;i<n;i++) {
             if (rains[i]) {
-                if (pre.find(rains[i])==pre.end()) {
-                    
-                }
-                else {
+                if (pre.find(rains[i])!=pre.end()) {
                     auto it=pos.lower_bound(pre[rains[i]]);
                     if (it == pos.end()) return {};
                     ans[*it] = rains[i];
