@@ -29,33 +29,52 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
     def maxGroupNumber(self, tiles: List[int]) -> int:
-        counter = Counter(tiles)
-        tiles = [[k, v] for k, v in counter.items()]
         tiles.sort()
         n = len(tiles)  # 按牌的种类排序
-        if n == 1: return tiles[0][1] // 3
-        if n == 2: return tiles[0][1] // 3 + tiles[1][1] // 3
-        dp = [[[[0] * 5 for _ in range(5)] for _ in range(5)] for _ in range(n)]
-        # dp[i][a][b][c]  表示处理到第i种牌时，牌面为 tiles[i][0]-2,tiles[i][0]-1,tiles[i][0] 的牌的数量分别为a/b/c张时，总得分最大值
-        if tiles[0][0] + 1 == tiles[1][0]:
-            for i in range(min(tiles[0][1], 5)):
-                dp[0][0][0][i] = tiles[0][1] // 3
-                for j in range(min(tiles[1][1], 5)):
-                    dp[1][0][i][j] = tiles[0][1] // 3 + tiles[1][1] // 3
-        else:
-            for i in range(min(tiles[1][1], 5)):
-                dp[1][0][0][i] = tiles[1][1] // 3
+        # if n == 1: return tiles[0][1] // 3
+        # if n == 2: return tiles[0][1] // 3 + tiles[1][1] // 3
+        dp = [[[[-1] * 5 for _ in range(5)] for _ in range(5)] for _ in range(n)]
+        dp[0][0][0][1] = 0  # i==0时， 只有这种为0，其他的都不存在为-1
+        for i in range(1, n):
+            for a in range(5):
+                for b in range(5):
+                    for c in range(5):
+                        # 想办法利用 dp[i - 1][a][b][c] 来更新，dp[i] 的某些值
+                        if tiles[i - 1] == tiles[i]:
+                            # 在与前一张牌面相同时，相同的abc，在多出一张牌时，能够的得分一定不会变小
+                            dp[i][a][b][c] = MAX(dp[i][a][b][c], dp[i - 1][a][b][c])
 
-        for i in range(2, n):
-            if tiles[i - 1][0] + 1 != tiles[i][0]:
-                for c in range(min(tiles[i][1], 5)):
-                    dp[1][0][0][c] = tiles[i][1] // 3
+                            if c < 4:
+                                # i 时，拥有 c + 1 张tiles[i]，与i -1 时，用c张tiles[i] 是等效的
+                                dp[i][a][b][c + 1] = MAX(dp[i][a][b][c + 1], dp[i - 1][a][b][c])
+                            if c > 2:
+                                # c > 2 时，可以将c组成一个刻子
+                                dp[i][a][b][c - 2] = MAX(dp[i][a][b][c - 2], dp[i - 1][a][b][c] + 1)
+                            if min(a, b, c + 1) > 0:
+                                # 在 dp[i - 1][a][b][c] 的基础上拿出一个a和一个b，再加上tiles[i]的c，组成一个顺子
+                                dp[i][a - 1][b - 1][c] = MAX(dp[i][a - 1][b - 1][c], dp[i - 1][a][b][c] + 1)
+                        elif tiles[i - 1] + 1 == tiles[i]:
+                            dp[i][b][c][1] = MAX(dp[i][b][c][1], dp[i - 1][a][b][c])
+                            if min(b, c) > 0:
+                                dp[i][b - 1][c - 1][0] = MAX(dp[i][b - 1][c - 1][0], dp[i - 1][a][b][c])
+                        elif tiles[i - 1] + 2 == tiles[i]:
+                            dp[i][c][0][1] = MAX(dp[i][c][0][1], dp[i - 1][a][b][c])
+                        else:
+                            dp[i][0][0][1] = MAX(dp[i][0][0][1], dp[i - 1][a][b][c])
 
+        ans = 0
+        for a in range(5):
+            for b in range(5):
+                ans = MAX(ans, max(dp[-1][a][b]))
+        return ans
 
 
 so = Solution()
+print(so.maxGroupNumber(tiles = [1,2,2,2,3,4,5]))
 print(so.maxGroupNumber(tiles = [2,2,2,3,4]))
 
 

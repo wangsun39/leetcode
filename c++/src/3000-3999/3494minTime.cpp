@@ -5,22 +5,22 @@ class Solution {
     public:
     long long minTime(vector<int>& skill, vector<int>& mana) {
         int n=skill.size(),m=mana.size();
-        int s=0;
-        vector<vector<int>> start(m, vector<int>(n, 0));
+        long long s=0;
+        vector<vector<long long>> start(m, vector<long long>(n, 0));
         for (int i=0;i<n;i++) {
-            start[0][i]=s*mana[0];
+            start[0][i]=(long long)s*mana[0];
             s+=skill[i];
         }
         for (int i=1;i<m;i++) {
             start[i][0]=start[i-1][0]+skill[0]*mana[i-1];
             for (int j=1;j<n;j++) {
-                start[i][j]=max(start[i-1][j]+skill[j]*mana[i-1], start[i][j-1]+skill[j-1]*mana[i]);
+                start[i][j]=max(start[i-1][j]+(long long)skill[j]*mana[i-1], start[i][j-1]+(long long)skill[j-1]*mana[i]);
             }
             for (int j=n-2;j>=0;j--) {
-                start[i][j]=start[i][j+1]-skill[j]*mana[i];
+                start[i][j]=start[i][j+1]-(long long)skill[j]*mana[i];
             }
         }
-        return start[m-1][n-1]+skill[n-1]*mana[m-1];
+        return start[m-1][n-1]+(long long)skill[n-1]*mana[m-1];
     }
     };
 
