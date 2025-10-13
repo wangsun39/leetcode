@@ -22,6 +22,10 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def iceBreakingGame(self, num: int, target: int) -> int:
+        p = 0
+        for i in range(2, num + 1):
+            p = (p + target) % i
+        return p
 
 
 
