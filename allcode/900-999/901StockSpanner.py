@@ -33,9 +33,8 @@
 # https://leetcode.cn/problems/online-stock-span/
 
 
+from leetcode.allcode.competition.mypackage import *
 
-from functools import lru_cache
-from typing import List
 class StockSpanner:
 
     def __init__(self):

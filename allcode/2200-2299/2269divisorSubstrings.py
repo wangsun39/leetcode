@@ -40,13 +40,6 @@
 
 
 from leetcode.allcode.competition.mypackage import *
-from collections import defaultdict
-# d = Counter(list1)
-# d = defaultdict(int)
-
-from functools import lru_cache
-from typing import List
-# @lru_cache(None)
 
 class Solution:
     def divisorSubstrings(self, num: int, k: int) -> int:
