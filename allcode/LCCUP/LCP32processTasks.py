@@ -51,24 +51,19 @@ class Solution:
             cur = r
             while stack and cur - stack[-1][1] <= d:
                 d -= cur - stack[-1][1]
-                cur = stack[-1][0]
+                cur = stack[-1][0] - 1  # 保持cur是开区间
                 stack.pop()
-            if cur == r:
-                stack.append([r - d + 1, r, stack[-1][2] + d])
-            elif stack:
-                stack.append([cur - d, r, r - (cur - d) + 1 + stack[-1][2]])
+            if stack:
+                stack.append([cur - d + 1, r, r - (cur - d) + stack[-1][2]])
             else:
-                stack.append([cur - d, r, r - (cur - d) + 1])
+                stack.append([cur - d + 1, r, r - (cur - d)])
         return stack[-1][2]
 
 
 
 so = Solution()
+print(so.processTasks([[29,70,3],[43,48,3],[30,83,27],[6,75,26],[25,96,41],[2,80,44],[74,88,15],[52,97,17],[33,50,2],[66,82,8]]))  # 52
 print(so.processTasks([[1,3,2],[2,5,3],[5,6,2]]))  # 4
 print(so.processTasks([[10,42,6],[47,81,35],[38,58,13],[39,48,4],[12,62,24],[54,73,1],[59,96,34],[65,91,20]]))  # 54
 print(so.processTasks([[2,7,5],[3,5,1]]))  # 5
-
-
-
-
 
