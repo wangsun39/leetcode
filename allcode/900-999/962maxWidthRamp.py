@@ -30,20 +30,17 @@
 
 
 from leetcode.allcode.competition.mypackage import *
-class Solution:
-    def repeatedNTimes(self, nums: List[int]) -> int:
-        n = len(nums)
-        seq = [i for i in range(n)]
-        while True:
-            x, y = random.choice(seq), random.choice(seq)
-            if x == y:
-                continue
-            if nums[x] == nums[y]:
-                return nums[x]
 
+class Solution:
+    def maxWidthRamp(self, nums: List[int]) -> int:
+        mn = inf
+        ans = 0
+        for i, x in sorted(enumerate(nums), key=lambda x: x[1]):
+            ans = max(ans, i - mn)
+            mn = min(mn, i)
+        return ans
 
 
 so = Solution()
-print(so.repeatedNTimes([5,1,5,2,5,3,5,4]))
-#print(so.largestComponentSize(3660))
+print(so.maxWidthRamp([6,0,8,2,1,5]))
 
