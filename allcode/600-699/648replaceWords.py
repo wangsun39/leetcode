@@ -32,8 +32,38 @@
 # Definition for a binary tree node.
 from leetcode.allcode.competition.mypackage import *
 
+
+c2i = {c: i for i, c in enumerate(ascii_lowercase)}
+
+class Trie:
+
+    def __init__(self):
+        self.root = [0] * 27
+
+    def insert(self, word: str) -> None:  # O(log(len(word)))
+        cur = self.root
+        for e in word:
+            if cur[c2i[e]] == 0:
+                cur[c2i[e]] = [0] * 27
+            cur = cur[c2i[e]]
+        cur[26] = True  # 最后一个值作为是否结束
+
+
+    def search(self, word: str) -> str:
+        cur = self.root
+        ans = []
+        for e in word:
+            i = c2i[e]
+            if cur[i] == 0:
+                return word
+            elif cur[i][26]:
+                return ''.join(ans)
+            ans.append(e)
+            cur = cur[i]
+        return word
+
 class Solution:
-    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+    def replaceWords1(self, dictionary: List[str], sentence: str) -> str:
         s = set(dictionary)
         def trans(word):
             n = len(word)
@@ -47,6 +77,16 @@ class Solution:
             res.append(trans(word))
         return ' '.join(res)
 
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        # # 2025/10/22  Trie树的方式
+        tr = Trie()
+        for dic in dictionary:
+            tr.insert(dic)
+        ans = []
+        for w in sentence.split():
+            ans.append(tr.search(w))
+
+        return ' '.join(ans)
 
 
 so = Solution()
