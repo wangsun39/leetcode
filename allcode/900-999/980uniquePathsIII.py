@@ -38,9 +38,7 @@
 # 提示：
 #
 # 1 <= grid.length * grid[0].length <= 20
-from functools import cache
-from math import log
-from typing import List, Optional
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def uniquePathsIII(self, grid: List[List[int]]) -> int:
