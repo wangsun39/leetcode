@@ -77,7 +77,7 @@ class Solution:
             if x != fa[x]:
                 fa[x] = find(fa[x])
             return fa[x]
-        def union(x, y):
+        def union(x, y):  # x 是代表元
             fa[find(y)] = find(x)
         def setNum():
             ans = 0

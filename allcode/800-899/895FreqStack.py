@@ -36,7 +36,6 @@
 
 
 from leetcode.allcode.competition.mypackage import *
-import bisect
 
 class FreqStack:
 
@@ -49,24 +48,24 @@ class FreqStack:
     def push(self, val: int) -> None:
         if len(self.d1[val]):
             t, i = len(self.d1[val]), self.d1[val][-1]
-            pos = bisect.bisect_left(self.l, [t, i])
+            pos = bisect_left(self.l, [t, i])
             del self.l[pos]
             self.d1[val].append(self.cnt)
-            bisect.insort_left(self.l, [t + 1, self.cnt])
+            insort_left(self.l, [t + 1, self.cnt])
         else:
             self.d1[val].append(self.cnt)
-            bisect.insort_left(self.l, [1, self.cnt])
+            insort_left(self.l, [1, self.cnt])
         self.q.append(val)
         self.cnt += 1
 
     def pop(self) -> int:
         t, i = self.l[-1]
         num = self.q[i]
-        pos = bisect.bisect_left(self.l, [t, i])
+        pos = bisect_left(self.l, [t, i])
         del self.l[pos]
         self.d1[num].pop()
         if t > 1:
-            bisect.insort_left(self.l, [t - 1, self.d1[num][-1]])
+            insort_left(self.l, [t - 1, self.d1[num][-1]])
         return num
 
 
