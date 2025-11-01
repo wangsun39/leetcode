@@ -26,9 +26,7 @@
 
 
 
-from typing import List
-from functools import cache
-from collections import deque, defaultdict
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
