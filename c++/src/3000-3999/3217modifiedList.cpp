@@ -26,6 +26,5 @@ int main()
     vector<int> nums{1,2,3,4,5};
 
     Solution so;
-    cout << so.maximumLength(nums,2) << endl;
     return 0;
 }
