@@ -24,8 +24,7 @@
 # 0 <= k <= 100
 # 0 <= prices.length <= 1000
 # 0 <= prices[i] <= 1000
-from cmath import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxProfit(self, k: int, prices: List[int]) -> int:

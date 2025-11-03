@@ -19,8 +19,7 @@
 # 提示：
 #
 # intervals[i][0] <= intervals[i][1]
-from cmath import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         if len(intervals) < 1:

@@ -33,8 +33,7 @@
 #
 # 二叉树中节点数目范围是 [1, 10^5] 。
 # 每个节点权值的范围是 [-10^4, 10^4] 。
-from cmath import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 import math
 
 class Solution:

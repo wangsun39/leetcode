@@ -36,8 +36,7 @@
 # 0 <= startj < endj <= 109
 # endj < startj+1
 
-from cmath import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:

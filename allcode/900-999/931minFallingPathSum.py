@@ -25,8 +25,7 @@
 # n == matrix.length == matrix[i].length
 # 1 <= n <= 100
 # -100 <= matrix[i][j] <= 100
-from cmath import inf
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
