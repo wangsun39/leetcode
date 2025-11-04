@@ -64,19 +64,31 @@ class Solution:
                 r1.append(y1)
                 r2.append(y2 + w)
             m = len(r1)
-            d = [r1[i] - r2[i] for i in range(m)]
-            s = sum(r1)  # 初始值为r1之和，相当于x向下的边一条都不取，此时子树的边权最大值
+            d = [r2[i] - r1[i] for i in range(m)]
+            a1 = a2 = s = sum(r1)  # 初始值为r1之和，相当于x向下的边一条都不取，此时子树的边权最大值
             # 依次加入最大增益的边，使得s值不断变大，最多加入k条边，求出a1,a2
+            cnt = 0
+            for i, di in sorted(enumerate(d), key=lambda x: x[1], reverse=True):
+                if di <= 0:
+                    break
+                s += di
+                cnt += 1
+                if cnt <= k - 1:
+                    a1 = a2 = s
+                elif cnt == k:
+                    a1 = s
+                    break
+            return a1, a2
 
-
-
-
-
+        a1, a2 = dfs(0, -1)
+        return max(a1, a2)
 
 
 
 so = Solution()
-print(so.maximizeSumOfWeights(edges = [[0,1,4],[0,2,2],[2,3,12],[2,4,6]], k = 2))
+print(so.maximizeSumOfWeights(edges = [[0,3,48],[3,4,48],[3,2,27],[2,1,38]], k = 2))  # 134
+print(so.maximizeSumOfWeights(edges = [[0,1,5],[1,2,10],[0,3,15],[3,4,20],[3,5,5],[0,6,10]], k = 3))  # 65
+print(so.maximizeSumOfWeights(edges = [[0,1,4],[0,2,2],[2,3,12],[2,4,6]], k = 2))  # 22
 
 
 
