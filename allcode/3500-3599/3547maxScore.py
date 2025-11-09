@@ -1,4 +1,4 @@
-# 给你一个包含 n 个节点的 无向图，节点按从 0 到 n - 1 编号。每个节点 最多 与其他两个节点相连。
+# 给你一个包含 n 个节点的 无向连通图，节点按从 0 到 n - 1 编号。每个节点 最多 与其他两个节点相连。
 #
 # 图中包含 m 条边，使用一个二维数组 edges 表示，其中 edges[i] = [ai, bi] 表示节点 ai 和节点 bi 之间有一条边。
 #
@@ -49,104 +49,15 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maxScore(self, n: int, edges: List[List[int]]) -> int:
-
-        fa = list(range(n))
-
-        def find(x):
-            if x != fa[x]:
-                fa[x] = find(fa[x])
-            return fa[x]
-        def union(x, y):
-            fa[find(y)] = find(x)
-
-        deg = [0] * n
-        for x, y in edges:
-            deg[x] += 1
-            deg[y] += 1
-            union(x, y)
-        for i in range(n):
-            find(i)
-
-        counter = Counter(fa)
-        isCycle = {i: 1 for i in counter.keys()}
-        for i, x in enumerate(fa):
-            if deg[i] == 1:
-                isCycle[x] = 0
-
-        ans = 0
-        c1 = []  # 环
-        c2 = []  # 链
-        for x, isC in isCycle.items():
-            if isC:
-                c1.append(counter[x])
-            else:
-                c2.append(counter[x])
-        # c1.sort(reverse=True)
-        # c2.sort(reverse=True)
-
-        c = [[x, 1] for x in c1]
-        c += [[x, 0] for x in c2]
-        c.sort(reverse=True)
-
-
-
-        mx = n
-
-        for x, flg in c:
-            if flg:
-                if x == 1: break
-                dq = deque()
-                for i in range(1, x + 1, 2):
-                    dq.appendleft(mx)
-                    mx -= 1
-                    if mx:
-                        dq.append(mx)
-                        mx -= 1
-                ans += dq[0] * dq[-1]
-                # if x == 2: return ans
-                for y, z in pairwise(dq):
-                    ans += y * z
-            else:
-                dq = deque()
-                for i in range(1, x + 1, 2):
-                    dq.appendleft(mx)
-                    mx -= 1
-                    if mx:
-                        dq.append(mx)
-                        mx -= 1
-                # ans = dq[0] * dq[-1]
-                for y, z in pairwise(dq):
-                    ans += y * z
-
+        if n == 1: return 0
+        ans = n * (n - 1)
+        for i in range(2, n + 1, 2):
+            ans += i * (i - 2)
+        for i in range(3, n + 1, 2):
+            ans += i * (i - 2)
+        if len(edges) == n:
+            ans += 2
         return ans
-
-        # for x in c1:
-        #     if x == 1: break
-        #     dq = deque()
-        #     for i in range(1, x + 1, 2):
-        #         dq.appendleft(mx)
-        #         mx -= 1
-        #         if mx:
-        #             dq.append(mx)
-        #             mx -= 1
-        #     ans += dq[0] * dq[-1]
-        #     # if x == 2: return ans
-        #     for y, z in pairwise(dq):
-        #         ans += y * z
-        #
-        # for x in c2:
-        #     dq = deque()
-        #     for i in range(1, x + 1, 2):
-        #         dq.appendleft(mx)
-        #         mx -= 1
-        #         if mx:
-        #             dq.append(mx)
-        #             mx -= 1
-        #     # ans = dq[0] * dq[-1]
-        #     for y, z in pairwise(dq):
-        #         ans += y * z
-        #
-        # return ans
 
 
 so = Solution()

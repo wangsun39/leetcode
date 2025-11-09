@@ -43,23 +43,36 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def maximumWeight(self, intervals: List[List[int]]) -> List[int]:
-        intervals.sort(key=lambda x:x[1])
-        dp0 = []
-        dp1 = []
-        dp2 = []
-        dp3 = []
-        dp4 = []
-        for x, y, w in intervals:
-            if dp1 and dp1[-1][1] < w:
-                dp1.append([y, w])
-            else:
-                continue
+        n = len(intervals)
+        int2 = [[x, y, w, i] for i, [x, y, w] in enumerate(intervals)]
+        int2.sort(key=lambda x: x[1])
+        dp = [[(0, []) for _ in range(4)] for _ in range(n)]  # 前 i 个区间，组合成 j+1个区间的[最大得分, 最小原下标集合]为 dp[i][j]
+        dp[0][0] = (-int2[0][2], [int2[0][3]])
+        for ii, [x, y, w, i] in enumerate(int2):
+            # ii 是新下标，i 是原数组下标
+            p = bisect_left(int2, x, key=lambda t: t[1])  # int2中坐标小于 p 的区间都在当前区间左侧
+            if ii > 0:
+                dp[ii][0] = min(dp[ii - 1][0], (-w, [i]))
+            for j in range(1, 4):
+                if ii > 0:
+                    dp[ii][j] = dp[ii - 1][j]
+                if p > 0:
+                    dp[ii][j] = min(dp[ii][j], (dp[p - 1][j - 1][0] - w, sorted(dp[p - 1][j - 1][1] + [i])))
 
+        mn = 0
+        ans = []
+        for j in range(4):
+            if mn > dp[-1][j][0]:
+                mn = dp[-1][j][0]
+                ans = dp[-1][j][1]
+            elif mn == dp[-1][j][0]:
+                ans = min(ans, dp[-1][j][1])
+        return ans
 
 
 
 so = Solution()
-print(so.maximumWeight())
+print(so.maximumWeight(intervals = [[1,3,2],[4,5,2],[1,5,5],[6,9,3],[6,7,1],[8,9,1]]))
 
 
 
