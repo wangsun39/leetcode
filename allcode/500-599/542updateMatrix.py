@@ -32,7 +32,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+    def updateMatrix1(self, mat: List[List[int]]) -> List[List[int]]:
         M, N = len(mat), len(mat[0])
         dp = [[200000] * (N + 2) for _ in range(M + 2)]
         offset = [[-1, 0], [1, 0], [0, -1], [0, 1]]
@@ -63,6 +63,37 @@ class Solution:
         print(dp)
         dp = [dp[i][1: N + 1] for i in range(M)]
         return dp
+
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        # 2025/11/11 BFS
+        r, c = len(mat), len(mat[0])
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        vis = [[0] * c for _ in range(r)]
+        ans = [[r + c] * c for _ in range(r)]
+        dq = deque()
+        for i in range(r):
+            for j in range(c):
+                if mat[i][j] == 0:
+                    ans[i][j] = 0
+                    vis[i][j] = 1
+                    dq.append([i, j])
+
+        dis = 1
+        while dq:
+            dq2 = deque()
+            while dq:
+                x, y = dq.popleft()
+                for dx, dy in dir:
+                    u, v = x + dx, y + dy
+                    if 0 <= u < r and 0 <= v < c and vis[u][v] == 0:
+                        ans[u][v] = dis
+                        vis[u][v] = 1
+                        dq2.append([u, v])
+            dq = dq2
+            dis += 1
+        return ans
+
+
 
 
 so = Solution()
