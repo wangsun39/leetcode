@@ -35,10 +35,9 @@
 # 0 <= value <= 105
 # 最多调用 2 * 105 次 get 和 put
 
-from typing import List
-from sortedcontainers import SortedDict
+from leetcode.allcode.competition.mypackage import *
 
-class LRUCache:
+class LRUCache1:
 
     def __init__(self, capacity: int):
         self.cap = capacity
@@ -74,7 +73,38 @@ class LRUCache:
         self.sd[self.seq] = key
 
 
+class LRUCache:
+    # 2025/11/21  队列方式
 
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.dic = {}   # key: [value, seq]
+        self.seq = 0
+        self.dq = deque()  # seq: key
+
+
+    def get(self, key: int) -> int:
+        if key not in self.dic:
+            return -1
+        self.seq += 1
+        self.dic[key][1] = self.seq
+        self.dq.append([key, self.seq])
+        return self.dic[key][0]
+
+
+    def put(self, key: int, value: int) -> None:
+        self.seq += 1
+        self.dq.append([key, self.seq])
+        if key in self.dic:
+            self.dic[key] = [value, self.seq]
+            return
+        if len(self.dic) >= self.cap:
+            while self.dq[0][1] != self.dic[self.dq[0][0]][1]:
+                self.dq.popleft()
+            del(self.dic[self.dq[0][0]])
+            self.dq.popleft()
+
+        self.dic[key] = [value, self.seq]
 
 
 so = LRUCache(2)
