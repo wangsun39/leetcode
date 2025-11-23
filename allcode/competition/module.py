@@ -20,5 +20,5 @@ def comb(n: int, m: int) -> int:
     return f[n] * inv_f[m] * inv_f[n - m] % MOD
 
 # (a // b) % MOD == a * qpow(b, MOD - 2, MOD) % MOD
-
+# a * pow(b, -1, MOD) % MOD  用内置函数计算逆元
 
