@@ -95,22 +95,22 @@ class Solution:
                 hi = max(hi, w)
 
         def check(val):
-            in_node = defaultdict(set)
+            in_deg = [0] * n  # 入度
             g = defaultdict(list)
             for x, y, w in edges:
                 if online[x] and online[y] and w >= val:
                     g[x].append([y, w])
-                    in_node[y].add((x, w))
+                    in_deg[y] += 1
 
-            dq = deque([[x, inf] for x in range(1, n) if len(in_node[x]) == 0])
+            dq = deque([[x, inf] for x in range(1, n) if in_deg[x] == 0])
             dq.append([0, 0])
             dis = [inf] * n
             dis[0] = 0
             while dq:
                 x, acc = dq.popleft()
                 for y, w in g[x]:
-                    in_node[y].remove((x, w))
-                    if len(in_node[y]) == 0:
+                    in_deg[y] -= 1
+                    if in_deg[y] == 0:
                         dq.append([y, w + dis[x]])
                     if w + dis[x] == inf: continue
                     dis[y] = min(dis[y], w + dis[x])
