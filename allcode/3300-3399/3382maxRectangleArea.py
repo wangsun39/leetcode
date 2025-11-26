@@ -80,14 +80,23 @@ class Fenwick:
 
 class Solution:
     def maxRectangleArea(self, xCoord: List[int], yCoord: List[int]) -> int:
-        ys = sorted(set(yCoord))
-        y2i = {x: i + 1 for i, x in enumerate(ys)}
+        # 离散化
+        X = set(xCoord) | set(yCoord)
+        dis = {x: i + 1 for i, x in enumerate(sorted(list(X)))}
+        xCoord = [dis[x] for x in xCoord]
+        yCoord = [dis[x] for x in yCoord]
+        n = len(xCoord)
+        left = defaultdict(lambda: defaultdict(lambda: -inf))  # (x,y) 左侧最近的点
+        down = defaultdict(lambda: defaultdict(lambda: -inf))  # (x,y) 下侧最近的点
+        for i in range(n):
+
+
 
 
 
 
 so = Solution()
-print(so.maxRectangleArea())
+print(so.maxRectangleArea(xCoord = [1,1,3,3], yCoord = [1,3,1,3]))
 
 
 
