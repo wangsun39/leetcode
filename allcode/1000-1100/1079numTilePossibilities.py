@@ -24,9 +24,7 @@
 # 1 <= tiles.length <= 7
 # tiles 由大写英文字母组成
 
-from collections import Counter
-from functools import cache
-from typing import List
+from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
