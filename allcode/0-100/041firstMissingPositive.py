@@ -28,7 +28,7 @@
 from typing import List
 
 class Solution:
-    def firstMissingPositive(self, nums: List[int]) -> int:
+    def firstMissingPositive1(self, nums: List[int]) -> int:
         N = len(nums)
         if 0 == N:
             return 1
@@ -47,6 +47,24 @@ class Solution:
             if e != 'exist':
                 return i + 1
         return N + 1
+
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        # 2025/11/29 题目扩充的数据范围
+        n = len(nums)
+        for i in range(n):
+            if nums[i] <= 0 or nums[i] > n:
+                nums[i] = 0
+        for i, x in enumerate(nums):
+            if x <= 0 or x > n:
+                continue
+            while x > 0 and x <= n:
+                y = nums[x - 1]
+                nums[x - 1] = -1
+                x = y
+        for i in range(n):
+            if nums[i] != -1:
+                return i + 1
+        return n + 1
 
 
 so = Solution()
