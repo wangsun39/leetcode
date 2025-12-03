@@ -56,9 +56,6 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-MIN = lambda a, b: b if b < a else a
-MAX = lambda a, b: b if b > a else a
-
 class Solution:
     def minMirrorPairDistance(self, nums: List[int]) -> int:
         def reverse(x):

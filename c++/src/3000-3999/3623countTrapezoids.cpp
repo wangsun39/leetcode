@@ -30,7 +30,6 @@ class Solution {
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<vector<int>>connections= parseGrid("[[1,2],[2,3],[3,4],[4,5]]");
     vector<vector<int>>q= parseGrid("[[0,0],[1,0],[0,1],[2,1]]");
 
     Solution so;
