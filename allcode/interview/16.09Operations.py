@@ -77,19 +77,19 @@ class Operations:
         if (a > 0 and b > 0) or (a < 0 and b < 0):
             sign = 1
         else:
-            sign = -1
+            sign = self.flip(1)
         if a < 0: a = self.flip(a)
         if b < 0: b = self.flip(b)
         if a < b: a, b = b, a
         power = [[1, a]]
         c = 1
         while c < b:
-            x, y = power[-1]
-            power.append([self.multiply2(x), self.multiply2(y)])  # [n, n*a] 其中n是2^i
+            x, y = power[-1]  # 这里的-1就不改造了
+            power.append([self.multiply2(x), self.multiply2(y)])  # [n, a^n] 其中n是2^i
             c += power[-1][0]
 
-        res = 0
-        cur = 0
+        res = 0  # 答案
+        cur = 0  # 当前加了多少个a
         while cur < b:
             for cnt, val in power:
                 if cur + cnt > b: break
@@ -98,15 +98,34 @@ class Operations:
         if sign == 1: return res
         return self.flip(res)
 
+    def divide(self, a: int, b: int) -> int:
+        if a == 0: return 0
+        if (a > 0 and b > 0) or (a < 0 and b < 0):
+            sign = 1
+        else:
+            sign = self.flip(1)
+        if a < 0: a = self.flip(a)
+        if b < 0: b = self.flip(b)
+        if a < b: return 0
+        power = [[1, b]]
+        c = 1
+        while c < a:
+            x, y = power[-1]
+            power.append([self.multiply2(x), self.multiply2(y)])  # [n, b^n] 其中n是2^i
+            c += power[-1][0]
 
-    # def divide(self, a: int, b: int) -> int:
-
-
-
-
-
+        cur = 0  # 当前减了多少个b，即答案
+        res = a  # 剩余的数
+        while res >= b:
+            for cnt, val in power:
+                if val > res: break
+                cur += cnt
+                res = self.minus(res, val)
+        if sign == 1: return cur
+        return self.flip(cur)
 
 so = Operations()
+print(so.divide(-13969484,-5))
 print(so.multiply(5, 6))
 
 
