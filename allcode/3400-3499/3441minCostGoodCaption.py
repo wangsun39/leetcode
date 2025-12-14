@@ -63,9 +63,6 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-MIN = lambda a, b: b if b < a else a
-MAX = lambda a, b: b if b > a else a
-
 class Solution:
     def minCostGoodCaption(self, caption: str) -> str:
         n = len(caption)
@@ -98,7 +95,7 @@ class Solution:
 
                 # 另一条转移路径
                 v2 = dp[i + 1][j] + abs(caption[i] - j)
-                if dp[i][j] > v2:
+                if dp[i][j] > v2 or (dp[i][j] == v2 and nxt[i][j] > j):
                     dp[i][j] = v2
                     nxt[i][j] = j
                     if mn[i] > dp[i][j]:
@@ -116,8 +113,8 @@ class Solution:
             else:
                 ans.append(v0)
                 ans.append(v0)
-                i += 3
                 v0 = nxt[i][v0]
+                i += 3
             ans.append(v0)
         ans.append(ans[-1])
         ans.append(ans[-1])
@@ -126,6 +123,7 @@ class Solution:
 
 
 so = Solution()
+print(so.minCostGoodCaption(caption = "antwfdps"))  # nnnnnppp
 print(so.minCostGoodCaption(caption = "owsjeo"))  # sssjjj
 print(so.minCostGoodCaption(caption = "cdcd"))
 
