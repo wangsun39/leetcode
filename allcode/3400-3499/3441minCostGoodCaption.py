@@ -108,7 +108,7 @@ class Solution:
         v0 = mni[0]
         i = 0
         while i < n - 3:
-            if nxt[i][v0] == v0:
+            if nxt[i][v0] == v0:  # 根据nxt[i][v0]值决定是从哪个路径转移过来的，假如两条路径的值相同，那么选择i += 1也是能达到另一条路径的
                 i += 1
             else:
                 ans.append(v0)
