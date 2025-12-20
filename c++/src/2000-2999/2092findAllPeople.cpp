@@ -1,24 +1,28 @@
 #include "lc_pub.h"
 
+bool vis[50000]={0};
 class Solution {
 private:
 public:
     vector<int> findAllPeople(int n, vector<vector<int>>& meetings, int firstPerson) {
-        ranges::sort(meetings, {}, [&](vector<int> a) {return a[2];});
-        vector<int>vis(n, 0);
+        ranges::sort(meetings, {}, [&](vector<int> &a) {return a[2];});
+        // vector<int>vis(n, 0);
+        memset(vis,0,n);
         vis[0]=vis[firstPerson]=1;
         map<int, vector<pair<int, int>>> mip;
-        for (auto & m: meetings) {
-            mip[m[2]].push_back({m[0],m[1]});
-        }
-        for (auto &[k, v]: mip) {
+        int m=meetings.size();
+        int cur=meetings[0][2];
+        for (int i=0;i<m;) {
             deque<int> dq;
             unordered_map<int, vector<int>> g;
-            for (auto &[a,b]: v) {
-                g[a].push_back(b);
-                g[b].push_back(a);
+            
+            while (i<m&&meetings[i][2]==cur) {
+                g[meetings[i][0]].push_back(meetings[i][1]);
+                g[meetings[i][1]].push_back(meetings[i][0]);
+                i++;
             }
-            for (auto [uk, uv]: g) {
+            if (i<m) cur=meetings[i][2];
+            for (auto &[uk, uv]: g) {
                 if (vis[uk]) dq.push_back(uk);
             }
             while (dq.size()) {

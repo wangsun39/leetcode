@@ -93,6 +93,20 @@ class Solution:
         p2 = Poly({'b': 5, 'a': 2})
         print((p1 * p2).to_list())
 
+        def combine(left, right, sign):
+            if sign == '+':
+                return left + right
+            if sign == '-':
+                return left - right
+            return left * right
+
+        def make(expr):
+            pass
+
+        def parse(expr):
+
+
+
 
 
 so = Solution()
