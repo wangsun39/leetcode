@@ -51,12 +51,12 @@ from leetcode.allcode.competition.mypackage import *
 
 class Poly(Counter):
     def __add__(self, other):
-        res = super().__add__(other)  # Counter.__add__ 返回新 Counter，丢弃 <=0 的结果条目
-        return Poly(res)
+        self.update(other)  # 不能直接相加，相加会自动丢弃<=0的结果
+        return self
 
     def __sub__(self, other):
-        res = super().__sub__(other)  # Counter.__sub__ 返回新 Counter，丢弃 <=0 的结果条目
-        return Poly(res)
+        self.update(Counter({k: -v for k, v in other.items()}))  # 不能直接相加，相加会自动丢弃<=0的结果
+        return self
 
     def __mul__(self, other):
         res = Poly()
@@ -83,15 +83,14 @@ class Poly(Counter):
             if v == 0: continue
             if len(k):
                 e = str(v) + '*' + '*'.join(k)
+            else:
+                e = str(v)
             res.append(e)
         return res
 
 
 class Solution:
     def basicCalculatorIV(self, expression: str, evalvars: List[str], evalints: List[int]) -> List[str]:
-        p1 = Poly({'e': 5, 'a': 2})
-        p2 = Poly({'b': 5, 'a': 2})
-        print((p1 * p2).to_list())
 
         def combine(left, right, sign):
             if sign == '+':
@@ -100,15 +99,75 @@ class Solution:
                 return left - right
             return left * right
 
-        def make(expr):
-            pass
+        def make(expr: str):
+            ans = Poly()
+            if expr.isdigit():
+                ans[tuple()] = int(expr)
+            else:
+                ans[tuple([expr])] = 1
+            return ans
 
-        def parse(expr):
+        def parse(expr: str):
+            polys = []
+            signs = []
+            n = len(expr)
+            i = 0
+            while i < n:
+                if expr[i] == '(':
+                    cnt = 1
+                    for j in range(i + 1, n):
+                        if expr[j] == '(':
+                            cnt += 1
+                        elif expr[j] == ')':
+                            cnt -= 1
+                            if cnt == 0:
+                                polys.append(parse(expr[i + 1: j]))
+                                i = j + 1
+                                break
+                elif expr[i].isalnum():
+                    j = i
+                    while j < n:
+                        if expr[j] == ' ':
+                            polys.append(make(expr[i: j]))
+                            j += 1
+                            break
+                        j += 1
+                    else:
+                        polys.append(make(expr[i: j]))
+                    i = j
+                elif expr[i] in '+-*':
+                    signs.append(expr[i])
+                    i += 1
+                else:
+                    i += 1
+            if len(polys) == 0:
+                return Poly()
+
+            i = 0
+            while i < len(signs):
+                if signs[i] == '*':  # 先进行乘法
+                    polys[i] = combine(polys[i], polys[i + 1], signs[i])
+                    polys.pop(i + 1)
+                    signs.pop(i)
+                    continue
+                i += 1
+
+            # 后进行加减法
+            ans = polys[0]
+            for i in range(len(signs)):
+                ans = combine(ans, polys[i + 1], signs[i])
+            return ans
 
 
+        poly = parse(expression)
+        evalmap = {a: b for a, b in zip(evalvars, evalints)}
+        ans = poly.eval(evalmap)
+        return ans.to_list()
 
 
 
 so = Solution()
-print(so.basicCalculatorIV(expression = "e + 8 - a + 5", evalvars = ["e"], evalints = [1]))  # 1
+print(so.basicCalculatorIV(expression = "a * b * c + b * a * c * 4", evalvars = [], evalints = []))  # ["-1*pressure","5"]
+print(so.basicCalculatorIV(expression = "e - 8 + temperature - pressure", evalvars = ["e", "temperature"], evalints = [1, 12]))  # ["-1*pressure","5"]
+print(so.basicCalculatorIV(expression = "e + 8 - a + 5", evalvars = ["e"], evalints = [1]))  # ["-1*a","14"]
 
