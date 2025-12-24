@@ -36,8 +36,30 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def perfectMenu(self, materials: List[int], cookbooks: List[List[int]], attribute: List[List[int]], limit: int) -> int:
+        n, m = len(materials), len(cookbooks)  # n 是食材数量  m 是料理数量
+        ans = -1
+        for i in range(1 << m):  # 一种料理的组合
+            ma = [0] * n
+            valid = True
+            s = [0, 0]
+            for j in range(m):
+                if i & (1 << j):  # 一组料理中的第j个料理
+                    for k in range(n):
+                        ma[k] += cookbooks[j][k]  # 第j个料理中的第k个食材
+                        if ma[k] > materials[k]:
+                            valid = False
+                            break
+                    if not valid:
+                        break
+                    # 此料理合法
+                    s[0] += attribute[j][0]
+                    s[1] += attribute[j][1]
+            if not valid: continue
+            if s[1] >= limit:
+                ans = max(ans, s[0])
+        return ans
 
 
 so = Solution()
-print(so.gobang( [[0,0,1],[0,1,0],[0,2,0],[0,3,0],[0,7,0],[0,8,0],[0,9,0],[0,10,1]]))  # Black
+print(so.perfectMenu(materials = [3,2,4,1,2], cookbooks = [[1,1,0,1,2],[2,1,4,0,0],[3,2,4,1,0]], attribute = [[3,2],[2,4],[7,6]], limit = 5))  # 7
 
