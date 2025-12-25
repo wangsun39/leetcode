@@ -22,6 +22,5 @@ int main()
     auto points = parseGrid("[[1,1],[2,2],[3,3]]");
 
     Solution so;
-    cout << so.numberOfPairs(points) << endl;
     return 0;
 }
