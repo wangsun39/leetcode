@@ -61,48 +61,37 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-
-
 class Solution:
     def maxDistance(self, side: int, points: List[List[int]], k: int) -> int:
         n = len(points)
-        lens = []
-        # arr 所有点按顺时针重新排序 arr[i][2] 表示
-        arr = sorted([[x, y] for x, y in points if x == 0 and y != side])
-        lens.append(len(arr))
-        arr += sorted([[x, y] for x, y in points if y == side and x != side])
-        lens.append(len(arr))
-        arr += sorted([[x, y] for x, y in points if x == side and y != 0], reverse=True)
-        lens.append(len(arr))
-        arr += sorted([[x, y] for x, y in points if y == 0 and x != 0], reverse=True)
-        lens.append(len(arr))
-        for i in range(lens[0]):
-            arr[i].append(lens[1])
-        for i in range(lens[0], lens[1]):
-            arr[i].append(lens[2])
-        for i in range(lens[1], lens[2]):
-            arr[i].append(lens[3] + n)
-        for i in range(lens[2], lens[3]):
-            arr[i].append(lens[0] + n)
-        # 设计循环数组
+        # 将所有点一维化，按顺时针顺序，因为k>=4,因此答案不会超过side
+        arr = []
+        for x, y in points:
+            if x == 0:
+                arr.append(y)
+            elif y == side:
+                arr.append(x + side)
+            elif x == side:
+                arr.append(side - y + side * 2)
+            else:
+                arr.append(side - x + side * 3)
+        arr.sort()
+        arr += arr  # 构造循环数组
         for i in range(n, n * 2):
-            arr.append(arr[i - n][:])
-            arr[i][2] = arr[i - n][2] + n
-
-        def dis(n1, n2):
-            return abs(n1[0] - n2[0]) + abs(n1[1] - n2[1])
+            arr[i] += 4 * side
 
         def check(val):
             for i in range(n):  # 第一个点为i，开始贪心选择
-                cand = [i]
-                j = 1
-                while len(cand) < k:
-                    while j < i + n and dis(arr[cand[-1]], arr[j]) < val:
-                        j += 1
-                    if j == i + n or dis(arr[i], arr[j]) < val:
+                cnt = 1
+                j = i
+                while cnt < k:
+                    # 在一维数组使用二分的前提是，如果点i在正方形的一条边上，那么在当前这条边的其他点j与它的距离就是abs(arr[j]-arr[i])
+                    # 在顺时针的下一条边上的点j与它的距离也是abs(arr[j]-arr[i])
+                    # 在i对边上的点与它的距离虽然不是 abs(arr[j]-arr[i])， 但一定是>=side的，而答案的上限是side，因此对边的任何点与i的距离都是>=val，一定满足要求
+                    j = bisect_left(arr, arr[j] + val)
+                    if j - i >= n or arr[i] + 4 * side - arr[j] < val:
                         break
-                    cand.append(j)
-                    j += 1
+                    cnt += 1
                 else:
                     return True
             return False
@@ -118,9 +107,9 @@ class Solution:
 
 
 so = Solution()
-print(so.maxDistance(side = 13, points = [[5,0],[0,3],[9,13],[0,0],[0,13],[10,13]], k = 4))
-print(so.maxDistance(side = 6, points = [[2,0],[5,0],[0,0],[2,6]], k = 4))
+print(so.maxDistance(side = 13, points = [[5,0],[0,3],[9,13],[0,0],[0,13],[10,13]], k = 4))  # 8
 print(so.maxDistance(side = 2, points = [[0,2],[2,0],[2,2],[0,0]], k = 4))
+print(so.maxDistance(side = 6, points = [[2,0],[5,0],[0,0],[2,6]], k = 4))
 
 
 
