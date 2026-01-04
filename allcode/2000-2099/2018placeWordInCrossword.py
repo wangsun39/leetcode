@@ -60,9 +60,9 @@ class Solution:
                     else:
                         return True
             return False
-        m1 = [x[::-1] for x in board]
-        m2 = list(zip(*board))
-        m3 = [x[::-1] for x in m2]
+        m1 = [x[::-1] for x in board]  # 左右翻转
+        m2 = list(zip(*board))  # 转置
+        m3 = [x[::-1] for x in m2]  # 转置的左右翻转
         return check(board) or check(m1) or check(m2) or check(m3)
 
 
