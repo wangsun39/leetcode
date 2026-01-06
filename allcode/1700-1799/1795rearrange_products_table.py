@@ -75,5 +75,19 @@ print(rearrange_products_table(products))
 # select product_id, 'store3' store, store3 price from Products where store3 is not null;
 
 
+import numpy as np
+
+M = np.array([
+    [-1, 3, 0, 0, 0, 3],
+    [3, -1, 3, 0, 0, 0],
+    [0, 3, -1, 3, 0, 0],
+    [0, 0, 3, -1, 3, 0],
+    [0, 0, 0, 3, -1, 3],
+    [3, 0, 0, 0, 3, -1],
+], dtype=float)
+for A in range(56, 10000, 280):
+    b = np.array([2026 - A, 2026, 2026, 2026, 2026, 2026], dtype=float)
+    x = np.linalg.solve(M, b)
+    print(A, x)
 
 
