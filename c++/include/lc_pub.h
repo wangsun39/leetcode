@@ -126,6 +126,7 @@ vector<vector<int>> parseGrid(const string &gridText)
 // memo = vector<vector<vector<int>>> (m, vector<vector<int>>(n, vector<int>(N + 1, -1)));  三维vector初始化
 // vector res(m, vector<int>(m));
 
+// static constexpr int DIRS[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
 // 计算二进制中1的个数
 // std::popcount
