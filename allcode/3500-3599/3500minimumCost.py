@@ -52,13 +52,15 @@ class Solution:
         p = list(accumulate(nums, initial=0))
         q = list(accumulate(cost, initial=0))
         dp = [inf] * n  # 前i个数分割的最小代价
-        dp[0] = (nums[0] + k) * cost[0]
+        dp[0] = (nums[0] + k) * q[-1]
         for i in range(1, n):
-            res = (p[i + 1] + k) * q[i + 1]
+            res = (p[i + 1] + k) * q[-1]
+            # res = inf
             for j in range(i):
                 # 最后一段为 [j + 1, i]
                 res = min(res, dp[j] + p[i + 1] * (q[i + 1] - q[j + 1]) + k * (q[n] - q[j + 1]))
             dp[i] = res
+        print(dp)
         return dp[-1]
 
 

@@ -2,28 +2,16 @@
 
 class Solution {
 public:
-    int maxSumDivThree(vector<int>& nums) {
-        int dp0[3]={0,INT_MIN,INT_MIN};
-        int dp1[3]={0};
-        for (int x: nums) {
-            if (x%3==0) {
-                dp1[0]=max(dp0[0],dp0[0]+x);
-                dp1[1]=max(dp0[1],dp0[1]+x);
-                dp1[2]=max(dp0[2],dp0[2]+x);
-            }
-            else if(x%3==1) {
-                dp1[0]=max(dp0[0],dp0[2]+x);
-                dp1[1]=max(dp0[1],dp0[0]+x);
-                dp1[2]=max(dp0[2],dp0[1]+x);
-            }
-            else {
-                dp1[0]=max(dp0[0],dp0[1]+x);
-                dp1[1]=max(dp0[1],dp0[2]+x);
-                dp1[2]=max(dp0[2],dp0[0]+x);
-            }
-            memcpy(dp0,dp1,sizeof(dp0));
+    int minTimeToVisitAllPoints(vector<vector<int>>& points) {
+        int n=points.size();
+        int ans=0;
+        for (int i=0;i<n-1;i++) {
+            int x=points[i][0],y=points[i][1];
+            int u=points[i+1][0],v=points[i+1][1];
+            int d1=abs(x-u),d2=abs(y-v);
+            ans+=min(d1,d2)+abs(d1-d2);
         }
-        return dp0[0];
+        return ans;
     }
 };
 
@@ -32,6 +20,5 @@ int main()
     std::cout<<"test let us start! %s" << __cplusplus <<std::endl;
     vector<int> nums{3,6,5,1,8};
     Solution so;
-    cout << so.maxSumDivThree(nums) <<endl;
     return 0;
 }
