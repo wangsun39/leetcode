@@ -51,17 +51,22 @@ class Solution:
         n = len(nums)
         p = list(accumulate(nums, initial=0))
         q = list(accumulate(cost, initial=0))
-        dp = [inf] * n  # 前i个数分割的最小代价
-        dp[0] = (nums[0] + k) * q[-1]
-        for i in range(1, n):
-            res = (p[i + 1] + k) * q[-1]
-            # res = inf
+
+        # 原目标和最终可以等价转化为 s = min(a1B1 + a2B2 + ... + akBk) ，其中min是对所有的分割进行取小
+        # ai是第i段nums的和+k
+        # bi是第i段cost的和
+        # Bi是bi+...+bk  ，相当于cost的一个后缀和
+        @cache
+        def dfs(i):
+            # dfs(i) 并不是前i项的原始目标和最小值
+            # dfs的目标是前i项，再任意分割下，min(a1B1 + a2B2 + ...+atBt) t表示某次分割前i项的分割数量是t
+            if i == 0: return (nums[0] + k) * q[n]
+            res = (p[i + 1] + k) * q[n]
             for j in range(i):
-                # 最后一段为 [j + 1, i]
-                res = min(res, dp[j] + p[i + 1] * (q[i + 1] - q[j + 1]) + k * (q[n] - q[j + 1]))
-            dp[i] = res
-        print(dp)
-        return dp[-1]
+                res = min(res, dfs(j) + (p[i + 1] - p[j + 1] + k) * (q[n] - q[j + 1]))
+            return res
+
+        return dfs(n - 1)
 
 
 so = Solution()
