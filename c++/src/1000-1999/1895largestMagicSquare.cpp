@@ -20,9 +20,6 @@ public:
         for (int k=min(r,c);k>0;k--) {
             for (int i=k;i<=r;i++) {
                 for (int j=k;j<=c;j++) {
-                    // [i-k,i-1] * [j-k,j-1]
-                    if (k==3&&i==4&&j==4)
-                        cout<<1<<endl;
                     int s=diag[i][j]-diag[i-k][j-k];
                     if (s!=anti[i][j-k]-anti[i-k][j]) continue;
 
