@@ -39,32 +39,43 @@ from leetcode.allcode.competition.mypackage import *
 class Solution:
     def removeOccurrences(self, s: str, part: str) -> str:
         n, m = len(s), len(part)
+
+        pi = [0] * m  # 前缀子串 part[:i + 1] 的真前缀和真后缀的最长匹配
+        c = 0
+        for i in range(1, m):
+            v = part[i]
+            while c and part[c] != v:
+                c = pi[c - 1]
+            if part[c] == v:
+                c += 1
+            pi[i] = c
+
         stack = []
         for x in s:
-            if stack:
-                match_num = stack[-1][1]
-                if part[match_num] == x:
-                    match_num += 1
-                elif x == part[0]:
-                    match_num = 1
-                else:
-                    match_num = 0
-                stack.append([x, match_num])
-            else:
+            if len(stack) == 0:
                 if x == part[0]:
-                    match_num = 1
+                    stack.append([x, 1])
                 else:
-                    match_num = 0
-                stack.append([x, match_num])
+                    stack.append([x, 0])
+            else:
+                p = stack[-1][1]  # 已匹配长度
+                while p and x != part[p]:
+                    p = pi[p - 1]
+                if x == part[p]:
+                    stack.append([x, p + 1])
+                else:
+                    stack.append([x, 0])
             if stack[-1][1] == m:
                 for _ in range(m):
                     stack.pop()
+
         ans = [x[0] for x in stack]
         return ''.join(ans)
 
 
 
 so = Solution()
+print(so.removeOccurrences(s = "daabcbaabcbc", part = "abc"))
 print(so.removeOccurrences("kpygkivtlqoockpygkivtlqoocssnextkqzjpycbylkaondsskpygkpygkivtlqoocssnextkqzjpkpygkivtlqoocssnextkqzjpycbylkaondsycbylkaondskivtlqoocssnextkqzjpycbylkaondssnextkqzjpycbylkaondshijzgaovndkjiiuwjtcpdpbkrfsi", "kpygkivtlqoocssnextkqzjpycbylkaonds"))
 
 
