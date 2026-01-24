@@ -61,50 +61,40 @@
 
 from leetcode.allcode.competition.mypackage import *
 
-MX = 10 ** 5 + 1
-# MX = 10
-omega = [[] for _ in range(MX)]  # omega[i]  表示i的所有质因子
-for i in range(2, MX):  # 预处理 omega
-    if len(omega[i]) == 0:  # i 是质数
-        for j in range(i, MX, i):
-            omega[j].append(i)  # i 是 j 的一个质因子
-
 class Solution:
     def minStable(self, nums: List[int], maxC: int) -> int:
         n = len(nums)
-        if n - nums.count(0) <= maxC: return 0
+        if n - nums.count(1) <= maxC: return 0
 
         def check(val):
-            l = r = 0
+            # p = [0] * n  # 以 nums[i] 为右端点的子数组，达到最小gcd的左端点的最大值
+            trick = [[nums[0], 0]]  # trick[i] = [a, b] 记录以 nums[i] 为右端点的某子数组的gcd为a,能达到gcdweia的子数组的左端点的最大值为b
+                                         # 即区间 [b, i] 的gcd为a
             cnt = 0
-            factors = Counter()
-            while r < n:
-                if nums[r] == 1:
-                    l = r = r + 1
-                    factors = Counter()
-                    continue
-                gcd_gt_one = False
-                for x in omega[nums[r]]:
-                    factors[x] += 1
-                    if factors[x] == r - l + 1:  # 说明区间[l, r] 有公因子
-                        gcd_gt_one = True
-                while not gcd_gt_one and l < r:
-                    # 公因子为1，可以右移 l
-                    for y in omega[nums[l]]:
-                        factors[y] -= 1
-                    l += 1
-                    for y in omega[nums[l]]:
-                        if factors[y] == r - l + 1:
-                            gcd_gt_one = True
-                            break
-                if r - l + 1 > val and gcd_gt_one:
+            for i, x in enumerate(nums[1:], 1):
+                # 计算以 nums[i] 为右端点的子数组，达到最小gcd的左端点的最大值
+                for j in range(len(trick)):
+                    trick[j][0] = gcd(trick[j][0], x)
+                trick.append([x, i])
+                # 去掉trick中重复的值，取最左侧的
+                k, j = 0, 1
+                while j < len(trick):
+                    if trick[j][0] == trick[k][0]:
+                        j += 1
+                    else:
+                        trick[k + 1] = trick[j][:]
+                        k += 1
+                        j += 1
+                del(trick[k + 1:])  # i + 1 开始向后的元素都可以删掉，i+1之前保存的都是不重复的
+
+                # 此时 以nums[i] 为右端点的子数组，达到的gcd最小值为trick[0][0]，左端点为trick[0]
+                if trick[0][0] == 1: trick.pop(0)
+                if trick and i - trick[0][1] + 1 > val:
+                    # 长度超了，并且最小gcd还不是1，需要在i处修改为1
                     cnt += 1
-                    if cnt > maxC:
-                        return False
-                    l = r = r + 1
-                    factors = Counter()
-                    continue
-                r += 1
+                    if cnt > maxC: return False
+                    trick = [[1, i]]
+
             return True
         lo, hi = 0, n
         while lo + 1 < hi:
@@ -119,12 +109,13 @@ class Solution:
 
 
 so = Solution()
+print(so.minStable(nums = [1,3], maxC = 1))  # 0
+print(so.minStable(nums = [2,2,2,2], maxC = 0))  # 4
 print(so.minStable(nums = [52,52,16,56], maxC = 1))  # 2
 print(so.minStable(nums = [2,3], maxC = 0))  # 1
 print(so.minStable(nums = [2,1], maxC = 0))  # 1
 print(so.minStable(nums = [25,12,18], maxC = 0))  # 2
 print(so.minStable(nums = [2,1], maxC = 2))  # 0
-print(so.minStable(nums = [2,2,2,2], maxC = 0))  # 4
 print(so.minStable(nums = [2,4,9,6], maxC = 1))  # 2
 print(so.minStable(nums = [3,5,10], maxC = 1))  # 1
 
