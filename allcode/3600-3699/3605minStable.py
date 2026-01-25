@@ -88,7 +88,7 @@ class Solution:
                 del(trick[k + 1:])  # i + 1 开始向后的元素都可以删掉，i+1之前保存的都是不重复的
 
                 # 此时 以nums[i] 为右端点的子数组，达到的gcd最小值为trick[0][0]，左端点为trick[0]
-                if trick[0][0] == 1: trick.pop(0)
+                if trick[0][0] == 1: trick.pop(0)  # gcd为1的子数组是不用考虑的
                 if trick and i - trick[0][1] + 1 > val:
                     # 长度超了，并且最小gcd还不是1，需要在i处修改为1
                     cnt += 1

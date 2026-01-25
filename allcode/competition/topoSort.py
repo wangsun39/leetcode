@@ -51,5 +51,31 @@ def loudAndRich(richer: List[List[int]], quiet: List[int]) -> List[int]:
 
 
 
+# 数据范围比较小的情况下，可以使用
+def maxProfit(n: int, edges: List[List[int]], score: List[int]) -> int:
+    # 优化后的简洁写法
+    if not edges:
+        score.sort()
+        return sum(s * i for i, s in enumerate(score, 1))
+
+    pre = [0] * n  # 前面元素的状压
+    for x, y in edges:
+        pre[y] |= (1 << x)
+
+    @cache
+    def dfs(vis):
+        if vis == (1 << n) - 1:
+            return 0
+
+        start = vis.bit_count() + 1
+        res = 0
+        for i in range(n):
+            if vis & (1 << i): continue
+            if (pre[i] & vis) == pre[i]:  # 判断前序节点是否都访问过了
+                v = dfs(vis ^ (1 << i)) + start * score[i]
+                res = max(res, v)
+        return res
+
+    return dfs(0)
 
 

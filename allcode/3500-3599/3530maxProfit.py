@@ -60,16 +60,84 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
+    class Solution:
+        def maxProfit(self, n: int, edges: List[List[int]], score: List[int]) -> int:
+            if not edges:
+                score.sort()
+                return sum(s * i for i, s in enumerate(score, 1))
+
+            g = defaultdict(list)
+            pre_num = [0] * n
+            for x, y in edges:
+                if y not in g[x]:
+                    g[x].append(y)
+                    pre_num[y] += 1
+            queue = deque([i for i in range(n) if pre_num[i] == 0])  # deque 在操作大数组时，性能比 list 好很多
+
+            @cache
+            def dfs(vis):
+                if vis == (1 << n) - 1:
+                    return 0
+
+                start = vis.bit_count() + 1
+                res = 0
+                m = len(queue)
+                for _ in range(m):
+                    x = queue.popleft()
+                    vis ^= (1 << x)
+                    for y in g[x]:
+                        pre_num[y] -= 1
+                        if pre_num[y] == 0:
+                            queue.append(y)
+                    res = max(res, dfs(vis) + score[x] * start)
+                    # 恢复现场
+                    for y in g[x][::-1]:
+                        pre_num[y] += 1
+                        if queue and queue[-1] == y:
+                            queue.pop()
+                    vis ^= (1 << x)
+                    queue.append(x)
+
+                return res
+
+            return dfs(0)
+
     def maxProfit(self, n: int, edges: List[List[int]], score: List[int]) -> int:
+        # 优化后的简洁写法
+        if not edges:
+            score.sort()
+            return sum(s * i for i, s in enumerate(score, 1))
 
+        pre = [0] * n  # 前面元素的状压
+        for x, y in edges:
+            pre[y] |= (1 << x)
 
+        @cache
+        def dfs(vis):
+            if vis == (1 << n) - 1:
+                return 0
+
+            start = vis.bit_count() + 1
+            res = 0
+            for i in range(n):
+                if vis & (1 << i): continue
+                if (pre[i] & vis) == pre[i]:  # 判断前序节点是否都访问过了
+                    v = dfs(vis ^ (1 << i)) + start * score[i]
+                    res = MAX(res, v)
+            return res
+
+        return dfs(0)
 
 
 
 
 so = Solution()
-print(so.maxProfit(n = 2, edges = [[0,1]], score = [2,3]))
+print(so.maxProfit(n = 2, edges = [[0,1]], score = [2,3]))  # 8
+print(so.maxProfit(n = 3, edges = [[0,1]], score = [21915,50942,52739]))
+print(so.maxProfit(n = 3, edges = [[0,1],[0,2]], score = [1,6,3]))   # 25
 
 
 
