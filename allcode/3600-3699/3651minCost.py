@@ -55,64 +55,47 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
     def minCost(self, grid: List[List[int]], k: int) -> int:
-        dir = [[1, 0], [0, 1]]
         r, c = len(grid), len(grid[0])
         arr = []
         for i in range(r):
             for j in range(c):
                 arr.append([i, j])
-        arr.sort(key=lambda x: grid[x[0]][x[1]])
-        vis = [[[inf] * (k + 1) for _ in range(c)] for _ in range(r)]  # vis[i][j][t] 表示经过t+1次传送到达[i,j]所需的最少成本
-        dqa = deque([[0, 0, 0]])  # 上一步普通移动到达的点
-        dqb = deque()  # 上一步传送到达的点
-        vis[0][0][0] = 0
-        while dqa or dqb:
-            dqa2, dqb2 = deque(), deque()
-            if dqa:
-                la = list(dqa)
-                la.sort(key=lambda x: x[2])
-                cand = []
-                for x, y, z in la:
-                    if cand and cand[-1][2] == z:
-                        if cand[-1][3] < grid[x][y]:
-                            cand.pop()
-                            cand.append([x, y, z, grid[x][y]])
-                    else:
-                        cand.append([x, y, z, grid[x][y]])
-                for x, y, st, z in cand:
-                    if st < k:
-                        p = bisect_right(arr, grid[x][y], key=lambda z: grid[z[0]][z[1]])
-                        for i in range(p):
-                            u, v = arr[i]
-                            if vis[u][v][st + 1] > vis[x][y][st]:
-                                dqb2.append([u, v, st + 1])
-                                vis[u][v][st + 1] = vis[x][y][st]
-            while dqa:
-                x, y, st = dqa.popleft()
-                for dx, dy in dir:
-                    u, v = x + dx, y + dy
-                    if 0 <= u < r and 0 <= v < c and vis[u][v][st] > vis[x][y][st] + grid[u][v]:
-                        dqa2.append([u, v, st])
-                        vis[u][v][st] = vis[x][y][st] + grid[u][v]
+        arr.sort(key=lambda x: grid[x[0]][x[1]], reverse=True)  # 所有单元格排序
+        dp = [[[inf] * c for _ in range(r)] for _ in range(k + 1)]  # 传送i次，到位置[j,t]的最小成本为 dp[i][j][t]
+        dp[0][0][0] = 0
+        for j in range(r):
+            for t in range(c):
+                if j: dp[0][j][t] = MIN(dp[0][j][t], dp[0][j - 1][t] + grid[j][t])
+                if t: dp[0][j][t] = MIN(dp[0][j][t], dp[0][j][t - 1] + grid[j][t])
+        for i in range(1, k + 1):
+            mn = dp[i - 1][arr[0][0]][arr[0][1]]
+            start = 0
+            cur = 1
+            while start < r * c:  # 从大到小的顺序处理每个格子的传送转移
+                mn = MIN(mn, dp[i - 1][arr[start][0]][arr[start][1]])
+                while cur < r * c and grid[arr[cur][0]][arr[cur][1]] == grid[arr[cur - 1][0]][arr[cur - 1][1]]:
+                    mn = MIN(mn, dp[i - 1][arr[cur][0]][arr[cur][1]])
+                    cur += 1
+                for j, t in arr[start: cur]:
+                    dp[i][j][t] = MIN(dp[i][j][t], mn)
+                start = cur
+                cur += 1
+            for j in range(r):  # 处理每个格子的普通移动
+                for t in range(c):
+                    if j: dp[i][j][t] = MIN(dp[i][j][t], dp[i][j - 1][t] + grid[j][t])
+                    if t: dp[i][j][t] = MIN(dp[i][j][t], dp[i][j][t - 1] + grid[j][t])
+        ans = min(dp[i][r - 1][c - 1] for i in range(k + 1))
+        return ans
 
-            while dqb:
-                # 上一步传送，这一步只能普通移动，因为这一步能送的点，上一步都能送到
-                x, y, st = dqb.popleft()
-                for dx, dy in dir:
-                    u, v = x + dx, y + dy
-                    if 0 <= u < r and 0 <= v < c and vis[u][v][st] > vis[x][y][st] + grid[u][v]:
-                        dqa2.append([u, v, st])
-                        vis[u][v][st] = vis[x][y][st] + grid[u][v]
-
-            dqa, dqb = dqa2, dqb2
-            # cnt += 1
-        return min(vis[-1][-1])
 
 
 so = Solution()
-print(so.minCost(grid = [[6,7,1,20,11],[4,5,18,23,28]], k = 3))
+print(so.minCost(grid = [[6,7,1,20,11],[4,5,18,23,28]], k = 3))  # 46
 print(so.minCost(grid = [[1,3,3],[2,5,4],[4,3,5]], k = 2))
 
 
