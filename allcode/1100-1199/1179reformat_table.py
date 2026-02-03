@@ -80,6 +80,7 @@ def reformat_table1(department: pd.DataFrame) -> pd.DataFrame:
 
 
 def reformat_table(department: pd.DataFrame) -> pd.DataFrame:
+    print(department)
     # 更有解法
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
