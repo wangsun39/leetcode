@@ -87,18 +87,26 @@ class Solution:
         ans = max(left) + 1
         for i in range(1, n - 1):
             if nums[i - 1] == nums[i + 1]: continue
+            L = R = 0
             if nums[i - 1] < nums[i + 1]:
-                if (i == 1 or nums[i - 2] >= nums[i - 1]) and (i == n - 2 or nums[i + 1] >= nums[i + 2]):
-                    ans = max(ans, left[i - 1] + right[i + 1] + 2)
+                # 左侧递减的长度+右侧递增的长度
+                if i > 1 and nums[i - 2] > nums[i - 1]:
+                    L = left[i - 1]
+                if i + 2 < n and nums[i + 1] > nums[i + 2]:
+                    R = right[i + 1]
             else:
-                if (i == 1 or nums[i - 2] <= nums[i - 1]) and (i == n - 2 or nums[i + 1] <= nums[i + 2]):
-                    ans = max(ans, left[i - 1] + right[i + 1] + 2)
+                if i > 1 and nums[i - 2] < nums[i - 1]:
+                    L = left[i - 1]
+                if i + 2 < n and nums[i + 1] < nums[i + 2]:
+                    R = right[i + 1]
+            ans = max(ans, L + R + 2)
         return ans
 
 
 
 
 so = Solution()
+print(so.longestAlternating([1,2,3,3,2,1]))
 print(so.longestAlternating([1,1,2,2,1,1]))
 print(so.longestAlternating([2,1,3,2]))
 
