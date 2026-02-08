@@ -82,7 +82,8 @@ from leetcode.allcode.competition.mypackage import *
 
 
 class Solution:
-    def goodSubtreeSum(self, vals: List[int], par: List[int]) -> int:
+    def goodSubtreeSum1(self, vals: List[int], par: List[int]) -> int:
+        # 这个方法正确，但性能不够，被卡常了
         MOD = 10 ** 9 + 7
         n = len(vals)
         g = defaultdict(list)
@@ -109,9 +110,9 @@ class Solution:
                 p_mx[x] = max(res)
                 return res
 
+            v = [0] * 1024
             for y in g[x]:
                 res_y = dfs(y)
-                v = [0] * 1024
                 for i in range(1024):
                     ii = 1023 & (~i)
                     j = ii
@@ -138,8 +139,57 @@ class Solution:
 
 
 
+    def goodSubtreeSum(self, vals: List[int], par: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        n = len(vals)
+        g = defaultdict(list)
+        for i, x in enumerate(par):
+            g[x].append(i)
+
+        def to_mask(x):
+            s = str(x)
+            res = 0
+            for y in s:
+                if res & (1 << int(y)):  # 此数不能选
+                    return 0
+                res |= (1 << int(y))
+            return res
+
+        mask = [to_mask(x) for x in vals]
+        p_mx = [0] * n  # 以 i 为根的子树的最大分数
+
+        def dfs(x):
+            res = {0: 0}
+            mask_x = mask[x]
+            if mask_x: res[mask_x] = vals[x]
+            if len(g[x]) == 0:
+                p_mx[x] = max(res.values())
+                return res
+
+            v = {0: 0}
+            for y in g[x]:
+                res_y = dfs(y)
+                for i, iv in res.items():
+                    for j, jy in res_y.items():
+                        if (i & j) == 0:
+                            v[i | j] = max(v.get(i | j, 0), res[i] + res_y[j])
+                res = dict(v)
+            if res: p_mx[x] = max(res.values())
+            return res
+
+        dfs(0)
+        def dfs2(x):
+            res = p_mx[x]
+            for y in g[x]:
+                res += dfs2(y)
+                res %= MOD
+            return res
+
+        return dfs2(0)
 
 
 
 so = Solution()
+print(so.goodSubtreeSum(vals = [3,22,5], par = [-1,0,1]))
+print(so.goodSubtreeSum(vals = [345672,735649,125748,462830,8210,369107,348052,31957], par = [-1,5,3,0,3,4,0,6]))
 print(so.goodSubtreeSum(vals = [2,3], par = [-1,0]))
