@@ -65,17 +65,19 @@ class Solution:
 
         def f(num: str):  # 数字 <= num 满足条件的所有数字
             @cache
-            def digitDp(i: int, pre_dir: int, pre: int, is_limit: bool) -> int:  # 枚举第i位，i-1位值为pre， i-2位与i-1位的大小关系pre_dir(-1,0,1,2)  2表示前面不足2个数字
+            def digitDp(i: int, pre_dir: int, pre: int, seq: int, is_limit: bool) -> int:
+                # 枚举第i位，i-1位值为pre， i-2位与i-1位的大小关系pre_dir(-1,0,1,2)  2表示前面不足2个数字
+                # 从0到i-1的的波谷个数为 seq
                 if i == len(num):
-                    return 0
+                    return seq
                 ans = 0
                 if pre == -1: # 未构成数字
-                    ans = digitDp(i + 1, 2, -1, False)
+                    ans = digitDp(i + 1, 2, -1, seq, False)
                 upper = int(num[i]) if is_limit else 9  # 判断当前位是否受约束
                 lower = 0 if pre != -1 else 1
                 for j in range(lower, upper + 1): # 枚举当前位数字
-                    if pre == -1:
-                        ans += digitDp(i + 1, 2, j, is_limit and j == upper)
+                    if pre == -1:  # 前面没有数字
+                        ans += digitDp(i + 1, 2, j, seq, is_limit and j == upper)
                     else:
                         if j == pre:
                             dir = 0
@@ -84,17 +86,16 @@ class Solution:
                         else:
                             dir = 1
                         if pre_dir == 2:
-                            ans += digitDp(i + 1, dir, j, is_limit and j == upper)
+                            ans += digitDp(i + 1, dir, j, seq, is_limit and j == upper)
                         else:
                             if (pre_dir == -1 and dir == 1) or (pre_dir == 1 and dir == -1):
-                                ans += digitDp(i + 1, dir, j, is_limit and j == upper) + 1
+                                ans += digitDp(i + 1, dir, j, seq + 1, is_limit and j == upper)
                             else:
-                                ans += digitDp(i + 1, dir, j, is_limit and j == upper)
+                                ans += digitDp(i + 1, dir, j, seq, is_limit and j == upper)
 
-                if is_limit: print(num, ans)
                 return ans
 
-            return digitDp(0, 2, -1, True)
+            return digitDp(0, 2, -1, 0, True)
 
         return f(str(num2)) - f(str(num1 - 1))
 
