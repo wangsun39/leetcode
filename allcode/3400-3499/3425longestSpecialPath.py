@@ -61,7 +61,7 @@ class Solution:
         mn = 1
 
         arr = deque([[0, 0]])   # 记录根节点到当前节点的一条路上的点和路径上每点到root的距离
-        group = defaultdict(list)  # 路径上值相同点的列表
+        group = defaultdict(list)  # 路径上值相同点的列表，存放的是对应点相对root的深度
         group[nums[0]].append(0)
 
         def dfs(x, fa, left):

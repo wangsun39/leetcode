@@ -51,7 +51,6 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def longestSpecialPath(self, edges: List[List[int]], nums: List[int]) -> List[int]:
-        n = len(nums)
         g = defaultdict(lambda: defaultdict(lambda: inf))
         for x, y, w in edges:
             g[x][y] = w
@@ -60,41 +59,49 @@ class Solution:
         mx = 0
         mn = 1
 
-        arr = deque([[0, 0]])  # 记录根节点到当前节点的一条路上的点和路径上每点到root的距离
-        group = defaultdict(list)  # 路径上值相同点的列表
+        arr = deque([[0, 0]])   # 记录根节点到当前节点的一条路上的点和路径上每点到root的距离
+        group = defaultdict(list)  # 路径上值相同点的列表，存放的是对应点相对root的深度
         group[nums[0]].append(0)
 
-        def dfs(x, fa, left):
-            # pos 记录与当前节点在一条路径上最远祖先在arr中位置下标
+        def dfs(x, fa, left, last):
+            # left 表示在arr中只能在下标>=left的元素中计算最长路径，即滑窗的左端点，滑窗的右端点就是当前位置
+            # last 表示滑窗内已经出现两个相同元素时，下次滑动需要将左端点移动到的位置，-1表示滑窗内没有相同元素
             nonlocal mx, mn
             # print(fa, x)
             arr.append([x, arr[-1][1] + g[fa][x]])
-            p = len(arr) - 1
-            p0 = left
+            p = len(arr) - 1  # 滑窗右端点
             if len(group[nums[x]]):
-                p0 = max(p0, group[nums[x]][-1] + 1)
-            dis = arr[p][1] - arr[p0][1]
+                # 更新滑窗左端点
+                if group[nums[x]][-1] >= left:  # x的前一个点在滑窗内
+                    if last == -1:  # 滑窗左端点不用更新，更新last
+                        last = group[nums[x]][-1] + 1
+                    elif group[nums[x]][-1] + 1 < last:  # 更新滑窗左端点，不更新last
+                        left = group[nums[x]][-1] + 1
+                    else:  #  更新滑窗左端点，更新last
+                        left, last = last, group[nums[x]][-1] + 1
+            dis = arr[p][1] - arr[left][1]
             if dis > mx:
                 mx = dis
-                mn = p - p0 + 1
+                mn = p - left + 1
             elif dis == mx:
-                mn = min(mn, p - p0 + 1)
+                mn = min(mn, p - left + 1)
             group[nums[x]].append(p)
             for y in g[x]:
                 if y == fa or g[x][y] == inf: continue
-                dfs(y, x, p0)
+                dfs(y, x, left, last)
 
             group[nums[x]].pop()
             arr.pop()
 
         for x in g[0]:
-            dfs(x, 0, 0)
+            dfs(x, 0, 0, -1)
 
         return [mx, mn]
 
 
 so = Solution()
 print(so.longestSpecialPath(edges = [[0,1,1],[1,2,3],[1,3,1],[2,4,6],[4,7,2],[3,5,2],[3,6,5],[6,8,3]], nums = [1,1,0,3,1,2,1,1,0]))
+print(so.longestSpecialPath(edges = [[1,0,3],[0,2,4],[0,3,5]], nums = [1,1,0,2]))
 
 
 
