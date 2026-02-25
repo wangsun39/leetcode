@@ -129,10 +129,6 @@ def analyze_organization_hierarchy(employees: pd.DataFrame) -> pd.DataFrame:
 
 
 
-
-# data = [[1, 'ATGCTAGCTAGCTAA', 'Human'], [2, 'GGGTCAATCATC', 'Human'], [3, 'ATATATCGTAGCTA', 'Human'], [4, 'ATGGGGTCATCATAA', 'Mouse'], [5, 'TCAGTCAGTCAG', 'Mouse'], [6, 'ATATCGCGCTAG', 'Zebrafish'], [7, 'CGTATGCGTCGTA', 'Zebrafish']]
-# samples = pd.DataFrame(data, columns=["sample_id", "dna_sequence", "species"])
-
 data = [[1, 'Alice', None, 12000, 'Executive'], [2, 'Bob', 1, 10000, 'Sales'], [3, 'Charlie', 1, 10000, 'Engineering'], [4, 'David', 2, 7500, 'Sales'], [5, 'Eva', 2, 7500, 'Sales'], [6, 'Frank', 3, 9000, 'Engineering'], [7, 'Grace', 3, 8500, 'Engineering'], [8, 'Hank', 4, 6000, 'Sales'], [9, 'Ivy', 6, 7000, 'Engineering'], [10, 'Judy', 6, 7000, 'Engineering']]
 employees = pd.DataFrame(data, columns=["employee_id", "employee_name", "manager_id", "salary", "department"]).astype({"employee_id": "int", "employee_name": "string", "manager_id": "Int64", "salary": "int", "department": "string"})
 
