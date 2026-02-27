@@ -51,6 +51,22 @@ class MyCalendar1:
             return True
         return False
 
+class MyCalendar2:
+
+    def __init__(self):
+        self.sl = SortedList()
+
+
+    def book(self, start: int, end: int) -> bool:
+        p = self.sl.bisect_left([start])
+        if p >= len(self.sl):
+            self.sl.add([end - 1, start])
+            return True
+        if self.sl[p][1] > end - 1:
+            self.sl.add([end - 1, start])
+            return True
+        return False
+
 from collections import defaultdict
 
 class MyCalendar:
