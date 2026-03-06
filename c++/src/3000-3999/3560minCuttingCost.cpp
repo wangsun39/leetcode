@@ -1,0 +1,59 @@
+// 给你三个整数 n、m 和 k。
+
+// 有两根长度分别为 n 和 m 单位的木材，需要通过三辆卡车运输。每辆卡车最多只能装载一根长度 不超过 k 单位的木材。
+
+// 你可以将木材切成更小的段，其中将长度为 x 的木材切割成长度为 len1 和 len2 的段的成本为 cost = len1 * len2，并且满足 len1 + len2 = x。
+
+// 返回将木材分配到卡车上的 最小总成本 。如果木材不需要切割，总成本为 0。
+
+ 
+
+// 示例 1：
+
+// 输入： n = 6, m = 5, k = 5
+
+// 输出： 5
+
+// 解释：
+
+// 将长度为 6 的木材切割成长度为 1 和 5 的两段，成本为 1 * 5 == 5。现在三段长度分别为 1、5 和 5 的木材可以分别装载到每辆卡车。
+
+// 示例 2：
+
+// 输入： n = 4, m = 4, k = 6
+
+// 输出： 0
+
+// 解释：
+
+// 两根木材已经可以直接装载到卡车上，因此不需要切割。
+
+ 
+
+// 提示：
+
+// 2 <= k <= 105
+// 1 <= n, m <= 2 * k
+// 输入数据保证木材总存在能被运输的方案。
+
+#include "lc_pub.h"
+
+
+class Solution {
+    public:
+    long long minCuttingCost(int n, int m, int k) {
+        if (n <= k && m <= k) return 0;
+        if (n > k) return (long long)(n - k) * k;
+        return (long long)(m - k) * k;
+    }
+    };
+
+    
+int main()
+{
+    cout<<"test let us start! %s" << __cplusplus <<std::endl;
+    vector<int> nums{7,2,0,4,2};
+
+    Solution so;
+    return 0;
+}
