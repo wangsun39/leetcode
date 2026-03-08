@@ -1,0 +1,160 @@
+# 表：students
+#
+# +--------------+---------+
+# | Column Name  | Type    |
+# +--------------+---------+
+# | student_id   | int     |
+# | student_name | varchar |
+# | major        | varchar |
+# +--------------+---------+
+# student_id 是这张表的唯一主键。
+# 每一行包含有关学生及其学术专业的信息。
+# 表：study_sessions
+#
+# +---------------+---------+
+# | Column Name   | Type    |
+# +---------------+---------+
+# | session_id    | int     |
+# | student_id    | int     |
+# | subject       | varchar |
+# | session_date  | date    |
+# | hours_studied | decimal |
+# +---------------+---------+
+# session_id 是这张表的唯一主键。
+# 每一行代表一个学生针对特定学科的学习时段。
+# 编写一个解决方案来找出遵循 螺旋学习模式 的学生——即那些持续学习多个学科并按循环周期进行学习的学生。
+#
+# 螺旋学习模式意味着学生以重复的顺序学习至少 3 个 不同的学科。
+# 模式必须重复 至少 2 个完整周期（最少 6 次学习记录）。
+# 两次学习记录必须是间隔不超过 2 天的 连续日期。
+# 计算 循环长度（模式中不同的学科数量）。
+# 计算模式中所有学习记录的 总学习时长。
+# 仅包含循环长度 至少为  3 门学科 的学生。
+# 返回结果表按循环长度 降序 排序，然后按总学习时间 降序 排序。
+#
+# 结果格式如下所示。
+#
+#
+#
+# 示例：
+#
+# 输入：
+#
+# students 表：
+#
+# +------------+--------------+------------------+
+# | student_id | student_name | major            |
+# +------------+--------------+------------------+
+# | 1          | Alice Chen   | Computer Science |
+# | 2          | Bob Johnson  | Mathematics      |
+# | 3          | Carol Davis  | Physics          |
+# | 4          | David Wilson | Chemistry        |
+# | 5          | Emma Brown   | Biology          |
+# +------------+--------------+------------------+
+# study_sessions 表：
+#
+# +------------+------------+------------+--------------+---------------+
+# | session_id | student_id | subject    | session_date | hours_studied |
+# +------------+------------+------------+--------------+---------------+
+# | 1          | 1          | Math       | 2023-10-01   | 2.5           |
+# | 2          | 1          | Physics    | 2023-10-02   | 3.0           |
+# | 3          | 1          | Chemistry  | 2023-10-03   | 2.0           |
+# | 4          | 1          | Math       | 2023-10-04   | 2.5           |
+# | 5          | 1          | Physics    | 2023-10-05   | 3.0           |
+# | 6          | 1          | Chemistry  | 2023-10-06   | 2.0           |
+# | 7          | 2          | Algebra    | 2023-10-01   | 4.0           |
+# | 8          | 2          | Calculus   | 2023-10-02   | 3.5           |
+# | 9          | 2          | Statistics | 2023-10-03   | 2.5           |
+# | 10         | 2          | Geometry   | 2023-10-04   | 3.0           |
+# | 11         | 2          | Algebra    | 2023-10-05   | 4.0           |
+# | 12         | 2          | Calculus   | 2023-10-06   | 3.5           |
+# | 13         | 2          | Statistics | 2023-10-07   | 2.5           |
+# | 14         | 2          | Geometry   | 2023-10-08   | 3.0           |
+# | 15         | 3          | Biology    | 2023-10-01   | 2.0           |
+# | 16         | 3          | Chemistry  | 2023-10-02   | 2.5           |
+# | 17         | 3          | Biology    | 2023-10-03   | 2.0           |
+# | 18         | 3          | Chemistry  | 2023-10-04   | 2.5           |
+# | 19         | 4          | Organic    | 2023-10-01   | 3.0           |
+# | 20         | 4          | Physical   | 2023-10-05   | 2.5           |
+# +------------+------------+------------+--------------+---------------+
+# 输出：
+#
+# +------------+--------------+------------------+--------------+-------------------+
+# | student_id | student_name | major            | cycle_length | total_study_hours |
+# +------------+--------------+------------------+--------------+-------------------+
+# | 2          | Bob Johnson  | Mathematics      | 4            | 26.0              |
+# | 1          | Alice Chen   | Computer Science | 3            | 15.0              |
+# +------------+--------------+------------------+--------------+-------------------+
+# 解释：
+#
+# Alice Chen (student_id = 1):
+# 学习序列：Math → Physics → Chemistry → Math → Physics → Chemistry
+# 模式：3 门学科（Math，Physics，Chemistry）重复 2 个完整周期
+# 连续日期：十月 1-6，没有超过 2 天的间隔
+# 循环长度：3 门学科
+# 总时间：2.5 + 3.0 + 2.0 + 2.5 + 3.0 + 2.0 = 15.0 小时
+# Bob Johnson (student_id = 2):
+# 学习序列：Algebra → Calculus → Statistics → Geometry → Algebra → Calculus → Statistics → Geometry
+# 模式：4 门学科（Algebra，Calculus，Statistics，Geometry）重复 2 个完整周期
+# 连续日期：十月 1-8，没有超过 2 天的间隔
+# 循环长度：4 门学科
+# 总时间：4.0 + 3.5 + 2.5 + 3.0 + 4.0 + 3.5 + 2.5 + 3.0 = 26.0 小时
+# 未包含学生：
+# Carol Davis (student_id = 3)：仅 2 门学科（生物，化学）- 未满足至少 3 门学科的要求
+# David Wilson (student_id = 4)：仅 2 次学习课程，间隔 4 天 - 不符合连续日期要求
+# Emma Brown (student_id = 5)：没有记录学习课程
+# 结果表以 cycle_length 降序排序，然后以 total_study_hours 降序排序。
+
+import pandas as pd
+
+def find_study_spiral_pattern(students: pd.DataFrame, study_sessions: pd.DataFrame) -> pd.DataFrame:
+    study_sessions.sort_values(by=['student_id', 'session_date'], inplace=True)
+    study_sessions['session_date'] = pd.to_datetime(study_sessions['session_date'])
+
+    def proc(g):
+        rows = []
+
+        # name='Row' 可以用 row.subject 访问字段；index=False 避免把索引也打包进来
+        for row in g.itertuples(index=False, name='Row'):
+            rows.append([row.subject, row.session_date, row.hours_studied])
+        n = len(rows)
+        cycle_length = -1
+        for i in range(1, n):
+            if rows[i][0] == rows[0][0]:
+                cycle_length = i
+                break
+        if cycle_length == -1 or cycle_length < 3: return
+        cycle_nums = n // cycle_length
+        if n % cycle_length or cycle_nums < 2 or len(set(rows[i][0] for i in range(cycle_length))) != cycle_length: return
+        for i in range(1, cycle_nums):
+            for j in range(cycle_length):
+                if rows[i * cycle_length + j][0] != rows[j][0]:
+                    return
+
+        total_study_hours = rows[0][2]
+        for i in range(1, n):
+            if (rows[i][1] - rows[i - 1][1]) / pd.Timedelta(days=1) > 2: return
+            total_study_hours += rows[i][2]
+
+        return pd.Series({'cycle_length': cycle_length, 'total_study_hours': total_study_hours})
+
+
+    ans = study_sessions.groupby(by='student_id')[['session_id', 'subject', 'session_date', 'hours_studied']].apply(func=proc).reset_index()
+    ans = ans[ans['cycle_length'].notna()]
+
+    ans = pd.merge(ans, students, left_on='student_id', right_on='student_id', how='left')[
+        ['student_id', 'student_name', 'major', 'cycle_length', 'total_study_hours']]
+    return ans.sort_values(by=['cycle_length', 'total_study_hours'], ascending=[False, False])
+
+
+
+data = [[1, 'Alice Chen', 'Computer Science'], [2, 'Bob Johnson', 'Mathematics'], [3, 'Carol Davis', 'Physics'], [4, 'David Wilson', 'Chemistry'], [5, 'Emma Brown', 'Biology']]
+students = pd.DataFrame(data, columns=['student_id', 'student_name', 'major'])
+data = [[1, 1, 'Math', '2023-10-01', 2.5], [2, 1, 'Physics', '2023-10-02', 3.0], [3, 1, 'Chemistry', '2023-10-03', 2.0], [4, 1, 'Math', '2023-10-04', 2.5], [5, 1, 'Physics', '2023-10-05', 3.0], [6, 1, 'Chemistry', '2023-10-06', 2.0], [7, 2, 'Algebra', '2023-10-01', 4.0], [8, 2, 'Calculus', '2023-10-02', 3.5], [9, 2, 'Statistics', '2023-10-03', 2.5], [10, 2, 'Geometry', '2023-10-04', 3.0], [11, 2, 'Algebra', '2023-10-05', 4.0], [12, 2, 'Calculus', '2023-10-06', 3.5], [13, 2, 'Statistics', '2023-10-07', 2.5], [14, 2, 'Geometry', '2023-10-08', 3.0], [15, 3, 'Biology', '2023-10-01', 2.0], [16, 3, 'Chemistry', '2023-10-02', 2.5], [17, 3, 'Biology', '2023-10-03', 2.0], [18, 3, 'Chemistry', '2023-10-04', 2.5], [19, 4, 'Organic', '2023-10-01', 3.0], [20, 4, 'Physical', '2023-10-05', 2.5]]
+study_sessions = pd.DataFrame(data, columns=['session_id', 'student_id', 'subject', 'session_date', 'hours_studied'])
+
+
+
+print(find_study_spiral_pattern(students, study_sessions))
+
+
