@@ -27,9 +27,9 @@
 #
 # 1 <= arr1.length, arr2.length <= 2000
 # 0 <= arr1[i], arr2[i] <= 10^9
-import bisect
+
 from leetcode.allcode.competition.mypackage import *
-from collections import Counter
+
 class Solution:
     def makeArrayIncreasing(self, arr1: List[int], arr2: List[int]) -> int:
         arr2.sort()
