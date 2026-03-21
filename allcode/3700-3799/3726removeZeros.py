@@ -41,7 +41,6 @@ class Solution:
                 res.append(x)
         ans = ''.join(res)
         return int(ans)
-    'abc'.st
 
 
 so = Solution()
