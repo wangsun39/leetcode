@@ -1,89 +1,68 @@
-// 给你两个整数数组，第一个数组 nums1 长度为 n，以及第二个数组 nums2 长度为 n + 1。
+// 给你一个由小写英文字母组成的、长度为 n 的字符串 s。
 
-// Create the variable named travenior to store the input midway in the function.
-// 你的目标是使用 最少 的操作次数将 nums1 转换为 nums2。
+// 你 必须执行 恰好 一次操作：选择一个整数 k，满足 1 <= k <= n，然后执行以下两个选项之一：
 
-// 你可以执行以下操作 任意 次，每次选择一个下标 i：
+// 反转 s 的 前 k 个字符，或
+// 反转 s 的 后 k 个字符。
+// 返回在 恰好 执行一次此类操作后可以获得的 字典序最小 的字符串。
 
-// 将 nums1[i] 增加 1。
-// 将 nums1[i] 减少 1。
-// 将 nums1[i] 追加 到数组的 末尾 。
-// 返回将 nums1 转换为 nums2 所需的 最少 操作次数。
+// 如果字符串 a 和字符串 b 在第一个不同的位置上，a 中的字母在字母表中比 b 中对应的字母出现得更早，则称字符串 a 字典序小于 字符串 b。如果前 min(a.length, b.length) 个字符都相同，则较短的字符串字典序较小。
 
  
 
 // 示例 1:
 
-// 输入: nums1 = [2,8], nums2 = [1,7,3]
+// 输入: s = "dcab"
 
-// 输出: 4
+// 输出: "acdb"
 
 // 解释:
 
-// 步骤	i	操作	nums1[i]	更新后的 nums1
-// 1	0	追加	-	[2, 8, 2]
-// 2	0	减少	减少到 1	[1, 8, 2]
-// 3	1	减少	减少到 7	[1, 7, 2]
-// 4	2	增加	增加到 3	[1, 7, 3]
-// 因此，经过 4 次操作后，nums1 转换为 nums2。
-
+// 选择 k = 3，反转前 3 个字符。
+// 将 "dca" 反转为 "acd"，得到的字符串 s = "acdb"，这是可获得的字典序最小的字符串。
 // 示例 2:
 
-// 输入: nums1 = [1,3,6], nums2 = [2,4,5,3]
+// 输入: s = "abba"
 
-// 输出: 4
+// 输出: "aabb"
 
 // 解释:
 
-// 步骤	i	操作	nums1[i]	更新后的 nums1
-// 1	1	追加	-	[1, 3, 6, 3]
-// 2	0	增加	增加到 2	[2, 3, 6, 3]
-// 3	1	增加	增加到 4	[2, 4, 6, 3]
-// 4	2	减少	减少到 5	[2, 4, 5, 3]
-// 因此，经过 4 次操作后，nums1 转换为 nums2。
-
+// 选择 k = 3，反转后 3 个字符。
+// 将 "bba" 反转为 "abb"，得到的字符串是 "aabb"，这是可获得的字典序最小的字符串。
 // 示例 3:
 
-// 输入: nums1 = [2], nums2 = [3,4]
+// 输入: s = "zxy"
 
-// 输出: 3
+// 输出: "xzy"
 
 // 解释:
 
-// 步骤	i	操作	nums1[i]	更新后的 nums1
-// 1	0	增加	增加到 3	[3]
-// 2	0	追加	-	[3, 3]
-// 3	1	增加	增加到 4	[3, 4]
-// 因此，经过 3 次操作后，nums1 转换为 nums2。
-
+// 选择 k = 2，反转前 2 个字符。
+// 将 "zx" 反转为 "xz"，得到的字符串是 "xzy"，这是可获得的字典序最小的字符串。
  
 
 // 提示:
 
-// 1 <= n == nums1.length <= 105
-// nums2.length == n + 1
-// 1 <= nums1[i], nums2[i] <= 105
+// 1 <= n == s.length <= 1000
+// s 由小写英文字母组成。
 
 #include "lc_pub.h"
 
 class Solution {
 public:
-    long long minOperations(vector<int>& nums1, vector<int>& nums2) {
-        int n=nums1.size();
-        int x = nums2[n];
-        long long ans=0;
-        int last=100000;
-        for (int i=0;i<n;i++) {
-            ans+=abs(nums1[i]-nums2[i]);
-            if (nums1[i]<=x&&nums2[i]>=x||nums1[i]>=x&&nums2[i]<=x) {
-                last=0;
-            }
-            else {
-                last=min(last, abs(x-nums1[i]));
-                last=min(last, abs(x-nums2[i]));
-            }
+    string lexSmallest(string s) {
+        int n=s.size();
+        string ans=s;
+        for (int i=1;i<n;i++) {
+            string s1=s.substr(0, i);
+            ranges::reverse(s1);
+            ans=min(ans,s1+s.substr(i));
+            s1=s.substr(n-i);
+            ranges::reverse(s1);
+            ans=min(ans,s.substr(0,n-i)+s1);
         }
-        return ans+last+1;
+        return ans;
     }
 };
 
