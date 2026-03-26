@@ -88,13 +88,16 @@ class Solution:
             ds = defaultdict(set)
             for i in range(r):
                 for j in range(c):
-                    if i == r - 1 and j != 0 and j != c - 1: continue
+                    # if i == r - 1 and j != 0 and j != c - 1: continue
                     ds[g[i][j]].add((i, j))
             res = 0
             for i in range(r - 1):
                 res += sum(g[i])
                 for j in range(c):
                     ds[g[i][j]].remove((i, j))
+                if i == r - 2:
+                    for j in range(1, c - 1):
+                        ds[g[r - 1][j]].remove((r - 1, j))
                 if res * 2 > s: break
                 obj = s - res * 2
                 if len(ds[obj]):
@@ -113,6 +116,7 @@ class Solution:
 
 
 so = Solution()
+print(so.canPartitionGrid(grid = [[1,2,4],[1,6,6],[5,6,7]]))
 print(so.canPartitionGrid(grid = [[1, 2, 1, 2, 1, 2]]))
 print(so.canPartitionGrid(grid = [[1,4],[2,3]]))
 print(so.canPartitionGrid(grid = [[1,2],[3,4]]))
