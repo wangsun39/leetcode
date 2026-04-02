@@ -83,7 +83,9 @@ class Solution:
                     else:
                         res = max(res, dfs(i, j + 1, left) + coins[i][j])
             return res
-        return dfs(0, 0, 2)
+        ans = dfs(0, 0, 2)
+        dfs.cache_clear()
+        return ans
 
 
 
