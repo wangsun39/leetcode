@@ -51,7 +51,7 @@
 class Solution {
 public:
     long long minCost(string s, vector<int>& cost) {
-        long long total = accumulate(cost.begin(), cost.end(), 0LL);;
+        long long total = accumulate(cost.begin(), cost.end(), 0LL);
         long long stat[26] = {0};
         int n=s.size();
         for (int i=0;i<n;i++) {
