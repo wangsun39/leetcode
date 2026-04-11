@@ -79,21 +79,64 @@
 from leetcode.allcode.competition.mypackage import *
 
 MOD = 10 ** 9 + 7
+MX = 100001
 pow2 = [1]
-for _ in range(32):
+for _ in range(MX):
     pow2.append(pow2[-1] * 2 % MOD)
 
 class Solution:
     def countEffective(self, nums: List[int]) -> int:
+        if all(x == nums[0] for x in nums):
+            return 1
         n = len(nums)
         or_all = reduce(lambda x, y:  x | y, nums)
+        w = or_all.bit_length()
+
+        dp = [[0] * (1 << w) for _ in range(w + 1)]
+        # dp[i][mask] 表示
+        #     mask 是一个数字，考虑一个集合S：S是所有这样的数字的集合：每个数字的>=i位（二进制）都与mask相同
+        #     dp[i][mask] 表示 nums中是集合S的子集的元素个数
+        for x in nums:
+            dp[0][x] += 1
+
+        for i in range(1, w + 1):
+            bit = 1 << (i - 1)
+            for mask in range(1 << w):
+                # 如果mask的第i-1位，是0，转移方程: dp[i][mask] = dp[i - 1][mask]
+                # 如果mask的第i-1位，是1,
+                #    第i-1位保留1，则 dp[i][mask] = dp[i - 1][mask]
+                #    第i-1位不保留1， 则 dp[i][mask] = dp[i - 1][mask ^ bit]
+                dp[i][mask] = dp[i - 1][mask]
+                if mask & bit:
+                    dp[i][mask] += dp[i - 1][mask ^ bit]
+
+        ans = pow2[n]
+
+        sub = or_all
+        c = or_all.bit_count()
+        while sub:
+            # 枚举所有子集，使用容斥原理
+            if sub.bit_count() & 1 == c & 1:  # 同奇偶
+                ans -= pow2[dp[w][sub]]
+            else:
+                ans += pow2[dp[w][sub]]
+            ans %= MOD
+            sub = (sub - 1) & or_all
+
+        # 再单独考虑空集
+        if c & 1:  # 同奇偶
+            ans += 1
+        else:
+            ans -= 1
+
+        return ans
+
 
 
 
 so = Solution()
-print(so.sumAndMultiply(s = "3", queries = [[0,0]]))
-print(so.sumAndMultiply(s = "10203004", queries = [[0,7],[1,3],[4,6]]))
-
+print(so.countEffective(nums = [1,2,3]))
+print(so.countEffective(nums = [7,4,6]))
 
 
 
