@@ -46,22 +46,41 @@ class Solution:
     def nthSmallest(self, n: int, k: int) -> int:
         ans = 0
 
+        for i in range(52, -1, -1):
+            # 尝试在第i位填1
+            if i == 0:
+                ans |= 1
+                break
+            u = comb(i - 1, k)
+            if u > n:
+                # i 右边可以组合出大于 n 种，说明第i位不能为1
+                continue
+            if u < n:
+                # 否则第i位就必须为1
+                ans |= (1 << (i - 1))
+                n -= u
+                k -= 1
+            if k == 0:
+                break
+        return ans
 
-        while True:
-            l = k  # 二进制长度
-            while True:
-                if comb(l, k) >= n:
-                    break
-                l += 1
 
-            ans |= (1 << (l - 1))
-            k -= 1
+
+        # while True:
+        #     l = k  # 二进制长度
+        #     while True:
+        #         if comb(l, k) >= n:
+        #             break
+        #         l += 1
+        #
+        #     ans |= (1 << (l - 1))
+        #     k -= 1
 
 
 
 
 so = Solution()
+print(so.nthSmallest(n = 3, k = 1))
 print(so.nthSmallest(n = 4, k = 2))
-print(so.nthSmallest(n = 6, k = 1))
 
 
