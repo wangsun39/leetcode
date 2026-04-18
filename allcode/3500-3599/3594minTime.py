@@ -64,57 +64,71 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def minTime(self, n: int, k: int, m: int, time: List[int], mul: List[float]) -> float:
-        allmask = (1 << n) - 1
-        heap = []
-        heappush(heap, (0, allmask, 0, 0))
-        vis = set()
-        vis.add((allmask, 0, 0))
+        ALL = ((1 << n) - 1)
+        g = defaultdict(list)
 
-        while heap:
-            total_time, mask, boat_pos, stage = heappop(heap)
+        @cache
+        def get_time(x):
+            return max(time[i] for i in range(n) if x & (1 << i))
 
-            if mask == 0 and boat_pos == 1:
-                return total_time
+        # 定义一个状态0-11位为未过河的人的mask，12-14为阶段数，15位表示船是否过河了
+        for i in range(1 << n):
+            for j in range(m):
+                # 1. 船未过河
+                st1 = i | (j << 12)
+                # 选取i的每个子集过河
+                sub = i
+                while sub:
+                    # 处理 sub 的逻辑
+                    if sub.bit_count() <= k:
+                        t = get_time(sub) * mul[j]
+                        st2 = (i ^ sub) | (((j + int(t)) % m) << 12) | (1 << 15)
+                        g[st1].append([st2, t])
+                        # print(bin(st1), bin(st2))
+                    sub = (sub - 1) & i
 
-            if boat_pos == 0:
-                for group_mask in range(1, 1 << n):
-                    if (group_mask & mask) != group_mask:
-                        continue
-                    group_size = bin(group_mask).count('1')
-                    if group_size > k:
-                        continue
+                # 2. 船已过河
+                ii = ALL ^ i  # 已过河的人
+                st1 = i | (j << 12) | (1 << 15)
+                for l in range(n):  # 回程只能是1个人，如果选多个人回来，有可能有更优的解，但这不符合题目要求
+                    sub = 1 << l
+                    if ii & sub:
+                        t = get_time(sub) * mul[j]
+                        st2 = ((ii ^ sub) ^ ALL) | (((j + int(t)) % m) << 12)
+                        g[st1].append([st2, t])
 
-                    max_time = max(time[i] for i in range(n) if (group_mask & (1 << i)))
-                    d = max_time * mul[stage]
-                    new_stage = (stage + int(d)) % m
-                    new_mask = mask ^ group_mask
-                    new_total_time = total_time + d
-                    new_boat_pos = 1
 
-                    state = (new_mask, new_boat_pos, new_stage)
-                    if state not in vis:
-                        vis.add(state)
-                        heappush(heap, (new_total_time, new_mask, new_boat_pos, new_stage))
-            else:
-                for r in range(n):
-                    if not (mask & (1 << r)):
-                        return_time = time[r] * mul[stage]
-                        new_stage = (stage + int(return_time)) % m
-                        new_mask = mask | (1 << r)
-                        new_total_time = total_time + return_time
-                        new_boat_pos = 0
+        def dijkstra(g: List[List[Tuple[int]]], start: int, n: int) -> List[int]:
+            # dist = [inf] * len(g)   # 注意这个地方可能要替换成 n
+            dist = [inf] * n
+            dist[start] = 0
+            h = [(0, start)]
+            while h:
+                d, x = heappop(h)
+                if d > dist[x]:
+                    continue
+                for y, wt in g[x]:
+                    new_d = dist[x] + wt
+                    if new_d < dist[y]:
+                        dist[y] = new_d
+                        heappush(h, (new_d, y))
+            return dist
 
-                        state = (new_mask, new_boat_pos, new_stage)
-                        if state not in vis:
-                            vis.add(state)
-                            heappush(heap, (new_total_time, new_mask, new_boat_pos, new_stage))
+        st0 = (1 << n) - 1
+        dist = dijkstra(g, st0, 65536)
+        ans = inf
+        for i in range(m):
+            st = (i << 12) | (1 << 15)
+            # print(bin(st), st)
+            ans = min(ans, dist[st])
+        return ans if ans < inf else -1
 
-        return -1
+
 
 
 so = Solution()
-print(so.minTime( n = 1, k = 1, m = 2, time = [5], mul = [1.0,1.3]))
-print(so.minTime( n = 3, k = 2, m = 3, time = [2,5,8], mul = [1.0,1.5,0.75]))
+print(so.minTime(n = 3, k = 2, m = 3, time = [2,5,8], mul = [1.0,1.5,0.75]))
+print(so.minTime(n = 1, k = 1, m = 2, time = [5], mul = [1.0,1.3]))
 print(so.minTime(n = 2, k = 1, m = 2, time = [10,10], mul = [2.0,2.0]))
 
 
