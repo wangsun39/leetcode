@@ -187,3 +187,9 @@ priority_queue<int, vector<int>, greater<int>> small_heap;
 // int => string  to_string
 
 // return unordered_set(s.begin(), s.end()).size();   string => unordered_set
+
+// 类似python pairwise的写法
+// bool asc = std::adjacent_find(s.begin(), s.end(),
+//     [](int a, int b) { return a > b; }) == s.end();
+
+// bool asc = std::is_sorted(s.begin(), s.end());
