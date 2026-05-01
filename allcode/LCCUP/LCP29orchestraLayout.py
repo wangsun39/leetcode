@@ -31,11 +31,62 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def orchestraLayout(self, num: int, xPos: int, yPos: int) -> int:
-        dir = [[0, 1], [1, 0], [0, -1], [-1, 0]]
-        x, y = 0, 0
+        if xPos == 0:
+            return (yPos + 1) % 9
+        # 4个拐点
+        # (i, i-1)      (i,n-1-i)
+        # (i,n-1-i)     (i,i)
+
+        # 先计算出点在那个段上，此段的长度 l 和 段内的序数 s，长度为l的段有两个，位于第 t 个
+        if xPos <= num // 2:
+            if yPos <= xPos - 1:
+                # 落在左侧向上的方向
+                l = num - 2 * (yPos + 1)
+                s = (num - 1 - yPos) - xPos  # 先计算下方的拐点位置,即 yPos==n-1-i，i就是行号
+                t = 0
+            elif yPos <= num - 1 - xPos:
+                # 落在上侧向右的方向
+                l = num - 2 * xPos
+                s = yPos - (xPos - 1)
+                t = 1
+            else:
+                # 落在右侧向下的方向
+                l = num - 1 - 2 * (num - 1 - yPos)
+                s = xPos - (num - 1 - yPos)
+                t = 0
+        else:
+            if yPos < num - xPos - 1:
+                # 落在左侧向上的方向，和上面的代码重复
+                l = num - 2 * (yPos + 1)
+                s = (num - 1 - yPos) - xPos  # 先计算下方的拐点位置,即 yPos==n-1-i，i就是行号
+                t = 0
+            elif yPos < xPos:
+                # 落在下侧向左的方向
+                l = num - 1 - 2 * (num - 1 - xPos)
+                s = xPos - yPos
+                t = 1
+            else:
+                # 落在右侧向下的方向，和上面的代码重复
+                l = num - 1 - 2 * (num - 1 - yPos)
+                s = xPos - (num - 1 - yPos)
+                t = 0
+
+
+        # 计算这点前面有多少个点
+        m = num  # 第一行特殊处理
+        if l + 1 <= num - 1:
+            m += (l + 1 + num - 1) * (num - 1 - l)  # 加上前面一组两个的所有段
+        m += t * l  # 加上前一个可能存在的长度为l的段
+        m += s  # 加上段内的序号
+        ans = m % 9
+
+        return 1 if ans == 0 else ans
 
 
 
 so = Solution()
-
+print(so.orchestraLayout(num = 4, xPos = 1, yPos = 2))  # 5
+print(so.orchestraLayout(num = 5, xPos = 2, yPos = 2))  # 7
+print(so.orchestraLayout(num = 5, xPos = 0, yPos = 2))  # 3
+print(so.orchestraLayout(num = 6408, xPos = 1889, yPos = 3386))
 
