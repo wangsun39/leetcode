@@ -84,13 +84,13 @@ class Trie:
         for i, e in enumerate(word):
             if cur[e]['cnt'] == 1:
                 del(cur[e])
-                return
+                break
             else:
                 cur[e]['cnt'] -= 1
                 if i == len(word) - 1:
                     break
             cur = cur[e]
-        cur[e]['end'] -= 1
+        if e in cur: cur[e]['end'] -= 1
         self.root['cnt'] -= 1
 
     def startsWith(self, prefix: str) -> [str]:
