@@ -64,8 +64,8 @@ class Solution:
         n = len(nums)
         left = [0] * n
         right = [0] * n
-        left[1] = 1
-        right[n - 2] = 1
+        left[1] = 1  # 左侧前缀和，从0跳跃到nums[i]的代价
+        right[n - 2] = 1  # 右侧前缀和
         for i in range(1, n - 1):
             if nums[i] - nums[i - 1] <= nums[i + 1] - nums[i]:
                 left[i + 1] = left[i] + nums[i + 1] - nums[i]
