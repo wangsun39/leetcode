@@ -84,22 +84,27 @@ class SegmentTree:
         self._n = n
         self._k = k
         self._tree = [0] * (2 << (n - 1).bit_length())  # 维护一个区间的乘积模k的值
-        self._tree2 = [[0] * (2 << (n - 1).bit_length()) for _ in range(k)]   # 维护一个区间中以区间左端点为端点的前缀积模k为i的区间个数 tree2[i][j] j表示某个区间的编号
+        self._tree2 = [[0] * k for _ in range(2 << (n - 1).bit_length())]   # 维护一个区间中以区间左端点为端点的前缀积模k为j的区间个数 tree2[i][j] i表示某个区间的编号
         self._build(arr, 1, 0, n - 1)
 
     # 合并两个 val
     def _merge_val(self, a: int, b: int) -> int:
-        return max(a, b)  # **根据题目修改**
+        return a * b % self._k
 
     # 合并左右儿子的 val 到当前节点的 val
     def _maintain(self, node: int) -> None:
         self._tree[node] = self._merge_val(self._tree[node * 2], self._tree[node * 2 + 1])
+        self._tree2[node] = self._tree2[node * 2].copy()
+        for j in range(self._k):
+            self._tree2[node][self._tree[node * 2] * j % self._k] += self._tree2[node * 2 + 1][j]
+
 
     # 用 a 初始化线段树
     # 时间复杂度 O(n)
     def _build(self, a: List[int], node: int, l: int, r: int) -> None:
         if l == r:  # 叶子
             self._tree[node] = a[l] % self._k  # 初始化叶节点的值
+            self._tree2[node][a[l] % self._k] = 1  # 初始化叶节点的值
             return
         m = (l + r) // 2
         self._build(a, node * 2, l, m)  # 初始化左子树
@@ -109,7 +114,10 @@ class SegmentTree:
     def _update(self, node: int, l: int, r: int, i: int, val: int) -> None:
         if l == r:  # 叶子（到达目标）
             # 如果想直接替换的话，可以写 self._tree[node] = val
-            self._tree[node] = self._merge_val(self._tree[node], val)
+            # self._tree[node] = self._merge_val(self._tree[node], val)
+            self._tree[node] = val % self._k
+            self._tree2[node] = [0] * self._k
+            self._tree2[node][val % self._k] = 1
             return
         m = (l + r) // 2
         if i <= m:  # i 在左子树
@@ -118,17 +126,21 @@ class SegmentTree:
             self._update(node * 2 + 1, m + 1, r, i, val)
         self._maintain(node)
 
-    def _query(self, node: int, l: int, r: int, ql: int, qr: int) -> int:
+    def _query(self, node: int, l: int, r: int, ql: int, qr: int):
         if ql <= l and r <= qr:  # 当前子树完全在 [ql, qr] 内
-            return self._tree[node]
+            return self._tree[node], self._tree2[node]
         m = (l + r) // 2
         if qr <= m:  # [ql, qr] 在左子树
             return self._query(node * 2, l, m, ql, qr)
         if ql > m:  # [ql, qr] 在右子树
             return self._query(node * 2 + 1, m + 1, r, ql, qr)
-        l_res = self._query(node * 2, l, m, ql, qr)
-        r_res = self._query(node * 2 + 1, m + 1, r, ql, qr)
-        return self._merge_val(l_res, r_res)
+        l1, l2 = self._query(node * 2, l, m, ql, qr)
+        r1, r2 = self._query(node * 2 + 1, m + 1, r, ql, qr)
+        res1 = l1 * r1 % self._k
+        res2 = l2.copy()
+        for j in range(self._k):
+            res2[l1 * j % self._k] += r2[j]
+        return res1, res2
 
     # 更新 a[i] 为 _merge_val(a[i], val)
     # 时间复杂度 O(log n)
@@ -147,12 +159,19 @@ class SegmentTree:
 
 class Solution:
     def resultArray(self, nums: List[int], k: int, queries: List[List[int]]) -> List[int]:
-
+        st = SegmentTree(nums, k)
+        n = len(nums)
+        ans = []
+        for i, v, start, x in queries:
+            st.update(i, v)
+            res1, res2 = st.query(start, n - 1)
+            ans.append(res2[x])
+        return ans
 
 
 
 so = Solution()
-print(so.resultArray(nums = [1], k = 2))
+print(so.resultArray(nums = [1,2,3,4,5], k = 3, queries = [[2,2,0,2],[3,3,3,0],[0,1,0,1]]))
 
 
 
