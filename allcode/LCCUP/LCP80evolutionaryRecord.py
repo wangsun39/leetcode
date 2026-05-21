@@ -46,13 +46,12 @@ class Solution:
             return ''.join(sorted(ans))
 
         ans = dfs2(root)
+        if all(x == '1' for x in ans): return ans
         end = len(ans) - 1
         while ans[end] == '1':
             end -= 1
 
         return ans[: end + 1]
-
-
 
 
 so = Solution()
