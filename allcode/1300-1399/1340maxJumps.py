@@ -48,7 +48,7 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def maxJumps(self, arr: List[int], d: int) -> int:
+    def maxJumps1(self, arr: List[int], d: int) -> int:
         n = len(arr)
         @cache
         def dfs(x):
@@ -67,6 +67,42 @@ class Solution:
             ans = max(ans, dfs(i) + 1)
         return ans
 
+
+
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        # 2026/5/24 单调栈，从低到高
+        n = len(arr)
+        left = [-1] * n  # 左侧在比arr[i]第一个更大的位置
+        right = [-1] * n  # 右侧在比arr[i]第一个更大的位置
+        stack = []
+        for i in range(n):
+            while stack and arr[stack[-1]] <= arr[i]:
+                stack.pop()
+            if stack:
+                left[i] = stack[-1]
+            stack.append(i)
+        stack = []
+        for i in range(n - 1, -1, -1):
+            while stack and arr[stack[-1]] <= arr[i]:
+                stack.pop()
+            if stack:
+                right[i] = stack[-1]
+            stack.append(i)
+
+        @cache
+        def dfs(i):
+            res = 1
+            if left[i] != -1 and i - left[i] <= d:
+                res = max(res, dfs(left[i]) + 1)
+            if right[i] != -1 and right[i] - i <= d:
+                res = max(res, dfs(right[i]) + 1)
+            # print(i, res)
+            return res
+
+        ans = 0
+        for i in range(n):
+            ans = max(ans, dfs(i))
+        return ans
 
 
 
