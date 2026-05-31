@@ -47,59 +47,21 @@
 class Solution {
 public:
     int minOperations(vector<int>& nums, int k) {
-        unordered_map<int, int> c0, c1;
-        int n=nums.size(),n1=n/2;
-        int n0=n-n1;
-        if (n < 2) return 0;
-        for (int i=0;i<n;i++) {
-            if (i&1)
-                c1[nums[i]%k]++;
-            else
-                c0[nums[i]%k]++;
+        int n = nums.size();
+        for (int i=0;i<n;i++) nums[i]=nums[i]%k;
+        int ans=k*n;
+        for (int i=0;i<k;i++) {
+            for (int j=0;j<k;j++) {
+                if (i == j) continue;
+                int s=0;
+                for (int l=0;l<n;l++) {
+                    if (l%2==0) s+=min((nums[l]-i+k)%k,(i-nums[l]+k)%k);
+                    else s+=min((nums[l]-j+k)%k,(j-nums[l]+k)%k);
+                }
+                ans=min(ans,s);
+            }
         }
-        auto check = [&](unordered_map<int, int> & counter) -> vector<int> {
-            vector<int> keys;
-            for (auto& [k, _] : counter) {
-                keys.push_back(k);
-            }
-            if (counter.size()<=1) return {keys[0], 0, 1};
-            ranges::sort(keys);
-            int mn=0,k;
-            int m = keys.size();
-            long long l=0,r=0;
-            for (int i=1;i<m;i++) {
-                mn+=(keys[i]-keys[0])*counter[keys[i]];
-                r+=counter[keys[i]];
-            }
-            
-            int s=mn,val=keys[0];
-            for (int i=1;i<m;i++) {
-                l+=counter[keys[i-1]];
-                int delta=keys[i]-keys[i-1];
-                s+=(l-r)*delta;
-                r-=counter[keys[i]];
-                if (s<mn) {
-                    mn=s;
-                    val=keys[i];
-                }
-                else
-                    break;
-            }
-            auto calc = [&](unordered_map<int, int> & counter, int key) -> int {
-                int res=0;
-                for (auto &[k,v]: counter) {
-                    res+=abs(key-k)*v;
-                }
-                return res;
-            };
-            int x1=calc(counter, val-1);
-            int x2=calc(counter, val+1);
-            return {val, mn, min(x1,x2)};
-        };
-        auto v0=check(c0),v1=check(c1);
-        if (v0[0]!=v1[0]) return v0[1]+v1[1];
-        
-        return min(v0[1]+v1[2],v0[2]+v1[1]);
+        return ans;
     }
 };
 
@@ -107,9 +69,9 @@ public:
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<int> nums{63,36,77,19};
+    vector<int> nums{73,92,31,78,89};
 
     Solution so;
-    cout<<so.minOperations(nums, 4);
+    cout<<so.minOperations(nums, 17);
     return 0;
 }
