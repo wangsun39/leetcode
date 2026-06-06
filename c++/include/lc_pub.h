@@ -123,6 +123,7 @@ vector<vector<int>> parseGrid(const string &gridText)
     return grid;
 }
 // std::vector<std::vector<int>> dp(n, std::vector<int>(amount + 1, INT_MAX));   二维vector初始化
+// std::vector dp(n, std::vector(amount + 1, INT_MAX));
 // memo = vector<vector<vector<int>>> (m, vector<vector<int>>(n, vector<int>(N + 1, -1)));  三维vector初始化
 // vector res(m, vector<int>(m));
 

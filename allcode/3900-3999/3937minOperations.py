@@ -54,21 +54,24 @@ class Solution:
         def calc(arr):
             m = len(arr)
             arr.sort()
-            arr += [x + k for x in arr]
+            arr += [x + k for x in arr]  # 拼接上的后一个数组是加上k的，保证单调增
             s = list(accumulate(arr, initial=0))
-            v0, mn0 = v1, mn1 = 0, inf   # 记录最小值和次小值，以及取到它们的 nums[i] 值
+            v0, mn0 = 0, inf   # 记录最小值，以及取到它的 nums[i] 值
             for i in range(m):
                 if i == 0 or arr[i - 1] != arr[i]:
                     t = arr[i] + k // 2
                     p = bisect_right(arr, t)
-                    # [i, p) 区间内的点，减一个值到 arr[i], [p, i + m) 区间内的点加一个值到 arr[i + m]
+                    # [i, p) 区间内的点，减一个值到 arr[i]操作数更少, [p, i + m) 区间内的点加一个值到 arr[i + m]操作数更少
                     u = (s[p] - s[i]) - arr[i] * (p - i) + arr[i + m] * (i + m - p) - (s[i + m] - s[p])
                     if u < mn0:
-                        v1, mn1 = v0, mn0
                         v0, mn0 = arr[i], u
-                    elif u < mn1:
-                        v1, mn1 = arr[i], u
-            return [v0, mn0, v1, mn1]
+
+            # 次小值应该在v0左右
+            u1 = sum(min((x - (v0 - 1)) % k, ((v0 - 1) - x) % k) for x in arr[:m])
+            u2 = sum(min((x - (v0 + 1)) % k, ((v0 + 1) - x) % k) for x in arr[:m])
+            if u1 < u2:
+                return [v0, mn0, v0 - 1, u1]
+            return [v0, mn0, v0 + 1, u2]
 
         r1 = calc(odds)
         r2 = calc(even)
