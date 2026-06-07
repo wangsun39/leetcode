@@ -64,40 +64,37 @@ class Solution:
 
         @cache
         def dfs(x, st):  # 以x为根的子树，st=0表示不选x，st=1表示不限制选x，返回各自余数的子集个数
-            res = [0] * k
-            r1 = [0] * k
-            r1[0] = 1  # 表示一个都不选
+            tmp = Counter()
+            rx0 = Counter()   # st为0的统计
+            rx0[0] = 1  # 表示一个都不选
             if len(g[x]) == 0:
-                res[0] = 1
+                tmp[0] = 1
                 if st == 0:
-                    return res
-                res[nums[x] % k] += 1
-                return res
+                    return tmp
+                tmp[nums[x] % k] += 1
+                return tmp
             for y in g[x]:
-                r2 = dfs(y, 1)
-                for i in range(k):
-                    for j in range(k):
-                        res[(i + j) % k] += r1[i] * r2[j]
-                        res[(i + j) % k] %= MOD
-                r1, res = res, [0] * k
+                ry = dfs(y, 1)
+                for i, vi in rx0.items():
+                    for j, vj in ry.items():
+                        tmp[(i + j) % k] += vi * vj
+                        tmp[(i + j) % k] %= MOD
+                rx0, tmp = tmp, Counter()
 
-            res = r1[:]
             if st == 0:
-                # print(x, st, r1)
-                return r1
-            res1 = [0] * k
-            r1 = [0] * k
-            r1[nums[x] % k] = 1  # 表示之选一个x
+                return rx0
+            tmp = Counter()
+            rx1 = Counter()   # st为1的统计
+            rx1[nums[x] % k] = 1  # 表示只选一个x
             for y in g[x]:
-                r2 = dfs(y, 0)
-                for i in range(k):
-                    for j in range(k):
-                        res1[(i + j) % k] += r1[i] * r2[j]
-                        res1[(i + j) % k] %= MOD
-                r1, res1 = res1, [0] * k
+                ry = dfs(y, 0)
+                for i, vi in rx1.items():
+                    for j, vj in ry.items():
+                        tmp[(i + j) % k] += vi * vj
+                        tmp[(i + j) % k] %= MOD
+                rx1, tmp = tmp, Counter()
 
-            # print(x, st, res, res1)
-            return [res[i] + r1[i] for i in range(k)]
+            return rx0 + rx1
         ans = dfs(0, 1)
         return (ans[0] - 1) % MOD  # 减去一个空子集的情况
 

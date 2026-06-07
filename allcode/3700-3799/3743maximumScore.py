@@ -59,7 +59,7 @@ MAX = lambda a, b: b if b > a else a
 class Solution:
     def maximumScore(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        # def calc(arr):
+        # def calc(arr):  # 记忆化搜索性能差一点
         #     # 计算非循环数组 arr ，在题目意义下的最大值结果
         #     @cache
         #     def dfs(i, j, st):  # 前i个数，分成 j 段，当前状态为 st 时的最大值收益
