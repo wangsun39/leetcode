@@ -65,6 +65,7 @@ public:
         int pre=intervals[0][0] - 1;
         long long s=0;  // 所有被覆盖的点之和
         for (auto &it: intervals) {
+            if (it[1]<pre) continue;
             if (it[0]>pre) {
                 s+=it[1]-it[0]+1;
             }
