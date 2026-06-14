@@ -119,8 +119,8 @@ class Solution:
                     xB.insert(z & ~xorAC)  # 放入线性基中的值不需要考虑 xorAC 为 1 的bit位
                     # 在线性基中找个最大的异或子集 A'，则 max(xorA+xorC) = 2 * xorA'
                     # 最终的结果要加上 xorAC
-            xorA_ = xB.max_xor() * 2 + xorAC
-            ans = max(ans, xorA_ + andB)
+            maxXorAC = xB.max_xor() * 2 + xorAC
+            ans = max(ans, maxXorAC + andB)
 
         return ans
 
