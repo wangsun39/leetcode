@@ -35,12 +35,57 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
     def defendSpaceCity(self, time: List[int], position: List[int]) -> int:
-        n = len(time)
+        m, n = max(time), max(position) + 1
+
+        time_mask = [0] * n  # 每个位置需要屏障的所有时间点掩码
+        for t, p in zip(time, position):
+            time_mask[p] |= 1 << (t - 1)
+
+        ns = 1 << m  # 时间的子集数量
+        all_masks = ns - 1
+        dp = [[inf] * ns for _ in range(n)]   # dp[i][j] 表示 前i个位置处理结束，且第i个位置开启向后的联合屏障的时间点子集为j时，消耗的最小能量
+        for i in range(n):
+            for j in range(ns):
+
+                # 能转移过来的子集只有与 j的交集是空的状态sub，因为不能同时在i和i-1都使用联合屏障，其他情况都有可能
+                mj = all_masks ^ j  # 能取的所有时间点，枚举mj的每个子集就是sub， 即i-1上的时间点状态
+                sub = mj
+                while True:
+                    # 处理 sub 的逻辑
+                    res = 0
+                    if i:
+                        res = dp[i - 1][sub]  # 从i-1转移过来的能量
+                    uncover = time_mask[i] & ~(j | sub)  # 位置i未被联合屏障覆盖，且需要设置屏障的时间点
+                    if 1 & j:  # 第一个屏障用联合屏障
+                        res += 3
+                    elif 1 & uncover:  # 第一个屏障用普通屏障
+                        res += 2
+                    for k in range(1, m):  # 遍历时间
+                        if (1 << k) & j:
+                            if (1 << (k - 1)) & j:  # 维持屏障
+                                res += 1
+                            else:
+                                res += 3
+                        elif (1 << k) & uncover:
+                            if (1 << (k - 1)) & uncover:  # 维持屏障
+                                res += 1
+                            else:
+                                res += 2
+                    dp[i][j] = MIN(dp[i][j], res)
+
+                    sub = (sub - 1) & mj
+                    if sub == mj:
+                        break
+        return min(dp[-1])
 
 
 
 so = Solution()
-print(so.defendSpaceCity(time = [1,2,1], position = [6,3,3]))  # 0
+print(so.defendSpaceCity(time = [1,1,1,2,2,3,5], position = [1,2,3,1,2,1,3]))  # 9
+print(so.defendSpaceCity(time = [1,2,1], position = [6,3,3]))  # 5
 
