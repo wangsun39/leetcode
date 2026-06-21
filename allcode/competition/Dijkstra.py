@@ -18,7 +18,7 @@ class Solution:
             if d > dist[x]:
                 continue
             for y, wt in g[x]:
-                new_d = dist[x] + wt
+                new_d = d + wt
                 if new_d < dist[y]:
                     dist[y] = new_d
                     heappush(h, (new_d, y))

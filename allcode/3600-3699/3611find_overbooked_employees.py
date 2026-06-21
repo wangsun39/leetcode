@@ -94,7 +94,7 @@
 import pandas as pd
 
 def find_overbooked_employees(employees: pd.DataFrame, meetings: pd.DataFrame) -> pd.DataFrame:
-    meetings['w'] = meetings['meeting_date'].dt.isocalendar().year + meetings['meeting_date'].dt.isocalendar().week  # 获取周
+    meetings['w'] = meetings['meeting_date'].dt.isocalendar().year * 100 + meetings['meeting_date'].dt.isocalendar().week  # 获取周
     weeks = (
         meetings
         .groupby(['employee_id', 'w'], dropna=False)  # 显式保留 NaN
