@@ -56,9 +56,12 @@ MIN = lambda a, b: b if b < a else a
 
 class Solution:
     def guardCastle(self, grid: List[str]) -> int:
-        n = len(grid)
-        for i in range(n):
-            for j in range(2):
+        n = len(grid[0])
+        for i in range(2):
+            grid[i] = list(grid[i])
+        dir = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+        for i in range(2):
+            for j in range(n):
                 if grid[i][j] == '.':
                     grid[i][j] = 0
                 elif grid[i][j] == 'S':
@@ -71,21 +74,82 @@ class Solution:
                     grid[i][j] = 4
 
         def calc(g):
-            dp = [[[0] * 4 for _ in range(4)] for _ in range(n)]  # dp[i][j][k]  i列的两个格子的状态为j，k时，最小需要额外放置的障碍物最小个数
+            def update(i, s1, s2, t1, t2, extra):
+                # 第i-2列的状态是s1/s2，目标的状态为t1/t2时，对dp数组进行更新，额外的增量是extra
+                if s1 in [1, 2]:
+                    if s1 + t1 == 3: return  # 「恶魔」和「城堡」相邻是不允许的
+                    if t1 == 0:
+                        t1 = s1  # 「空地」的状态直接被更新为前面的状态，状态0的优先级是低于状态1，2的
+                if s2 in [1, 2]:
+                    if s2 + t2 == 3: return  # 「恶魔」和「城堡」相邻是不允许的
+                    if t2 == 0:
+                        t2 = s2  # 「空地」的状态直接被更新为前面的状态
+                if t1 in [1, 2] and t1 + t2 == 3: return   # 「恶魔」和「城堡」相邻是不允许的
+                if t1 in [1, 2] and t2 == 0:
+                    t2 = t1  # 「空地」的状态被更新为周围的状态
+                if t2 in [1, 2] and t1 == 0:
+                    t1 = t2  # 「空地」的状态被更新为周围的状态
+                # print(s1,s2,t1,t2,i)
+                dp[i][t1][t2] = MIN(dp[i][t1][t2], dp[i - 1][s1][s2] + extra)
+
+
+
+            for i in range(2):
+                for j in range(n):
+                    for di, dj in dir:
+                        u, v = i + di, j + dj
+                        if 0 <= u < 2 and 0 <= v < n:
+                            if {g[i][j], g[u][v]} == {1, 2}:
+                                return inf
+            dp = [[[inf] * 4 for _ in range(4)] for _ in range(n + 1)]
+            dp[0][0][0] = 0
+            # dp[i][j][k]  表示当前处理到第 i-1 列，并且第 i-1 列的两个格子的状态分别是 s1和s2时 ，最小需要将「空地」放上「障碍物」的操作次数
+            # 注意，dp[i]对应g[i-1]列
+            # 4种状态：
+            # 0 表示「空地」
+            # 1 表示「城堡」或者之前的列存在「城堡」可以到达此位置
+            # 2 表示「恶魔」或者之前的列存在「恶魔」可以到达此位置
+            # 3 表示「障碍物」
+            # 任意两种状态之间都是相互独立的。
+            for i in range(1, n + 1):  # 枚举每一列
+                # 枚举第i-2列的两个格子共计4*4种状态，计算这两个状态对i-1列两个实际值的可能影响
+                for s1 in range(4):
+                    for s2 in range(4):
+                        update(i, s1, s2, g[0][i - 1], g[1][i - 1], 0)  # 不放置任何障碍，状态直接从左侧转移过来
+                        if g[0][i - 1] == 0:
+                            update(i, s1, s2, 3, g[1][i - 1], 1)
+                        if g[1][i - 1] == 0:
+                            update(i, s1, s2, g[0][i - 1], 3, 1)
+                        if g[0][i - 1] == 0 and g[1][i - 1] == 0:
+                            update(i, s1, s2, 3, 3, 2)
+            # print(dp)
+            return min(min(x) for x in dp[n])
+
+
+        # 下面这个思路很关键：
+        # 我们可以考虑两种情况：即允许「恶魔」走到「传送门」，或者不允许「恶魔」走到「传送门」
+        # 对于第一种情况，我们可以将所有的「传送门」全部看成「恶魔」；  这种情况比较容易理解
+        # 对于第二种情况，我们可以将所有的「传送门」全部看成「城堡」。  这种情况就不是这么显然，
+        #     可以这么考虑：在不增加任何障碍的前提下，1）「恶魔」和 「城堡」本来就是隔离的，答案为0
+        #                                     2）「传送门」和「恶魔」，「传送门」和「城堡」 本来都是隔离的，答案和把「传送门」替换成什么并无关系
+        #                 这两种情况的解，用上面两种替换依然是能得到正确答案的
+        #                 那么剩下的情况只有：「恶魔」，「传送门」和「城堡」这三者本身都是可以互相到达，那么用上述两种替换方法，一种相当于把「恶魔」隔离出去，另一种相当于把「城堡」隔离出去
+        #
 
         g1 = [r[:] for r in grid]
-        for i in range(n):
-            for j in range(2):
-                if g1[i][j] == '4':  # 将 瞬移点 改为 恶魔
+        for i in range(2):
+            for j in range(n):
+                if g1[i][j] == 4:  # 将 瞬移点 改为 恶魔
                     g1[i][j] = 1
         ans = calc(g1)
 
         g1 = [r[:] for r in grid]
-        for i in range(n):
-            for j in range(2):
-                if g1[i][j] == '4':  # 将 瞬移点 改为 城堡
+        for i in range(2):
+            for j in range(n):
+                if g1[i][j] == 4:  # 将 瞬移点 改为 城堡
                     g1[i][j] = 2
         ans = min(ans, calc(g1))
+        if ans == inf: return -1
 
         return ans
 
@@ -93,11 +157,9 @@ class Solution:
 
 
 
-
-
-
 so = Solution()
-print(so.minRecSize(lines = [[2,3],[3,0],[4,1]]))
+print(so.guardCastle(grid = ["SP#P..P#PC#.S", "..#P..P####.#"]))
+print(so.guardCastle(grid = ["S.C.P#P.", ".....#.S"]))
 
 
 
