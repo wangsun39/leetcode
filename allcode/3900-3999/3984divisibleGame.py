@@ -66,38 +66,29 @@ from leetcode.allcode.competition.mypackage import *
 MIN = lambda a, b: b if b < a else a
 MAX = lambda a, b: b if b > a else a
 
-def euler_all_primes(n):
-    is_prime = [False, False] + [True] * (n - 1)
-    primes = []
-    flg = False
-    for i in range(2, n + 1):
-        if is_prime[i]: primes.append(i)
-        if flg: continue
-        for j in primes:
-            if j * i > n: break
-            is_prime[j * i] = False
-            if i % j == 0: break
-
-    return is_prime, primes
-
-MX = 10 ** 6 + 1
-is_prime, primes = euler_all_primes(MX)
-
 class Solution:
     def divisibleGame(self, nums: list[int]) -> int:
         MOD = 10 ** 9 + 7
         mx = max(nums)
         if mx == 1:
-            return -sum(nums) * 2 % MOD
+            return -1 * 2 % MOD
         ans = -inf
-        ks = []  # 需要枚举的所有k
-        sq = int(mx ** 0.5) + 1
-        for x in primes:
-            if x > sq: break
-            ks.append(x)
+        ks = set()  # 需要枚举的所有k
         for x in nums:
-            if is_prime[x] and x > sq:
-                ks.append(x)
+            i = 2
+            while i * i <= x:
+                if x % i != 0:
+                    i += 1
+                    continue
+                ks.add(i)
+                while x % i == 0:
+                    x //= i
+                i += 1
+            if x > 1:
+                ks.add(x)
+        ks = list(ks)
+        ks.sort()
+
         for x in ks:
             if x > mx: break
             arr = [y if y % x == 0 else -y for y in nums]

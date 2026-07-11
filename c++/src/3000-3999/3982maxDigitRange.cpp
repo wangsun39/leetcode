@@ -1,0 +1,83 @@
+// 给你一个整数数组 nums。
+
+// 一个整数的 数字范围 定义为其 最大 数字与 最小 数字之间的差。
+
+// 例如，5724 的数字范围为 7 - 2 = 5。
+
+// 返回 nums 中所有 数字范围 等于数组中 最大数字范围 的整数之和。
+
+ 
+
+// 示例 1：
+
+// 输入： nums = [5724,111,350]
+
+// 输出： 6074
+
+// 解释：
+
+// i	nums[i]	最大数字	最小数字	数字范围
+// 0	5724	7	2	5
+// 1	111	1	1	0
+// 2	350	5	0	5
+// 最大数字范围为 5。数字范围为 5 的整数是 5724 和 350，因此答案为 5724 + 350 = 6074。
+
+// 示例 2：
+
+// 输入： nums = [90,900]
+
+// 输出： 990
+
+// 解释：
+
+// i	nums[i]	最大数字	最小数字	数字范围
+// 0	90	9	0	9
+// 1	900	9	0	9
+// 最大数字范围为 9。两个整数的数字范围都是 9 ，因此答案为 90 + 900 = 990。
+
+ 
+
+// 提示：
+
+// 1 <= nums.length <= 100
+// 10 <= nums[i] <= 105
+
+#include "lc_pub.h"
+
+class Solution {
+public:
+    int maxDigitRange(vector<int>& nums) {
+        int ans=0;
+        int diff=-1;
+        for (int x: nums) {
+            int mn=10,mx=-1;
+            int orig=x;
+            while (x) {
+                int y=x%10;
+                mn=min(mn, y);
+                mx=max(mx,y);
+                x/=10;
+            }
+            if (diff<mx-mn){
+                diff=mx-mn;
+                ans=orig;
+            }
+            else if (diff==mx-mn) {
+                ans+=orig;
+            }
+        }
+        return ans;
+    }
+};
+
+    
+int main()
+{
+    cout<<"test let us start! %s" << __cplusplus <<std::endl;
+    vector<int> nums{0,0,0,2,0};
+    // auto items=parseGrid("[[6,2],[2,6],[3,4]]");
+    auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
+
+    Solution so;
+    return 0;
+}
