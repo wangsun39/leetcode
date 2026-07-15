@@ -48,47 +48,17 @@ class Solution:
         shapes = [[[int(z) for z in y] for y in x] for x in shapes]
         # print(shapes)
 
-        def check(sp):
-            # edge = [[0] * n for _ in range(12)]  # 定义12组棱的填充状态，正方体，从前向后，定义12组棱
-            for i in range(1, n - 1):  # 检查12组棱的填充状态
-                if sp[0][0][i] ^ sp[1][-1][i] == 0:
-                    return False
-                if sp[0][-1][i] ^ sp[4][-1][i] == 0:
-                    return False
-                if sp[1][0][i] ^ sp[3][0][i] == 0:
-                    return False
-                if sp[3][-1][i] ^ sp[4][0][i] == 0:
-                    return False
-                if sp[0][i][0] ^ sp[2][i][0] == 0:
-                    return False
-                if sp[0][i][-1] ^ sp[5][i][0] == 0:
-                    return False
-                if sp[2][i][-1] ^ sp[3][i][0] == 0:
-                    return False
-                if sp[3][i][-1] ^ sp[5][i][-1] == 0:
-                    return False
-                if sp[1][i][0] ^ sp[2][0][n - 1 - i] == 0:
-                    return False
-                if sp[1][i][-1] ^ sp[5][0][n - 1 - i] == 0:
-                    return False
-                if sp[4][i][0] ^ sp[2][-1][n - 1 - i] == 0:
-                    return False
-                if sp[4][i][-1] ^ sp[5][-1][n - 1 - i] == 0:
-                    return False
-            # 检查 8 个角的填充状态
-            if sp[0][0][0] + sp[2][0][0] + sp[1][-1][0] != 1: return False
-            if sp[0][0][-1] + sp[5][0][0] + sp[1][-1][-1] != 1: return False
-            if sp[0][-1][0] + sp[2][-1][0] + sp[4][-1][0] != 1: return False
-            if sp[0][-1][-1] + sp[5][-1][0] + sp[4][-1][-1] != 1: return False
-            if sp[3][0][0] + sp[2][0][-1] + sp[1][0][0] != 1: return False
-            if sp[3][0][-1] + sp[5][0][-1] + sp[1][0][-1] != 1: return False
-            if sp[3][-1][0] + sp[2][-1][-1] + sp[4][0][0] != 1: return False
-            if sp[3][-1][-1] + sp[5][-1][-1] + sp[4][0][-1] != 1: return False
-            return True
+        @cache
+        def dfs(mask, tu): # 剩余可选的位置mask，当前以及选择的位置排序
+            m = mask.bit_count()  # 本次在位置m放置一个shape
+            if m == 6: return [0] * (n * 12)
+            for i in range(6):
+                if mask & (1 << i):  # 尝试在m位置放置 shapes[i]
+                    if m == 0:
+                        for j in range(4):  # 枚举4个方向
 
-        for p in permutations(list(range(6))):
 
-        return check(shapes)
+        return
 
 
 
