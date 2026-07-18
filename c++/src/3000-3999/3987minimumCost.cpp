@@ -74,6 +74,7 @@ public:
                 cur+=v*k-nums[i];
             }
         }
+        cnt %= MOD;
         return (1+cnt)*cnt/2%MOD;
     }
 };
