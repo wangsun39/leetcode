@@ -1,0 +1,126 @@
+// 给你两个二维整数数组 series1 和 series2。
+
+// 两个序列中的每个元素都表示为 [timestamp, value]，其中：
+
+// timestamp 是表示时间的整数。
+// value 是表示该时间点对应值的整数。
+// 每个数组都按照 timestamp 的 严格递增 顺序排列。
+
+// 若某个序列中某个时间戳 缺失 ，且该序列中存在更晚的时间戳，则将该缺失时间戳的值设为下一个更晚时间戳对应的值。否则，该时间点的值视为 0。
+
+// 聚合序列 通过以下方式构造：对于两个序列中出现过的每个时间戳，将两个序列在该时间戳对应的值相加。
+
+// 返回聚合后的序列，格式为二维整数数组 [timestamp, summedValue]，并按照 timestamp 严格递增 排序。
+
+// 如果一个数组中的每个元素都严格大于前一个元素，则称该数组为 严格递增 。
+
+ 
+
+// 示例 1：
+
+// 输入： series1 = [[1,3],[4,1]], series2 = [[2,2],[5,2]]
+
+// 输出： [[1,5],[2,3],[4,3],[5,2]]
+
+// 解释：
+
+// 时间戳	series1	series2	summedValue
+// 1	3	2	5
+// 2	1	2	3
+// 4	1	2	3
+// 5	0	2	2
+// 因此，聚合后的序列为 [[1, 5], [2, 3], [4, 3], [5, 2]]。
+
+// 示例 2：
+
+// 输入： series1 = [[1,5],[3,1]], series2 = [[2,2]]
+
+// 输出： [[1,7],[2,3],[3,1]]
+
+// 解释：
+
+// 时间戳	series1	series2	summedValue
+// 1	5	2	7
+// 2	1	2	3
+// 3	1	0	1
+// 因此，聚合后的序列为 [[1, 7], [2, 3], [3, 1]]。
+
+// 示例 3：
+
+// 输入： series1 = [[1,5]], series2 = [[1000000000,2]]
+
+// 输出： [[1,7],[1000000000,2]]
+
+// 解释：
+
+// 在时间戳 1 处，series2 中下一个可用时间戳是 1000000000，其值为 2。在时间戳 1000000000 处，series1 中不存在更晚的时间戳，因此其值为 0。最终结果只包含至少出现在两个序列之一中的时间戳。
+
+ 
+
+// 提示：
+
+// 1 <= series1.length, series2.length <= 105
+// series1[i].length == series2[i].length == 2
+// 1 <= series1[i][0], series2[i][0] <= 109
+// 1 <= series1[i][1], series2[i][1] <= 109
+// 每个序列都按照 timestamp 严格递增排序。
+
+#include "lc_pub.h"
+
+class Solution {
+public:
+    vector<vector<int>> aggregateTimeSeries(vector<vector<int>>& series1, vector<vector<int>>& series2) {
+        vector<int> keys;
+        int n1=series1.size(),n2=series2.size();
+        int l1=n1-1,l2=n2-1;
+        vector<vector<int>> ans;
+        int a1=0,a2=0;
+        while (l1>=0||l2>=0) {
+            if (l1>=0&&l2>=0) {
+                if (series1[l1][0]==series2[l2][0]) {
+                    ans.emplace_back(vector<int>{series1[l1][0], series1[l1][1]+series2[l2][1]});
+                    l1--;l2--;
+                }
+                else if (series1[l1][0]<series2[l2][0]) {
+                    if (l1<n1-1) {
+                        ans.emplace_back(vector<int>{series2[l2][0], series1[l1+1][1]+series2[l2][1]});
+                    }
+                    else {
+                        ans.emplace_back(vector<int>{series2[l2][0], series2[l2][1]});
+                    }
+                    l2--;
+                }
+                else {
+                    if (l2<n2-1) {
+                        ans.emplace_back(vector<int>{series1[l1][0], series1[l1][1]+series2[l2+1][1]});
+                    }
+                    else {
+                        ans.emplace_back(vector<int>{series1[l1][0], series1[l1][1]});
+                    }
+                    l1--;
+                }
+            }
+            else if (l1<0) {
+                ans.emplace_back(vector<int>{series2[l2][0], series1[l1+1][1]+series2[l2][1]});
+                l2--;
+            }
+            else {
+                ans.emplace_back(vector<int>{series1[l1][0], series1[l1][1]+series2[l2+1][1]});
+                l1--;
+            }
+        }
+        ranges::reverse(ans);
+        return ans;
+    }
+};
+
+    
+int main()
+{
+    cout<<"test let us start! %s" << __cplusplus <<std::endl;
+    vector<string> strs{"?1?"};
+    auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
+
+    Solution so;
+    return 0;
+}

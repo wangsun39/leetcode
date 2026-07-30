@@ -78,26 +78,60 @@ public:
         auto calc = [&](this auto && check, string &t) -> bool {
             int c0=0,c1=0;  // ? 对应的0的个数和1的个数
             int d0=0,d1=0;  // s[i]与t[i]不等时 s[i]对应的0的个数和1的个数
-            vector<int> idx;  // 记录不相等的下标
-            for (int i=0;i<n;i++) {
-                if (s[i]==t[i]) continue;
-                idx.push_back(i);
-                if (t[i]=='?') {
-                    if (s[i]=='0') c0++;
-                    else c1++;
-                }
-                else {
-                    if (s[i]=='0') d0++;
+            for (int i=n-1;i>=0;i--) {
+                if (s[i]!=t[i]) {
+                    if (t[i]!='?') {
+                        if (s[i]=='1') {
+                            if (d0) {
+                                d0--;
+                            }
+                            else if (c0) {
+                                c0--;
+                            }
+                            else {
+                                return false;  // 没有可以与s[i]对换的s[j]了
+                            }
+                        }
+                        else {
+                            d0++;
+                        }
+                    }
                     else {
-                        if (d0) return false;
-                        d1++;
+                        if (s[i]=='1') c1++;
+                        else c0++;
                     }
                 }
             }
-            if (d0>d1) {
-                return d0-d1<=c1;
+            // 至此s[i]=='1'的位置都能找到后面一个s[j]=='0'(i<j)与其对换
+            // 但不能保证s[i]=='0'都能找到前面一个s[j]=='1'(i>j)与其对换
+            // 下面就反过来遍历，解决这个问题
+            c0=c1=d0=d1=0;
+            for (int i=0;i<n;i++) {
+                if (s[i]!=t[i]) {
+                    if (t[i]!='?') {
+                        if (s[i]=='0') {
+                            if (d1) {
+                                d1--;
+                            }
+                            else if (c1) {
+                                c1--;
+                            }
+                            else {
+                                return false;  // 没有可以与s[i]对换的s[j]了
+                            }
+                        }
+                        else {
+                            d1++;
+                        }
+                    }
+                    else {
+                        if (s[i]=='1') c1++;
+                        else c0++;
+                    }
+                }
             }
-            return d1-d0<=c0;
+
+            return true;
         };
         for (int i=0;i<m;i++) {
             ans[i]=calc(strs[i]);
@@ -110,10 +144,10 @@ public:
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<int> nums{1,3,2,4,5,6};
+    vector<string> strs{"?1?"};
     auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
 
     Solution so;
-    // cout<<so.minAdjacentSwaps(nums, 3,4);
+    cout<<so.transformStr("110", strs);
     return 0;
 }
