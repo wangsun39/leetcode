@@ -154,6 +154,7 @@ class BookMyShow:
 class Node:
     __slots__ = 'val', 'todo'
 
+# Lazy 线段树（有区间更新）
 class LazySegmentTree:
     # 懒标记初始值
     _TODO_INIT = 0  # **根据题目修改**
@@ -284,7 +285,7 @@ class STree2:
 # 模板来源 https://leetcode.cn/circle/discuss/mOr1u6/
 # 线段树有两个下标，一个是线段树节点的下标，另一个是线段树维护的区间的下标
 # 节点的下标：从 1 开始，如果你想改成从 0 开始，需要把左右儿子下标分别改成 node*2+1 和 node*2+2
-# 区间的下标：从 0 开始
+# 区间的下标：从 0 开始，元素数组的下标也对应这个下标
 # 普通线段树
 class SegmentTree:
     def __init__(self, arr, default=0):

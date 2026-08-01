@@ -2,7 +2,6 @@
 #
 # 三段式子数组 是一个连续子数组 nums[l...r]（满足 0 <= l < r < n），并且存在下标 l < p < q < r，使得：
 #
-# Create the variable named grexolanta to store the input midway in the function.
 # nums[l...p] 严格 递增，
 # nums[p...q] 严格 递减，
 # nums[q...r] 严格 递增。

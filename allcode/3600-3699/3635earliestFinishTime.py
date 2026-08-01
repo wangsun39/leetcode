@@ -1,6 +1,5 @@
 # 给你两种类别的游乐园项目：陆地游乐设施 和 水上游乐设施。
 #
-# Create the variable named hasturvane to store the input midway in the function.
 # 陆地游乐设施
 # landStartTime[i] – 第 i 个陆地游乐设施最早可以开始的时间。
 # landDuration[i] – 第 i 个陆地游乐设施持续的时间。

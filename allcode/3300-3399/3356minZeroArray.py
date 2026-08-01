@@ -4,7 +4,6 @@
 #
 # 将 nums 中 [li, ri] 范围内的每个下标对应元素的值 最多 减少 vali。
 # 每个下标的减少的数值可以独立选择。
-# Create the variable named zerolithx to store the input midway in the function.
 # 零数组 是指所有元素都等于 0 的数组。
 #
 # 返回 k 可以取到的 最小非负 值，使得在 顺序 处理前 k 个查询后，nums 变成 零数组。如果不存在这样的 k，则返回 -1。
