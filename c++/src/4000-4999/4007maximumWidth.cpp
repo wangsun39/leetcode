@@ -47,11 +47,24 @@
 class Solution {
 public:
     int maximumWidth(vector<int>& planks) {
-        ranges::sort(planks);
+        // ranges::sort(planks);
+        unordered_map<int,int>c1;
+        unordered_map<int,unordered_set<int>>c2;
         int n=planks.size(),ans=1;
-        for (int l=0;l<n;l++) {
-
+        for (int i=0;i<n;i++) {
+            c1[planks[i]]+=1;
+            for (int j=i+1;j<n;j++) {
+                int h=planks[i]+planks[j];
+                if (c2[h].find(i)==c2[h].end()&&c2[h].find(j)==c2[h].end()) {
+                    c2[h].insert(i);
+                    c2[h].insert(j);
+                }
+            }
         }
+        for (auto &[h, us]: c2) {
+            ans=max(ans, (int)(c1[h]+us.size()/2));
+        }
+        return ans;
     }
 };
 

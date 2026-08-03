@@ -67,14 +67,24 @@ class Solution:
                 cp = cv = 0
                 ans[i] = 0
             else:
-                # 找到一个第一个位置i，使得 s[i+1]-s[cp]-cv>=x，即 s[i+1]>=x+s[cp]+cv
-                p = bisect_left(s, x + s[cp] + cv)
+                if tasks[cp] - cv > x:
+                    cv += x
+                    ans[i] = n - cp
+                    continue
+                x -= (tasks[cp] - cv)
+                cp += 1
+                cv = 0
+                if x == 0:
+                    ans[i] = n - cp
+                    continue
+                # 找到一个第一个位置j，使得 s[j+1]-s[cp]>=x，即 s[j+1]>=x+s[cp]
+                p = bisect_left(s, x + s[cp])
                 if s[p] == x + s[cp] + cv:
-                    ans[i] = n - i
+                    ans[i] = n - p
                     cp = p % n
                     cv = 0
                 else:
-                    ans[i] = n - i - 1
+                    ans[i] = n - (p - 1)
                     cp = p - 1
                     cv = tasks[p] - (s[p] - s[cp] - cv - x)
 
