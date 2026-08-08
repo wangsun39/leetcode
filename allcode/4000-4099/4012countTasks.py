@@ -63,18 +63,19 @@ class Solution:
         ans = [0] * len(shifts)
         cp = cv = 0
         for i, x in enumerate(shifts):
-            if s[n] - s[cp] - cv <= x:
+            if s[n] - s[cp] - cv <= x:  # 剩余任务都能完成
                 cp = cv = 0
                 ans[i] = 0
             else:
-                if tasks[cp] - cv > x:
+                if tasks[cp] - cv > x:  # 当前任务都不能完成
                     cv += x
                     ans[i] = n - cp
                     continue
+                # 先完成当前任务，清0 cv
                 x -= (tasks[cp] - cv)
                 cp += 1
                 cv = 0
-                if x == 0:
+                if x == 0:  # 刚好完成当前任务
                     ans[i] = n - cp
                     continue
                 # 找到一个第一个位置j，使得 s[j+1]-s[cp]>=x，即 s[j+1]>=x+s[cp]
@@ -85,8 +86,8 @@ class Solution:
                     cv = 0
                 else:
                     ans[i] = n - (p - 1)
+                    cv = tasks[p - 1] - (s[p] - s[cp] - x)
                     cp = p - 1
-                    cv = tasks[p] - (s[p] - s[cp] - cv - x)
 
         return ans
 

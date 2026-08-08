@@ -47,22 +47,29 @@
 class Solution {
 public:
     int maximumWidth(vector<int>& planks) {
-        // ranges::sort(planks);
         unordered_map<int,int>c1;
-        unordered_map<int,unordered_set<int>>c2;
+        unordered_map<int,int>c2;
+        vector<int> s;
         int n=planks.size(),ans=1;
         for (int i=0;i<n;i++) {
             c1[planks[i]]+=1;
-            for (int j=i+1;j<n;j++) {
-                int h=planks[i]+planks[j];
-                if (c2[h].find(i)==c2[h].end()&&c2[h].find(j)==c2[h].end()) {
-                    c2[h].insert(i);
-                    c2[h].insert(j);
-                }
+        }
+        for (auto [k, v]: c1) {
+            s.push_back(k);
+        }
+        int m=s.size();
+
+        for (int i=0;i<m;i++) {
+            int h=s[i]*2;
+            c2[h]+=c1[s[i]]/2;
+            c2[s[i]]+=c1[s[i]];
+            for (int j=i+1;j<m;j++) {
+                int h=s[i]+s[j];
+                c2[h]+=min(c1[s[i]], c1[s[j]]);
             }
         }
-        for (auto &[h, us]: c2) {
-            ans=max(ans, (int)(c1[h]+us.size()/2));
+        for (auto &[h, v]: c2) {
+            ans=max(ans, v);
         }
         return ans;
     }
@@ -72,9 +79,10 @@ public:
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<string> strs{"?1?"};
+    vector<int> arr{39,14,56,96,55,56,83,38,33,27,98,71,68,1,42,31,14,42,34,23,68,81,56,33,56,59,71,59,81,56,80,15,28,42,28,56,46,46,42,14,23,72,19,6,81,56,71,56,33,58};
     auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
 
     Solution so;
+    cout<<so.maximumWidth(arr);
     return 0;
 }
