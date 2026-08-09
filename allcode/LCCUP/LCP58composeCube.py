@@ -59,7 +59,7 @@ class Solution:
             res[2] = int(shape[-1], 2)
             res[3] = int(''.join(shape[i][0] for i in range(n)), 2)
             return res
-        print(shapes)
+        # print(shapes)
 
         def reverse(edge: int):
             res = 0
@@ -85,127 +85,79 @@ class Solution:
             arr[0], arr[2] = reverse(arr[0]), reverse(arr[2])
 
         squares = [trans_sq(sh) for sh in shapes]
-        print(squares, mid)
+        # print(squares, mid)
 
-        def match1(e1, e2, p1, p2):
-            if e1 & e2 & mid: return False
-            if not ((e1 ^ e2) & mid) == mid:  # 棱块有重叠
-                return False
-            if (e2[0] >> (n - 1)) == 1 == p1 or (e2[0] & 1) == 1 == p2:  # 顶点有重叠
-                return False
-            return True
-
-
-        def put_sq_pos1(sq, p, edges, ps):
-            # p=0底面，1前，2右，3后，4左，5上
-            # 将一个方形边框数组，放入一个立方体的p面
-            if p == 0:
-                edges[0] = sq[0]
-                edges[1] = sq[1]
-                edges[2] = sq[2]
-                edges[3] = sq[3]
-                ps[6] = sq[0] >> (n - 1)
-                ps[7] = sq[0] & 1
-                ps[2] = sq[2] >> (n - 1)
-                ps[3] = sq[2] & 1
-            elif p == 1:
-                if not match(edges[2], sq[2], ps[2], ps[3]):
-                    return False
-                edges[10] |= sq[0]
-                edges[5] |= sq[1]
-                edges[2] |= sq[2]
-                edges[6] |= sq[3]
-                ps[0] |= sq[0] >> (n - 1)
-                ps[1] |= sq[0] & 1
-                ps[2] |= sq[2] >> (n - 1)
-                ps[3] |= sq[2] & 1
-            elif p == 2:
-                if not match(edges[5], sq[3], ps[1], ps[3]) or not match(edges[1], sq[2], ps[3], ps[7]):
-                    return False
-                edges[9] |= sq[0]
-                edges[4] |= sq[1]
-                edges[1] |= sq[2]
-                edges[5] |= sq[3]
-                ps[1] |= sq[0] >> (n - 1)
-                ps[5] |= sq[0] & 1
-                ps[3] |= sq[2] >> (n - 1)
-                ps[7] |= sq[2] & 1
-            elif p == 3:
-                if not match(edges[0], sq[2], ps[6], ps[7]) or not match(edges[4], sq[1], ps[5], ps[7]):
-                    return False
-                edges[8] |= sq[0]
-                edges[4] |= sq[1]
-                edges[0] |= sq[2]
-                edges[7] |= sq[3]
-                ps[4] |= sq[0] >> (n - 1)
-                ps[5] |= sq[0] & 1
-                ps[6] |= sq[2] >> (n - 1)
-                ps[7] |= sq[2] & 1
-            elif p == 4:
-                if not match(edges[6], sq[3], ps[0], ps[2]) or not match(edges[7], sq[1], ps[4], ps[6]) or not match(edges[3], sq[2], ps[2], ps[6]):
-                    return False
-                edges[11] |= sq[0]
-                edges[7] |= sq[1]
-                edges[3] |= sq[2]
-                edges[6] |= sq[3]
-                ps[0] |= sq[0] >> (n - 1)
-                ps[4] |= sq[0] & 1
-                ps[2] |= sq[2] >> (n - 1)
-                ps[6] |= sq[2] & 1
-            else:
-                if not match(edges[8], sq[0], ps[4], ps[5]) or not match(edges[9], sq[1], ps[2], ps[3]) or not match(edges[10], sq[2], ps[2], ps[3]) or not match(edges[11], sq[3], ps[2], ps[3]):
-                    return False
-                if any(e != mask for e in edges):
-                    return False
-            return True
-
-        def epdg_to_point(ei):  # 根据棱的编号获取两个顶点的编号
+        def epdg_to_points(ei):  # 根据棱的编号获取两个顶点的编号
             mp = [[6,7],[7,3],[2,3],[6,2],[1,3],[0,2],[4,6],[5,7],[4,5],[5,1],[0,1],[4,0]]
             return mp[ei]
 
-        def match(e1, e2, e1Id):
+        def face_to_edges(fi):  # 根据面的编号获取4条棱的编号
+            mp = [[0,1,2,3],[10,4,2,5],[9,4,1,7],[8,7,0,6],[11,5,3,6],[8,9,10,11]]
+            return mp[fi]
+
+        def match(e1, e2, e1Id, ps):
             # e1 是棱数组中的棱，顶点是无效的， e2 正方形的一条边，顶点是有效的
-            # if e1 & e2 & mid: return False
             if not ((e1 ^ e2) & mid) == mid:  # 棱块有重叠或空缺
                 return False
-            p1, p2 = epdg_to_point(e1Id)
-            if (e2[0] >> (n - 1)) == 1 == p1 or (e2[0] & 1) == 1 == p2:  # 顶点有重叠
+            p1, p2 = epdg_to_points(e1Id)
+            if (e2 >> (n - 1)) == 1 == ps[p1] or (e2 & 1) == 1 == ps[p2]:  # 顶点有重叠
                 return False
             return True
 
-        def update_point(eId, e, ps):
-            p1, p2 = epdg_to_point(eId)
-            ps[p1], ps[p2] = e[0] >> (n - 1), e[0] & 1
+        def update_points(eId, e, ps):
+            p1, p2 = epdg_to_points(eId)
+            ps[p1] |= e >> (n - 1)
+            ps[p2] |= e & 1
+
+        def update_edges(fId, sq, es):
+            e1,e2,e3,e4 = face_to_edges(fId)
+            es[e1] |= sq[0]
+            es[e2] |= sq[1]
+            es[e3] |= sq[2]
+            es[e4] |= sq[3]
 
         def put_sq_pos(sq, p, edges, ps):
             # p=0底面，1前，2右，3后，4左，5上
             # 将一个方形边框数组，放入一个立方体的p面
             if p == 0:
-                edges[0] = sq[0]
-                edges[1] = sq[1]
-                edges[2] = sq[2]
-                edges[3] = sq[3]
-                update_point(0, sq[0], ps)
-                update_point(2, sq[2], ps)
+                update_edges(p, sq, edges)
+                update_points(0, sq[0], ps)
+                update_points(2, sq[2], ps)
             elif p == 1:
-                if not match(edges[2], sq[2], 2):
+                if not match(edges[2], sq[2], 2, ps):
                     return False
-                edges[10] |= sq[0]
-                edges[4] |= sq[1]
-                edges[2] |= sq[2]
-                edges[5] |= sq[3]
-                update_point(10, sq[0], ps)
-                update_point(2, sq[2], ps)
+                update_edges(p, sq, edges)
+                update_points(10, sq[0], ps)
+                update_points(2, sq[2], ps)
+            elif p == 2:
+                if not match(edges[4], sq[1], 4, ps) or not match(edges[1], sq[2], 1, ps):
+                    return False
+                update_edges(p, sq, edges)
+                update_points(9, sq[0], ps)
+                update_points(1, sq[2], ps)
+            elif p == 3:
+                if not match(edges[0], sq[2], 0, ps) or not match(edges[7], sq[1], 7, ps):
+                    return False
+                update_edges(p, sq, edges)
+                update_points(8, sq[0], ps)
+                update_points(0, sq[2], ps)
+            elif p == 4:
+                if (not match(edges[6], sq[3], 6, ps) or not match(edges[5], sq[1], 5, ps)
+                        or not match(edges[3], sq[2], 3, ps)):
+                    return False
+                update_edges(p, sq, edges)
+                update_points(11, sq[0], ps)
+                update_points(3, sq[2], ps)
+            else:
+                if (not match(edges[8], sq[0], 8, ps) or not match(edges[9], sq[1], 9, ps)
+                        or not match(edges[10], sq[2], 10, ps) or not match(edges[11], sq[3], 11, ps)):
+                    return False
+                update_points(8, sq[0], ps)
+                update_points(10, sq[2], ps)
+                if any(point != 1 for point in ps):
+                    return False
 
-
-
-        # def backup(p):
-        #     nonlocal edges2
-        #     edges2 = edges[:]
-        #
-        # def restore(p):
-        #     nonlocal edges
-        #     edges = edges2[:]
+            return True
 
 
         def dfs(chosen: int, edges, ps):
@@ -215,36 +167,36 @@ class Solution:
             for i in range(1, 6):
                 if (1 << i) & chosen:
                     sq = squares[i][:]  # 拷贝一个正方形
-                    for _ in range(2):
-                        for _ in range(4):
-                            # backup(p)
-                            edges2 = edges[:]
-                            ps2 = ps[:]
+                    for _ in range(2):  # 遍历2个镜像
+                        for _ in range(4):  # 遍历4个方向
+                            edges2 = edges[:]  # 保存现场
+                            ps2 = ps[:]  # 保存现场
                             # print(1, edges)
-                            if not put_sq_pos(sq, p, edges, ps): # 尝试将 sq 放在位置 p
-                                continue
-                            if dfs(chosen ^ (1 << i), edges, ps):
-                                return True
-                            # restore(p)
-                            ps = ps2[:]
-                            edges = edges2[:]
-                            # print(2, edges)
+                            # print('in1: ', p, i, sq, edges, ps)
+                            if put_sq_pos(sq, p, edges, ps): # 尝试将 sq 放在位置 p
+                                # print('in: ', p, i, sq, edges, ps)
+                                if dfs(chosen ^ (1 << i), edges, ps):
+                                    return True
+
+                            ps = ps2[:]  # 恢复现场
+                            edges = edges2[:]  # 恢复现场
                             rotate(sq)
                         rotate2(sq)
             return False
 
         edges = [0] * 12  # 立方体的12条棱（不包含顶点）
-        # edges2 = [0] * 12  # 立方体的12条棱
         # 前4个为底面棱，中间4个为中间竖着的，后面是顶层4个棱
         points = [0] * 8  # 8个顶点，前面4个放在数组前4个，背面4个放在数组后4个
-        put_sq_pos(squares[0], 0, points, points)  # 第一个正方形固定在底面
+        put_sq_pos(squares[0], 0, edges, points)  # 第一个正方形固定在底面
         # dfs 枚举其他面的放置
-        return dfs((1 << 6) - 2, edges,points)
+        return dfs((1 << 6) - 2, edges, points)
 
 
 
 
 so = Solution()
-print(so.composeCube([["010","010","000"],["001","011","010"],["000","010","110"],["001","011","001"],["011","111","011"],["110","011","110"]]))  # 0
-print(so.composeCube([["000","110","000"],["110","011","000"],["110","011","110"],["000","010","111"],["011","111","011"],["011","010","000"]]))  # 0
+print(so.composeCube([["000","110","000"],["110","011","000"],["110","011","110"],["000","010","111"],["011","111","011"],["111","010","000"]]))  # False
+print(so.composeCube([["010","010","000"],["001","011","010"],["000","010","011"],["001","011","001"],["010","111","111"],["101","111","010"]]))  # True
+print(so.composeCube([["010","010","000"],["001","011","010"],["000","010","011"],["001","011","001"],["010","111","111"],["110","011","110"]]))  # True
+print(so.composeCube([["000","110","000"],["110","011","000"],["110","011","110"],["000","010","111"],["011","111","011"],["011","010","000"]]))  # True
 
