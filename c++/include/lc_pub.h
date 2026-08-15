@@ -156,6 +156,7 @@ vector<vector<int>> parseGrid(const string &gridText)
 // auto p2 = ranges::upper_bound(um[value], right);
 
 // ranges::sort(cpx)   // vector 排序
+// ranges::sort(prices, greater<int>{});  // 降序
 // sort(intervals.begin(), intervals.end(), [](const std::vector<int> &a, const std::vector<int> &b)
 //      { return a[1] < b[1]; });
 // reduce(candies.begin(), candies.end(), 0LL)   // vector 求和 ，转成long long
