@@ -82,6 +82,7 @@ class SegmentTree:
         # 如果 arr 是 int，视作数组大小，默认值为 default
         if isinstance(arr, int):
             arr = [default] * arr
+        self._arr = arr[:]
         n = len(arr)
         m = (2 << (n - 1).bit_length())
         self._n = n
@@ -92,24 +93,58 @@ class SegmentTree:
         self._build(arr, 1, 0, n - 1)
 
     # 合并两个 val
-    def _merge_val(self, l_c, l_f, l_l, r_c, r_f, r_l, ll, lr, rr) -> List[int]:
+    def _merge_val(self, l_cnt, l_first, l_last, r_cnt, r_first, r_last, ll, lr, rr) -> List[int]:
+        # **根据题目修改**
         # 返回三个值：
         # 合并区间 [ql, qr] 中的内峰值子数组个数，
         # 区间内第一个峰值子数组的最后一个元素下标，
         # 区间内最后一个峰值子数组的第一个元素下标
-        # l_c, l_f, l_l是左子节点的 count/first/last 值
-        # r_c, r_f, r_l是右子节点的 count/first/last 值
-        # l, r  左边区间对应原数组的最右侧点下标
+        # l_cnt, l_first, l_last 是左子节点的 count/first/last 值
+        # r_cnt, r_first, r_last 是右子节点的 count/first/last 值
+        # ll, lr, rr  左右区间的左右端点
         if rr - ll + 1 < 3:
             return [0, -1, -1]
+        rl = lr + 1
+        mid_l = mid_r = -1
+        if rl + 1 <= rr and self._arr[lr] < self._arr[rl] > self._arr[rl + 1]:
+            mid_l = lr
+            mid_r = rl + 1
+        elif self._arr[lr - 1] < self._arr[lr] > self._arr[rl]:
+            mid_l = lr - 1
+            mid_r = rl
 
+        if l_last == r_first == mid_l == -1:
+            return [0, -1, -1]
 
-        return [0, -1, -1]  # **根据题目修改**
+        if l_last == r_first == -1:
+            return [(mid_l - ll + 1) * (rr - mid_r + 1), mid_r, mid_l]
+
+        if l_last == -1:
+            r1 = (lr - ll + 1) * (rr - r_first + 1)
+            if mid_l == -1:
+                return [r1 + r_cnt, r_first, r_last]
+            else:
+                r2 = (r_first - mid_r) * (mid_l - ll + 1)
+                return [r1 + r2 + r_cnt, mid_r, r_last]
+        if r_first == -1:
+            r1 = (l_last - ll + 1) * (rr - rl + 1)
+            if mid_l == -1:
+                return [r1 + l_cnt, l_first, l_last]
+            else:
+                r2 = (mid_l - l_last) * (rr - mid_r + 1)
+                return [r1 + r2 + l_cnt, l_first, mid_l]
+
+        r1 = (l_last - ll + 1) * (rr - rl + 1)
+        r2 = (lr - l_last) * (rr - r_first + 1)
+        if mid_l == -1:
+            return [l_cnt + r_cnt + r1 + r2, l_first, r_last]
+        r3 = (mid_l - l_last) * (r_first - mid_r)
+        return [l_cnt + r_cnt + r1 + r2 + r3, l_first, r_last]
 
     # 合并左右儿子的 val 到当前节点的 val
     def _maintain(self, node: int, l, r) -> None:
         m = (l + r) // 2
-        self._count[node], first, last = self._merge_val(self._count[node * 2], self._first[node * 2], self._last[node * 2],
+        self._count[node], self._first[node], self._last[node] = self._merge_val(self._count[node * 2], self._first[node * 2], self._last[node * 2],
                                             self._count[node * 2 + 1], self._first[node * 2 + 1], self._last[node * 2 + 1],
                                             l, m, r)
 
@@ -128,6 +163,7 @@ class SegmentTree:
         if l == r:  # 叶子（到达目标）
             # 如果想直接替换的话，可以写 self._count[node] = val
             # self._count[node] = self._merge_val(self._count[node], val)
+            self._arr[i] = val
             return
         m = (l + r) // 2
         if i <= m:  # i 在左子树
@@ -142,7 +178,7 @@ class SegmentTree:
         # 区间内第一个峰值子数组的最后一个元素下标，
         # 区间内最后一个峰值子数组的第一个元素下标
         if ql <= l and r <= qr:  # 当前子树完全在 [ql, qr] 内
-            return [self._count[node], -1, -1]
+            return [self._count[node], self._first[node], self._last[node]]
         m = (l + r) // 2
         if qr <= m:  # [ql, qr] 在左子树
             return self._query(node * 2, l, m, ql, qr)
@@ -177,6 +213,9 @@ class Solution:
 
 
 so = Solution()
+print(so.countOfPeaks(nums = [7,15,20,14,2,5,12,0,15,18], queries = [[1,0,6],[1,5,6],[1,6,9]]))
+print(so.countOfPeaks(nums = [13,9,1,6,12,5], queries = [[1,1,5],[2,0,3]]))
+print(so.countOfPeaks(nums = [3,6,2,7,1], queries = [[1,1,3],[1,0,4],[2,3,0]]))
 print(so.countOfPeaks(nums = [1,3,2,4], queries = [[1,0,3],[2,1,1],[1,0,3]]))
 
 
