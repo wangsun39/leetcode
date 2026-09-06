@@ -62,25 +62,55 @@ class Solution:
     def earliestSecondToMarkIndices(self, nums: List[int], changeIndices: List[int]) -> int:
         n = len(nums)
         m = len(changeIndices)
-        s = sum(nums)
+        s = sum(nums) + n
+
+        # 定义：不断减1的方式为方式1，直接变成0的为方式2
 
         def check(t):  # 检查时间t内是否能完成
-            nums2 = nums[:]
-            left = s
-            vis = set()
-            for i in range(t, 0, -1):
-                idx = changeIndices[i - 1] - 1
-                if idx not in vis:
-                    v = nums[idx]
-                    left -= v
-                    vis.add(idx)
-                if left + n - len(vis) > i - 1: return False
-            return left == 0 and len(vis) == n
+            t -= 1  # t 转成changeIndices的下标
+            first = {}   # x 在 changeIndices 中第一次出现的时间，可以证明如果要使用方式2
+            # 且有多个 changeIndices[s] 相同，那一定在最早的s时间，使用方式2
+            for i, x in enumerate(changeIndices):
+                if i > t: break
+                if x - 1 in first: continue
+                first[x - 1] = i
+            cnt = 0  # 累计空闲的时间
+            cnt2 = s  # 累计还需要花费的时间
+            hp = []  # 放置已经用方式2的下标
+            for i in range(t, -1, -1):
+                j = changeIndices[i] - 1  # j 为 nums 的下标
+                if first[j] != i:
+                    cnt += 1  # i 这个时间就可以空出来做任意nums[i]的减一或标记
+                    continue
+                if nums[j] <= 1:  # 值小于1的项，不需要用方式2处理
+                    cnt += 1
+                    continue
+                if cnt > 0:
+                    heappush(hp, [nums[j], j])
+                    cnt -= 1
+                    cnt2 -= nums[j] + 1
+                    continue
+                if hp and hp[0][0] < nums[j]:
+                    # 把之前放入hp的最小的nums[i] 反悔掉，使其使用不断减1的方式处理
+                    cnt += 1  # 释放了堆顶的那次
+                    cnt2-= nums[j] - hp[0][0]
+                    heapreplace(hp, [nums[j], j])
 
-        for i in range(s + n, m + 1):
-            if check(i):
-                return i
-        return -1
+            return cnt >= cnt2
+
+
+        if not check(m):
+            return -1
+
+        lo, hi = n - 1, m
+        while lo + 1 < hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid
+
+        return hi
 
 
 so = Solution()
