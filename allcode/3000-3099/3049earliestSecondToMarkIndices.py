@@ -95,6 +95,8 @@ class Solution:
                     cnt += 1  # 释放了堆顶的那次
                     cnt2-= nums[j] - hp[0][0]
                     heapreplace(hp, [nums[j], j])
+                else:
+                    cnt += 1
 
             return cnt >= cnt2
 

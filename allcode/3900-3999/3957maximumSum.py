@@ -120,6 +120,7 @@ class Solution:
                         dp[i] = res[0]
                         dp2[i] = 1
 
+            # 返回值要用res，而不能用dp，因为dp中的数值初始化为0，不能保证一定能取到一组有效子数组
             return res
 
         v, cnt = calc(0)
@@ -136,8 +137,12 @@ class Solution:
                 lo = mid
             elif cnt < m:
                 hi = mid
+                ans = v + mid * m
             else:
                 return v + mid * m
+
+        # 如果二分结束还没返回，取最接近的
+        return ans
 
 
 
