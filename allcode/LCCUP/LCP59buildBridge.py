@@ -29,6 +29,10 @@ from leetcode.allcode.competition.mypackage import *
 
 class Solution:
     def buildBridge(self, num: int, wood: List[List[int]]) -> int:
+        hp_l = [-wood[0][0]]  # 大顶堆，凸函数左侧单调减部分的横坐标信息，每向左一个坐标，斜率都-1
+        hp_r = [wood[0][0]]   # 小顶堆，凸函数右侧单调增部分的横坐标信息，每向右一个坐标，斜率都+1
+        for wl, wr in wood[1:]:
+            a
 
 
 

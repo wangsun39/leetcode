@@ -137,13 +137,30 @@ class Solution:
                 lo = mid
             elif cnt < m:
                 hi = mid
-                ans = v + mid * m
+                ans = v + mid * m  # 如果 mid 对应的cnt<m， mid-1对应的cnt>m，那么m应该也是mid的一种可能cnt值（只是因为calc函数计算的是满足v的最小cnt，所以没有得到m）
+                # 因为 m 是一定存在某个惩罚因子使其得到的，这个惩罚因子不是mid-1，那只能是mid了
             else:
                 return v + mid * m
 
         # 如果二分结束还没返回，取最接近的
         return ans
 
+# 不需用浮点数的一个解释
+# 1. 整数约束导致的不连续性
+# 因为子数组个数 cnt 是整数，所以 cnt(val) 是一个阶梯函数：
+#
+# text
+# cnt(val)
+#     ^
+#     |     ____
+#     |    |    |
+#     |    |    |____
+#     |    |    |    |
+#     |    |    |    |____
+#     +----+----+----+-----> val
+# 在某个区间内，cnt 保持不变。只有当 val 跨越某个"临界点"时，cnt 才会变化。
+#
+# 所以不存在一个浮点数 val 使得 cnt(val) = m 恰好成立（除非 m 正好是某个阶梯的值）。
 
 
 

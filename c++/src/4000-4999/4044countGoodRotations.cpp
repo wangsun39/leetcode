@@ -62,20 +62,20 @@ class Solution {
 public:
     int countGoodRotations(vector<int>& nums) {
         int n=nums.size();
-        vector<int>s(n*2+1,0);
+        vector<long long>s(n*2+1,0);
         for (int i=0;i<n;i++) {
             nums.push_back(nums[i]);
         }
         for (int i=0;i<n*2;i++) {
             s[i+1]=s[i]+nums[i];
         }
-        int ss=s[n];
+        long long ss=s[n];
 
         int ans=0;
         for (int i=0;i<n;i++) {
             // [i, i+n/2)
-            int s1=s[i+n/2]-s[i];  // 后一半
-            int s2=ss-s1;
+            long long s1=s[i+n/2]-s[i];
+            long long s2=ss-s1;
             if (s1<s2) ans++;
         }
         return ans;
