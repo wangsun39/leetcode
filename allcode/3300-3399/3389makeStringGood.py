@@ -54,12 +54,46 @@
 
 from leetcode.allcode.competition.mypackage import *
 
+MIN = lambda a, b: b if b < a else a
+MAX = lambda a, b: b if b > a else a
+
 class Solution:
     def makeStringGood(self, s: str) -> int:
+        counter = [0] * 26
+        for x in s:
+            counter[ord(x) - ord('a')] += 1
+
+        ans = inf
+        mx_cnt = max(counter)
+        for cnt in range(mx_cnt + 1):
+            # 枚举最终相等的数量
+            dp = [inf] * 27  # 从 i 开始向后，达到数量都是 cnt 的最小操作次数
+            dp[-1] = 0
+            dp[25] = MIN(counter[-1], abs(cnt - counter[-1]))
+            for j in range(24, -1, -1):
+                dp[j] = MIN(counter[j], abs(cnt - counter[j])) + dp[j + 1]  # 单独处理 j
+
+                # 下面是组合处理 j 和 j + 1
+                if counter[j + 1] >= cnt:  # 不能从i变成j
+                    continue
+                if counter[j] > cnt:
+                    if counter[j] - cnt > cnt - counter[j + 1]:
+                        dp[j] = MIN(dp[j], counter[j] - cnt + dp[j + 2])
+                    else:
+                        dp[j] = MIN(dp[j], cnt - counter[j + 1] + dp[j + 2])
+                else:
+                    if counter[j] > cnt - counter[j + 1]:
+                        dp[j] = MIN(dp[j], counter[j] + dp[j + 2])
+                    else:
+                        dp[j] = MIN(dp[j], cnt - counter[j + 1] + dp[j + 2])
+            ans = MIN(ans, dp[0])
+        return ans
+
+
 
 
 so = Solution()
-print(so.makeStringGood())
+print(so.makeStringGood("gigigjjggjjgg"))
 
 
 

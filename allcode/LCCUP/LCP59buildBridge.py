@@ -31,8 +31,32 @@ class Solution:
     def buildBridge(self, num: int, wood: List[List[int]]) -> int:
         hp_l = [-wood[0][0]]  # 大顶堆，凸函数左侧单调减部分的横坐标信息，每向左一个坐标，斜率都-1
         hp_r = [wood[0][0]]   # 小顶堆，凸函数右侧单调增部分的横坐标信息，每向右一个坐标，斜率都+1
-        for wl, wr in wood[1:]:
-            a
+        len_w = [y - x for x, y in wood]
+        addl = addr = 0   # 中间一段斜率为0的段的左右端点的偏移量
+        ans = 0
+        for i, [wl, wr] in enumerate(wood[1:], 1):
+            addl -= len_w[i]
+            addr += len_w[i - 1]   # 左端点的偏移量
+            L = -hp_l[0] + addl
+            R = hp_r[0] + addr
+
+            if wl < L:
+                ans += L - wl
+                heappop(hp_l)
+                heappush(hp_l, -(wl - addl))
+                heappush(hp_l, -(wl - addl))
+                heappush(hp_r, L - addr)
+            elif wl > R:
+                ans += wl - R
+                heappop(hp_r)
+                heappush(hp_r, wl - addr)
+                heappush(hp_r, wl - addr)
+                heappush(hp_l, -(R - addl))
+            else:
+                heappush(hp_l, -(wl - addl))
+                heappush(hp_r, wl - addr)
+
+        return ans
 
 
 
