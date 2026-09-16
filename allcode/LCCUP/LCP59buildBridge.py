@@ -37,6 +37,9 @@ class Solution:
         for i, [wl, wr] in enumerate(wood[1:], 1):
             addl -= len_w[i]
             addr += len_w[i - 1]   # 左端点的偏移量
+            # 放入堆中的L，R是不能改变的，但实际上它们在取 绝对值和大括号 的过程是在对两个堆进行左右的平移，这个平移一直在累计
+            # 因此放入堆也要做个平移，出堆也要做个平移，这个平移量就是 addl addr
+            # 参考 https://www.cnblogs.com/wyzwyz/p/14038855.html
             L = -hp_l[0] + addl
             R = hp_r[0] + addr
 

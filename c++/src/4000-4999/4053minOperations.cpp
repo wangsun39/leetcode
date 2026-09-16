@@ -49,33 +49,91 @@
 
 #include "lc_pub.h"
 
+#define MX 10000
+vector<int> p0, p1;
+
+auto init = [] {
+
+    auto to_arr = [](int x, int arr[], int &len) -> void {
+        int y=x;
+        len=0;
+        while (y) {
+            arr[len] = y%10;
+            len++;
+            y/=10;
+        }
+        return ;
+    };
+    auto to_num = [](int arr[], int len) -> long long {
+        long long res = 0;
+        for (int i=0;i<len;i++) {
+            res=res*10+arr[i];
+        }
+        return res;
+    };
+
+    p0.push_back(0);
+    p1.push_back(0);
+    for (int i=1;i<10;i++) {
+        if (i%2)
+            p1.push_back(i);
+        else
+            p0.push_back(i);
+    }
+
+    for (int j=1;j<MX;j++) {
+        int s[11] = {0};
+        int len;
+        to_arr(j,s,len);
+        for (int i=0;i<10;i++) {
+            s[len]=i;
+            for (int k=len+1;k<len*2+1;k++) {
+                s[k]=s[len*2-k];
+            }
+            long long v=to_num(s, len*2+1);
+            if (v%2)
+                p1.push_back(v);
+            else
+                p0.push_back(v);
+        }
+        for (int k=len;k<len*2;k++) {
+                s[k]=s[len*2-1-k];
+            }
+            long long v=to_num(s, len*2);
+            if (v%2)
+                p1.push_back(v);
+            else
+                p0.push_back(v);
+    }
+    p1.push_back(1'000'000'001);
+    p0.push_back(2'000'000'002);
+    ranges::sort(p1);
+    ranges::sort(p0);
+    
+    return 0;
+}();
+
 class Solution {
 public:
     long long minOperations(vector<int>& nums) {
 
-        auto to_num = [](int x[], int len) -> long long {
-            long long res = 0;
-            for (int i=0;i<len;i++) {
-                res = res * 10 + x[i];
-            }
-            return res;
-        };
-
-        auto calc = [&](int x) -> long long {
-            int s[11] = {0};
-            int y=x;
-            int bit=0;
-            while (y) {
-                s[bit] = y%10;
-                bit++;
-                y/=10;
-            }
-        };
 
         int n=nums.size();
         long long ans = 0;
         for (int i=0;i<n;i++) {
-            ans += calc(nums[i]);
+            long long v;
+            if (nums[i]%2)
+            {
+                auto it=ranges::lower_bound(p1, nums[i]);
+                v=min(nums[i]-*(it-1), *(it)-nums[i]);
+            }
+            else
+            {
+                auto it=ranges::lower_bound(p0, nums[i]);
+                v=min(nums[i]-*(it-1), *(it)-nums[i]);
+            }
+                
+            ans+=v/2;
         }
         return ans;
     }
@@ -85,10 +143,10 @@ public:
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<int> nums{499,499,499};
+    vector<int> nums{10,12,14,16};
     auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
 
     Solution so;
-    cout<<so.minDays(2)<<endl;
+    cout<<so.minOperations(nums)<<endl;
     return 0;
 }
