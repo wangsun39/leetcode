@@ -62,6 +62,7 @@ auto init = [] {
             len++;
             y/=10;
         }
+        for (int i=0;i<len/2;i++) swap(arr[i], arr[len-1-i]);  // 需要进行一个翻转，这步很关键
         return ;
     };
     auto to_num = [](int arr[], int len) -> long long {
