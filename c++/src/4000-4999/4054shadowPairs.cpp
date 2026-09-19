@@ -75,14 +75,15 @@ public:
             while (st.size()) {
                 if (nums[st.top()]>=nums[i]) {
                     if (nums[st.top()]>nums[i])
-                        counter[nums[st.top()]]=0;
+                        counter[nums[st.top()]]=0;  // 为相等的数进行特殊处理
                     st.pop();
                 }
                 else
                     break;
             }
+            // 找到最近的一个比nums[i]小的数
             if (st.size()) {
-                dp[i]=dp[st.top()]+counter[nums[st.top()]];
+                dp[i]=dp[st.top()]+counter[nums[st.top()]];  // 前面与 nums[st.top()] 相等的数都能与 nums[i]构成数对
             }
             st.push(i);
             counter[nums[i]]++;
