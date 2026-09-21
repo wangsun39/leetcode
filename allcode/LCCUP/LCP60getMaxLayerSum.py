@@ -69,35 +69,82 @@ class Solution:
                 lev[-1].append(node_id)
                 nodes.append([lev_no, id_in_row, pre + node.val, left_no, right_no])
 
-        ans = max(lv[-1][1] for lv in lev)
+        ans = max(nodes[lv[-1]][2] for lv in lev)
+        # print(nodes)
+        # print(ans)
         m = len(lev)
         vis = set()  #  一层能内哪些区间是处理过的，处理过了就不用处理了
         # https://leetcode.cn/problems/WInSav/solutions/1804029/by-newhar-7hps
 
+        def is_all_lev(left, right):
+            lv, l_id, s1, _, _ = nodes[left]
+            _, r_id, s2, _, _ = nodes[right]
+            return l_id == 0 and r_id == len(lev[lv]) - 1
+
+        def seg_sum(left, right):
+            lv, l_id, s1, _, _ = nodes[left]
+            _, r_id, s2, _, _ = nodes[right]
+            if l_id == 0:
+                return s2
+            l_node = lev[lv][l_id - 1]
+            return s2 - nodes[l_node][2]
+
+
         def calc(node_id):  # 删除 node_id 能得到最大的行之和
             nonlocal ans
             lev_no, no_in_lev, pre_sum, left, right = nodes[node_id]
-            if left == right == -1:
-                return
+            cur_left, cur_right = node_id, node_id
+            # if left == right == -1:
+            #     return
             if left != -1 != right:  # 不允许删除 node_id
                 return
             vis.add((left, right))
-            while left != -1 or right != -1:
-                # 向下遍历每层
+            while True:
+                lev_no, _, _, ll, lr = nodes[cur_left]
+                _, _, _, rl, rr = nodes[cur_right]
+
                 nx_left = nx_right = -1
-                if left != -1:
-                    nx_left = left
-                else:
-                    nx_left = right
-                if right != -1:
-                    nx_right = right
-                else:
-                    nx_right = left
-                left, right = nx_left, nx_right
-                if (left, right) in vis:
+                cur_left_id, cur_right_id = cur_left, cur_right
+                while cur_left_id <= cur_right_id:   # 查询下一层在 cur_left_id cur_right_id 范围内的左右端点
+                    _, _, _, ll, lr = nodes[cur_left_id]
+                    if ll != -1:
+                        nx_left = ll
+                        break
+                    elif lr != -1:
+                        nx_left = lr
+                        break
+                    cur_left_id += 1
+                while cur_left_id <= cur_right_id:   # 查询下一层在 cur_left cur_right_id 范围内的左右端点
+                    _, _, _, rl, rr = nodes[cur_right_id]
+                    if rr != -1:
+                        nx_right = rr
+                        break
+                    elif rl != -1:
+                        nx_right = rl
+                        break
+                    cur_right_id -= 1
+
+                if nx_left == nx_right == -1:
+                    # 当前分支的最后一层
+                    if not is_all_lev(cur_left, cur_right):
+                        cur_total = nodes[lev[lev_no][-1]][2]
+                        cur_sum = seg_sum(cur_left, cur_right)
+                        ans = max(ans, cur_total - cur_sum)
                     break
 
-                vis.add((left, right))
+                cur_total = nodes[lev[lev_no][-1]][2]
+                cur_sum = seg_sum(cur_left, cur_right)
+                nx_sum = seg_sum(nx_left, nx_right)
+                # print(lev_no, nx_left, nx_right)
+                # print(node_id, cur_left, cur_right, cur_total, cur_sum, nx_sum, cur_total - cur_sum + nx_sum, ans)
+
+                ans = max(ans, cur_total - cur_sum + nx_sum)
+                cur_left, cur_right = nx_left, nx_right
+
+                if (cur_left, cur_right) in vis:
+                    break
+
+                vis.add((cur_left, cur_right))
 
 
 
@@ -109,12 +156,6 @@ class Solution:
 
 
 
-
-
-
-
-
-
 so = Solution()
-print(so.getMaxLayerSum(num = 10, wood = [[1,2],[4,7],[8,9]]))  # 3
+# print(so.getMaxLayerSum(num = 10, wood = [[1,2],[4,7],[8,9]]))  # 3
 
