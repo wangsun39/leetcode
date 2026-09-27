@@ -132,10 +132,10 @@ class Solution:
                     fw.sub((nxt - pre) % n)
                 # 以上 if else 可以写成
                 # fw.sub((nxt - pre - 1) % n + 1)
-                fw.add(idx - pre)
+                fw.add((idx - pre) % n)
                 fw.add((nxt - idx) % n)
             else:
-                fw.sub(idx - pre)
+                fw.sub((idx - pre) % n)
                 fw.sub((nxt - idx) % n)
                 if pre == nxt:
                     fw.add(n)
