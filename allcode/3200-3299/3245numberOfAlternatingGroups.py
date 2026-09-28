@@ -110,20 +110,18 @@ class Solution:
         for i, x in enumerate(colors[1:], 1):
             if x == colors[i - 1]:
                 sl.add(i)
+        if colors[0] == colors[-1]:
+            sl.add(0)
         for i, x in enumerate(sl[1:], 1):
             d = sl[i] - sl[i - 1]
             fw.add(d)
-        if colors[0] == colors[-1]:
-            sl.add(0)
         if sl:
             fw.add(sl[0] + n - sl[-1])  # 首尾相连
-        # else:
-        #     fw.add(n)
 
         def update(idx, add_flg):
             p = sl.bisect_left(idx)
             pre = sl[p - 1]
-            nxt = sl[(p + 1) % len(sl)]
+            nxt = sl[p % len(sl)]
 
             if add_flg:
                 if pre == nxt:
@@ -188,6 +186,8 @@ class Solution:
 
 
 so = Solution()
+print(so.numberOfAlternatingGroups(colors = [0,1,0,0], queries = [[1,3],[1,3],[1,3],[2,1,0],[1,3],[1,3]]))
+print(so.numberOfAlternatingGroups(colors = [1,1,1,0], queries = [[2,3,1],[1,3],[1,3],[2,0,1],[1,3]]))
 print(so.numberOfAlternatingGroups(colors = [0,0,0,1], queries = [[2,1,1],[1,3],[2,1,1],[2,0,1]]))
 print(so.numberOfAlternatingGroups(colors = [0,0,1,0,1,1], queries = [[1,3],[2,3,0],[1,5]]))
 print(so.numberOfAlternatingGroups(colors = [0,1,1,0,1], queries = [[2,1,0],[1,4]]))
