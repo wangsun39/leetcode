@@ -54,12 +54,12 @@
 from leetcode.allcode.competition.mypackage import *
 
 class Solution:
-    def removeDigit(self) -> str:
+    def minDifference(self, nums: List[int]) -> int:
         pass
 
 
 so = Solution()
-print(so.removeDigit())
+print(so.minDifference([1,2,-1,10,8]))
 
 
 
