@@ -93,6 +93,5 @@ int main()
     vector<int> nums{-58,4,24,23};
     auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
 
-    Solution so;
     return 0;
 }
