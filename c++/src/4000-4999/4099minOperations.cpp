@@ -86,15 +86,12 @@ public:
             mx = max(mx, nums[i]);
         }
         if (ans>k) return -1;
-        vector<vector<int>> pp(n, std::vector<int>(2, 0));
+        // 需要计算 每个 nums[i] 左侧有多少个数大于它
         for (int i=0;i<n;i++) {
-            pp[i][0]=nums[i];
-            pp[i][1]=i;
-        }
-        ranges::sort(pp);
-        for (int i=0;i<n;i++) {
-            if (pp[i][1]>i)  // 相邻对换，只需考虑从后面移动到前面的情况，剩下的位置会自动归位
-                ans+=pp[i][1]-i;
+            for (int j=0;j<i;j++) {
+                if (nums[j]>nums[i])
+                    ans++;
+            }
         }
 
         return ans;
@@ -105,10 +102,10 @@ public:
 int main()
 {
     cout<<"test let us start! %s" << __cplusplus <<std::endl;
-    vector<int> nums{3,2,1},locked={0,1,0};
+    vector<int> nums{4,2,3,1},locked={0,1,1,0};
     auto items=parseGrid("[[2,4],[3,2],[4,1],[6,4],[12,4]]");
     Solution so;
-    cout<<so.minOperations(nums,locked,1)<<endl;
+    cout<<so.minOperations(nums,locked,2)<<endl;
 
     return 0;
 }
